@@ -1,0 +1,6 @@
+version: '3'
+services:
+  adminfrontend:
+    image: ghcr.io/shake-the-lake/adminfrontend:latest
+    ports:
+      - 80:80
