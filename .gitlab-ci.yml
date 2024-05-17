@@ -1,0 +1,18 @@
+stages:
+  - lint
+  - build
+
+check-job:
+  stage: lint
+  image: node:lts
+  script:
+    - npm install
+    - npm run lint
+
+build-job:
+  stage: build
+  image: node:lts
+  script:
+    - npm run build
+  only:
+    - main
