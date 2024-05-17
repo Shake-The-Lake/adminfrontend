@@ -6,7 +6,7 @@ check-job:
   stage: lint
   image: node:lts
   script:
-    - npm run install
+    - npm install
     - npm run lint
 
 build-job:
