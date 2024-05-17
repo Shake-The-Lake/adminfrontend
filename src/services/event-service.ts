@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {type EventDto} from '../models/api/event.model';
 
-const baseUrl = 'http://localhost:8080';
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 export const getAllEvents = async (): Promise<EventDto[]> => {
 	const response = await axios.get<EventDto[]>(`${baseUrl}/event`);
