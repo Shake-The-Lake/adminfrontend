@@ -8,11 +8,3 @@ check-job:
   script:
     - npm install
     - npm run lint
-
-build-job:
-  stage: build
-  image: node:lts
-  script:
-    - npm run build
-  only:
-    - main
