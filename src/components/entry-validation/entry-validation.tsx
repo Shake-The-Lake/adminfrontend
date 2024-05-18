@@ -15,7 +15,7 @@ const EntryValidation: React.FC = () => {
 	} catch (error) {}
 
 	return (
-		<div className="w-full lg:w-1/2 pl-10 border rounded border-gray-200 p-6">
+		<div className="w-full lg:w-full pl-10 border rounded border-gray-200 p-6 flex flex-col">
 			<h1 className="text-2xl font-bold mb-4">Entry Validation Data</h1>
 			<p className="mb-8 text-gray-600">
 				Enter the entry validation data for the event. By entering the
@@ -23,13 +23,13 @@ const EntryValidation: React.FC = () => {
 				book a boat ride. This code is automatically generated and unique over
 				all events.
 			</p>
-			<div className="space-y-4">
+			<div className="flex-grow space-y-4">
 				<EntryValidationForm onSubmit={handleSubmit} />
-				<div className="flex space-x-4 mt-4">
-					<button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+				<div className="flex justify-between mt-4">
+					<button className="bg-primary text-white px-4 py-2 rounded-md">
 						Start Event
 					</button>
-					<button className="bg-gray-500 text-white px-4 py-2 rounded-md">
+					<button className="bg-white text-black px-4 border border-gray-200 py-2 rounded-md">
 						Export to QR Code
 					</button>
 				</div>

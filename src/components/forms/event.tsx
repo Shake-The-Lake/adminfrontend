@@ -30,7 +30,7 @@ const EventForm: React.FC<EventFormProps> = ({onSubmit, defaultValues}) => {
 
 	return (
 		<Form {...form}>
-			<form className="p-1" onSubmit={form.handleSubmit(onSubmit)}>
+			<form className="p-1 space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
 				<FormField
 					name="title"
 					control={form.control}

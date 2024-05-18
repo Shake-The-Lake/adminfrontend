@@ -66,7 +66,14 @@ const EventOverview: React.FC = () => {
 				<p className="mb-8 text-gray-600">Enter the basic data for the event</p>
 				<EventForm onSubmit={handleSubmit} defaultValues={defaultValues} />
 			</div>
-			<EntryValidation></EntryValidation>
+			<div className="w-full lg:w-1/2 flex flex-col">
+				<EntryValidation />
+				<div className="mt-40 flex justify-end">
+					<button className="bg-primary text-white px-4 py-2 rounded-md">
+						Save Changes
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 };

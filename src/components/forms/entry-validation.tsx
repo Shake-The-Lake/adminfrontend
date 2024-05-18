@@ -30,7 +30,7 @@ const EntryValidationForm: React.FC<EntryValidationFormProps> = ({
 	return (
 		<Form {...entryValidationForm}>
 			<form
-				className="p-1"
+				className="p-1 space-y-4"
 				onSubmit={entryValidationForm.handleSubmit(onSubmit)}>
 				<FormField
 					name="employeeEntryCode"
