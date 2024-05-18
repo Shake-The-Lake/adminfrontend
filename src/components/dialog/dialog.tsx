@@ -31,12 +31,12 @@ const StlDialog: React.FC<StlDialogProps> = ({
 			<DialogTrigger asChild>
 				<Button className="w-full text-center">{triggerLabel}</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-md h-full">
+			<DialogContent className="sm:max-w-md flex flex-col">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
 				</DialogHeader>
-				<div className="grow-0 overflow-auto min-h-32">{children}</div>
+				<div className="flex-grow overflow-auto p-1">{children}</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
 						<Button type="button" variant="secondary">
