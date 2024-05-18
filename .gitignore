@@ -39,3 +39,4 @@ yarn-error.log*
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 **/.history
+/shakethelakeadminfrontend.iml

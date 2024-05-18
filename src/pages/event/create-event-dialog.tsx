@@ -15,12 +15,12 @@ import {
 import {Input} from '../../components/ui/input';
 import {Button} from '../../components/ui/button';
 import {
-	DialogHeader,
-	DialogFooter,
-	DialogClose,
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from '../../components/ui/dialog';
@@ -29,8 +29,8 @@ const formSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
 	date: z.string(),
-	internalEventStart: z.string(),
-	externalEventStart: z.string(),
+	startedAt: z.string(),
+	customerOnlyTime: z.string(),
 	location: z.string(),
 });
 
@@ -45,6 +45,8 @@ const CreateEventDialog: React.FC = () => {
 
 	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (values) => {
 		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
+		const today = new Date();
+		const todayAsString = today.toISOString();
 		const event: EventDto = {
 			id: 0,
 			title: values.title,
@@ -59,12 +61,12 @@ const CreateEventDialog: React.FC = () => {
 				canton: '',
 			},
 			date: values.date,
-			customerCode: '',
+			customerCode: 'abcdefg', // TODO: backend does not allow null values here anymore but Design does not include creating customer code in creat event popup
 			employeeCode: '',
-			customerOnlyTime: '',
+			customerOnlyTime: values.customerOnlyTime,
 			isStarted: false,
-			startedAt: '',
-			endedAt: '',
+			startedAt: values.startedAt,
+			endedAt: todayAsString, // TODO Frontend UI does not have end dates jet planned.
 		};
 		try {
 			const createdEvent = createEvent(event);
@@ -151,7 +153,7 @@ const CreateEventDialog: React.FC = () => {
 									</FormItem>
 								)}></FormField>
 							<FormField
-								name="internalEventStart"
+								name="startedAt"
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
@@ -166,7 +168,7 @@ const CreateEventDialog: React.FC = () => {
 									</FormItem>
 								)}></FormField>
 							<FormField
-								name="externalEventStart"
+								name="customerOnlyTime"
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
