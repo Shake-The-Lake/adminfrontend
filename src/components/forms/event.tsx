@@ -5,7 +5,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
 
-const formSchema = z.object({
+export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
 	date: z.string(),
@@ -14,14 +14,18 @@ const formSchema = z.object({
 	location: z.string(),
 });
 
+export type EventFormSchema = z.infer<typeof eventFormSchema>;
+
 type EventFormProps = {
-	onSubmit: SubmitHandler<z.infer<typeof formSchema>>;
+	onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>>;
+	defaultValues?: Partial<EventFormSchema>;
 };
 
-const EventForm: React.FC<EventFormProps> = ({onSubmit}) => {
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
+const EventForm: React.FC<EventFormProps> = ({onSubmit, defaultValues}) => {
+	const form = useForm<z.infer<typeof eventFormSchema>>({
+		resolver: zodResolver(eventFormSchema),
 		mode: 'onChange',
+		defaultValues,
 	});
 
 	return (
