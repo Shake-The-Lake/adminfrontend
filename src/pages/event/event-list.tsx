@@ -48,7 +48,11 @@ const EventList = () => {
 	return (
 		<div className="flex justify-center w-full max-w-lg">
 			<LoadingSpinner isLoading={isLoading} />
+
 			<div className="w-full max-w-6xl p-4">
+				<div className="mb-5">
+					<CreateEventDialog />
+				</div>
 				<ul>
 					{events.length > 0 ? (
 						events.map((event) => (
@@ -64,8 +68,6 @@ const EventList = () => {
 						<p className="text-center">No events yet.</p>
 					)}
 				</ul>
-
-				<CreateEventDialog />
 			</div>
 		</div>
 	);
