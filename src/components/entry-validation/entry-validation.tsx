@@ -8,12 +8,14 @@ import {z} from 'zod';
 const EntryValidation: React.FC = () => {
 	const handleSubmit: SubmitHandler<
 		z.infer<typeof entryValidationSchema>
-	> = () => {};
+	> = () => {
+		// TODO Implement API
+	};
 	try {
 	} catch (error) {}
 
 	return (
-		<div className="w-full lg:w-1/2 pl-10 border-l border-gray-200">
+		<div className="w-full lg:w-1/2 pl-10 border rounded border-gray-200 p-6">
 			<h1 className="text-2xl font-bold mb-4">Entry Validation Data</h1>
 			<p className="mb-8 text-gray-600">
 				Enter the entry validation data for the event. By entering the
