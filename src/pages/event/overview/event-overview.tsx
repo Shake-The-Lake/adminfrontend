@@ -8,6 +8,7 @@ import type {SubmitHandler} from 'react-hook-form';
 import {z} from 'zod';
 import {useLocation, useNavigate} from 'react-router-dom';
 import EntryValidation from '../../../components/entry-validation/entry-validation';
+import LoadingSpinner from '../../../components/animations/loading';
 
 const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
@@ -21,6 +22,7 @@ const EventOverview: React.FC = () => {
 
 	const [defaultValues, setDefaultValues] =
 		useState<Partial<EventFormSchema> | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchEvent = async () => {
@@ -40,8 +42,10 @@ const EventOverview: React.FC = () => {
 					location: event.location?.name || '',
 				};
 				setDefaultValues(transformedEvent);
+				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching event:', error);
+				setIsLoading(false);
 			}
 		};
 
@@ -52,15 +56,12 @@ const EventOverview: React.FC = () => {
 		data,
 	) => {
 		console.log('Form submitted:', data);
-		// TODO
+		// TODO implement / renew backend endpoint
 	};
-
-	if (!defaultValues) {
-		return <div>Loading...</div>;
-	}
 
 	return (
 		<div className="flex flex-col lg:flex-row items-start justify-between px-20 py-20 max-h-fit w-full">
+			<LoadingSpinner isLoading={isLoading} />
 			<div className="w-full lg:w-1/2 pr-10">
 				<h1 className="text-2xl font-bold mb-4">Basic Data</h1>
 				<p className="mb-8 text-gray-600">Enter the basic data for the event</p>
