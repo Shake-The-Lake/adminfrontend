@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {deleteActivityType, getAllActivityTypes} from '../../../services/activity-type-serivce';
 import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/card';
+import CreateActivityTypeDialog from './create-activity-type-dialog';
 import {getTranslation} from '../../../lib/utils';
 
 const ActivityTypesPage = () => {
@@ -63,6 +64,7 @@ const ActivityTypesPage = () => {
 						<p className="text-center">No activity types yet.</p>
 					)}
 				</ul>
+				<CreateActivityTypeDialog />
 			</div>
 		</div>
 	);

@@ -35,7 +35,7 @@ const EventList = () => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>{error}</p>;
 
-	const handleDelete = async (id: number) => {
+	const handleDelete = async (id?: number) => {
 		try {
 			await deleteEvent(id);
 			return true;
