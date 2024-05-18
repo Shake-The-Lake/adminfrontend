@@ -21,6 +21,6 @@ export const eventDetailRoutes = {
 };
 
 export const iconPaths = {
-	tiAndM: 'ti-and-m-logo.svg',
-	shakeTheLake: 'shake-the-lake-icon.svg',
+	tiAndM: '/ti-and-m-logo.svg',
+	shakeTheLake: '/shake-the-lake-icon.svg',
 };
