@@ -34,4 +34,6 @@ RUN ["npm", "run", "build"]
 
 FROM nginx:1.13-alpine
 
+# Configure nginx so that subroutes are always served the index.html
+COPY default.conf /etc/nginx/conf.d/
 COPY --from=build /code/build /usr/share/nginx/html
