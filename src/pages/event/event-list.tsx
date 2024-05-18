@@ -4,6 +4,7 @@ import {deleteEvent, getAllEvents} from '../../services/event-service';
 import CreateEventDialog from './create-event-dialog';
 import StlCard from '../../components/cards/card';
 
+
 const EventList = () => {
 	const [events, setEvents] = useState<EventDto[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -43,6 +44,7 @@ const EventList = () => {
 			return false;
 		}
 	};
+	
 
 	return (
 		<div className="flex justify-center w-full max-w-lg">
