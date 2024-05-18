@@ -7,6 +7,7 @@ import {getEventById} from '../../../services/event-service';
 import type {SubmitHandler} from 'react-hook-form';
 import {z} from 'zod';
 import {useLocation, useNavigate} from 'react-router-dom';
+import EntryValidation from '../../../components/entry-validation/entry-validation';
 
 const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
@@ -59,8 +60,13 @@ const EventOverview: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center py-24">
-			<EventForm onSubmit={handleSubmit} defaultValues={defaultValues} />
+		<div className="flex flex-col lg:flex-row items-start justify-between px-20 py-20 max-h-fit w-full">
+			<div className="w-full lg:w-1/2 pr-10">
+				<h1 className="text-2xl font-bold mb-4">Basic Data</h1>
+				<p className="mb-8 text-gray-600">Enter the basic data for the event</p>
+				<EventForm onSubmit={handleSubmit} defaultValues={defaultValues} />
+			</div>
+			<EntryValidation></EntryValidation>
 		</div>
 	);
 };
