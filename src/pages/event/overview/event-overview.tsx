@@ -20,8 +20,9 @@ const EventOverview: React.FC = () => {
 
 	const eventId = location.pathname.split('/').pop();
 
-	const [defaultValues, setDefaultValues] =
-		useState<Partial<EventFormSchema> | null>(null);
+	const [defaultValues, setDefaultValues] = useState<
+		Partial<EventFormSchema> | undefined
+	>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {

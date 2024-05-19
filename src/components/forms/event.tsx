@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -27,6 +27,12 @@ const EventForm: React.FC<EventFormProps> = ({onSubmit, defaultValues}) => {
 		mode: 'onChange',
 		defaultValues,
 	});
+
+	useEffect(() => {
+		if (defaultValues) {
+			form.reset(defaultValues);
+		}
+	}, [defaultValues, form]);
 
 	return (
 		<Form {...form}>

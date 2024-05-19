@@ -2,7 +2,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLocation} from 'react-router-dom';
 
-const BoatsPage: React.FC = () => {
+const BoatsOverview: React.FC = () => {
 	const {t} = useTranslation();
 	const location = useLocation();
 
@@ -16,4 +16,4 @@ const BoatsPage: React.FC = () => {
 	);
 };
 
-export default BoatsPage;
+export default BoatsOverview;

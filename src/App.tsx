@@ -9,7 +9,7 @@ import {
 	ActivityTypePage,
 	ActivityTypesPage,
 	BoatPage,
-	BoatsPage,
+	BoatsOverview,
 	BookingsPage,
 	ErrorPage,
 	EventOverview,
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: `${eventDetailRoutes.id}/${eventDetailRoutes.boats}`,
-				element: <BoatsPage />,
+				element: <BoatsOverview />,
 			},
 			{
 				path: `${eventDetailRoutes.id}/${eventDetailRoutes.boats}/${eventDetailRoutes.boatId}`,
