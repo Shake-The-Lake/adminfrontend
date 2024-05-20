@@ -13,12 +13,11 @@ import LoadingSpinner from '../../../components/animations/loading';
 const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-
 	/* not quite happy with this solution to read out the event id
   but it didnt worked with useParams...
   */
-
 	const eventId = location.pathname.split('/').pop();
+	const [eventTitle, setEventTitle] = useState('');
 
 	const [defaultValues, setDefaultValues] = useState<
 		Partial<EventFormSchema> | undefined
@@ -34,6 +33,7 @@ const EventOverview: React.FC = () => {
 					return;
 				}
 				const event = await getEventById(Number(eventId));
+				setEventTitle(event.title);
 				const transformedEvent = {
 					title: event.title,
 					description: event.description,
@@ -61,19 +61,29 @@ const EventOverview: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col lg:flex-row items-start justify-between px-20 py-20 max-h-fit w-full">
+		<div className="flex flex-col items-start justify-between px-20 py-10 max-h-fit w-full">
 			<LoadingSpinner isLoading={isLoading} />
-			<div className="w-full lg:w-1/2 pr-10">
-				<h1 className="text-2xl font-bold mb-4">Basic Data</h1>
-				<p className="mb-8 text-gray-600">Enter the basic data for the event</p>
-				<EventForm onSubmit={handleSubmit} defaultValues={defaultValues} />
+
+			<div className="w-full mb-10 flex justify-start">
+				<h2 className="text-3xl font-bold">{eventTitle}</h2>
 			</div>
-			<div className="w-full lg:w-1/2 flex flex-col">
-				<EntryValidation />
-				<div className="mt-40 flex justify-end">
-					<button className="bg-primary text-white px-4 py-2 rounded-md">
-						Save Changes
-					</button>
+
+			<div className="w-full flex flex-col lg:flex-row">
+				<div className="w-full lg:w-1/2 pr-10">
+					<h1 className="text-2xl font-bold mb-4">Basic Data</h1>
+					<p className="mb-8 text-gray-600">
+						Enter the basic data for the event
+					</p>
+					<EventForm onSubmit={handleSubmit} defaultValues={defaultValues} />
+				</div>
+				<div className="hidden lg:block border-l border-gray-300 mx-4"></div>
+				<div className="w-full lg:w-1/2 flex flex-col">
+					<EntryValidation />
+					<div className="mt-40 flex justify-end">
+						<button className="bg-primary text-white px-4 py-2 rounded-md">
+							Save Changes
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
