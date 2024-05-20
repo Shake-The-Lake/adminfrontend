@@ -64,7 +64,7 @@ const ActivityTypesPage = () => {
 						<p className="text-center">No activity types yet.</p>
 					)}
 				</ul>
-				<CreateActivityTypeDialog />
+				<CreateActivityTypeDialog setActivityType={setActivityType} />
 			</div>
 		</div>
 	);

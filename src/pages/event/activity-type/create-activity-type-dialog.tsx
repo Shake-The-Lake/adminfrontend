@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {
 	Form,
 	FormControl,
@@ -24,37 +24,33 @@ import {
 	DialogTrigger,
 } from '../../../components/ui/dialog';
 import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
-import {createActivityType} from '../../../services/activity-type-serivce';
+import {createActivityType, getAllActivityTypes} from '../../../services/activity-type-serivce';
 import {Plus} from 'lucide-react';
 import {changeLanguage} from 'i18next';
 import {type LocalizedStringDto} from '../../../models/api/localized-string';
 
 const formSchema = z.object({
 	titleDe: z.string().min(5).max(20),
-	titleEn: z.string().min(5).max(20),
-	titleFr: z.string().min(5).max(20),
+	titleEn: z.string().min(5).max(20), 
 	descriptionDe: z.string(),
-	descriptionFr: z.string(),
 	descriptionEn: z.string(),
 	icon: z.string(),
 	checklistDe: z.string(),
 	checklistEn: z.string(),
-	checklistFr: z.string(),
 });
 
 // Todo! sometimes this generates an error, investigate sometime
 // Cannot update a component (`CreateEventDialog`) while rendering a different component (`Controller`). To locate the bad setState() call inside `Controller`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
-const ActiveTypeDialog: React.FC = () => {
-	const navigate = useNavigate();
-
+const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 	const [currentLanguage, setCurrentLanguage] = useState('de');
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		mode: 'onChange',
 	});
-
-	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (values) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const {id} = useParams<{eventId: string}>();
+	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values) => {
 		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
 		const description: LocalizedStringDto = {
 			de: values.descriptionDe,
@@ -76,20 +72,24 @@ const ActiveTypeDialog: React.FC = () => {
 			description,
 			icon: values.icon,
 			checklist,
+			eventId: Number(id),
 		};
 		try {
-			const createdActiveType = createActivityType(activeType);
-			console.log('Created event:', createdActiveType);
-			navigate('/');
+			await createActivityType(activeType);
+			setIsOpen(false);
+			const newActivityTypeList: ActivityTypeDto[] = await getAllActivityTypes();
+			setActivityType(newActivityTypeList);
 		} catch (error) {
 			console.error('Failed to active type event:', error);
 		}
 	};
 
 	return (
-		<Dialog>
+		<Dialog open={isOpen}>
 			<DialogTrigger asChild>
-				<Button className="h-40 w-full flex items-center justify-center">
+				<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
+					setIsOpen(true); 
+				}}>
 					<Plus className="size-24" />
 				</Button>
 			</DialogTrigger>
@@ -182,7 +182,22 @@ const ActiveTypeDialog: React.FC = () => {
 										</FormItem>
 									)}></FormField>
 							</div>
-
+							<FormField
+								name="icon"
+								control={form.control}
+								render={({field}) => (
+									<FormItem>
+										<FormLabel>Icon</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Icon"
+												{...field}
+												className="input"
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}></FormField>
 							<div							
 								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
 								<FormField
@@ -246,13 +261,19 @@ const ActiveTypeDialog: React.FC = () => {
 				</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary">
+						<Button type="button" variant="secondary"
+							onClick={()=> {
+								setIsOpen(false); 
+							}}>
 							Cancel
 						</Button>
 					</DialogClose>
 					<Button
-						type="submit"
-						onClick={form.handleSubmit(onSubmit)}>
+						type="button"
+						onClick={async ()=> {
+							await form.handleSubmit(onSubmit)();
+						}}
+					>
 						Save
 					</Button>
 				</DialogFooter>
