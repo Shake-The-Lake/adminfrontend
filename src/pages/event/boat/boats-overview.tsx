@@ -5,7 +5,8 @@ import {getEventById} from '../../../services/event-service';
 import {getBoatById} from '../../../services/boat-service';
 import {BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/card';
-import {Button} from '../../../components/ui/button';
+import StlDialog from '../../../components/dialog/dialog';
+import BoatForm from '../../../components/forms/boat';
 
 const BoatsOverview: React.FC = () => {
 	const {t} = useTranslation();
@@ -45,25 +46,40 @@ const BoatsOverview: React.FC = () => {
 		<div className="flex flex-col items-center py-10 px-10">
 			<div className="flex justify-between items-center w-full mb-8">
 				<h1 className="text-2xl font-bold">{t('boats')}</h1>
-				<Button
-					onClick={handleCreateNewBoat}
-					className="bg-primary text-white px-4 py-2 rounded-md">
-					{t('Add Boat')}
-				</Button>
 			</div>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-				{boats.map((boat) => (
-					<div key={boat.id} className="mb-4 flex justify-center">
-						<StlCard
-							id={boat.id}
-							title={boat.name}
-							description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
-							path={`/boats/${boat.id}`}
-							handleDelete={handleDelete}
-						/>
-					</div>
-				))}
-			</div>
+			{boats.length === 0 ? (
+				<div className="flex flex-col items-center justify-center w-full h-full">
+					<p className="text-lg mb-4">{t('No boats yet')}</p>
+					<StlDialog
+						title="Create Boat"
+						description="Add a new boat by entering the necessary data."
+						triggerLabel="Add new boat"
+						onSubmit={() =>
+							document.querySelector('form')?.dispatchEvent(
+								new Event('submit', {
+									cancelable: true,
+									bubbles: true,
+								}),
+							)
+						}>
+						<BoatForm />
+					</StlDialog>
+				</div>
+			) : (
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+					{boats.map((boat) => (
+						<div key={boat.id} className="mb-4 flex justify-center">
+							<StlCard
+								id={boat.id}
+								title={boat.name}
+								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
+								path={`/boats/${boat.id}`}
+								handleDelete={handleDelete}
+							/>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 };
