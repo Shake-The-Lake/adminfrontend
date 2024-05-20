@@ -65,7 +65,7 @@ const EventOverview: React.FC = () => {
 			<LoadingSpinner isLoading={isLoading} />
 
 			<div className="w-full mb-10 flex justify-start">
-				<h2 className="text-3xl font-bold">{eventTitle}</h2>
+				<h2 className="text-2xl font-bold">{eventTitle}</h2>
 			</div>
 
 			<div className="w-full flex flex-col lg:flex-row">

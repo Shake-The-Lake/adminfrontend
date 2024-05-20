@@ -15,6 +15,7 @@ const BoatsOverview: React.FC = () => {
 	const location = useLocation();
 	const pathSegments = location.pathname.split('/');
 	const eventId = pathSegments[pathSegments.length - 2];
+	const [eventTitle, setEventTitle] = useState('');
 	const [boats, setBoats] = useState<BoatDto[]>([]);
 
 	const createNewBoat: SubmitHandler<z.infer<typeof boatFormSchema>> = (
@@ -26,6 +27,7 @@ const BoatsOverview: React.FC = () => {
 			try {
 				const event = await getEventById(Number(eventId));
 				const boatIds = event.boatIds;
+				setEventTitle(event.title);
 
 				const fetchedBoats = await Promise.all(
 					boatIds.map((id) => getBoatById(id)),
@@ -50,8 +52,9 @@ const BoatsOverview: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center py-10 px-10">
-			<div className="flex justify-between items-center w-full mb-8">
-				<h1 className="text-2xl font-bold">{t('boats')}</h1>
+			<div className="w-full mb-10 flex flex-col justify-start">
+				<h2 className="text-2xl font-bold">{eventTitle}</h2>
+				<h2 className="mt-5">Boats</h2>
 			</div>
 			{boats.length === 0 ? (
 				<div className="flex flex-col items-center justify-center w-full h-full">
