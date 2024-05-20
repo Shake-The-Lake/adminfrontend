@@ -9,6 +9,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	FormMessage,
 } from '../../../components/ui/form';
 import {Input} from '../../../components/ui/input';
 import {Button} from '../../../components/ui/button';
@@ -106,123 +107,139 @@ const ActiveTypeDialog: React.FC = () => {
 								<Button 
 									type="button"
 									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'en' ? 'bg-white' : 'bg-primary-stroke'}`} 
-									onClick={() => {
-										setCurrentLanguage('en'); 
+									onClick={async () => {
+										const isValid = await form.trigger(['checklistDe', 'descriptionDe', 'titleDe']);
+										if (isValid) {
+											setCurrentLanguage('en'); 
+										}
 									}}
 								>English</Button>
 								<Button 
 									type="button"
 									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'de' ? 'bg-white' : 'bg-primary-stroke'}`} 
-									onClick={() => {
-										setCurrentLanguage('de');
+									onClick={async () => {
+										const isValid = await form.trigger(['checklistEn', 'descriptionEn', 'titleen']);
+										if (isValid) {
+											setCurrentLanguage('de');
+										}
 									}}
 								>German</Button>
 							</div>
 							<p className="text-primary-dark-stroke mb-2 mt-2">Enter English content and content that does not belong to a specific language here.</p>
-							<div>
-								{currentLanguage === 'en' ? (
-									<FormField
-										name="titleEn"
-										control={form.control}
-										render={({field}) => (
-											<FormItem>
-												<FormLabel>Title en</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="Title in English"
-														{...field}
-														className="input"
-													/>
-												</FormControl>
-											</FormItem>
-										)}></FormField>
-								) : 								(
-									<FormField
-										name="titleDe"
-										control={form.control}
-										render={({field}) => (
-											<FormItem>
-												<FormLabel>Title de</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="Title in German"
-														{...field}
-														className="input"
-													/>
-												</FormControl>
-											</FormItem>
-										)}></FormField>)}
+							<div							
+								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} ><FormField
+									name="titleEn"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>Title En</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Title in English"
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}></FormField>
 							</div>
-							<div>
-								{currentLanguage === 'en' ? (
-									<FormField
-										name="descriptionEn"
-										control={form.control}
-										render={({field}) => (
-											<FormItem>
-												<FormLabel>Description</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="Title in English"
-														{...field}
-														className="input"
-													/>
-												</FormControl>
-											</FormItem>
-										)}></FormField>
-								) : 								(
-									<FormField
-										name="descriptionDe"
-										control={form.control}
-										render={({field}) => (
-											<FormItem>
-												<FormLabel>Description</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="Description in German"
-														{...field}
-														className="input"
-													/>
-												</FormControl>
-											</FormItem>
-										)}></FormField>)}
+							<div							
+								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
+								<FormField
+									name="titleDe"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>Title De</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Title in German"
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}></FormField>
 							</div>
-							{/* Location ist currently just a single string field for simplicity
-							In the Future we will need some more fields or a seperate form to fill the date for the location
-							*/}
-							<div>
-								{currentLanguage === 'en' ? (
-									<FormField
-										name="checklistEn"
-										control={form.control}
-										render={({field}) => (
-											<FormItem>
-												<FormLabel>Title</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="Checklist in English"
-														{...field}
-														className="input"
-													/>
-												</FormControl>
-											</FormItem>
-										)}></FormField>
-								) : 								(
-									<FormField
-										name="checklistDe"
-										control={form.control}
-										render={({field}) => (
-											<FormItem>
-												<FormLabel>Title</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="Checklist in German"
-														{...field}
-														className="input"
-													/>
-												</FormControl>
-											</FormItem>
-										)}></FormField>)}
+							<div							
+								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} >
+								<FormField
+									name="descriptionEn"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>Description En</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Title in English"
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}></FormField>
+							</div>
+
+							<div							
+								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
+								<FormField
+									name="descriptionDe"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>Description de</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Description in German"
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}></FormField>
+							</div>
+							<div							
+								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} >
+								<FormField
+									name="checklistEn"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>Checklist En</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Checklist in English"
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}></FormField>
+							</div>
+								
+							<div							
+								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
+								<FormField
+									name="checklistDe"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>Checklist De</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Checklist in German"
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}></FormField>
 							</div>
 						</form>
 					</Form>
@@ -235,7 +252,6 @@ const ActiveTypeDialog: React.FC = () => {
 					</DialogClose>
 					<Button
 						type="submit"
-						disabled={!form.formState.isValid}
 						onClick={form.handleSubmit(onSubmit)}>
 						Save
 					</Button>
