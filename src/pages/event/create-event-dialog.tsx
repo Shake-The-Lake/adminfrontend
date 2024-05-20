@@ -41,6 +41,7 @@ const CreateEventDialog: React.FC = () => {
 			date: values.date,
 			customerCode: 'abcdefg', // TODO: backend does not allow null values here anymore but Design does not include creating customer code in creat event popup
 			employeeCode: '',
+			boatIds: [],
 			customerOnlyTime: values.customerOnlyTime,
 			isStarted: false,
 			startedAt: values.startedAt,

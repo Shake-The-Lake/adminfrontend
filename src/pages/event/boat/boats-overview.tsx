@@ -6,7 +6,9 @@ import {getBoatById} from '../../../services/boat-service';
 import {BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/card';
 import StlDialog from '../../../components/dialog/dialog';
-import BoatForm from '../../../components/forms/boat';
+import BoatForm, {boatFormSchema} from '../../../components/forms/boat';
+import type {SubmitHandler} from 'react-hook-form';
+import {z} from 'zod';
 
 const BoatsOverview: React.FC = () => {
 	const {t} = useTranslation();
@@ -14,6 +16,10 @@ const BoatsOverview: React.FC = () => {
 	const pathSegments = location.pathname.split('/');
 	const eventId = pathSegments[pathSegments.length - 2];
 	const [boats, setBoats] = useState<BoatDto[]>([]);
+
+	const createNewBoat: SubmitHandler<z.infer<typeof boatFormSchema>> = (
+		values,
+	) => {};
 
 	useEffect(() => {
 		const fetchEvent = async () => {
@@ -62,7 +68,7 @@ const BoatsOverview: React.FC = () => {
 								}),
 							)
 						}>
-						<BoatForm />
+						<BoatForm onSubmit={createNewBoat} />
 					</StlDialog>
 				</div>
 			) : (
