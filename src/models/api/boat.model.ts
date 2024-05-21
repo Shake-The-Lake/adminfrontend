@@ -3,12 +3,12 @@ export type BoatDto = {
 	boatDriverId?: number;
 	name: string;
 	type: string;
-	seatsRider: number;
-	seatsViewer: number;
-	slotDurationInMins: number;
+	seatsRider: string;
+	seatsViewer: string;
+	slotDurationInMins?: number;
 	availableFrom: string;
 	availableUntil: string;
-	timeSlotIds: Set<number>;
+	timeSlotIds?: Set<number>;
 	activityTypeId?: number;
 	eventId?: number;
 };

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLocation} from 'react-router-dom';
 import {getEventById} from '../../../services/event-service';
-import {getBoatById} from '../../../services/boat-service';
+import {createBoat, getBoatById} from '../../../services/boat-service';
 import {BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/card';
 import StlDialog from '../../../components/dialog/dialog';
@@ -20,10 +20,29 @@ const BoatsOverview: React.FC = () => {
 
 	const createNewBoat: SubmitHandler<z.infer<typeof boatFormSchema>> = (
 		values,
-	) => {};
+	) => {
+		const boat: BoatDto = {
+			id: 0,
+			name: values.boatName,
+			boatDriverId: 1, // TODO handle logic for boatdrivers
+			type: values.boatType,
+			seatsRider: values.riderSeats,
+			seatsViewer: values.viewerSeats,
+			activityTypeId: 1, // TODO handle and discuss logic
+			availableFrom: values.boatAvailableForm,
+			availableUntil: values.boatAvailableUntil,
+			eventId: Number(eventId),
+		};
+		try {
+			const createdBoat = createBoat(boat);
+			console.log('Created boat:', createdBoat);
+		} catch (error) {
+			console.error('Failed to create boat:', error);
+		}
+	};
 
 	useEffect(() => {
-		const fetchEvent = async () => {
+		const fetchBoat = async () => {
 			try {
 				const event = await getEventById(Number(eventId));
 				const boatIds = event.boatIds;
@@ -37,15 +56,10 @@ const BoatsOverview: React.FC = () => {
 				console.error('Error fetching boats:', error);
 			}
 		};
-		fetchEvent();
+		fetchBoat();
 	}, [eventId]);
 
-	const handleCreateNewBoat = async () => {
-		// TODO
-		return;
-	};
-
-	const handleDelete = async (id: number) => {
+	const deleteBoat = async (id: number) => {
 		// TODO
 		return true;
 	};
@@ -75,15 +89,15 @@ const BoatsOverview: React.FC = () => {
 					</StlDialog>
 				</div>
 			) : (
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 					{boats.map((boat) => (
-						<div key={boat.id} className="mb-4 flex justify-center">
+						<div key={boat.id} className="mb-2 flex justify-center">
 							<StlCard
 								id={boat.id}
 								title={boat.name}
 								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
 								path={`/boats/${boat.id}`}
-								handleDelete={handleDelete}
+								handleDelete={deleteBoat}
 							/>
 						</div>
 					))}

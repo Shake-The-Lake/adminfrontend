@@ -1,7 +1,6 @@
 import React from 'react';
 import {z} from 'zod';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
 
@@ -9,8 +8,8 @@ export const boatFormSchema = z.object({
 	boatName: z.string().min(5).max(20),
 	boatDriver: z.string(),
 	boatType: z.string(),
-	riderSeats: z.number(),
-	viewerSeats: z.number(),
+	riderSeats: z.string(),
+	viewerSeats: z.string(),
 	//slotDuration: z.number(), will be added later on
 	activityTypes: z.string().array(),
 	boatAvailableForm: z.string(),
@@ -26,7 +25,7 @@ type BoatFormProps = {
 
 const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 	const form = useForm<z.infer<typeof boatFormSchema>>({
-		resolver: zodResolver(boatFormSchema),
+		//resolver: zodResolver(boatFormSchema), Form Validation errors are currently not handelt correctly with popups or notifications -> if validations errors -> onSubmit won't do anything
 		mode: 'onChange',
 		defaultValues,
 	});
@@ -138,6 +137,7 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 						</FormItem>
 					)}
 				/>
+				<button type="submit" style={{display: 'none'}} />
 			</form>
 		</Form>
 	);

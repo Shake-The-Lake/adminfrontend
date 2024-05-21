@@ -12,3 +12,8 @@ export const getBoatById = async (id: number): Promise<BoatDto> => {
 	const response = await axios.get<BoatDto>(`${baseUrl}/boat/${id}`);
 	return response.data;
 };
+
+export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
+	const response = await axios.post<BoatDto>(`${baseUrl}/boat`, boat);
+	return response.data;
+};
