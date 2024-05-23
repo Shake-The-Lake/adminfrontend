@@ -13,6 +13,7 @@ import StlDialog from '../../../components/dialog/dialog';
 import BoatForm, {boatFormSchema} from '../../../components/forms/boat';
 import type {SubmitHandler} from 'react-hook-form';
 import {z} from 'zod';
+import {Plus} from 'lucide-react';
 
 const BoatsOverview: React.FC = () => {
 	const {t} = useTranslation();
@@ -104,6 +105,14 @@ const BoatsOverview: React.FC = () => {
 							/>
 						</div>
 					))}
+					<div className="mb-2 flex justify-center">
+						<button
+							className="flex items-center justify-center w-full h-full bg-primary text-white text-lg rounded-lg"
+							// TODO find solution for architecture
+							onClick={() => {}}>
+							<Plus className="w-20 h-20"></Plus>
+						</button>
+					</div>
 				</div>
 			)}
 		</div>

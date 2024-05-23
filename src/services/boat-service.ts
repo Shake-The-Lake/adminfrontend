@@ -19,6 +19,6 @@ export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
 };
 
 export const deleteBoat = async (id: number): Promise<BoatDto> => {
-	let response = await axios.delete<BoatDto>(`${baseUrl}/boat/${id}`);
+	const response = await axios.delete<BoatDto>(`${baseUrl}/boat/${id}`);
 	return response.data;
 };
