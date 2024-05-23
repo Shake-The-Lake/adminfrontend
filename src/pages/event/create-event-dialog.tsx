@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {type EventDto} from '../../models/api/event.model';
 import {createEvent} from '../../services/event-service';
 import StlDialog from '../../components/dialog/dialog';
-import EventForm from '../../components/forms/event';
+import EventForm, {useEventForm} from '../../components/forms/event';
 
 const formSchema = z.object({
 	title: z.string().min(5).max(20),
@@ -20,6 +20,7 @@ const formSchema = z.object({
 // Cannot update a component (`CreateEventDialog`) while rendering a different component (`Controller`). To locate the bad setState() call inside `Controller`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
+	const form = useEventForm();
 
 	const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = (values) => {
 		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
@@ -61,15 +62,8 @@ const CreateEventDialog: React.FC = () => {
 			title="Create Event"
 			description="Add a new event by entering the basic meta data needed."
 			triggerLabel="Add new event"
-			onSubmit={() =>
-				document.querySelector('form')?.dispatchEvent(
-					new Event('submit', {
-						cancelable: true,
-						bubbles: true,
-					}),
-				)
-			}>
-			<EventForm onSubmit={handleSubmit} />
+			onSubmit={() => handleSubmit(form.getValues())}>
+			<EventForm form={form} />
 		</StlDialog>
 	);
 };

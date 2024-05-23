@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import EventForm, {
 	EventFormSchema,
-	eventFormSchema,
+	useEventForm,
 } from '../../../components/forms/event';
-import {getEventById} from '../../../services/event-service';
-import type {SubmitHandler} from 'react-hook-form';
-import {z} from 'zod';
+import {getEventById, updateEvent} from '../../../services/event-service';
+import {SubmitHandler} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
 import EntryValidation from '../../../components/entry-validation/entry-validation';
 import LoadingSpinner from '../../../components/animations/loading';
@@ -13,17 +12,13 @@ import LoadingSpinner from '../../../components/animations/loading';
 const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	/* not quite happy with this solution to read out the event id
-  but it didnt worked with useParams...
-  */
 	const eventId = location.pathname.split('/').pop();
 	const [eventTitle, setEventTitle] = useState('');
-
 	const [defaultValues, setDefaultValues] = useState<
 		Partial<EventFormSchema> | undefined
 	>(undefined);
+	const form = useEventForm();
 	const [isLoading, setIsLoading] = useState(true);
-
 	useEffect(() => {
 		const fetchEvent = async () => {
 			try {
@@ -49,17 +44,24 @@ const EventOverview: React.FC = () => {
 				setIsLoading(false);
 			}
 		};
-
 		fetchEvent();
 	}, [eventId, navigate]);
 
-	const handleSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
-		data,
-	) => {
-		console.log('Form submitted:', data);
-		// TODO implement / renew backend endpoint
+	const handleUpdate: SubmitHandler<EventFormSchema> = async (event) => {
+		try {
+			const updatedEvent = {
+				...event,
+				// add fields witch are not covered yet by the ui TODO: fix this
+				endedAt: new Date().toISOString(),
+				customerCode: 'dummyCustomerCode',
+				employeeCode: 'dummyEmployeeCode',
+			};
+			setEventTitle(event.title);
+			await updateEvent(Number(eventId), updatedEvent);
+		} catch (error) {
+			console.error('Error updating event:', error);
+		}
 	};
-
 	return (
 		<div className="flex flex-col items-start justify-between px-20 py-10 max-h-fit w-full">
 			<LoadingSpinner isLoading={isLoading} />
@@ -74,13 +76,16 @@ const EventOverview: React.FC = () => {
 					<p className="mb-8 text-gray-600">
 						Enter the basic data for the event
 					</p>
-					<EventForm onSubmit={handleSubmit} defaultValues={defaultValues} />
+					<EventForm form={form} defaultValues={defaultValues} />
 				</div>
 				<div className="hidden lg:block border-l border-gray-300 mx-4"></div>
 				<div className="w-full lg:w-1/2 flex flex-col">
 					<EntryValidation />
 					<div className="mt-40 flex justify-end">
-						<button className="bg-primary text-white px-4 py-2 rounded-md">
+						<button
+							type="submit"
+							onClick={form.handleSubmit(handleUpdate)}
+							className="bg-primary text-white px-4 py-2 rounded-md">
 							Save Changes
 						</button>
 					</div>

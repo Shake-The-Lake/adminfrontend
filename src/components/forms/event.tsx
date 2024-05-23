@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
-import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
 
@@ -17,26 +16,39 @@ export const eventFormSchema = z.object({
 export type EventFormSchema = z.infer<typeof eventFormSchema>;
 
 type EventFormProps = {
-	onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>>;
+	onSubmit?: SubmitHandler<z.infer<typeof eventFormSchema>>;
 	defaultValues?: Partial<EventFormSchema>;
+	form: ReturnType<typeof useEventForm>;
 };
 
-const EventForm: React.FC<EventFormProps> = ({onSubmit, defaultValues}) => {
-	const form = useForm<z.infer<typeof eventFormSchema>>({
-		resolver: zodResolver(eventFormSchema),
+export const useEventForm = () =>
+	useForm<z.infer<typeof eventFormSchema>>({
+		//resolver: zodResolver(eventFormSchema), validation disabled because of missing error handling & onSubmit doesnt work
 		mode: 'onChange',
-		defaultValues,
 	});
 
+const EventForm: React.FC<EventFormProps> = ({
+	onSubmit,
+	defaultValues,
+	form,
+}) => {
 	useEffect(() => {
 		if (defaultValues) {
 			form.reset(defaultValues);
 		}
 	}, [defaultValues, form]);
 
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const data = form.getValues();
+		if (onSubmit) {
+			onSubmit(data);
+		}
+	};
+
 	return (
 		<Form {...form}>
-			<form className="p-1 space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+			<form className="p-1 space-y-4" onSubmit={handleSubmit}>
 				<FormField
 					name="title"
 					control={form.control}
