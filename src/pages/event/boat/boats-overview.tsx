@@ -2,7 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLocation} from 'react-router-dom';
 import {getEventById} from '../../../services/event-service';
-import {createBoat, getBoatById} from '../../../services/boat-service';
+import {
+	createBoat,
+	deleteBoat,
+	getBoatById,
+} from '../../../services/boat-service';
 import {BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/card';
 import StlDialog from '../../../components/dialog/dialog';
@@ -59,9 +63,8 @@ const BoatsOverview: React.FC = () => {
 		fetchBoat();
 	}, [eventId]);
 
-	const deleteBoat = async (id: number) => {
-		// TODO
-		return true;
+	const removeBoat = async (id: number) => {
+		await deleteBoat(id);
 	};
 
 	return (
@@ -97,7 +100,7 @@ const BoatsOverview: React.FC = () => {
 								title={boat.name}
 								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
 								path={`/boats/${boat.id}`}
-								handleDelete={deleteBoat}
+								handleDelete={removeBoat}
 							/>
 						</div>
 					))}
