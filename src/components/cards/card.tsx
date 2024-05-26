@@ -12,10 +12,10 @@ import {Button} from '../ui/button';
 
 export type StlCardProps = {
 	id: number;
-	title: string;
+	title?: string;
 	description?: string;
 	path: string;
-	handleDelete: (id: number) => Promise<boolean>;
+	handleDelete: (id: number) => Promise<void>;
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {

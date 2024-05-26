@@ -6,15 +6,15 @@ import DefaultLayout from './components/default-layout';
 import EventDetailLayout from './components/event-detail-layout';
 import {eventDetailRoutes} from './constants';
 import {
-	HomePage,
-	ErrorPage,
-	EventPage,
-	ActivityTypesPage,
 	ActivityTypePage,
-	BoatsPage,
+	ActivityTypesPage,
 	BoatPage,
-	SchedulePage,
+	BoatsOverview,
 	BookingsPage,
+	ErrorPage,
+	EventOverview,
+	HomePage,
+	SchedulePage,
 } from './pages';
 
 const router = createBrowserRouter([
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
 			{index: true, element: <Navigate to="/" replace={true} />},
 			{
 				path: eventDetailRoutes.id,
-				element: <EventPage />,
+				element: <EventOverview />,
 			},
 			{
 				path: `${eventDetailRoutes.id}/${eventDetailRoutes.activityTypes}`,
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: `${eventDetailRoutes.id}/${eventDetailRoutes.boats}`,
-				element: <BoatsPage />,
+				element: <BoatsOverview />,
 			},
 			{
 				path: `${eventDetailRoutes.id}/${eventDetailRoutes.boats}/${eventDetailRoutes.boatId}`,
