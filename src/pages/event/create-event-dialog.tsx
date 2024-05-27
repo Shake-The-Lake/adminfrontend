@@ -49,9 +49,12 @@ const CreateEventDialog: React.FC = () => {
 			endedAt: todayAsString, // TODO Frontend UI does not have end dates jet planned.
 		};
 		try {
-			const createdEvent = createEvent(event);
+			const createdEvent = createEvent(event)
+				.then((response) => {
+					navigate('/event/' + response.id);
+					return response.id;
+				});
 			console.log('Created event:', createdEvent);
-			navigate('/');
 		} catch (error) {
 			console.error('Failed to create event:', error);
 		}

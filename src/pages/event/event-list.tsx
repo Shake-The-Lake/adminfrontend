@@ -39,8 +39,11 @@ const EventList = () => {
 
 	const handleDelete = async (id?: number) => {
 		try {
-			await deleteEvent(id);
-			return true;
+			return await deleteEvent(id)
+				.then(() => {
+					setEvents(events.filter((event) => event.id !== id));
+					return true;
+				});
 		} catch (error) {
 			console.error(error); // Todo! add "real" error handling
 			return false;
