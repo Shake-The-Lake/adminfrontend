@@ -7,6 +7,7 @@ export type EventDto = {
 	customerCode: string;
 	employeeCode: string;
 	customerOnlyTime: string;
+	boatIds: number[];
 	isStarted: boolean;
 	startedAt: string;
 	endedAt: string;
