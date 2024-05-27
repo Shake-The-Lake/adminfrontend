@@ -64,12 +64,12 @@ const ActivityTypesPage = () => {
 	};
 
 	return (
-		<div className="flex justify-center w-full max-w-lg">
+		<div className="flex justify-center w-full">
 			<div className="w-full max-w-6xl p-4">
-				<ul>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 					{activityTypes.length > 0 ? (
 						activityTypes.map((activityType) => (
-							<li key={activityType.id} className="mb-4 flex justify-center">
+							<div key={activityType.id} className="mb-4 flex justify-center">
 								<StlCard
 									id={activityType.id}
 									title={getTranslation(i18n.language, activityType.name)}
@@ -77,17 +77,18 @@ const ActivityTypesPage = () => {
 									handleEdit={handleEdit}
 									handleDelete={handleDelete}
 								/>
-							</li>
+							</div>
 						))
 					) : (
 						<p className="text-center">No activity types yet.</p>
 					)}
-				</ul>
-				<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
-					openActivityTypeDialog();
-				}}>
-					<Plus className="size-24" />
-				</Button>
+
+					<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
+						openActivityTypeDialog();
+					}}>
+						<Plus className="size-24" />
+					</Button>
+				</div>
 				
 				<CreateActivityTypeDialog 
 					setActivityType={getAllActivityTypes} 
