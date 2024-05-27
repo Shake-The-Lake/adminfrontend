@@ -47,11 +47,19 @@ export type StlActivityTypeProps = {
 };
 const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 	const [currentLanguage, setCurrentLanguage] = useState('de');
-
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		mode: 'onChange',
-  	defaultValues: props.currentActivityType,
+		// TODO update the values when the form is opened with the current activity type
+		// defaultValues: {
+		// 	titleDe: props.currentActivityType?.name?.de ?? '',
+		// 	titleEn: props.currentActivityType?.name?.en ?? '',
+		// 	descriptionDe: props.currentActivityType?.description?.de ?? '',
+		// 	descriptionEn: props.currentActivityType?.description?.en ?? '',
+		// 	icon: props.currentActivityType?.icon ?? '',
+		// 	checklistDe: props.currentActivityType?.checklist?.de ?? '',
+		// 	checklistEn: props.currentActivityType?.checklist?.en ?? '',
+		// },
 	});
 	const {id} = useParams<{eventId: string}>();
 	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values) => {
@@ -90,13 +98,6 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 
 	return (
 		<Dialog open={props.isActivityTypeDialogOpen}>
-			<DialogTrigger asChild>
-				<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
-					props.openActivityTypeDialog(); 
-				}}>
-					<Plus className="size-24" />
-				</Button>
-			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle>Create Active Type</DialogTitle>

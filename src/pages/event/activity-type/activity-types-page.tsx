@@ -5,6 +5,8 @@ import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/card';
 import CreateActivityTypeDialog from './create-activity-type-dialog';
 import {getTranslation} from '../../../lib/utils';
+import {Button} from '../../../components/ui/button';
+import {Plus} from 'lucide-react';
 
 const ActivityTypesPage = () => {
 	const [activityTypes, setActivityType] = useState<ActivityTypeDto[]>([]);
@@ -46,7 +48,8 @@ const ActivityTypesPage = () => {
 	if (error) return <p>{error}</p>;
 
 	const handleEdit = async (id?: number) => {
-		setActiveActivityType( activityTypes.find((activityType) => activityType.id === id));
+		const currentActiveType = activityTypes.find((activityType) => activityType.id === id);
+		setActiveActivityType(currentActiveType);
 		openActivityTypeDialog();
 	};
 
@@ -80,7 +83,19 @@ const ActivityTypesPage = () => {
 						<p className="text-center">No activity types yet.</p>
 					)}
 				</ul>
-				<CreateActivityTypeDialog setActivityType={getAllActivityTypes} currentActivityType={activeActivityType} isActivityTypeDialogOpen={isActivityTypeDialogOpen} closeActivityTypeDialog={closeActivityTypeDialog} openActivityTypeDialog={open}/>
+				<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
+					openActivityTypeDialog();
+				}}>
+					<Plus className="size-24" />
+				</Button>
+				
+				<CreateActivityTypeDialog 
+					setActivityType={getAllActivityTypes} 
+					currentActivityType={activeActivityType} 
+					isActivityTypeDialogOpen={isActivityTypeDialogOpen} 
+					closeActivityTypeDialog={closeActivityTypeDialog} 
+					openActivityTypeDialog={open}
+				/>
 				
 			</div>
 		</div>
