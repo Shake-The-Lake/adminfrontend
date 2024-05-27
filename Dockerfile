@@ -30,6 +30,7 @@ CMD [ "npm", "start" ]
 
 FROM development AS build
 
+ENV VITE_APP_BASE_URL=https://api.shake-the-lake.ch
 RUN ["npm", "run", "build"]
 
 FROM nginx:1.13-alpine
