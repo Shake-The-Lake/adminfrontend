@@ -5,6 +5,7 @@ import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/card';
 import CreateActivityTypeDialog from './create-activity-type-dialog';
 import {getTranslation} from '../../../lib/utils';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Button} from '../../../components/ui/button';
 import {Plus} from 'lucide-react';
 
@@ -26,15 +27,17 @@ const ActivityTypesPage = () => {
 
 	const {i18n} = useTranslation();
 
+	const {id: eventId} = useParams<{eventId: string}>();
 	useEffect(() => {
 		async function fetchActivityTypes() {
 			try {
-				const activityTypeData = await getAllActivityTypes();
+				console.log(eventId);
+				const activityTypeData = await getAllActivityTypes(Number(eventId));
 				setActivityType(activityTypeData);
 				setLoading(false);
 			} catch (error) {
-				console.error('Error fetching events:', error);
-				setError('Failed to load events');
+				console.error(error);
+				setError('Failed to load activeTypes');
 				setLoading(false);
 			}
 		}
