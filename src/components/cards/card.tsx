@@ -40,10 +40,10 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 			</CardHeader>
 			<CardContent className="relative">
 				<CardDescription>{props.description}</CardDescription>
-				<Button variant="ghost" size="icon" onClick={handleNavigate}>
-					<ArrowRight className="cursor-pointer absolute bottom-0 right-0 mb-2 mr-2" />
-				</Button>
 			</CardContent>
+			<Button variant="ghost" className="absolute bottom-0 right-0 mb-2 mr-2" size="icon" onClick={handleNavigate}>
+				<ArrowRight />
+			</Button>
 		</Card>
 	);
 };
