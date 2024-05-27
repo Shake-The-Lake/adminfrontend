@@ -8,6 +8,17 @@ import {getTranslation} from '../../../lib/utils';
 
 const ActivityTypesPage = () => {
 	const [activityTypes, setActivityType] = useState<ActivityTypeDto[]>([]);
+	const [activeActivityType, setActiveActivityType] = useState<ActivityTypeDto | undefined>(undefined);
+	  const [isActivityTypeDialogOpen, setIsActivityTypeDialogOpen] = useState(false);
+
+	const openActivityTypeDialog = () => {
+		setIsActivityTypeDialogOpen(true); 
+	};
+
+	const closeActivityTypeDialog = () => {
+		setIsActivityTypeDialogOpen(false); 
+	};
+
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>(undefined);
 
@@ -34,7 +45,12 @@ const ActivityTypesPage = () => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>{error}</p>;
 
-	const handleDelete = async (id: number) => {
+	const handleEdit = async (id?: number) => {
+		setActiveActivityType( activityTypes.find((activityType) => activityType.id === id));
+		openActivityTypeDialog();
+	};
+
+	const handleDelete = async (id?: number) => {
 		try {
 			await deleteActivityType(id);
 			return true;
@@ -55,7 +71,7 @@ const ActivityTypesPage = () => {
 									id={activityType.id}
 									title={getTranslation(i18n.language, activityType.name)}
 									description={getTranslation(i18n.language, activityType.description)}
-									path={`${activityType.id}`}
+									handleEdit={handleEdit}
 									handleDelete={handleDelete}
 								/>
 							</li>
@@ -64,7 +80,8 @@ const ActivityTypesPage = () => {
 						<p className="text-center">No activity types yet.</p>
 					)}
 				</ul>
-				<CreateActivityTypeDialog setActivityType={setActivityType} />
+				<CreateActivityTypeDialog setActivityType={getAllActivityTypes} currentActivityType={activeActivityType} isActivityTypeDialogOpen={isActivityTypeDialogOpen} closeActivityTypeDialog={closeActivityTypeDialog} openActivityTypeDialog={open}/>
+				
 			</div>
 		</div>
 	);

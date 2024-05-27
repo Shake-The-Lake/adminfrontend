@@ -38,17 +38,21 @@ const formSchema = z.object({
 	checklistDe: z.string(),
 	checklistEn: z.string(),
 });
-
-// Todo! sometimes this generates an error, investigate sometime
-// Cannot update a component (`CreateEventDialog`) while rendering a different component (`Controller`). To locate the bad setState() call inside `Controller`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
-const ActiveTypeDialog: React.FC = ({setActivityType}) => {
+export type StlActivityTypeProps = {
+	isActivityTypeDialogOpen: boolean;
+	openActivityTypeDialog: () => void;
+	closeActivityTypeDialog: () => void;
+	currentActivityType?: ActivityTypeDto;
+	setActivityType: (activityType: ActivityTypeDto[]) => void;
+};
+const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 	const [currentLanguage, setCurrentLanguage] = useState('de');
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		mode: 'onChange',
+  	defaultValues: props.currentActivityType,
 	});
-	const [isOpen, setIsOpen] = useState(false);
 	const {id} = useParams<{eventId: string}>();
 	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values) => {
 		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
@@ -76,7 +80,7 @@ const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 		};
 		try {
 			await createActivityType(activeType);
-			setIsOpen(false);
+			props.closeActivityTypeDialog();
 			const newActivityTypeList: ActivityTypeDto[] = await getAllActivityTypes();
 			setActivityType(newActivityTypeList);
 		} catch (error) {
@@ -85,10 +89,10 @@ const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 	};
 
 	return (
-		<Dialog open={isOpen}>
+		<Dialog open={props.isActivityTypeDialogOpen}>
 			<DialogTrigger asChild>
 				<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
-					setIsOpen(true); 
+					props.openActivityTypeDialog(); 
 				}}>
 					<Plus className="size-24" />
 				</Button>
@@ -263,7 +267,7 @@ const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 					<DialogClose asChild>
 						<Button type="button" variant="secondary"
 							onClick={()=> {
-								setIsOpen(false); 
+								props.closeActivityTypeDialog();
 							}}>
 							Cancel
 						</Button>
