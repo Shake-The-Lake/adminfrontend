@@ -4,12 +4,14 @@ import {deleteEvent, getAllEvents} from '../../services/event-service';
 import CreateEventDialog from './create-event-dialog';
 import StlCard from '../../components/cards/card';
 import LoadingSpinner from '../../components/animations/loading';
+import {useNavigate} from 'react-router-dom';
 
 
 const EventList = () => {
 	const [events, setEvents] = useState<EventDto[]>([]);
 	const [error, setError] = useState<string | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
+	const navigate = useNavigate();
 
 	// Todo! throws warning sometimes:
 	// Warning: A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://reactjs.org/link/controlled-components
@@ -44,7 +46,10 @@ const EventList = () => {
 			return false;
 		}
 	};
-	
+
+	const handleEdit = async (id?: number) => {
+		navigate(`event/${id}`);
+	};
 
 	return (
 		<div className="flex justify-center w-full max-w-lg">
@@ -60,7 +65,7 @@ const EventList = () => {
 							<li key={event.id} className="mb-4 flex justify-center">
 								<StlCard
 									{...event}
-									path={`event/${event.id}`}
+									handleEdit={handleEdit}
 									handleDelete={handleDelete}
 								/>
 							</li>

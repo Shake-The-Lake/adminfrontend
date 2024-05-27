@@ -7,21 +7,19 @@ import {
 	CardHeader,
 	CardTitle,
 } from '../ui/card';
-import {useNavigate} from 'react-router-dom';
 import {Button} from '../ui/button';
 
 export type StlCardProps = {
 	id?: number;
 	title?: string;
 	description?: string;
-	path: string;
-	handleDelete: (id: number) => Promise<boolean>;
+	handleEdit: (id?: number) => Promise<void>;
+	handleDelete: (id?: number) => Promise<boolean>;
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
-	const navigate = useNavigate();
-	const handleNavigate = () => {
-		navigate(props.path);
+	const handleEdit = async () => {
+		await props.handleEdit(props.id);
 	};
 
 	const handleDelete = async () => {
@@ -41,7 +39,7 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 			<CardContent className="relative">
 				<CardDescription>{props.description}</CardDescription>
 			</CardContent>
-			<Button variant="ghost" className="absolute bottom-0 right-0 mb-2 mr-2" size="icon" onClick={handleNavigate}>
+			<Button variant="ghost" className="absolute bottom-0 right-0 mb-2 mr-2" size="icon" onClick={handleEdit}>
 				<ArrowRight />
 			</Button>
 		</Card>

@@ -55,7 +55,7 @@ const ActivityTypesPage = () => {
 									id={activityType.id}
 									title={getTranslation(i18n.language, activityType.name)}
 									description={getTranslation(i18n.language, activityType.description)}
-									path={`event/${activityType.id}`}
+									path={`${activityType.id}`}
 									handleDelete={handleDelete}
 								/>
 							</li>
