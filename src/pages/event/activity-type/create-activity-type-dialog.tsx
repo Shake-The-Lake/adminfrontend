@@ -118,7 +118,7 @@ const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 									type="button"
 									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'de' ? 'bg-white' : 'bg-primary-stroke'}`} 
 									onClick={async () => {
-										const isValid = await form.trigger(['checklistEn', 'descriptionEn', 'titleen']);
+										const isValid = await form.trigger(['checklistEn', 'descriptionEn', 'titleEn']);
 										if (isValid) {
 											setCurrentLanguage('de');
 										}
@@ -182,22 +182,6 @@ const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 										</FormItem>
 									)}></FormField>
 							</div>
-							<FormField
-								name="icon"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Icon</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Icon"
-												{...field}
-												className="input"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}></FormField>
 							<div							
 								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
 								<FormField
@@ -217,6 +201,22 @@ const ActiveTypeDialog: React.FC = ({setActivityType}) => {
 										</FormItem>
 									)}></FormField>
 							</div>
+							<FormField
+								name="icon"
+								control={form.control}
+								render={({field}) => (
+									<FormItem>
+										<FormLabel>Icon</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Icon"
+												{...field}
+												className="input"
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}></FormField>
 							<div							
 								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} >
 								<FormField

@@ -8,7 +8,6 @@ import LoadingSpinner from '../../components/animations/loading';
 
 const EventList = () => {
 	const [events, setEvents] = useState<EventDto[]>([]);
-	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
 
