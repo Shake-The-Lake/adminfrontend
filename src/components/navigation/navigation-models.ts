@@ -10,6 +10,7 @@ import {type MenuItemProperties} from './navigation-menu-item';
 import {type EventDto} from '../../models/api/event.model';
 import {getTranslation} from '../../lib/utils';
 import {createContext} from 'react';
+import './navigation.css';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const NavigationStructureContext = createContext(
@@ -38,7 +39,7 @@ export function getNavigationItemsForEvent(
 			link: `${eventBasePath}/${eventDetailRoutes.activityTypes}`,
 			labelKey: 'activityTypes',
 			icon: FolderCog,
-			needsFullMatch: true,
+			needsFullMatch: false,
 			subNavigations: activityTypes.map((activity) => ({
 				link: `${eventBasePath}/${eventDetailRoutes.activityTypes}/${activity.id}`,
 				labelKey: getTranslation(language, activity.name),
@@ -49,7 +50,7 @@ export function getNavigationItemsForEvent(
 			link: `${eventBasePath}/${eventDetailRoutes.boats}`,
 			labelKey: 'boats',
 			icon: Sailboat,
-			needsFullMatch: true,
+			needsFullMatch: false,
 			subNavigations: boats.map((boat) => ({
 				link: `${eventBasePath}/${eventDetailRoutes.boats}/${boat.id}`,
 				labelKey: boat.name,

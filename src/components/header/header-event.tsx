@@ -34,9 +34,9 @@ const EventNavigationElements = () => {
 						<img
 							src={iconPaths.shakeTheLake}
 							alt="Website Logo"
-							className="mr-2 h-10 w-10"
+							className="mr-2 h-10 w-10 text-primary"
 						/>
-						<span className="heading-xs">{t('shakeTheLake')}</span>
+						<span className="heading-xs text-primary">{t('shakeTheLake')}</span>
 					</Link>
 					{navigationItems}
 				</nav>
@@ -50,12 +50,12 @@ const HeaderEvent: React.FC = () => {
 	const navigate = useNavigate();
 
 	return (
-		<header className="flex h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6 backdrop-blur sticky top-0 z-10">
+		<header className="flex h-14 items-center gap-4 border-b px-4 lg:h-[var(--header-height)] lg:px-6 backdrop-blur sticky top-0 z-10">
 			<EventNavigationElements />
 			<div className="w-full flex-1"></div>
 			<Button
 				variant="link"
-				className="heading-xs"
+				className="heading-xs text-primary"
 				onClick={() => {
 					navigate('/');
 				}}>

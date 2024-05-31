@@ -5,6 +5,7 @@ import NavigationMenuItem from './navigation-menu-item';
 import {iconPaths} from '../../constants';
 import {useTranslation} from 'react-i18next';
 import {NavigationStructureContext} from './navigation-models';
+import './navigation.css';
 
 const SideNavigation: React.FC = () => {
 	const {t} = useTranslation();
@@ -22,12 +23,12 @@ const SideNavigation: React.FC = () => {
 						<img
 							src={iconPaths.shakeTheLake}
 							alt={t('shakeTheLake')}
-							className="mr-2 h-10 w-10"
+							className="mr-2 h-10 w-10 text-primary"
 						/>
-						<span className="heading-xs">{t('shakeTheLake')}</span>
+						<span className="heading-xs text-primary">{t('shakeTheLake')}</span>
 					</Link>
 				</div>
-				<div className="flex-1 border-r">
+				<div className="side-navigation-container flex-1 border-r">
 					<nav className="grid items-start px-2 mt-4 text-sm font-medium lg:px-4">
 						{navigationItems}
 					</nav>
