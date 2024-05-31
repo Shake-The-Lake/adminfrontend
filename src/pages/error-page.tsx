@@ -11,8 +11,8 @@ const ErrorPage: React.FC = () => {
 			<div className="h-full flex flex-col justify-center items-center gap-4 text-center">
 				<h1 className="mb-4 text-6xl font-semibold text-primary-blue">404</h1>
 				<p className="mb-4 text-lg text-gray-600">
-					<h4>{t('page404Oops')}</h4>
-					<h4>{t('pageNotFound')}</h4>
+					<span>{t('page404Oops')}</span>
+					<span>{t('pageNotFound')}</span>
 				</p>
 				<div className="animate-bounce">
 					<img
