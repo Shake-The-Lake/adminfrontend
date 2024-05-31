@@ -1,23 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {getEventById} from '../../../services/event-service';
 import {
 	createBoat,
 	deleteBoat,
 	getBoatById,
 } from '../../../services/boat-service';
-import {BoatDto} from '../../../models/api/boat.model';
+import {type BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/card';
 import StlDialog from '../../../components/dialog/dialog';
-import BoatForm, {boatFormSchema} from '../../../components/forms/boat';
+import BoatForm, {type boatFormSchema} from '../../../components/forms/boat';
 import type {SubmitHandler} from 'react-hook-form';
-import {z} from 'zod';
+import {type z} from 'zod';
 import {Plus} from 'lucide-react';
 
 const BoatsOverview: React.FC = () => {
 	const {t} = useTranslation();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const pathSegments = location.pathname.split('/');
 	const eventId = pathSegments[pathSegments.length - 2];
 	const [eventTitle, setEventTitle] = useState('');
@@ -50,21 +51,26 @@ const BoatsOverview: React.FC = () => {
 		const fetchBoat = async () => {
 			try {
 				const event = await getEventById(Number(eventId));
-				const boatIds = event.boatIds;
+				const {boatIds} = event;
 				setEventTitle(event.title);
 
 				const fetchedBoats = await Promise.all(
-					boatIds.map((id) => getBoatById(id)),
+					boatIds.map(async (id) => getBoatById(id)),
 				);
 				setBoats(fetchedBoats);
 			} catch (error) {
 				console.error('Error fetching boats:', error);
 			}
 		};
+
 		fetchBoat();
 	}, [eventId]);
 
-	const removeBoat = async (id: number) => {
+	const handleEdit = async (id?: number) => {
+		navigate(`${id}`);
+	};
+
+	const removeBoat = async (id?: number) => {
 		await deleteBoat(id);
 	};
 
@@ -100,7 +106,7 @@ const BoatsOverview: React.FC = () => {
 								id={boat.id}
 								title={boat.name}
 								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
-								path={`/boats/${boat.id}`}
+								handleEdit={handleEdit}
 								handleDelete={removeBoat}
 							/>
 						</div>

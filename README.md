@@ -20,7 +20,7 @@ In the project directory, you can run:
 
 Please install of you the vscode extension this will lint your code and make some tool tips when you add some code which isn't our styleguid: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint 
 
-### Pretier
+### Prettier
 That we all have the same space/taps/width etc. please install the code extension: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
 ### Pre hook

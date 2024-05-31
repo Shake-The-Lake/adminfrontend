@@ -6,9 +6,9 @@ import StlCard from '../../components/cards/card';
 import LoadingSpinner from '../../components/animations/loading';
 import {useNavigate} from 'react-router-dom';
 
+
 const EventList = () => {
 	const [events, setEvents] = useState<EventDto[]>([]);
-	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
@@ -37,7 +37,7 @@ const EventList = () => {
 
 	if (error) return <p>{error}</p>;
 
-	const handleDelete = async (id: number) => {
+	const handleDelete = async (id?: number) => {
 		try {
 			return await deleteEvent(id)
 				.then(() => {
@@ -48,6 +48,10 @@ const EventList = () => {
 			console.error(error); // Todo! add "real" error handling
 			return false;
 		}
+	};
+
+	const handleEdit = async (id?: number) => {
+		navigate(`event/${id}`);
 	};
 
 	return (
@@ -64,7 +68,7 @@ const EventList = () => {
 							<li key={event.id} className="mb-4 flex justify-center">
 								<StlCard
 									{...event}
-									path={`event/${event.id}`}
+									handleEdit={handleEdit}
 									handleDelete={handleDelete}
 								/>
 							</li>
