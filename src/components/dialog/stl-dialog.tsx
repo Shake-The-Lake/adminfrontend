@@ -10,6 +10,7 @@ import {
 	DialogTrigger,
 } from '../ui/dialog';
 import {Button} from '../ui/button';
+import {Plus} from 'lucide-react';
 
 export type StlDialogProps = {
 	title: string;
@@ -28,7 +29,11 @@ const StlDialog: React.FC<StlDialogProps> = ({
 }) => (
 	<Dialog>
 		<DialogTrigger asChild>
-			<Button className="w-full text-center">{triggerLabel}</Button>
+			<Button
+				className="h-40 w-full flex items-center justify-center"
+				title={triggerLabel}>
+				<Plus className="size-24" />
+			</Button>
 		</DialogTrigger>
 		<DialogContent className="sm:max-w-md flex flex-col">
 			<DialogHeader>
@@ -39,11 +44,11 @@ const StlDialog: React.FC<StlDialogProps> = ({
 			<DialogFooter className="justify-end items-end">
 				<DialogClose asChild>
 					<Button type="button" variant="secondary">
-							Cancel
+						Cancel
 					</Button>
 				</DialogClose>
 				<Button type="submit" onClick={onSubmit}>
-						Save
+					Save
 				</Button>
 			</DialogFooter>
 		</DialogContent>

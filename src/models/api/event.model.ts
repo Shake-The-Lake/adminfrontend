@@ -13,8 +13,8 @@ export type EventDto = {
 	isStarted?: boolean;
 	startedAt: string; // Assuming ISO string format for LocalDateTime
 	endedAt: string; // Assuming ISO string format for LocalDateTime
-	activityTypeIds?: Set<number>;
-	boatIds?: Set<number>;
+	activityTypeIds?: number[];
+	boatIds?: number[];
 	boats?: BoatDto[] | undefined;
 	activityTypes?: ActivityTypeDto[] | undefined;
 };

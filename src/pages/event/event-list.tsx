@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {type EventDto} from '../../models/api/event.model';
 import {deleteEvent, getAllEvents} from '../../services/event-service';
 import CreateEventDialog from './create-event-dialog';
-import StlCard from '../../components/cards/card';
+import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
 import {useNavigate} from 'react-router-dom';
-
 
 const EventList = () => {
 	const [events, setEvents] = useState<EventDto[]>([]);
@@ -39,11 +38,10 @@ const EventList = () => {
 
 	const handleDelete = async (id?: number) => {
 		try {
-			return await deleteEvent(id)
-				.then(() => {
-					setEvents(events.filter((event) => event.id !== id));
-					return true;
-				});
+			return await deleteEvent(id).then(() => {
+				setEvents(events.filter((event) => event.id !== id));
+				return true;
+			});
 		} catch (error) {
 			console.error(error); // Todo! add "real" error handling
 			return false;

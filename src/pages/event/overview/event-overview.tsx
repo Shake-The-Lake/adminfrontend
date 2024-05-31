@@ -13,7 +13,6 @@ const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const eventId = location.pathname.split('/').pop();
-	const [eventTitle, setEventTitle] = useState('');
 	const [defaultValues, setDefaultValues] = useState<
 	Partial<EventFormSchema> | undefined
 	>(undefined);
@@ -29,7 +28,6 @@ const EventOverview: React.FC = () => {
 				}
 
 				const event = await getEventById(Number(eventId));
-				setEventTitle(event.title);
 				const transformedEvent = {
 					title: event.title,
 					description: event.description,
@@ -60,7 +58,6 @@ const EventOverview: React.FC = () => {
 				customerCode: 'dummyCustomerCode',
 				employeeCode: 'dummyEmployeeCode',
 			};
-			setEventTitle(event.title);
 			await updateEvent(Number(eventId), updatedEvent);
 		} catch (error) {
 			console.error('Error updating event:', error);
@@ -70,10 +67,6 @@ const EventOverview: React.FC = () => {
 	return (
 		<div className="flex flex-col items-start justify-between px-20 py-10 max-h-fit w-full">
 			<LoadingSpinner isLoading={isLoading} />
-
-			<div className="w-full mb-10 flex justify-start">
-				<h2 className="text-2xl font-bold">{eventTitle}</h2>
-			</div>
 
 			<div className="w-full flex flex-col lg:flex-row">
 				<div className="w-full lg:w-1/2 pr-10">
