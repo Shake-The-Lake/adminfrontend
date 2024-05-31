@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import EventForm, {
-	EventFormSchema,
+	type EventFormSchema,
 	useEventForm,
 } from '../../../components/forms/event';
 import {getEventById, updateEvent} from '../../../services/event-service';
-import {SubmitHandler} from 'react-hook-form';
+import {type SubmitHandler} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
 import EntryValidation from '../../../components/entry-validation/entry-validation';
 import LoadingSpinner from '../../../components/animations/loading';
@@ -15,7 +15,7 @@ const EventOverview: React.FC = () => {
 	const eventId = location.pathname.split('/').pop();
 	const [eventTitle, setEventTitle] = useState('');
 	const [defaultValues, setDefaultValues] = useState<
-		Partial<EventFormSchema> | undefined
+	Partial<EventFormSchema> | undefined
 	>(undefined);
 	const form = useEventForm();
 	const [isLoading, setIsLoading] = useState(true);
@@ -27,6 +27,7 @@ const EventOverview: React.FC = () => {
 					navigate('/');
 					return;
 				}
+
 				const event = await getEventById(Number(eventId));
 				setEventTitle(event.title);
 				const transformedEvent = {
@@ -44,14 +45,17 @@ const EventOverview: React.FC = () => {
 				setIsLoading(false);
 			}
 		};
-		fetchEvent();
+
+		fetchEvent()
+			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
+			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, [eventId, navigate]);
 
 	const handleUpdate: SubmitHandler<EventFormSchema> = async (event) => {
 		try {
 			const updatedEvent = {
 				...event,
-				// add fields witch are not covered yet by the ui TODO: fix this
+				// Add fields witch are not covered yet by the ui TODO: fix this
 				endedAt: new Date().toISOString(),
 				customerCode: 'dummyCustomerCode',
 				employeeCode: 'dummyEmployeeCode',
@@ -62,6 +66,7 @@ const EventOverview: React.FC = () => {
 			console.error('Error updating event:', error);
 		}
 	};
+
 	return (
 		<div className="flex flex-col items-start justify-between px-20 py-10 max-h-fit w-full">
 			<LoadingSpinner isLoading={isLoading} />

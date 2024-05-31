@@ -1,6 +1,6 @@
 import React from 'react';
 import {z} from 'zod';
-import {SubmitHandler, useForm} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';

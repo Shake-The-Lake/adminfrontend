@@ -1,18 +1,16 @@
 import React from 'react';
 import EntryValidationForm, {
-	entryValidationSchema,
+	type entryValidationSchema,
 } from '../forms/entry-validation';
 import type {SubmitHandler} from 'react-hook-form';
-import {z} from 'zod';
+import {type z} from 'zod';
 
 const EntryValidation: React.FC = () => {
 	const handleSubmit: SubmitHandler<
-		z.infer<typeof entryValidationSchema>
+	z.infer<typeof entryValidationSchema>
 	> = () => {
 		// TODO Implement API
 	};
-	try {
-	} catch (error) {}
 
 	return (
 		<div className="w-full lg:w-full pl-10 p-6 flex flex-col">
@@ -34,4 +32,5 @@ const EntryValidation: React.FC = () => {
 		</div>
 	);
 };
+
 export default EntryValidation;

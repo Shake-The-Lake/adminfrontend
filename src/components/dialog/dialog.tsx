@@ -25,31 +25,29 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	triggerLabel,
 	onSubmit,
 	children,
-}) => {
-	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button className="w-full text-center">{triggerLabel}</Button>
-			</DialogTrigger>
-			<DialogContent className="sm:max-w-md flex flex-col">
-				<DialogHeader>
-					<DialogTitle>{title}</DialogTitle>
-					<DialogDescription>{description}</DialogDescription>
-				</DialogHeader>
-				<div className="flex-grow overflow-auto p-1">{children}</div>
-				<DialogFooter className="justify-end items-end">
-					<DialogClose asChild>
-						<Button type="button" variant="secondary">
+}) => (
+	<Dialog>
+		<DialogTrigger asChild>
+			<Button className="w-full text-center">{triggerLabel}</Button>
+		</DialogTrigger>
+		<DialogContent className="sm:max-w-md flex flex-col">
+			<DialogHeader>
+				<DialogTitle>{title}</DialogTitle>
+				<DialogDescription>{description}</DialogDescription>
+			</DialogHeader>
+			<div className="flex-grow overflow-auto p-1">{children}</div>
+			<DialogFooter className="justify-end items-end">
+				<DialogClose asChild>
+					<Button type="button" variant="secondary">
 							Cancel
-						</Button>
-					</DialogClose>
-					<Button type="submit" onClick={onSubmit}>
-						Save
 					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
-	);
-};
+				</DialogClose>
+				<Button type="submit" onClick={onSubmit}>
+						Save
+				</Button>
+			</DialogFooter>
+		</DialogContent>
+	</Dialog>
+);
 
 export default StlDialog;

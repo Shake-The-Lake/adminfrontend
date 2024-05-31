@@ -7,12 +7,12 @@ import {
 	deleteBoat,
 	getBoatById,
 } from '../../../services/boat-service';
-import {BoatDto} from '../../../models/api/boat.model';
+import {type BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/card';
 import StlDialog from '../../../components/dialog/dialog';
-import BoatForm, {boatFormSchema} from '../../../components/forms/boat';
+import BoatForm, {type boatFormSchema} from '../../../components/forms/boat';
 import type {SubmitHandler} from 'react-hook-form';
-import {z} from 'zod';
+import {type z} from 'zod';
 import {Plus} from 'lucide-react';
 
 const BoatsOverview: React.FC = () => {
@@ -31,8 +31,8 @@ const BoatsOverview: React.FC = () => {
 			name: values.boatName,
 			boatDriverId: 1, // TODO handle logic for boatdrivers
 			type: values.boatType,
-			seatsRider: values.riderSeats,
-			seatsViewer: values.viewerSeats,
+			seatsRider: Number(values.riderSeats),
+			seatsViewer: Number(values.viewerSeats),
 			activityTypeId: 1, // TODO handle and discuss logic
 			availableFrom: values.boatAvailableForm,
 			availableUntil: values.boatAvailableUntil,
@@ -49,24 +49,26 @@ const BoatsOverview: React.FC = () => {
 	useEffect(() => {
 		const fetchBoat = async () => {
 			try {
-				const event = await getEventById(Number(eventId));
-				const boatIds = event.boatIds;
+				const event = await getEventById(Number(eventId), 'boats');
+				const {boatIds} = event;
 				setEventTitle(event.title);
 
-				const fetchedBoats = await Promise.all(
-					boatIds.map((id) => getBoatById(id)),
-				);
-				setBoats(fetchedBoats);
+				setBoats(event.boats ?? []);
 			} catch (error) {
 				console.error('Error fetching boats:', error);
 			}
 		};
-		fetchBoat();
+
+		fetchBoat()
+			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
+			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, [eventId]);
 
 	const removeBoat = async (id: number) => {
 		await deleteBoat(id);
 	};
+
+	const mockCall = () => null;
 
 	return (
 		<div className="flex flex-col items-center py-10 px-10">
@@ -109,7 +111,7 @@ const BoatsOverview: React.FC = () => {
 						<button
 							className="flex items-center justify-center w-full h-full bg-primary text-white text-lg rounded-lg"
 							// TODO find solution for architecture
-							onClick={() => {}}>
+							onClick={mockCall}>
 							<Plus className="w-20 h-20"></Plus>
 						</button>
 					</div>

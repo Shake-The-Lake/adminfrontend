@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {SubmitHandler, useForm} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
@@ -23,7 +23,7 @@ type EventFormProps = {
 
 export const useEventForm = () =>
 	useForm<z.infer<typeof eventFormSchema>>({
-		//resolver: zodResolver(eventFormSchema), validation disabled because of missing error handling & onSubmit doesnt work
+		// Resolver: zodResolver(eventFormSchema), validation disabled because of missing error handling & onSubmit doesnt work
 		mode: 'onChange',
 	});
 
