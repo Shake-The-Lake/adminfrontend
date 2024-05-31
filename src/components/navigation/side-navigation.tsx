@@ -4,30 +4,15 @@ import {Link} from 'react-router-dom';
 import NavigationMenuItem from './navigation-menu-item';
 import {iconPaths} from '../../constants';
 import {useTranslation} from 'react-i18next';
-import {
-	type NavigationEventDto,
-	getNavigationItemsForEvent,
-} from './navigation-models';
+import {NavigationStructureContext} from './navigation-models';
 
 const SideNavigation: React.FC = () => {
 	const {t} = useTranslation();
 
-	// Todo! need add this centralized, able to be loaded once from backend
-	const exampleEvent: NavigationEventDto = {
-		id: 2,
-		title: 'Example Event 2024',
-		activityTypes: [{id: 1, localizedName: 'Wakeboarding'}],
-		boats: [
-			{id: 1, name: 'This is not actually a key'},
-			{id: 2, name: 'Poseidon'},
-		],
-	};
-
-	const navigationItems = getNavigationItemsForEvent(exampleEvent).map(
-		(item) => (
-			<NavigationMenuItem key={item.link} {...item} isMobileView={false} />
-		),
-	);
+	const navigationStructure = React.useContext(NavigationStructureContext);
+	const navigationItems = navigationStructure.map((item) => (
+		<NavigationMenuItem key={item.link} {...item} isMobileView={false} />
+	));
 
 	return (
 		<div className="hidden md:block">

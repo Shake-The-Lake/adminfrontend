@@ -6,33 +6,17 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import NavigationMenuItem from '../navigation/navigation-menu-item';
 import {iconPaths} from '../../constants';
-import {
-	type NavigationEventDto,
-	getNavigationItemsForEvent,
-} from '../navigation/navigation-models';
+import {NavigationStructureContext} from '../navigation/navigation-models';
 
 // Todo! translate all texts
-// todo! save NavigationEventDto as context somewhere, in order to fill sidebar dynamically
 
 const EventNavigationElements = () => {
 	const {t} = useTranslation();
 
-	// Todo! need add this centralized, able to be loaded once from backend
-	const exampleEvent: NavigationEventDto = {
-		id: 2,
-		title: 'Example Event 2024',
-		activityTypes: [{id: 1, localizedName: 'Wakeboarding'}],
-		boats: [
-			{id: 1, name: 'This is not actually a key'},
-			{id: 2, name: 'Poseidon'},
-		],
-	};
-
-	const navigationItems = getNavigationItemsForEvent(exampleEvent).map(
-		(item) => (
-			<NavigationMenuItem key={item.link} {...item} isMobileView={true} />
-		),
-	);
+	const navigationStructure = React.useContext(NavigationStructureContext);
+	const navigationItems = navigationStructure.map((item) => (
+		<NavigationMenuItem key={item.link} {...item} isMobileView={true} />
+	));
 
 	return (
 		<Sheet>

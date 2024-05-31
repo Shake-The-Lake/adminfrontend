@@ -17,8 +17,9 @@ export const getAllEvents = async (): Promise<EventDto[]> => {
 	return response.data;
 };
 
-export const getEventById = async (id: number): Promise<EventDto> => {
-	const response = await axios.get<EventDto>(`${baseUrl}/event/${id}`);
+export const getEventById = async (id: number, expand = ''): Promise<EventDto> => {
+	const params = expand ? {expand} : {};
+	const response = await axios.get<EventDto>(`${baseUrl}/event/${id}`, {params});
 	return response.data;
 };
 
