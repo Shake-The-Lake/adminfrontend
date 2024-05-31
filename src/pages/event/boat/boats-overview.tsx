@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {getEventById} from '../../../services/event-service';
 import {
 	createBoat,
@@ -18,6 +18,7 @@ import {Plus} from 'lucide-react';
 const BoatsOverview: React.FC = () => {
 	const {t} = useTranslation();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const pathSegments = location.pathname.split('/');
 	const eventId = pathSegments[pathSegments.length - 2];
 	const [eventTitle, setEventTitle] = useState('');
@@ -50,7 +51,6 @@ const BoatsOverview: React.FC = () => {
 		const fetchBoat = async () => {
 			try {
 				const event = await getEventById(Number(eventId), 'boats');
-				const {boatIds} = event;
 				setEventTitle(event.title);
 
 				setBoats(event.boats ?? []);
@@ -64,8 +64,16 @@ const BoatsOverview: React.FC = () => {
 			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, [eventId]);
 
-	const removeBoat = async (id: number) => {
-		await deleteBoat(id);
+	const handleEdit = async (id?: number) => {
+		navigate(`${id}`);
+	};
+
+	const removeBoat = async (id?: number) => {
+		if (id) {
+			return (await deleteBoat(id)) !== null;
+		}
+
+		return false;
 	};
 
 	const mockCall = () => null;
@@ -102,7 +110,7 @@ const BoatsOverview: React.FC = () => {
 								id={boat.id}
 								title={boat.name}
 								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
-								path={`/boats/${boat.id}`}
+								handleEdit={handleEdit}
 								handleDelete={removeBoat}
 							/>
 						</div>

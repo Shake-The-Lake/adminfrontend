@@ -1,10 +1,8 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocation} from 'react-router-dom';
 
 const ActivityTypePage: React.FC = () => {
 	const {t} = useTranslation();
-	const location = useLocation();
 
 	return (
 		<>
