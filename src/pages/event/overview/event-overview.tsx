@@ -15,7 +15,7 @@ const EventOverview: React.FC = () => {
 	const location = useLocation();
 	const eventId = location.pathname.split('/').pop();
 	const [defaultValues, setDefaultValues] = useState<
-		Partial<EventFormSchema> | undefined
+	Partial<EventFormSchema> | undefined
 	>(undefined);
 	const form = useEventForm();
 	const [isLoading, setIsLoading] = useState(true);

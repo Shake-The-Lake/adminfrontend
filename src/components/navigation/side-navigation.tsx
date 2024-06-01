@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import {Link} from 'react-router-dom';
 import NavigationMenuItem from './navigation-menu-item';
-import {iconPaths} from '../../constants';
 import {useTranslation} from 'react-i18next';
 import {NavigationStructureContext} from './navigation-models';
 import './navigation.css';
+import ShakeTheLakeIcon from '../icons/shake-the-lake-icon';
 
 const SideNavigation: React.FC = () => {
 	const {t} = useTranslation();
@@ -20,11 +20,7 @@ const SideNavigation: React.FC = () => {
 			<div className="flex h-full max-h-screen flex-col sticky top-0">
 				<div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
 					<Link to="/" className="flex items-center gap-2 font-semibold">
-						<img
-							src={iconPaths.shakeTheLake}
-							alt={t('shakeTheLake')}
-							className="mr-2 h-10 w-10 text-primary"
-						/>
+						<ShakeTheLakeIcon className="mr-2 h-10 w-10 text-primary" />
 						<span className="heading-s-upper text-primary">
 							{t('shakeTheLake')}
 						</span>

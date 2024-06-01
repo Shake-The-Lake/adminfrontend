@@ -5,8 +5,8 @@ import {Sheet, SheetContent, SheetTrigger} from '../ui/sheet';
 import {Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import NavigationMenuItem from '../navigation/navigation-menu-item';
-import {iconPaths} from '../../constants';
 import {NavigationStructureContext} from '../navigation/navigation-models';
+import ShakeTheLakeIcon from '../icons/shake-the-lake-icon';
 
 // Todo! translate all texts
 
@@ -31,11 +31,7 @@ const EventNavigationElements = () => {
 					<Link
 						to="/"
 						className="flex items-center gap-2 text-lg font-semibold">
-						<img
-							src={iconPaths.shakeTheLake}
-							alt="Website Logo"
-							className="mr-2 h-10 w-10 text-primary"
-						/>
+						<ShakeTheLakeIcon className="mr-2 h-10 w-10 text-primary" />
 						<span className="heading-s-upper text-primary">
 							{t('shakeTheLake')}
 						</span>

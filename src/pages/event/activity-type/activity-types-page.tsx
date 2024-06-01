@@ -8,7 +8,7 @@ import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
 import CreateActivityTypeDialog from './create-activity-type-dialog';
 import {getTranslation} from '../../../lib/utils';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {Button} from '../../../components/ui/button';
 import {Plus} from 'lucide-react';
 import LoadingSpinner from '../../../components/animations/loading';
@@ -19,7 +19,7 @@ const ActivityTypesPage = () => {
 
 	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
 	const [activeActivityType, setActiveActivityType] = useState<
-		ActivityTypeDto | undefined
+	ActivityTypeDto | undefined
 	>(undefined);
 	const [isActivityTypeDialogOpen, setIsActivityTypeDialogOpen] =
 		useState(false);

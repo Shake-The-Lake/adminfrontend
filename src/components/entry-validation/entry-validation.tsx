@@ -8,7 +8,7 @@ import {Button} from '../ui/button';
 
 const EntryValidation: React.FC = () => {
 	const handleSubmit: SubmitHandler<
-		z.infer<typeof entryValidationSchema>
+	z.infer<typeof entryValidationSchema>
 	> = () => {
 		// TODO Implement API
 	};

@@ -63,8 +63,8 @@ const NavigationMenuItem = (props: MenuItemProperties) => {
 		props.subNavigations.length > 0;
 	const childItems = hasChildren
 		? props.subNavigations!.map((child) => (
-				<SubNavigationMenuItem key={child.link} {...child} />
-			))
+			<SubNavigationMenuItem key={child.link} {...child} />
+		))
 		: undefined;
 
 	const isMobileView = props.isMobileView ?? false;
