@@ -6,7 +6,7 @@ const resources: Resource = {
 	en: {
 		translation: {
 			// Messages
-			welcomeMessage: 'Welcome to React',
+			welcomeMessage: 'Welcome to ti&m event planning.',
 			loading: 'Loading...',
 			page404Oops: 'Oops! Looks like you\'re lost.',
 			pageNotFound: 'This page could not be found.',
@@ -30,12 +30,12 @@ const resources: Resource = {
 	},
 	de: {
 		translation: {
-			welcomeMessage: 'Willkommen bei React',
+			welcomeMessage: 'Willkommen bei ti&m Event-Planung',
 		},
 	},
 	gsw: {
 		translation: {
-			welcomeMessage: 'Wiukommä bi Reäct',
+			welcomeMessage: 'Wiukommä bir ti&m Event-Planig.',
 		},
 	},
 };
@@ -52,7 +52,7 @@ i18n
 		// The default language
 		fallbackLng: en,
 		// It shows the supported languages
-		supportedLngs: languages.map(l => l.code),
+		supportedLngs: languages.map((l) => l.code),
 	})
 	.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
 	.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
