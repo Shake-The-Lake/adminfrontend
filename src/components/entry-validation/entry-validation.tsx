@@ -4,10 +4,11 @@ import EntryValidationForm, {
 } from '../forms/entry-validation';
 import type {SubmitHandler} from 'react-hook-form';
 import {type z} from 'zod';
+import {Button} from '../ui/button';
 
 const EntryValidation: React.FC = () => {
 	const handleSubmit: SubmitHandler<
-	z.infer<typeof entryValidationSchema>
+		z.infer<typeof entryValidationSchema>
 	> = () => {
 		// TODO Implement API
 	};
@@ -24,9 +25,7 @@ const EntryValidation: React.FC = () => {
 			<div className="flex-grow space-y-4">
 				<EntryValidationForm onSubmit={handleSubmit} />
 				<div className="flex justify-end mt-4">
-					<button className="bg-white text-black px-4 border border-gray-200 py-2 rounded-md">
-						Export to QR Code
-					</button>
+					<Button variant="outline"> Export to QR Code </Button>
 				</div>
 			</div>
 		</div>

@@ -41,8 +41,8 @@ const SubNavigationMenuItem = (props: MenuItemProperties) => {
 				[
 					isPending ? 'pending' : '',
 					isActive
-						? 'active bg-border text-primary hover:text-muted-foreground'
-						: 'text-muted-foreground',
+						? 'active bg-border text-primary hover:text-muted-foreground hover:bg-slate-300'
+						: 'text-muted-foreground hover:bg-slate-200',
 					isTransitioning ? 'transitioning' : '',
 				].join(' ') + linkClass
 			}>
@@ -89,7 +89,7 @@ const NavigationMenuItem = (props: MenuItemProperties) => {
 					[
 						isPending ? 'pending' : '',
 						isActive
-							? 'active bg-muted text-primary hover:bg-secondary' + subNavClass
+							? 'active bg-muted text-primary hover:bg-slate-200' + subNavClass
 							: 'text-muted-foreground',
 						isTransitioning ? 'transitioning' : '',
 					].join(' ') + linkClass

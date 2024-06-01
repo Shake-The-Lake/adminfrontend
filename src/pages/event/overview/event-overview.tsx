@@ -8,13 +8,14 @@ import {type SubmitHandler} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
 import EntryValidation from '../../../components/entry-validation/entry-validation';
 import LoadingSpinner from '../../../components/animations/loading';
+import {Button} from '../../../components/ui/button';
 
 const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const eventId = location.pathname.split('/').pop();
 	const [defaultValues, setDefaultValues] = useState<
-	Partial<EventFormSchema> | undefined
+		Partial<EventFormSchema> | undefined
 	>(undefined);
 	const form = useEventForm();
 	const [isLoading, setIsLoading] = useState(true);
@@ -80,12 +81,9 @@ const EventOverview: React.FC = () => {
 				<div className="w-full lg:w-1/2 flex flex-col">
 					<EntryValidation />
 					<div className="mt-40 flex justify-end">
-						<button
-							type="submit"
-							onClick={form.handleSubmit(handleUpdate)}
-							className="bg-primary text-white px-4 py-2 rounded-md">
+						<Button type="submit" onClick={form.handleSubmit(handleUpdate)}>
 							Save Changes
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>

@@ -14,7 +14,7 @@ const HeaderDefault: React.FC = () => {
 			<div className="w-full flex-1"></div>
 			<Button
 				variant="link"
-				className="heading-xs text-primary"
+				className="heading-s-upper text-primary"
 				onClick={() => {
 					navigate('/');
 				}}>

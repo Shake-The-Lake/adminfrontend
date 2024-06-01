@@ -3,6 +3,7 @@ import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
+import {Button} from '../ui/button';
 
 export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
@@ -129,7 +130,7 @@ const EventForm: React.FC<EventFormProps> = ({
 						</FormItem>
 					)}
 				/>
-				<button type="submit" style={{display: 'none'}} />
+				<Button type="submit" style={{display: 'none'}} />
 			</form>
 		</Form>
 	);

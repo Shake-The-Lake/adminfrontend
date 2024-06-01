@@ -36,7 +36,9 @@ const EventNavigationElements = () => {
 							alt="Website Logo"
 							className="mr-2 h-10 w-10 text-primary"
 						/>
-						<span className="heading-xs text-primary">{t('shakeTheLake')}</span>
+						<span className="heading-s-upper text-primary">
+							{t('shakeTheLake')}
+						</span>
 					</Link>
 					{navigationItems}
 				</nav>
@@ -55,7 +57,7 @@ const HeaderEvent: React.FC = () => {
 			<div className="w-full flex-1"></div>
 			<Button
 				variant="link"
-				className="heading-xs text-primary"
+				className="heading-s-upper text-primary"
 				onClick={() => {
 					navigate('/');
 				}}>

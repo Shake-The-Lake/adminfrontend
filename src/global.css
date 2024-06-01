@@ -96,8 +96,12 @@
 		@apply text-2xl font-medium leading-none;
 	}
 
-	.heading-xs {
-		@apply text-sm font-medium leading-none uppercase;
+	.heading-m-upper {
+		@apply text-base font-medium leading-none uppercase;
+	}
+
+	.heading-s-upper {
+		@apply text-sm heading-m-upper;
 	}
 
 	p.body-xl {

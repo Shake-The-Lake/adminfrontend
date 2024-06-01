@@ -20,7 +20,9 @@ const HeaderLogo: React.FC = (hasBorderBottom = false) => {
 					alt={t('shakeTheLake')}
 					className="mr-2 h-10 w-10 text-primary"
 				/>
-				<span className="heading-xs text-primary">{t('shakeTheLake')}</span>
+				<span className="heading-s-upper text-primary">
+					{t('shakeTheLake')}
+				</span>
 			</Link>
 		</div>
 	);
