@@ -7,6 +7,7 @@ import {defaultBoatDto, type BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import BoatForm from '../../../components/forms/boat';
+import {tryGetErrorMessage} from '../../../lib/utils';
 
 const BoatsOverview: React.FC = () => {
 	const {id} = useParams<{id: string}>();
@@ -38,20 +39,20 @@ const BoatsOverview: React.FC = () => {
 		navigate(`${id}`);
 	};
 
-	const removeBoat = async (id?: number) => {
-		if (id) {
-			// Todo! add toasters in file
-			const success = await deleteBoat(id);
-			if (success) {
-				setBoats((prevBoats) => prevBoats.filter((boat) => boat.id !== id));
-				return true;
-			}
-
-			// If not success, fail
-			console.error('Failed to delete boat');
+	const handleDelete = async (id?: number) => {
+		if (!id) {
+			return false;
 		}
 
-		return false;
+		try {
+			await deleteBoat(id);
+			setBoats((prevBoats) => prevBoats.filter((boat) => boat.id !== id));
+		} catch (error) {
+			console.error(error);
+			return tryGetErrorMessage(error);
+		}
+
+		return true;
 	};
 
 	const handleCreateNewBoat = async (dto: BoatDto) => {
@@ -62,8 +63,8 @@ const BoatsOverview: React.FC = () => {
 
 			setBoats([...boats, createdBoat]);
 		} catch (error) {
-			console.error('Failed to create activity type:', error);
-			return false;
+			console.error('Failed to create boat:', error);
+			return tryGetErrorMessage(error);
 		}
 
 		return true;
@@ -79,7 +80,7 @@ const BoatsOverview: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center">
-			<div className="w-full my-2 flex flex-col justify-start">
+			<div className="w-full mb-8 flex flex-col justify-start">
 				<h1>Boats</h1>
 			</div>
 			{boats.length === 0 && (
@@ -95,7 +96,7 @@ const BoatsOverview: React.FC = () => {
 							title={boat.name}
 							description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
 							handleEdit={handleEdit}
-							handleDelete={removeBoat}
+							handleDelete={handleDelete}
 						/>
 					</div>
 				))}

@@ -26,7 +26,6 @@ export const updateBoat = async (
 	return response.data;
 };
 
-export const deleteBoat = async (id: number): Promise<BoatDto> => {
-	const response = await axios.delete<BoatDto>(`${baseUrl}/boat/${id}`);
-	return response.data;
+export const deleteBoat = async (id: number): Promise<void> => {
+	await axios.delete(`${baseUrl}/boat/${id}`);
 };

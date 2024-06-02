@@ -6,9 +6,16 @@ import {
 	useForm,
 	type SubmitErrorHandler,
 } from 'react-hook-form';
-import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '../ui/form';
 import {Input} from '../ui/input';
-import {getAllActivityTypes} from '../../services/activity-type-service';
+import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
 import {type ActivityTypeDto} from '../../models/api/activity-type.model';
 import {
 	Select,
@@ -27,10 +34,10 @@ import {useToast} from '../ui/use-toast';
 
 const boatFormSchema = z.object({
 	id: z.number(),
-	name: z.string(),
+	name: z.string().min(5),
 	type: z.string(),
-	seatsRider: z.number(),
-	seatsViewer: z.number(),
+	seatsRider: z.coerce.number(),
+	seatsViewer: z.coerce.number(),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
 	availableFrom: z.string().refine((val) => !isNaN(Date.parse(val)), {
@@ -55,7 +62,7 @@ const boatFormSchema = z.object({
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
 
 type BoatFormProps = {
-	onSubmit: (dto: BoatDto) => Promise<boolean>; // True if successfully saved
+	onSubmit: (dto: BoatDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: BoatDto;
 	isCreate: boolean;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
@@ -83,7 +90,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 	useEffect(() => {
 		const fetchActivityTypes = async () => {
 			try {
-				const response = await getAllActivityTypes();
+				const response = await getAllActivityTypesFromEvent(eventId);
 				setActivityTypes(response);
 			} catch (error) {
 				console.error('Failed to fetch activity types:', error);
@@ -103,8 +110,14 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		};
 
 		const success = await onSubmit(boat);
-		if (success) {
+		if (success === true) {
 			onSuccessfullySubmitted();
+		} else if (typeof success === 'string') {
+			toast({
+				variant: 'destructive',
+				title: 'There was an error when saving.',
+				description: success,
+			});
 		}
 	};
 
@@ -129,30 +142,15 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Title</FormLabel>
+								<FormLabel>Boat Name</FormLabel>
 								<FormControl>
-									<Input placeholder="Title" {...field} className="input" />
+									<Input placeholder="Boat Name" {...field} className="input" />
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
 
-					<FormField
-						name="operator"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Boat Driver</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="Boat Driver"
-										{...field}
-										className="input"
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
 					<FormField
 						name="type"
 						control={form.control}
@@ -162,32 +160,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 								<FormControl>
 									<Input placeholder="Boat Type" {...field} className="input" />
 								</FormControl>
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						name="seatsRider"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Max available seats for riders</FormLabel>
-								<FormControl>
-									<Input placeholder="0" {...field} className="input" />
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						name="seatsViewer"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Max available seats for viewers</FormLabel>
-								<FormControl>
-									<Input placeholder="0" {...field} className="input" />
-								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -225,6 +198,63 @@ const BoatForm: React.FC<BoatFormProps> = ({
 										</SelectContent>
 									</Select>
 								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						name="operator"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Boat Driver</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="Boat Driver"
+										{...field}
+										className="input"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						name="seatsRider"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Max available seats for riders</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="0"
+										{...field}
+										className="input"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						name="seatsViewer"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Max available seats for viewers</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="0"
+										{...field}
+										className="input"
+									/>
+								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -238,6 +268,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 								<FormControl>
 									<Input type="datetime-local" {...field} className="input" />
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -251,6 +282,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 								<FormControl>
 									<Input type="datetime-local" {...field} className="input" />
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>

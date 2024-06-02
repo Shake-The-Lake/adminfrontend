@@ -6,6 +6,7 @@ import {updateActivityType} from '../../../services/activity-type-service';
 import {useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {useToast} from '../../../components/ui/use-toast';
+import {getTranslation, tryGetErrorMessage} from '../../../lib/utils';
 
 const ActivityTypePage: React.FC = () => {
 	const [activityType, setActivityType] = useState<ActivityTypeDto | undefined>(
@@ -25,7 +26,7 @@ const ActivityTypePage: React.FC = () => {
 		}
 	}, [routeData]);
 
-	const {t} = useTranslation();
+	const {t, i18n} = useTranslation();
 
 	const handleUpdateActivityType = async (dto: ActivityTypeDto) => {
 		try {
@@ -34,13 +35,10 @@ const ActivityTypePage: React.FC = () => {
 				dto,
 			);
 			console.log('Updated activity type:', updatedActivityType);
+			// Todo! trigger page reload after success
 		} catch (error) {
 			console.error('Failed to update activity type:', error);
-			toast({
-				variant: 'destructive',
-				description: 'Activity Type could not be saved.',
-			});
-			return false;
+			return tryGetErrorMessage(error);
 		}
 
 		return true;
@@ -51,7 +49,11 @@ const ActivityTypePage: React.FC = () => {
 			<div className="flex flex-col items-center">
 				<LoadingSpinner isLoading={isLoading} />
 
-				<h1 className="text-2xl font-bold mb-10">{t('activityType')}</h1>
+				<h2 className="w-full mb-6">
+					{t('activityType')} -{' '}
+					{getTranslation(i18n.language, activityType?.name)}
+				</h2>
+
 				{activityType && (
 					<ActivityTypeForm
 						key={activityType.id}

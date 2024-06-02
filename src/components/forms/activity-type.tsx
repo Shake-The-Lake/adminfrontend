@@ -45,7 +45,7 @@ const activityTypeSchema = z.object({
 export type ActivityTypeFormSchema = z.infer<typeof activityTypeSchema>;
 
 type ActivityTypeFormProps = {
-	onSubmit: (dto: ActivityTypeDto) => Promise<boolean>; // True if successfully saved
+	onSubmit: (dto: ActivityTypeDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: ActivityTypeDto;
 	isCreate: boolean;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
@@ -81,8 +81,14 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		};
 
 		const success = await onSubmit(activityType);
-		if (success) {
+		if (success === true) {
 			onSuccessfullySubmitted();
+		} else if (typeof success === 'string') {
+			toast({
+				variant: 'destructive',
+				title: 'There was an error when saving.',
+				description: success,
+			});
 		}
 	};
 
@@ -103,7 +109,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<Tabs defaultValue={i18n.language}>
-						<TabsList>
+						<TabsList className="w-full justify-start">
 							<TabsTrigger value="en">English</TabsTrigger>
 							<TabsTrigger value="de">German</TabsTrigger>
 							<TabsTrigger value="gsw">Swiss German</TabsTrigger>

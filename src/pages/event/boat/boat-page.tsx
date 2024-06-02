@@ -6,6 +6,7 @@ import LoadingSpinner from '../../../components/animations/loading';
 import BoatForm from '../../../components/forms/boat';
 import {useToast} from '../../../components/ui/use-toast';
 import {updateBoat} from '../../../services/boat-service';
+import {tryGetErrorMessage} from '../../../lib/utils';
 
 const BoatPage: React.FC = () => {
 	const [boat, setBoat] = useState<BoatDto | undefined>(undefined);
@@ -29,13 +30,10 @@ const BoatPage: React.FC = () => {
 		try {
 			const updatedBoat = await updateBoat(boat?.id ?? 0, dto);
 			console.log('Updated boat:', updatedBoat);
+			// Todo! trigger page reload after success
 		} catch (error) {
 			console.error('Failed to update boat:', error);
-			toast({
-				variant: 'destructive',
-				description: 'Boat could not be saved.',
-			});
-			return false;
+			return tryGetErrorMessage(error);
 		}
 
 		return true;
@@ -46,7 +44,10 @@ const BoatPage: React.FC = () => {
 			<div className="flex flex-col items-center">
 				<LoadingSpinner isLoading={isLoading} />
 
-				<h1 className="text-2xl font-bold mb-10">{t('boat')}</h1>
+				<h2 className="w-full mb-6">
+					{t('boat')} - {boat?.name}
+				</h2>
+
 				{boat && (
 					<BoatForm
 						key={boat.id}

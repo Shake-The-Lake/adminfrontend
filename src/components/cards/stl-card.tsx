@@ -8,22 +8,36 @@ import {
 	CardTitle,
 } from '../ui/card';
 import {Button} from '../ui/button';
+import {useToast} from '../ui/use-toast';
 
 export type StlCardProps = {
 	id?: number;
 	title?: string;
 	description?: string;
 	handleEdit: (id?: number) => Promise<void> | void;
-	handleDelete: (id?: number) => Promise<boolean>;
+	handleDelete: (id?: number) => Promise<boolean | string>;
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
+	const {toast} = useToast();
+
 	const handleEdit = async () => {
 		await props.handleEdit(props.id);
 	};
 
 	const handleDelete = async () => {
-		await props.handleDelete(props.id);
+		const success = await props.handleDelete(props.id);
+		if (success === true) {
+			toast({
+				description: 'Successfully deleted.',
+			});
+		} else if (typeof success === 'string') {
+			toast({
+				variant: 'destructive',
+				title: 'There was an error when deleting.',
+				description: success,
+			});
+		}
 	};
 
 	return (

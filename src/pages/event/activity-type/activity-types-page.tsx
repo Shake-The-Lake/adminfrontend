@@ -10,7 +10,7 @@ import {
 	type ActivityTypeDto,
 } from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
-import {getTranslation} from '../../../lib/utils';
+import {getTranslation, tryGetErrorMessage} from '../../../lib/utils';
 import {useNavigate, useParams} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import StlDialog from '../../../components/dialog/stl-dialog';
@@ -64,11 +64,13 @@ const ActivityTypesPage = () => {
 
 		try {
 			await deleteActivityType(id);
-			return true;
+			setActivityTypes((prev) => prev.filter((e) => e.id !== id));
 		} catch (error) {
-			console.error(error); // Todo! add "real" error handling
-			return false;
+			console.error(error);
+			return tryGetErrorMessage(error);
 		}
+
+		return true;
 	};
 
 	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
@@ -80,7 +82,7 @@ const ActivityTypesPage = () => {
 			setActivityTypes([...activityTypes, createdType]);
 		} catch (error) {
 			console.error('Failed to create activity type:', error);
-			return false;
+			return tryGetErrorMessage(error);
 		}
 
 		return true;
