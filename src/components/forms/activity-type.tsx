@@ -47,12 +47,14 @@ type ActivityTypeFormProps = {
 	onSubmit: (dto: ActivityTypeDto) => Promise<boolean>; // True if successfully saved
 	model: ActivityTypeDto;
 	isCreate: boolean;
+	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	model,
 	onSubmit,
 	isCreate,
+	onSuccessfullySubmitted,
 }) => {
 	const form = useForm<ActivityTypeFormSchema>({
 		mode: 'onChange',
@@ -76,7 +78,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 			eventId: model.eventId ?? eventId,
 		};
 
-		return onSubmit(activityType);
+		const success = await onSubmit(activityType);
+		if (success) {
+			onSuccessfullySubmitted();
+		}
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {

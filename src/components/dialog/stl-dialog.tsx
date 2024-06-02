@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
 	Dialog,
 	DialogClose,
@@ -16,8 +16,11 @@ export type StlDialogProps = {
 	title: string;
 	description: string;
 	triggerLabel: string;
-	onSubmit: () => boolean | void | unknown; // If returns true, close afterwards
+	onSubmit?: () => void; // Default submit logic is triggering a form submit
 	children: React.ReactNode;
+	isOpen?: boolean;
+	onClose?: () => void;
+	onOpen?: () => void;
 };
 
 const StlDialog: React.FC<StlDialogProps> = ({
@@ -26,18 +29,62 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	triggerLabel,
 	onSubmit,
 	children,
+	isOpen,
+	onClose,
+	onOpen,
 }) => {
 	const [open, setOpen] = useState(false);
-	const handleClick = () => {
-		const shouldClose = onSubmit();
 
-		if (shouldClose) {
-			setOpen(false);
+	useEffect(() => {
+		if (isOpen !== undefined) {
+			onOpenChange(isOpen);
+		}
+	}, [isOpen]);
+
+	const onOpenChange = (value: boolean) => {
+		if (value) {
+			handleOpen();
+		} else {
+			handleClose();
 		}
 	};
 
+	const handleClose = () => {
+		if (onClose) {
+			onClose();
+		}
+
+		setOpen(false);
+	};
+
+	const handleOpen = () => {
+		if (onOpen) {
+			onOpen();
+		}
+
+		setOpen(true);
+	};
+
+	const handleSubmit = () => {
+		if (onSubmit) {
+			onSubmit();
+		} else {
+			submitForm();
+		}
+	};
+
+	const submitForm = () => {
+		// Mock form submit event to trigger validation
+		document.querySelector('form')?.dispatchEvent(
+			new Event('submit', {
+				cancelable: true,
+				bubbles: true,
+			}),
+		);
+	};
+
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
 				<Button
 					className="h-40 w-full flex items-center justify-center"
@@ -53,11 +100,11 @@ const StlDialog: React.FC<StlDialogProps> = ({
 				<div className="flex-grow overflow-auto p-1">{children}</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary">
+						<Button type="button" variant="secondary" onClick={handleClose}>
 							Cancel
 						</Button>
 					</DialogClose>
-					<Button type="submit" onClick={handleClick}>
+					<Button type="submit" onClick={handleSubmit}>
 						Save
 					</Button>
 				</DialogFooter>

@@ -18,6 +18,7 @@ const ActivityTypesPage = () => {
 	const eventId = Number(id);
 
 	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
+	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>(undefined);
@@ -65,7 +66,8 @@ const ActivityTypesPage = () => {
 		}
 	};
 
-	const createNewActivityType = async (dto: ActivityTypeDto) => {
+	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
+		// Todo! trigger page reload after success
 		try {
 			const createdType = await createActivityType(dto);
 			console.log('Created activity type:', createdType);
@@ -75,6 +77,14 @@ const ActivityTypesPage = () => {
 		}
 
 		return true;
+	};
+
+	const closeCreateDialog = () => {
+		setIsCreateDialogOpen(false);
+	};
+
+	const openCreateDialog = () => {
+		setIsCreateDialogOpen(true);
 	};
 
 	return (
@@ -110,19 +120,12 @@ const ActivityTypesPage = () => {
 					title="Create Activity Type"
 					description="Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language."
 					triggerLabel="Add new Activity Type"
-					onSubmit={() => {
-						// Mock form submit event to trigger validation
-						document.querySelector('form')?.dispatchEvent(
-							new Event('submit', {
-								cancelable: true,
-								bubbles: true,
-							}),
-						);
-						// Todo! trigger page reload
-						return true;
-					}}>
+					isOpen={isCreateDialogOpen}
+					onClose={closeCreateDialog}
+					onOpen={openCreateDialog}>
 					<ActivityTypeForm
-						onSubmit={createNewActivityType}
+						onSubmit={handleCreateNewActivityType}
+						onSuccessfullySubmitted={closeCreateDialog}
 						model={{
 							id: undefined,
 							name: undefined,
