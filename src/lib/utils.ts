@@ -14,5 +14,5 @@ export function getTranslation(
 	if (locale === 'en') return object.en;
 	if (locale === 'de') return object.de;
 	if (locale === 'swissGerman') return object.swissGerman;
-	return '';
+	return object.de; // Make german the default language
 }

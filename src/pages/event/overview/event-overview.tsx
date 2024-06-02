@@ -59,13 +59,13 @@ const EventOverview: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-start justify-between px-20 py-10 max-h-fit w-full">
+		<div className="flex flex-col items-start justify-between max-h-fit w-full">
 			<LoadingSpinner isLoading={isLoading} />
 
 			<div className="w-full flex flex-col lg:flex-row">
-				<div className="w-full">
-					<h1 className="text-2xl font-bold mb-4">Basic Data</h1>
-					<p className="mb-8 text-gray-600">
+				<div className="w-full my-2">
+					<h1>Basic Data</h1>
+					<p className="mt-2 mb-8 text-gray-600">
 						Enter the basic data for the event
 					</p>
 					<EventForm form={form} defaultValues={defaultValues} />

@@ -20,7 +20,7 @@ export const boatFormSchema = z.object({
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
 
 type BoatFormProps = {
-	onSubmit: SubmitHandler<z.infer<typeof boatFormSchema>>;
+	onSubmit: SubmitHandler<BoatFormSchema>;
 	defaultValues?: Partial<BoatFormSchema>;
 };
 

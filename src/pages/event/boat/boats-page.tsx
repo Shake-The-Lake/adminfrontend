@@ -70,9 +70,9 @@ const BoatsOverview: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center py-10 px-10">
-			<div className="w-full my-5 flex flex-col justify-start">
-				<h2>Boats</h2>
+		<div className="flex flex-col items-center">
+			<div className="w-full my-2 flex flex-col justify-start">
+				<h1>Boats</h1>
 			</div>
 			{boats.length === 0 && (
 				<div className="w-full py-5">
@@ -95,14 +95,16 @@ const BoatsOverview: React.FC = () => {
 					title="Create Boat"
 					description="Add a new boat by entering the necessary data."
 					triggerLabel="Add new boat"
-					onSubmit={() =>
+					onSubmit={() => {
+						// Mock form submit event to trigger validation
 						document.querySelector('form')?.dispatchEvent(
 							new Event('submit', {
 								cancelable: true,
 								bubbles: true,
 							}),
-						)
-					}>
+						);
+						return true;
+					}}>
 					<BoatForm onSubmit={createNewBoat} />
 				</StlDialog>
 			</div>
