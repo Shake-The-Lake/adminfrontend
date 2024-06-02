@@ -17,6 +17,7 @@ import {
 	SchedulePage,
 } from './pages';
 import {getEventById} from './services/event-service';
+import {getActivityTypeById} from './services/activity-type-serivce';
 
 const router = createBrowserRouter([
 	{
@@ -47,6 +48,9 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.activityTypes}/${eventDetailRoutes.activityTypeId}`,
 				element: <ActivityTypePage />,
+				async loader({params}) {
+					return getActivityTypeById(Number(params.activityTypeId));
+				},
 			},
 			{
 				path: eventDetailRoutes.boats,

@@ -22,7 +22,9 @@ const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
 	const form = useEventForm();
 
-	const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = (values) => {
+	const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
+		values,
+	) => {
 		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
 		const today = new Date();
 		const todayAsString = today.toISOString();
@@ -49,14 +51,17 @@ const CreateEventDialog: React.FC = () => {
 			endedAt: todayAsString, // TODO Frontend UI does not have end dates jet planned.
 		};
 		try {
-			const createdEvent = createEvent(event).then((response) => {
+			const createdEvent = await createEvent(event).then((response) => {
 				navigate('/event/' + response.id);
 				return response.id;
 			});
 			console.log('Created event:', createdEvent);
 		} catch (error) {
 			console.error('Failed to create event:', error);
+			return false;
 		}
+
+		return true;
 	};
 
 	return (

@@ -65,7 +65,7 @@ const ActivityTypesPage = () => {
 		}
 	};
 
-	const createNewType = async (dto: ActivityTypeDto) => {
+	const createNewActivityType = async (dto: ActivityTypeDto) => {
 		try {
 			const createdType = await createActivityType(dto);
 			console.log('Created type:', createdType);
@@ -123,8 +123,8 @@ const ActivityTypesPage = () => {
 					return true;
 				}}>
 				<ActivityTypeForm
-					onSubmit={createNewType}
-					value={{
+					onSubmit={createNewActivityType}
+					model={{
 						id: undefined,
 						name: undefined,
 						description: undefined,

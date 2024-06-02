@@ -40,12 +40,12 @@ const activityTypeSchema = z.object({
 export type ActivityTypeFormSchema = z.infer<typeof activityTypeSchema>;
 
 type ActivityTypeFormProps = {
-	onSubmit: (dto: ActivityTypeDto) => Promise<boolean>;
-	value: ActivityTypeDto;
+	onSubmit: (dto: ActivityTypeDto) => Promise<boolean>; // True if successfully saved
+	model: ActivityTypeDto;
 };
 
 const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
-	value: model,
+	model,
 	onSubmit,
 }) => {
 	const form = useForm<ActivityTypeFormSchema>({

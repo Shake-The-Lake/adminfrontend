@@ -16,7 +16,7 @@ export type StlDialogProps = {
 	title: string;
 	description: string;
 	triggerLabel: string;
-	onSubmit: () => boolean | void; // If returns true, close afterwards
+	onSubmit: () => boolean | void | unknown; // If returns true, close afterwards
 	children: React.ReactNode;
 };
 
