@@ -9,6 +9,7 @@ import {
 	getNavigationItemsForEvent,
 } from './navigation/navigation-models';
 import {type EventDto} from '../models/api/event.model';
+import {Toaster} from './ui/toaster';
 
 const EventDetailLayout: React.FC = () => {
 	const [event, setEvent] = useState<EventDto | undefined>(undefined);
@@ -33,6 +34,7 @@ const EventDetailLayout: React.FC = () => {
 						<h1 className="heading-m-upper text-primary">{event?.title}</h1>
 						<Outlet />
 					</main>
+					<Toaster />
 					<Footer />
 				</div>
 			</div>

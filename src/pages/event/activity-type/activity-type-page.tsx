@@ -5,6 +5,7 @@ import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
 import {updateActivityType} from '../../../services/activity-type-serivce';
 import {useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
+import {useToast} from '../../../components/ui/use-toast';
 
 const ActivityTypePage: React.FC = () => {
 	const [activityType, setActivityType] = useState<ActivityTypeDto | undefined>(
@@ -12,6 +13,7 @@ const ActivityTypePage: React.FC = () => {
 	);
 	const [isLoading, setIsLoading] = useState(true);
 	const routeData = useLoaderData();
+	const {toast} = useToast();
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -31,6 +33,10 @@ const ActivityTypePage: React.FC = () => {
 			console.log('Updated activity type:', updatedType);
 		} catch (error) {
 			console.error('Failed to update activity type:', error);
+			toast({
+				variant: 'destructive',
+				description: 'Activity Type could not be saved.',
+			});
 			return false;
 		}
 
@@ -47,6 +53,11 @@ const ActivityTypePage: React.FC = () => {
 					<ActivityTypeForm
 						key={activityType.id}
 						onSubmit={handleUpdateActivityType}
+						onSuccessfullySubmitted={() => {
+							toast({
+								description: 'Activity Type successfully saved.',
+							});
+						}}
 						model={activityType}
 						isCreate={false}
 					/>

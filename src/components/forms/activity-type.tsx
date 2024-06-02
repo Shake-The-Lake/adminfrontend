@@ -21,6 +21,7 @@ import {type LocalizedStringDto} from '../../models/api/localized-string';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
+import {toast, useToast} from '../ui/use-toast';
 
 const localizedStringSchema = z.object({
 	en: z.string().optional(),
@@ -65,6 +66,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	const {i18n} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
+	const {toast} = useToast();
 
 	const onPrepareSubmit: SubmitHandler<ActivityTypeFormSchema> = async (
 		values,
@@ -86,6 +88,12 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
 		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
+
+		toast({
+			variant: 'destructive',
+			title: 'Could not be saved.',
+			description: 'There are validation errors in the form.',
+		});
 	};
 
 	return (
