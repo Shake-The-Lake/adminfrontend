@@ -7,7 +7,7 @@ const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 export const getAllActivityTypes = async (): Promise<ActivityTypeDto[]> => {
 	const response = await axios.get<ActivityTypeDto[]>(
 		`${baseUrl}/activitytype`,
-	);
+	); // Todo! is this really needed??
 	return response.data;
 };
 
@@ -18,7 +18,7 @@ export const getAllActivityTypesFromEvent = async (
 		`${baseUrl}/activitytype`,
 	);
 	return response.data.filter(
-		(activityType) => activityType.eventId !== eventId,
+		(activityType) => activityType.eventId === eventId,
 	);
 };
 
@@ -32,11 +32,22 @@ export const getActivityTypeById = async (
 };
 
 export const createActivityType = async (
-	ActivityType: ActivityTypeDto,
+	activityType: ActivityTypeDto,
 ): Promise<ActivityTypeDto> => {
 	const response = await axios.post<ActivityTypeDto>(
 		`${baseUrl}/activitytype`,
-		ActivityType,
+		activityType,
+	);
+	return response.data;
+};
+
+export const updateActivityType = async (
+	id: number,
+	activityType: ActivityTypeDto,
+): Promise<ActivityTypeDto> => {
+	const response = await axios.put<ActivityTypeDto>(
+		`${baseUrl}/activitytype/${id}`,
+		activityType,
 	);
 	return response.data;
 };

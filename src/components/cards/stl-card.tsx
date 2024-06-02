@@ -13,7 +13,7 @@ export type StlCardProps = {
 	id?: number;
 	title?: string;
 	description?: string;
-	handleEdit: (id?: number) => Promise<void>;
+	handleEdit: (id?: number) => Promise<void> | void;
 	handleDelete: (id?: number) => Promise<boolean>;
 };
 
@@ -27,9 +27,13 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 	};
 
 	return (
-		<Card className="relative w-full max-w-full h-40">
+		<Card className="relative w-full max-w-full h-40 hover:bg-slate-50">
 			<div className="absolute top-2 right-2 flex space-x-2">
-				<Button variant="ghost" size="icon" className="items-center" onClick={handleDelete}>
+				<Button
+					variant="ghost"
+					size="icon"
+					className="items-center"
+					onClick={handleDelete}>
 					<Trash className="cursor-pointer hover:text-red-600" />
 				</Button>
 			</div>
@@ -39,7 +43,11 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 			<CardContent className="relative">
 				<CardDescription>{props.description}</CardDescription>
 			</CardContent>
-			<Button variant="ghost" className="absolute bottom-0 right-0 mb-2 mr-2" size="icon" onClick={handleEdit}>
+			<Button
+				variant="ghost"
+				className="absolute bottom-0 right-0 mb-2 mr-2"
+				size="icon"
+				onClick={handleEdit}>
 				<ArrowRight />
 			</Button>
 		</Card>

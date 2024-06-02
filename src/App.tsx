@@ -16,6 +16,8 @@ import {
 	HomePage,
 	SchedulePage,
 } from './pages';
+import {getEventById} from './services/event-service';
+import {getActivityTypeById} from './services/activity-type-serivce';
 
 const router = createBrowserRouter([
 	{
@@ -29,36 +31,41 @@ const router = createBrowserRouter([
 		),
 	},
 	{
-		path: '/event',
+		path: `/event/${eventDetailRoutes.id}`,
 		element: <EventDetailLayout />,
+		async loader({params}) {
+			return getEventById(Number(params.id), 'boats,activityTypes');
+		},
 		children: [
-			{index: true, element: <Navigate to="/" replace={true} />},
 			{
-				path: eventDetailRoutes.id,
+				index: true,
 				element: <EventOverview />,
 			},
 			{
-				path: `${eventDetailRoutes.id}/${eventDetailRoutes.activityTypes}`,
+				path: eventDetailRoutes.activityTypes,
 				element: <ActivityTypesPage />,
 			},
 			{
-				path: `${eventDetailRoutes.id}/${eventDetailRoutes.activityTypes}/${eventDetailRoutes.activityTypeId}`,
+				path: `${eventDetailRoutes.activityTypes}/${eventDetailRoutes.activityTypeId}`,
 				element: <ActivityTypePage />,
+				async loader({params}) {
+					return getActivityTypeById(Number(params.activityTypeId));
+				},
 			},
 			{
-				path: `${eventDetailRoutes.id}/${eventDetailRoutes.boats}`,
+				path: eventDetailRoutes.boats,
 				element: <BoatsOverview />,
 			},
 			{
-				path: `${eventDetailRoutes.id}/${eventDetailRoutes.boats}/${eventDetailRoutes.boatId}`,
+				path: `${eventDetailRoutes.boats}/${eventDetailRoutes.boatId}`,
 				element: <BoatPage />,
 			},
 			{
-				path: `${eventDetailRoutes.id}/${eventDetailRoutes.schedule}`,
+				path: eventDetailRoutes.schedule,
 				element: <SchedulePage />,
 			},
 			{
-				path: `${eventDetailRoutes.id}/${eventDetailRoutes.bookings}`,
+				path: eventDetailRoutes.bookings,
 				element: <BookingsPage />,
 			},
 		],

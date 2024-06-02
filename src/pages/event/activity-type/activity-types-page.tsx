@@ -1,47 +1,38 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
+	createActivityType,
 	deleteActivityType,
 	getAllActivityTypesFromEvent,
 } from '../../../services/activity-type-serivce';
 import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
-import StlCard from '../../../components/cards/card';
-import CreateActivityTypeDialog from './create-activity-type-dialog';
+import StlCard from '../../../components/cards/stl-card';
 import {getTranslation} from '../../../lib/utils';
-import {useParams} from 'react-router-dom';
-import {Button} from '../../../components/ui/button';
-import {Plus} from 'lucide-react';
+import {useNavigate, useParams} from 'react-router-dom';
+import LoadingSpinner from '../../../components/animations/loading';
+import StlDialog from '../../../components/dialog/stl-dialog';
+import ActivityTypeForm from '../../../components/forms/activity-type';
 
 const ActivityTypesPage = () => {
-	const [activityTypes, setActivityType] = useState<ActivityTypeDto[]>([]);
-	const [activeActivityType, setActiveActivityType] = useState<
-		ActivityTypeDto | undefined
-	>(undefined);
-	const [isActivityTypeDialogOpen, setIsActivityTypeDialogOpen] =
-		useState(false);
+	const {id} = useParams<{id: string}>();
+	const eventId = Number(id);
 
-	const openActivityTypeDialog = () => {
-		setIsActivityTypeDialogOpen(true);
-	};
-
-	const closeActivityTypeDialog = () => {
-		setIsActivityTypeDialogOpen(false);
-	};
+	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
+	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>(undefined);
 
 	const {i18n} = useTranslation();
+	const navigate = useNavigate();
 
-	const {id: eventId} = useParams<{eventId: string}>();
 	useEffect(() => {
 		async function fetchActivityTypes() {
 			try {
-				console.log(eventId);
 				const activityTypeData = await getAllActivityTypesFromEvent(
 					Number(eventId),
 				);
-				setActivityType(activityTypeData);
+				setActivityTypes(activityTypeData);
 				setLoading(false);
 			} catch (error) {
 				console.error(error);
@@ -53,20 +44,21 @@ const ActivityTypesPage = () => {
 		fetchActivityTypes()
 			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
 			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, []);
+	}, [id]);
 
-	if (loading) return <p>Loading...</p>;
 	if (error) return <p>{error}</p>;
 
-	const handleEdit = async (id?: number) => {
-		const currentActiveType = activityTypes.find(
-			(activityType) => activityType.id === id,
-		);
-		setActiveActivityType(currentActiveType);
-		openActivityTypeDialog();
+	const handleEdit = (id?: number) => {
+		if (id) {
+			navigate(String(id));
+		}
 	};
 
 	const handleDelete = async (id?: number) => {
+		if (!id) {
+			return false;
+		}
+
 		try {
 			await deleteActivityType(id);
 			return true;
@@ -76,45 +68,79 @@ const ActivityTypesPage = () => {
 		}
 	};
 
+	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
+		// Todo! trigger page reload after success
+		try {
+			const createdType = await createActivityType(dto);
+			console.log('Created activity type:', createdType);
+
+			setActivityTypes([...activityTypes, createdType]);
+		} catch (error) {
+			console.error('Failed to create activity type:', error);
+			return false;
+		}
+
+		return true;
+	};
+
+	const closeCreateDialog = () => {
+		setIsCreateDialogOpen(false);
+	};
+
+	const openCreateDialog = () => {
+		setIsCreateDialogOpen(true);
+	};
+
 	return (
-		<div className="flex justify-center w-full">
-			<div className="w-full max-w-6xl p-4">
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-					{activityTypes.length > 0 ? (
-						activityTypes.map((activityType) => (
-							<div key={activityType.id} className="mb-4 flex justify-center">
-								<StlCard
-									id={activityType.id}
-									title={getTranslation(i18n.language, activityType.name)}
-									description={getTranslation(
-										i18n.language,
-										activityType.description,
-									)}
-									handleEdit={handleEdit}
-									handleDelete={handleDelete}
-								/>
-							</div>
-						))
-					) : (
-						<p className="text-center">No activity types yet.</p>
-					)}
+		<div className="flex flex-col items-center">
+			<LoadingSpinner isLoading={loading} />
 
-					<Button
-						className="h-40 w-full flex items-center justify-center"
-						onClick={() => {
-							openActivityTypeDialog();
-						}}>
-						<Plus className="size-24" />
-					</Button>
+			<div className="w-full my-2 flex flex-col justify-start">
+				<h1>Activity Types</h1>
+			</div>
+			{activityTypes.length === 0 && (
+				<div className="w-full py-5">
+					<p className="text-lg">No activity types yet.</p>
 				</div>
+			)}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+				{activityTypes.length > 0 &&
+					activityTypes.map((activityType) => (
+						<div key={activityType.id} className="mb-4 flex justify-center">
+							<StlCard
+								id={activityType.id}
+								title={getTranslation(i18n.language, activityType.name)}
+								description={getTranslation(
+									i18n.language,
+									activityType.description,
+								)}
+								handleEdit={handleEdit}
+								handleDelete={handleDelete}
+							/>
+						</div>
+					))}
 
-				<CreateActivityTypeDialog
-					setActivityType={getAllActivityTypesFromEvent}
-					currentActivityType={activeActivityType}
-					isActivityTypeDialogOpen={isActivityTypeDialogOpen}
-					closeActivityTypeDialog={closeActivityTypeDialog}
-					openActivityTypeDialog={open}
-				/>
+				<StlDialog
+					title="Create Activity Type"
+					description="Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language."
+					triggerLabel="Add new Activity Type"
+					isOpen={isCreateDialogOpen}
+					onClose={closeCreateDialog}
+					onOpen={openCreateDialog}>
+					<ActivityTypeForm
+						onSubmit={handleCreateNewActivityType}
+						onSuccessfullySubmitted={closeCreateDialog}
+						model={{
+							id: 0,
+							name: undefined,
+							description: undefined,
+							checklist: undefined,
+							icon: undefined,
+							eventId: undefined,
+						}}
+						isCreate={true}
+					/>
+				</StlDialog>
 			</div>
 		</div>
 	);

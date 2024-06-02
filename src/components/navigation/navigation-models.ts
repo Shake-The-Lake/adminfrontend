@@ -7,28 +7,27 @@ import {
 } from 'lucide-react';
 import {eventBaseRoute, eventDetailRoutes} from '../../constants';
 import {type MenuItemProperties} from './navigation-menu-item';
+import {type EventDto} from '../../models/api/event.model';
+import {getTranslation} from '../../lib/utils';
+import {createContext} from 'react';
+import './navigation.css';
 
-export type NavigationEventDto = {
-	id: number;
-	title: string;
-	activityTypes: NavigationActivityTypeDto[];
-	boats: NavigationBoatDto[];
-};
-
-export type NavigationActivityTypeDto = {
-	id: number;
-	localizedName: string;
-};
-
-export type NavigationBoatDto = {
-	id: number;
-	name: string;
-};
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const NavigationStructureContext = createContext(
+	[] as MenuItemProperties[],
+);
 
 export function getNavigationItemsForEvent(
-	event: NavigationEventDto,
+	event: EventDto | undefined,
+	language: string,
 ): MenuItemProperties[] {
+	if (!event) {
+		return [];
+	}
+
 	const eventBasePath = eventBaseRoute + event.id;
+	const activityTypes = event.activityTypes ? event.activityTypes : [];
+	const boats = event.boats ? event.boats : [];
 	return [
 		{
 			link: eventBasePath,
@@ -40,10 +39,10 @@ export function getNavigationItemsForEvent(
 			link: `${eventBasePath}/${eventDetailRoutes.activityTypes}`,
 			labelKey: 'activityTypes',
 			icon: FolderCog,
-			needsFullMatch: true,
-			subNavigations: event.activityTypes.map((activity) => ({
+			needsFullMatch: false,
+			subNavigations: activityTypes.map((activity) => ({
 				link: `${eventBasePath}/${eventDetailRoutes.activityTypes}/${activity.id}`,
-				labelKey: activity.localizedName,
+				labelKey: getTranslation(language, activity.name),
 				needsFullMatch: true,
 			})),
 		},
@@ -51,8 +50,8 @@ export function getNavigationItemsForEvent(
 			link: `${eventBasePath}/${eventDetailRoutes.boats}`,
 			labelKey: 'boats',
 			icon: Sailboat,
-			needsFullMatch: true,
-			subNavigations: event.boats.map((boat) => ({
+			needsFullMatch: false,
+			subNavigations: boats.map((boat) => ({
 				link: `${eventBasePath}/${eventDetailRoutes.boats}/${boat.id}`,
 				labelKey: boat.name,
 				needsFullMatch: true,

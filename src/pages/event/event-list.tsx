@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {type EventDto} from '../../models/api/event.model';
 import {deleteEvent, getAllEvents} from '../../services/event-service';
 import CreateEventDialog from './create-event-dialog';
-import StlCard from '../../components/cards/card';
+import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
 import {useNavigate} from 'react-router-dom';
-
 
 const EventList = () => {
 	const [events, setEvents] = useState<EventDto[]>([]);
@@ -22,9 +21,11 @@ const EventList = () => {
 			try {
 				const eventsData = await getAllEvents();
 				setEvents(eventsData);
+				setError(undefined);
 				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching events:', error);
+				setEvents([]);
 				setError('Failed to load events');
 				setIsLoading(false);
 			}
@@ -35,15 +36,12 @@ const EventList = () => {
 			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, []);
 
-	if (error) return <p>{error}</p>;
-
 	const handleDelete = async (id?: number) => {
 		try {
-			return await deleteEvent(id)
-				.then(() => {
-					setEvents(events.filter((event) => event.id !== id));
-					return true;
-				});
+			return await deleteEvent(id).then(() => {
+				setEvents(events.filter((event) => event.id !== id));
+				return true;
+			});
 		} catch (error) {
 			console.error(error); // Todo! add "real" error handling
 			return false;
@@ -62,7 +60,8 @@ const EventList = () => {
 				<div className="mb-5">
 					<CreateEventDialog />
 				</div>
-				<ul>
+				<p>{error}</p>
+				<ul className="mb-5">
 					{events.length > 0 ? (
 						events.map((event) => (
 							<li key={event.id} className="mb-4 flex justify-center">

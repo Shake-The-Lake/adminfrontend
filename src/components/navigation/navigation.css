@@ -1,0 +1,15 @@
+.side-navigation-container {
+	max-height: calc(100vh - var(--header-height));
+	overflow: auto;
+}
+
+/* side navigation color handling */
+a.active.parent {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+a.active.parent + .grid {
+	background-color: hsl(var(--muted));
+	border-bottom-left-radius: var(--radius);
+	border-bottom-right-radius: var(--radius);
+}

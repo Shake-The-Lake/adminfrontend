@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {z} from 'zod';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, type SubmitHandler, useForm} from 'react-hook-form';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
 import {getAllActivityTypes} from '../../services/activity-type-serivce';
-import {ActivityTypeDto} from '../../models/api/activity-type.model';
+import {type ActivityTypeDto} from '../../models/api/activity-type.model';
 import {
 	Select,
 	SelectContent,
@@ -12,6 +12,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {Button} from '../ui/button';
 
 export const boatFormSchema = z.object({
 	boatName: z.string().min(5).max(20),
@@ -27,12 +29,13 @@ export const boatFormSchema = z.object({
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
 
 type BoatFormProps = {
-	onSubmit: SubmitHandler<z.infer<typeof boatFormSchema>>;
+	onSubmit: SubmitHandler<BoatFormSchema>;
 	defaultValues?: Partial<BoatFormSchema>;
 };
 
 const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
-	const form = useForm<z.infer<typeof boatFormSchema>>({
+	const form = useForm<BoatFormSchema>({
+		resolver: zodResolver(boatFormSchema),
 		mode: 'onChange',
 		defaultValues,
 	});
@@ -49,7 +52,9 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 			}
 		};
 
-		fetchActivityTypes();
+		fetchActivityTypes()
+			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
+			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, []);
 
 	return (
@@ -128,12 +133,14 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 							<FormControl>
 								<Select
 									value={field.value ? field.value.toString() : ''}
-									onValueChange={(value) => field.onChange(Number(value))}>
+									onValueChange={(value) => {
+										field.onChange(Number(value));
+									}}>
 									<SelectTrigger className="w-full text-left p-2 border border-gray-300 rounded-md">
 										<SelectValue placeholder="Select Activity Type">
 											{field.value
 												? activityTypes.find((type) => type.id === field.value)
-														?.name?.en
+													?.name?.en
 												: 'Select Activity Type'}
 										</SelectValue>
 									</SelectTrigger>
@@ -175,7 +182,7 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 						</FormItem>
 					)}
 				/>
-				<button type="submit" style={{display: 'none'}} />
+				<Button type="submit" style={{display: 'none'}} />
 			</form>
 		</Form>
 	);
