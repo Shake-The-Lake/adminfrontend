@@ -18,6 +18,14 @@ export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
 	return response.data;
 };
 
+export const updateBoat = async (
+	id: number,
+	boat: BoatDto,
+): Promise<BoatDto> => {
+	const response = await axios.put<BoatDto>(`${baseUrl}/boat/${id}`, boat);
+	return response.data;
+};
+
 export const deleteBoat = async (id: number): Promise<BoatDto> => {
 	const response = await axios.delete<BoatDto>(`${baseUrl}/boat/${id}`);
 	return response.data;
