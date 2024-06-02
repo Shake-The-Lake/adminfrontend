@@ -9,8 +9,6 @@ export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
 	date: z.string(),
-	startedAt: z.string(),
-	customerOnlyTime: z.string(),
 	location: z.string(),
 });
 
@@ -99,31 +97,7 @@ const EventForm: React.FC<EventFormProps> = ({
 					control={form.control}
 					render={({field}) => (
 						<FormItem>
-							<FormLabel>Date</FormLabel>
-							<FormControl>
-								<Input type="datetime-local" {...field} className="input" />
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-				<FormField
-					name="startedAt"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>Internal Start</FormLabel>
-							<FormControl>
-								<Input type="datetime-local" {...field} className="input" />
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-				<FormField
-					name="customerOnlyTime"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>External Start</FormLabel>
+							<FormLabel>Event Date</FormLabel>
 							<FormControl>
 								<Input type="datetime-local" {...field} className="input" />
 							</FormControl>
