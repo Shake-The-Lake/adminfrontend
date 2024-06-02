@@ -6,7 +6,6 @@ import EventForm, {
 import {getEventById, updateEvent} from '../../../services/event-service';
 import {SubmitHandler} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
-import EntryValidation from '../../../components/entry-validation/entry-validation';
 import LoadingSpinner from '../../../components/animations/loading';
 
 const EventOverview: React.FC = () => {
@@ -33,8 +32,6 @@ const EventOverview: React.FC = () => {
 					title: event.title,
 					description: event.description,
 					date: event.date.split('.')[0],
-					startedAt: event.startedAt.split('.')[0],
-					customerOnlyTime: event.customerOnlyTime.split('.')[0],
 					location: event.location?.name || '',
 				};
 				setDefaultValues(transformedEvent);
@@ -77,11 +74,7 @@ const EventOverview: React.FC = () => {
 						Enter the basic data for the event
 					</p>
 					<EventForm form={form} defaultValues={defaultValues} />
-				</div>
-				<div className="hidden lg:block border-l border-gray-300 mx-4"></div>
-				<div className="w-full lg:w-1/2 flex flex-col">
-					<EntryValidation />
-					<div className="mt-40 flex justify-end">
+					<div className="flex justify-end mt-10">
 						<button
 							type="submit"
 							onClick={form.handleSubmit(handleUpdate)}
@@ -89,6 +82,13 @@ const EventOverview: React.FC = () => {
 							Save Changes
 						</button>
 					</div>
+				</div>
+				<div className="hidden lg:block mx-4"></div>
+				<div className="w-full lg:w-1/2 flex flex-col">
+					{/*Removed because it is not part of our MVP*/}
+					{/*<EntryValidation />
+			<div className="mt-40 flex justify-end"></div>
+			*/}
 				</div>
 			</div>
 		</div>

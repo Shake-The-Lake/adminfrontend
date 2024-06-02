@@ -4,13 +4,10 @@ export type EventDto = {
 	description: string;
 	location: Location;
 	date: string;
-	customerCode: string;
-	employeeCode: string;
-	customerOnlyTime: string;
+	//customerCode: string; not part of MVP
+	//employeeCode: string; not part of MVP
 	boatIds: number[];
 	isStarted: boolean;
-	startedAt: string;
-	endedAt: string;
 };
 
 export type Location = {
