@@ -70,7 +70,7 @@ const BoatsOverview: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center py-10 px-10">
+		<div className="flex flex-col items-center">
 			<div className="w-full my-5 flex flex-col justify-start">
 				<h2>Boats</h2>
 			</div>

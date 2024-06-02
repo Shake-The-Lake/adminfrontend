@@ -13,7 +13,7 @@ export type StlCardProps = {
 	id?: number;
 	title?: string;
 	description?: string;
-	handleEdit: (id?: number) => Promise<void>;
+	handleEdit: (id?: number) => Promise<void> | void;
 	handleDelete: (id?: number) => Promise<boolean>;
 };
 
