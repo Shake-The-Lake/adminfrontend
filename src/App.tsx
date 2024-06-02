@@ -17,7 +17,8 @@ import {
 	SchedulePage,
 } from './pages';
 import {getEventById} from './services/event-service';
-import {getActivityTypeById} from './services/activity-type-serivce';
+import {getActivityTypeById} from './services/activity-type-service';
+import {getBoatById} from './services/boat-service';
 
 const router = createBrowserRouter([
 	{
@@ -59,6 +60,9 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.boats}/${eventDetailRoutes.boatId}`,
 				element: <BoatPage />,
+				async loader({params}) {
+					return getBoatById(Number(params.boatId));
+				},
 			},
 			{
 				path: eventDetailRoutes.schedule,

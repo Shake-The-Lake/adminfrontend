@@ -21,7 +21,8 @@ import {type LocalizedStringDto} from '../../models/api/localized-string';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
-import {toast, useToast} from '../ui/use-toast';
+import {useToast} from '../ui/use-toast';
+import {Textarea} from '../ui/textarea';
 
 const localizedStringSchema = z.object({
 	en: z.string().optional(),
@@ -30,7 +31,7 @@ const localizedStringSchema = z.object({
 });
 
 const activityTypeSchema = z.object({
-	id: z.number().optional(),
+	id: z.number().min(0).optional(),
 	name: z.object({
 		en: z.string().min(5).max(20),
 		de: z.string().min(5).max(20),
@@ -45,7 +46,7 @@ const activityTypeSchema = z.object({
 export type ActivityTypeFormSchema = z.infer<typeof activityTypeSchema>;
 
 type ActivityTypeFormProps = {
-	onSubmit: (dto: ActivityTypeDto) => Promise<boolean>; // True if successfully saved
+	onSubmit: (dto: ActivityTypeDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: ActivityTypeDto;
 	isCreate: boolean;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
@@ -81,13 +82,19 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		};
 
 		const success = await onSubmit(activityType);
-		if (success) {
+		if (success === true) {
 			onSuccessfullySubmitted();
+		} else if (typeof success === 'string') {
+			toast({
+				variant: 'destructive',
+				title: 'There was an error when saving.',
+				description: success,
+			});
 		}
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
+		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead, make it global
 
 		toast({
 			variant: 'destructive',
@@ -100,10 +107,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		<>
 			<Form {...form}>
 				<form
-					className="p-1 space-y-4"
+					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
-					<Tabs defaultValue={i18n.language} className="w-[400px]">
-						<TabsList>
+					<Tabs defaultValue={i18n.language}>
+						<TabsList className="w-full justify-start">
 							<TabsTrigger value="en">English</TabsTrigger>
 							<TabsTrigger value="de">German</TabsTrigger>
 							<TabsTrigger value="gsw">Swiss German</TabsTrigger>
@@ -113,7 +120,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								Enter English content and content that does not belong to a
 								specific language here.
 							</p>
-							<div>
+							<div className="space-y-4">
 								<FormField
 									name="name.en"
 									control={form.control}
@@ -137,7 +144,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 										<FormItem>
 											<FormLabel>Description</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													placeholder="Description in English"
 													{...field}
 													className="input"
@@ -169,7 +176,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 										<FormItem>
 											<FormLabel>Checklist</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													placeholder="Checklist in English"
 													{...field}
 													className="input"
@@ -185,7 +192,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								Enter German content and content that does not belong to a
 								specific language here.
 							</p>
-							<div>
+							<div className="space-y-4">
 								<FormField
 									name="name.de"
 									control={form.control}
@@ -209,7 +216,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 										<FormItem>
 											<FormLabel>Description</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													placeholder="Description in German"
 													{...field}
 													className="input"
@@ -241,7 +248,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 										<FormItem>
 											<FormLabel>Checklist</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													placeholder="Checklist in German"
 													{...field}
 													className="input"
@@ -257,7 +264,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								Enter Swiss German content and content that does not belong to a
 								specific language here.
 							</p>
-							<div>
+							<div className="space-y-4">
 								<FormField
 									name="name.swissGerman"
 									control={form.control}
@@ -281,7 +288,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 										<FormItem>
 											<FormLabel>Description</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													placeholder="Description in Swiss German"
 													{...field}
 													className="input"
@@ -313,7 +320,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 										<FormItem>
 											<FormLabel>Checklist</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													placeholder="Checklist in Swiss German"
 													{...field}
 													className="input"

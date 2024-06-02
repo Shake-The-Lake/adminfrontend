@@ -3,11 +3,14 @@ import {useTranslation} from 'react-i18next';
 import {
 	createActivityType,
 	deleteActivityType,
-	getAllActivityTypes,
-} from '../../../services/activity-type-serivce';
-import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
+	getAllActivityTypesFromEvent,
+} from '../../../services/activity-type-service';
+import {
+	defaultActivityTypeDto,
+	type ActivityTypeDto,
+} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
-import {getTranslation} from '../../../lib/utils';
+import {getTranslation, tryGetErrorMessage} from '../../../lib/utils';
 import {useNavigate, useParams} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import StlDialog from '../../../components/dialog/stl-dialog';
@@ -29,7 +32,9 @@ const ActivityTypesPage = () => {
 	useEffect(() => {
 		async function fetchActivityTypes() {
 			try {
-				const activityTypeData = await getAllActivityTypes(Number(eventId));
+				const activityTypeData = await getAllActivityTypesFromEvent(
+					Number(eventId),
+				);
 				setActivityTypes(activityTypeData);
 				setLoading(false);
 			} catch (error) {
@@ -59,11 +64,13 @@ const ActivityTypesPage = () => {
 
 		try {
 			await deleteActivityType(id);
-			return true;
+			setActivityTypes((prev) => prev.filter((e) => e.id !== id));
 		} catch (error) {
-			console.error(error); // Todo! add "real" error handling
-			return false;
+			console.error(error);
+			return tryGetErrorMessage(error);
 		}
+
+		return true;
 	};
 
 	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
@@ -71,20 +78,22 @@ const ActivityTypesPage = () => {
 		try {
 			const createdType = await createActivityType(dto);
 			console.log('Created activity type:', createdType);
+
+			setActivityTypes([...activityTypes, createdType]);
 		} catch (error) {
 			console.error('Failed to create activity type:', error);
-			return false;
+			return tryGetErrorMessage(error);
 		}
 
 		return true;
 	};
 
-	const closeCreateDialog = () => {
-		setIsCreateDialogOpen(false);
-	};
-
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
+	};
+
+	const closeCreateDialog = () => {
+		setIsCreateDialogOpen(false);
 	};
 
 	return (
@@ -126,14 +135,7 @@ const ActivityTypesPage = () => {
 					<ActivityTypeForm
 						onSubmit={handleCreateNewActivityType}
 						onSuccessfullySubmitted={closeCreateDialog}
-						model={{
-							id: undefined,
-							name: undefined,
-							description: undefined,
-							checklist: undefined,
-							icon: undefined,
-							eventId: undefined,
-						}}
+						model={defaultActivityTypeDto}
 						isCreate={true}
 					/>
 				</StlDialog>
