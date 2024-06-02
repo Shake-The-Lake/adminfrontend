@@ -21,9 +21,11 @@ const EventList = () => {
 			try {
 				const eventsData = await getAllEvents();
 				setEvents(eventsData);
+				setError(undefined);
 				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching events:', error);
+				setEvents([]);
 				setError('Failed to load events');
 				setIsLoading(false);
 			}
@@ -33,8 +35,6 @@ const EventList = () => {
 			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
 			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, []);
-
-	if (error) return <p>{error}</p>;
 
 	const handleDelete = async (id?: number) => {
 		try {
@@ -60,7 +60,8 @@ const EventList = () => {
 				<div className="mb-5">
 					<CreateEventDialog />
 				</div>
-				<ul>
+				<p>{error}</p>
+				<ul className="mb-5">
 					{events.length > 0 ? (
 						events.map((event) => (
 							<li key={event.id} className="mb-4 flex justify-center">

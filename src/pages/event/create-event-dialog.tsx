@@ -11,8 +11,6 @@ const formSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
 	date: z.string(),
-	startedAt: z.string(),
-	customerOnlyTime: z.string(),
 	location: z.string(),
 });
 
@@ -22,12 +20,7 @@ const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
 	const form = useEventForm();
 
-	const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
-		values,
-	) => {
-		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
-		const today = new Date();
-		const todayAsString = today.toISOString();
+	const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = (values) => {
 		const event: EventDto = {
 			id: 0,
 			title: values.title,
@@ -42,19 +35,16 @@ const CreateEventDialog: React.FC = () => {
 				canton: '',
 			},
 			date: values.date,
-			customerCode: 'abcdefg', // TODO: backend does not allow null values here anymore but Design does not include creating customer code in creat event popup
-			employeeCode: '',
 			boatIds: [],
-			customerOnlyTime: values.customerOnlyTime,
 			isStarted: false,
-			startedAt: values.startedAt,
-			endedAt: todayAsString, // TODO Frontend UI does not have end dates jet planned.
 		};
 		try {
-			const createdEvent = await createEvent(event).then((response) => {
-				navigate('/event/' + response.id);
-				return response.id;
-			});
+			const createdEvent = createEvent({...form.getValues(), ...event}).then(
+				(response) => {
+					navigate('/event/' + response.id);
+					return response.id;
+				},
+			);
 			console.log('Created event:', createdEvent);
 		} catch (error) {
 			console.error('Failed to create event:', error);

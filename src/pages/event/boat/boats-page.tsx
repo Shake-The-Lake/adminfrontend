@@ -71,8 +71,8 @@ const BoatsOverview: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center">
-			<div className="w-full my-5 flex flex-col justify-start">
-				<h2>Boats</h2>
+			<div className="w-full my-2 flex flex-col justify-start">
+				<h1>Boats</h1>
 			</div>
 			{boats.length === 0 && (
 				<div className="w-full py-5">

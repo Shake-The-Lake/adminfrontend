@@ -6,13 +6,10 @@ export type EventDto = {
 	title: string;
 	description: string;
 	location: Location;
-	date: string; // Assuming ISO string format for LocalDateTime
-	customerCode: string;
-	employeeCode: string;
-	customerOnlyTime: string; // Assuming ISO string format for LocalDateTime
+	date: string;
+	// CustomerCode: string; not part of MVP
+	// employeeCode: string; not part of MVP
 	isStarted?: boolean;
-	startedAt: string; // Assuming ISO string format for LocalDateTime
-	endedAt: string; // Assuming ISO string format for LocalDateTime
 	activityTypeIds?: number[];
 	boatIds?: number[];
 	boats?: BoatDto[] | undefined;
