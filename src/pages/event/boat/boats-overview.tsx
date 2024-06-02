@@ -95,14 +95,16 @@ const BoatsOverview: React.FC = () => {
 					title="Create Boat"
 					description="Add a new boat by entering the necessary data."
 					triggerLabel="Add new boat"
-					onSubmit={() =>
+					onSubmit={() => {
+						// Mock form submit event to trigger validation
 						document.querySelector('form')?.dispatchEvent(
 							new Event('submit', {
 								cancelable: true,
 								bubbles: true,
 							}),
-						)
-					}>
+						);
+						return true;
+					}}>
 					<BoatForm onSubmit={createNewBoat} />
 				</StlDialog>
 			</div>

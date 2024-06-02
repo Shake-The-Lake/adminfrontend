@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
+	createActivityType,
 	deleteActivityType,
 	getAllActivityTypes,
 } from '../../../services/activity-type-serivce';
@@ -12,6 +13,8 @@ import {useParams} from 'react-router-dom';
 import {Button} from '../../../components/ui/button';
 import {Plus} from 'lucide-react';
 import LoadingSpinner from '../../../components/animations/loading';
+import StlDialog from '../../../components/dialog/stl-dialog';
+import ActivityTypeForm from '../../../components/forms/activity-type';
 
 const ActivityTypesPage = () => {
 	const {id} = useParams<{id: string}>();
@@ -19,7 +22,7 @@ const ActivityTypesPage = () => {
 
 	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
 	const [activeActivityType, setActiveActivityType] = useState<
-	ActivityTypeDto | undefined
+		ActivityTypeDto | undefined
 	>(undefined);
 	const [isActivityTypeDialogOpen, setIsActivityTypeDialogOpen] =
 		useState(false);
@@ -79,6 +82,18 @@ const ActivityTypesPage = () => {
 		}
 	};
 
+	const createNewType = async (dto: ActivityTypeDto) => {
+		try {
+			const createdType = await createActivityType(dto);
+			console.log('Created type:', createdType);
+		} catch (error) {
+			console.error('Failed to create type:', error);
+			return false;
+		}
+
+		return true;
+	};
+
 	return (
 		<div className="flex flex-col items-center py-10 px-10">
 			<LoadingSpinner isLoading={loading} />
@@ -124,6 +139,34 @@ const ActivityTypesPage = () => {
 				closeActivityTypeDialog={closeActivityTypeDialog}
 				openActivityTypeDialog={open}
 			/>
+
+			<StlDialog
+				title="Create Activity Type"
+				description="Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language."
+				triggerLabel="Add new Activity Type"
+				onSubmit={() => {
+					// Mock form submit event to trigger validation
+					document.querySelector('form')?.dispatchEvent(
+						new Event('submit', {
+							cancelable: true,
+							bubbles: true,
+						}),
+					);
+					// Todo! trigger page reload
+					return true;
+				}}>
+				<ActivityTypeForm
+					onSubmit={createNewType}
+					value={{
+						id: undefined,
+						name: undefined,
+						description: undefined,
+						checklist: undefined,
+						icon: undefined,
+						eventId: undefined,
+					}}
+				/>
+			</StlDialog>
 		</div>
 	);
 };

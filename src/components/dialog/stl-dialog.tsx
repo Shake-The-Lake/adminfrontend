@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
 	Dialog,
 	DialogClose,
@@ -16,7 +16,7 @@ export type StlDialogProps = {
 	title: string;
 	description: string;
 	triggerLabel: string;
-	onSubmit: () => void;
+	onSubmit: () => boolean | void; // If returns true, close afterwards
 	children: React.ReactNode;
 };
 
@@ -26,33 +26,44 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	triggerLabel,
 	onSubmit,
 	children,
-}) => (
-	<Dialog>
-		<DialogTrigger asChild>
-			<Button
-				className="h-40 w-full flex items-center justify-center"
-				title={triggerLabel}>
-				<Plus className="size-24" />
-			</Button>
-		</DialogTrigger>
-		<DialogContent className="sm:max-w-md flex flex-col">
-			<DialogHeader>
-				<DialogTitle>{title}</DialogTitle>
-				<DialogDescription>{description}</DialogDescription>
-			</DialogHeader>
-			<div className="flex-grow overflow-auto p-1">{children}</div>
-			<DialogFooter className="justify-end items-end">
-				<DialogClose asChild>
-					<Button type="button" variant="secondary">
-						Cancel
-					</Button>
-				</DialogClose>
-				<Button type="submit" onClick={onSubmit}>
-					Save
+}) => {
+	const [open, setOpen] = useState(false);
+	const handleClick = () => {
+		const shouldClose = onSubmit();
+
+		if (shouldClose) {
+			setOpen(false);
+		}
+	};
+
+	return (
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button
+					className="h-40 w-full flex items-center justify-center"
+					title={triggerLabel}>
+					<Plus className="size-24" />
 				</Button>
-			</DialogFooter>
-		</DialogContent>
-	</Dialog>
-);
+			</DialogTrigger>
+			<DialogContent className="flex flex-col">
+				<DialogHeader>
+					<DialogTitle>{title}</DialogTitle>
+					<DialogDescription>{description}</DialogDescription>
+				</DialogHeader>
+				<div className="flex-grow overflow-auto p-1">{children}</div>
+				<DialogFooter className="justify-end items-end">
+					<DialogClose asChild>
+						<Button type="button" variant="secondary">
+							Cancel
+						</Button>
+					</DialogClose>
+					<Button type="submit" onClick={handleClick}>
+						Save
+					</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
+};
 
 export default StlDialog;
