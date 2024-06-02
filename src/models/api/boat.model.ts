@@ -1,10 +1,10 @@
 export type BoatDto = {
 	id: number;
-	boatDriverId?: number;
 	name: string;
 	type: string;
 	seatsRider: string;
 	seatsViewer: string;
+	operator: string;
 	slotDurationInMins?: number;
 	availableFrom: string;
 	availableUntil: string;

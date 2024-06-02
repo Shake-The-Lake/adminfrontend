@@ -1,8 +1,8 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {
 	Form,
 	FormControl,
@@ -14,24 +14,24 @@ import {
 import {Input} from '../../../components/ui/input';
 import {Button} from '../../../components/ui/button';
 import {
-	DialogHeader,
-	DialogFooter,
-	DialogClose,
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from '../../../components/ui/dialog';
 import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
-import {createActivityType, getAllActivityTypes} from '../../../services/activity-type-serivce';
-import {Plus} from 'lucide-react';
-import {changeLanguage} from 'i18next';
+import {
+	createActivityType,
+	getAllActivityTypesFromEvent,
+} from '../../../services/activity-type-serivce';
 import {type LocalizedStringDto} from '../../../models/api/localized-string';
 
 const formSchema = z.object({
 	titleDe: z.string().min(5).max(20),
-	titleEn: z.string().min(5).max(20), 
+	titleEn: z.string().min(5).max(20),
 	descriptionDe: z.string(),
 	descriptionEn: z.string(),
 	icon: z.string(),
@@ -62,7 +62,9 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 		// },
 	});
 	const {id} = useParams<{eventId: string}>();
-	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values) => {
+	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
+		values,
+	) => {
 		// TODO sync for design/prototyp update: how to implement further form inputs for location properties
 		const description: LocalizedStringDto = {
 			de: values.descriptionDe,
@@ -89,7 +91,8 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 		try {
 			await createActivityType(activeType);
 			props.closeActivityTypeDialog();
-			const newActivityTypeList: ActivityTypeDto[] = await getAllActivityTypes();
+			const newActivityTypeList: ActivityTypeDto[] =
+				await getAllActivityTypesFromEvent();
 			setActivityType(newActivityTypeList);
 		} catch (error) {
 			console.error('Failed to active type event:', error);
@@ -102,37 +105,52 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 				<DialogHeader>
 					<DialogTitle>Create Active Type</DialogTitle>
 					<DialogDescription>
-						Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language.
+						Parts of this entity will eventually be displayed to the end user,
+						therefore certain fields need to be filled out in multiple
+						languages. Simply change the tab to edit another language.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grow-0 overflow-auto min-h-32">
 					<Form {...form}>
 						<form className="p-1">
 							<div className="bg-primary-stroke rounded-lg p-1 mb-1">
-								<Button 
+								<Button
 									type="button"
-									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'en' ? 'bg-white' : 'bg-primary-stroke'}`} 
+									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'en' ? 'bg-white' : 'bg-primary-stroke'}`}
 									onClick={async () => {
-										const isValid = await form.trigger(['checklistDe', 'descriptionDe', 'titleDe']);
+										const isValid = await form.trigger([
+											'checklistDe',
+											'descriptionDe',
+											'titleDe',
+										]);
 										if (isValid) {
-											setCurrentLanguage('en'); 
+											setCurrentLanguage('en');
 										}
-									}}
-								>English</Button>
-								<Button 
+									}}>
+									English
+								</Button>
+								<Button
 									type="button"
-									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'de' ? 'bg-white' : 'bg-primary-stroke'}`} 
+									className={`hover:bg-primary-dark-stroke transition-colors duration-300 text-primary-blue-dark ${currentLanguage === 'de' ? 'bg-white' : 'bg-primary-stroke'}`}
 									onClick={async () => {
-										const isValid = await form.trigger(['checklistEn', 'descriptionEn', 'titleEn']);
+										const isValid = await form.trigger([
+											'checklistEn',
+											'descriptionEn',
+											'titleEn',
+										]);
 										if (isValid) {
 											setCurrentLanguage('de');
 										}
-									}}
-								>German</Button>
+									}}>
+									German
+								</Button>
 							</div>
-							<p className="text-primary-dark-stroke mb-2 mt-2">Enter English content and content that does not belong to a specific language here.</p>
-							<div							
-								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} ><FormField
+							<p className="text-primary-dark-stroke mb-2 mt-2">
+								Enter English content and content that does not belong to a
+								specific language here.
+							</p>
+							<div className={`${currentLanguage === 'en' ? '' : 'hidden'}`}>
+								<FormField
 									name="titleEn"
 									control={form.control}
 									render={({field}) => (
@@ -149,8 +167,7 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 										</FormItem>
 									)}></FormField>
 							</div>
-							<div							
-								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
+							<div className={`${currentLanguage === 'de' ? '' : 'hidden'}`}>
 								<FormField
 									name="titleDe"
 									control={form.control}
@@ -168,8 +185,7 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 										</FormItem>
 									)}></FormField>
 							</div>
-							<div							
-								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} >
+							<div className={`${currentLanguage === 'en' ? '' : 'hidden'}`}>
 								<FormField
 									name="descriptionEn"
 									control={form.control}
@@ -187,8 +203,7 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 										</FormItem>
 									)}></FormField>
 							</div>
-							<div							
-								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
+							<div className={`${currentLanguage === 'de' ? '' : 'hidden'}`}>
 								<FormField
 									name="descriptionDe"
 									control={form.control}
@@ -213,17 +228,12 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 									<FormItem>
 										<FormLabel>Icon</FormLabel>
 										<FormControl>
-											<Input
-												placeholder="Icon"
-												{...field}
-												className="input"
-											/>
+											<Input placeholder="Icon" {...field} className="input" />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}></FormField>
-							<div							
-								className={`${currentLanguage === 'en' ? '' : 'hidden'}`} >
+							<div className={`${currentLanguage === 'en' ? '' : 'hidden'}`}>
 								<FormField
 									name="checklistEn"
 									control={form.control}
@@ -241,9 +251,8 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 										</FormItem>
 									)}></FormField>
 							</div>
-								
-							<div							
-								className={`${currentLanguage === 'de' ? '' : 'hidden'}`} >
+
+							<div className={`${currentLanguage === 'de' ? '' : 'hidden'}`}>
 								<FormField
 									name="checklistDe"
 									control={form.control}
@@ -266,8 +275,10 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 				</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary"
-							onClick={()=> {
+						<Button
+							type="button"
+							variant="secondary"
+							onClick={() => {
 								props.closeActivityTypeDialog();
 							}}>
 							Cancel
@@ -275,10 +286,9 @@ const ActiveTypeDialog: React.FC<StlActivityTypeProps> = (props) => {
 					</DialogClose>
 					<Button
 						type="button"
-						onClick={async ()=> {
+						onClick={async () => {
 							await form.handleSubmit(onSubmit)();
-						}}
-					>
+						}}>
 						Save
 					</Button>
 				</DialogFooter>

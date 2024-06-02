@@ -1,8 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {z} from 'zod';
-import {SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
+import {getAllActivityTypes} from '../../services/activity-type-serivce';
+import {ActivityTypeDto} from '../../models/api/activity-type.model';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select';
 
 export const boatFormSchema = z.object({
 	boatName: z.string().min(5).max(20),
@@ -10,8 +19,7 @@ export const boatFormSchema = z.object({
 	boatType: z.string(),
 	riderSeats: z.string(),
 	viewerSeats: z.string(),
-	//slotDuration: z.number(), will be added later on
-	activityTypes: z.string().array(),
+	activityTypeId: z.number(),
 	boatAvailableForm: z.string(),
 	boatAvailableUntil: z.string(),
 });
@@ -25,10 +33,24 @@ type BoatFormProps = {
 
 const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 	const form = useForm<z.infer<typeof boatFormSchema>>({
-		//resolver: zodResolver(boatFormSchema), Form Validation errors are currently not handelt correctly with popups or notifications -> if validations errors -> onSubmit won't do anything
 		mode: 'onChange',
 		defaultValues,
 	});
+
+	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
+
+	useEffect(() => {
+		const fetchActivityTypes = async () => {
+			try {
+				const response = await getAllActivityTypes();
+				setActivityTypes(response);
+			} catch (error) {
+				console.error('Failed to fetch activity types:', error);
+			}
+		};
+
+		fetchActivityTypes();
+	}, []);
 
 	return (
 		<Form {...form}>
@@ -46,8 +68,7 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 					)}
 				/>
 
-				{/*TODO: define logic for handling driver selection and possible creation of new driver*/}
-				{/*				<FormField
+				<FormField
 					name="boatDriver"
 					control={form.control}
 					render={({field}) => (
@@ -58,7 +79,7 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 							</FormControl>
 						</FormItem>
 					)}
-				/>*/}
+				/>
 				<FormField
 					name="boatType"
 					control={form.control}
@@ -98,19 +119,36 @@ const BoatForm: React.FC<BoatFormProps> = ({onSubmit, defaultValues}) => {
 					)}
 				/>
 
-				{/* TODO Define logic here as well */}
-				{/*				<FormField
-					name="activityTypes"
+				<Controller
+					name="activityTypeId"
 					control={form.control}
 					render={({field}) => (
 						<FormItem>
 							<FormLabel>Activity Types</FormLabel>
 							<FormControl>
-								<Input placeholder="" {...field} className="input" />
+								<Select
+									value={field.value ? field.value.toString() : ''}
+									onValueChange={(value) => field.onChange(Number(value))}>
+									<SelectTrigger className="w-full text-left p-2 border border-gray-300 rounded-md">
+										<SelectValue placeholder="Select Activity Type">
+											{field.value
+												? activityTypes.find((type) => type.id === field.value)
+														?.name?.en
+												: 'Select Activity Type'}
+										</SelectValue>
+									</SelectTrigger>
+									<SelectContent className="w-full border border-gray-300 rounded-md mt-1">
+										{activityTypes.map((type) => (
+											<SelectItem key={type.id} value={type.id.toString()}>
+												{type.name?.en}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
 							</FormControl>
 						</FormItem>
 					)}
-				/>*/}
+				/>
 
 				<FormField
 					name="boatAvailableForm"

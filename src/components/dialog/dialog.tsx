@@ -7,14 +7,14 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from '../ui/dialog';
 import {Button} from '../ui/button';
 
 export type StlDialogProps = {
 	title: string;
 	description: string;
-	triggerLabel: string;
+	isOpen: boolean;
+	onClose: () => void;
 	onSubmit: () => void;
 	children: React.ReactNode;
 };
@@ -22,15 +22,13 @@ export type StlDialogProps = {
 const StlDialog: React.FC<StlDialogProps> = ({
 	title,
 	description,
-	triggerLabel,
+	isOpen,
+	onClose,
 	onSubmit,
 	children,
 }) => {
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button className="w-full text-center">{triggerLabel}</Button>
-			</DialogTrigger>
+		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="sm:max-w-md flex flex-col">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
@@ -39,7 +37,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 				<div className="flex-grow overflow-auto p-1">{children}</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary">
+						<Button type="button" variant="secondary" onClick={onClose}>
 							Cancel
 						</Button>
 					</DialogClose>

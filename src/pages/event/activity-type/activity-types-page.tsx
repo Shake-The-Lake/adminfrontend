@@ -1,25 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {deleteActivityType, getAllActivityTypes} from '../../../services/activity-type-serivce';
+import {
+	deleteActivityType,
+	getAllActivityTypesFromEvent,
+} from '../../../services/activity-type-serivce';
 import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/card';
 import CreateActivityTypeDialog from './create-activity-type-dialog';
 import {getTranslation} from '../../../lib/utils';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {Button} from '../../../components/ui/button';
 import {Plus} from 'lucide-react';
 
 const ActivityTypesPage = () => {
 	const [activityTypes, setActivityType] = useState<ActivityTypeDto[]>([]);
-	const [activeActivityType, setActiveActivityType] = useState<ActivityTypeDto | undefined>(undefined);
-	  const [isActivityTypeDialogOpen, setIsActivityTypeDialogOpen] = useState(false);
+	const [activeActivityType, setActiveActivityType] = useState<
+		ActivityTypeDto | undefined
+	>(undefined);
+	const [isActivityTypeDialogOpen, setIsActivityTypeDialogOpen] =
+		useState(false);
 
 	const openActivityTypeDialog = () => {
-		setIsActivityTypeDialogOpen(true); 
+		setIsActivityTypeDialogOpen(true);
 	};
 
 	const closeActivityTypeDialog = () => {
-		setIsActivityTypeDialogOpen(false); 
+		setIsActivityTypeDialogOpen(false);
 	};
 
 	const [loading, setLoading] = useState(true);
@@ -32,7 +38,9 @@ const ActivityTypesPage = () => {
 		async function fetchActivityTypes() {
 			try {
 				console.log(eventId);
-				const activityTypeData = await getAllActivityTypes(Number(eventId));
+				const activityTypeData = await getAllActivityTypesFromEvent(
+					Number(eventId),
+				);
 				setActivityType(activityTypeData);
 				setLoading(false);
 			} catch (error) {
@@ -51,7 +59,9 @@ const ActivityTypesPage = () => {
 	if (error) return <p>{error}</p>;
 
 	const handleEdit = async (id?: number) => {
-		const currentActiveType = activityTypes.find((activityType) => activityType.id === id);
+		const currentActiveType = activityTypes.find(
+			(activityType) => activityType.id === id,
+		);
 		setActiveActivityType(currentActiveType);
 		openActivityTypeDialog();
 	};
@@ -76,7 +86,10 @@ const ActivityTypesPage = () => {
 								<StlCard
 									id={activityType.id}
 									title={getTranslation(i18n.language, activityType.name)}
-									description={getTranslation(i18n.language, activityType.description)}
+									description={getTranslation(
+										i18n.language,
+										activityType.description,
+									)}
 									handleEdit={handleEdit}
 									handleDelete={handleDelete}
 								/>
@@ -86,21 +99,22 @@ const ActivityTypesPage = () => {
 						<p className="text-center">No activity types yet.</p>
 					)}
 
-					<Button className="h-40 w-full flex items-center justify-center" onClick={() => {
-						openActivityTypeDialog();
-					}}>
+					<Button
+						className="h-40 w-full flex items-center justify-center"
+						onClick={() => {
+							openActivityTypeDialog();
+						}}>
 						<Plus className="size-24" />
 					</Button>
 				</div>
-				
-				<CreateActivityTypeDialog 
-					setActivityType={getAllActivityTypes} 
-					currentActivityType={activeActivityType} 
-					isActivityTypeDialogOpen={isActivityTypeDialogOpen} 
-					closeActivityTypeDialog={closeActivityTypeDialog} 
+
+				<CreateActivityTypeDialog
+					setActivityType={getAllActivityTypesFromEvent}
+					currentActivityType={activeActivityType}
+					isActivityTypeDialogOpen={isActivityTypeDialogOpen}
+					closeActivityTypeDialog={closeActivityTypeDialog}
 					openActivityTypeDialog={open}
 				/>
-				
 			</div>
 		</div>
 	);

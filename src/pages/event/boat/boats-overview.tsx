@@ -23,6 +23,7 @@ const BoatsOverview: React.FC = () => {
 	const eventId = pathSegments[pathSegments.length - 2];
 	const [eventTitle, setEventTitle] = useState('');
 	const [boats, setBoats] = useState<BoatDto[]>([]);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	const createNewBoat: SubmitHandler<z.infer<typeof boatFormSchema>> = (
 		values,
@@ -30,11 +31,11 @@ const BoatsOverview: React.FC = () => {
 		const boat: BoatDto = {
 			id: 0,
 			name: values.boatName,
-			boatDriverId: 1, // TODO handle logic for boatdrivers
+			operator: values.boatDriver,
 			type: values.boatType,
 			seatsRider: values.riderSeats,
 			seatsViewer: values.viewerSeats,
-			activityTypeId: 1, // TODO handle and discuss logic
+			activityTypeId: values.activityTypeId,
 			availableFrom: values.boatAvailableForm,
 			availableUntil: values.boatAvailableUntil,
 			eventId: Number(eventId),
@@ -45,6 +46,7 @@ const BoatsOverview: React.FC = () => {
 		} catch (error) {
 			console.error('Failed to create boat:', error);
 		}
+		setIsDialogOpen(false);
 	};
 
 	useEffect(() => {
@@ -71,7 +73,15 @@ const BoatsOverview: React.FC = () => {
 	};
 
 	const removeBoat = async (id?: number) => {
-		await deleteBoat(id);
+		if (id === undefined) return false;
+		const success = await deleteBoat(id);
+		if (success) {
+			setBoats((prevBoats) => prevBoats.filter((boat) => boat.id !== id));
+			return true;
+		} else {
+			console.error('Failed to delete boat');
+			return false;
+		}
 	};
 
 	return (
@@ -83,20 +93,11 @@ const BoatsOverview: React.FC = () => {
 			{boats.length === 0 ? (
 				<div className="flex flex-col items-center justify-center w-full h-full">
 					<p className="text-lg mb-4">{t('No boats yet')}</p>
-					<StlDialog
-						title="Create Boat"
-						description="Add a new boat by entering the necessary data."
-						triggerLabel="Add new boat"
-						onSubmit={() =>
-							document.querySelector('form')?.dispatchEvent(
-								new Event('submit', {
-									cancelable: true,
-									bubbles: true,
-								}),
-							)
-						}>
-						<BoatForm onSubmit={createNewBoat} />
-					</StlDialog>
+					<button
+						className="flex items-center justify-center w-full h-full bg-primary text-white text-lg rounded-lg"
+						onClick={() => setIsDialogOpen(true)}>
+						<Plus className="w-20 h-20"></Plus>
+					</button>
 				</div>
 			) : (
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
@@ -114,13 +115,27 @@ const BoatsOverview: React.FC = () => {
 					<div className="mb-2 flex justify-center">
 						<button
 							className="flex items-center justify-center w-full h-full bg-primary text-white text-lg rounded-lg"
-							// TODO find solution for architecture
-							onClick={() => {}}>
+							onClick={() => setIsDialogOpen(true)}>
 							<Plus className="w-20 h-20"></Plus>
 						</button>
 					</div>
 				</div>
 			)}
+			<StlDialog
+				title="Create Boat"
+				description="Add a new boat by entering the necessary data."
+				isOpen={isDialogOpen}
+				onClose={() => setIsDialogOpen(false)}
+				onSubmit={() =>
+					document.querySelector('form')?.dispatchEvent(
+						new Event('submit', {
+							cancelable: true,
+							bubbles: true,
+						}),
+					)
+				}>
+				<BoatForm onSubmit={createNewBoat} />
+			</StlDialog>
 		</div>
 	);
 };
