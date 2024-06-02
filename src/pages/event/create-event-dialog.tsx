@@ -4,7 +4,7 @@ import {z} from 'zod';
 import {useNavigate} from 'react-router-dom';
 import {type EventDto} from '../../models/api/event.model';
 import {createEvent} from '../../services/event-service';
-import StlDialog from '../../components/dialog/dialog';
+import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm, {useEventForm} from '../../components/forms/event';
 
 const formSchema = z.object({
@@ -39,10 +39,12 @@ const CreateEventDialog: React.FC = () => {
 			isStarted: false,
 		};
 		try {
-			const createdEvent = createEvent(event).then((response) => {
-				navigate('/event/' + response.id);
-				return response.id;
-			});
+			const createdEvent = createEvent({...form.getValues(), ...event}).then(
+				(response) => {
+					navigate('/event/' + response.id);
+					return response.id;
+				},
+			);
 			console.log('Created event:', createdEvent);
 		} catch (error) {
 			console.error('Failed to create event:', error);

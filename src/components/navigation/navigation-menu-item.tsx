@@ -10,6 +10,7 @@ import {
 import {Button} from '../ui/button';
 import {useState} from 'react';
 import {cn} from '../../lib/utils';
+import './navigation.css';
 
 export type MenuItemProperties = {
 	labelKey: string;
@@ -40,8 +41,8 @@ const SubNavigationMenuItem = (props: MenuItemProperties) => {
 				[
 					isPending ? 'pending' : '',
 					isActive
-						? 'active bg-muted text-primary hover:bg-secondary'
-						: 'text-muted-foreground',
+						? 'active bg-border text-primary hover:text-muted-foreground hover:bg-slate-300'
+						: 'text-muted-foreground hover:bg-slate-200',
 					isTransitioning ? 'transitioning' : '',
 				].join(' ') + linkClass
 			}>
@@ -76,6 +77,9 @@ const NavigationMenuItem = (props: MenuItemProperties) => {
 		viewSpecificLinkClass,
 	);
 
+	const subNavClass =
+		props.subNavigations && props.subNavigations.length > 0 ? ' parent' : '';
+
 	return (
 		<>
 			<NavLink
@@ -85,7 +89,7 @@ const NavigationMenuItem = (props: MenuItemProperties) => {
 					[
 						isPending ? 'pending' : '',
 						isActive
-							? 'active bg-muted text-primary hover:bg-secondary'
+							? 'active bg-muted text-primary hover:bg-slate-200' + subNavClass
 							: 'text-muted-foreground',
 						isTransitioning ? 'transitioning' : '',
 					].join(' ') + linkClass

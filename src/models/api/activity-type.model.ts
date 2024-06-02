@@ -5,6 +5,6 @@ export type ActivityTypeDto = {
 	name?: LocalizedStringDto;
 	description?: LocalizedStringDto;
 	checklist?: LocalizedStringDto;
-	icon: string;
+	icon?: string;
 	eventId?: number;
 };
