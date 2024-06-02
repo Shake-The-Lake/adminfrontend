@@ -25,7 +25,7 @@ export function tryGetErrorMessage(error: unknown) {
 			response: {data?: {message?: string}; status: number};
 		};
 		errorMessage =
-			axiosError.response.data?.message ||
+			axiosError.response.data?.message ??
 			`Error: ${axiosError.response.status}`;
 	} else if (error && typeof error === 'object' && 'request' in error) {
 		const axiosError = error as {request: unknown};
