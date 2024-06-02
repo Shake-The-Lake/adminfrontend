@@ -4,8 +4,11 @@ import {
 	createActivityType,
 	deleteActivityType,
 	getAllActivityTypesFromEvent,
-} from '../../../services/activity-type-serivce';
-import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
+} from '../../../services/activity-type-service';
+import {
+	defaultActivityTypeDto,
+	type ActivityTypeDto,
+} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
 import {getTranslation} from '../../../lib/utils';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -83,12 +86,12 @@ const ActivityTypesPage = () => {
 		return true;
 	};
 
-	const closeCreateDialog = () => {
-		setIsCreateDialogOpen(false);
-	};
-
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
+	};
+
+	const closeCreateDialog = () => {
+		setIsCreateDialogOpen(false);
 	};
 
 	return (
@@ -130,14 +133,7 @@ const ActivityTypesPage = () => {
 					<ActivityTypeForm
 						onSubmit={handleCreateNewActivityType}
 						onSuccessfullySubmitted={closeCreateDialog}
-						model={{
-							id: 0,
-							name: undefined,
-							description: undefined,
-							checklist: undefined,
-							icon: undefined,
-							eventId: undefined,
-						}}
+						model={defaultActivityTypeDto}
 						isCreate={true}
 					/>
 				</StlDialog>

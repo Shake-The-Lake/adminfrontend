@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import ActivityTypeForm from '../../../components/forms/activity-type';
 import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
-import {updateActivityType} from '../../../services/activity-type-serivce';
+import {updateActivityType} from '../../../services/activity-type-service';
 import {useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {useToast} from '../../../components/ui/use-toast';
@@ -29,8 +29,11 @@ const ActivityTypePage: React.FC = () => {
 
 	const handleUpdateActivityType = async (dto: ActivityTypeDto) => {
 		try {
-			const updatedType = await updateActivityType(activityType?.id ?? 0, dto);
-			console.log('Updated activity type:', updatedType);
+			const updatedActivityType = await updateActivityType(
+				activityType?.id ?? 0,
+				dto,
+			);
+			console.log('Updated activity type:', updatedActivityType);
 		} catch (error) {
 			console.error('Failed to update activity type:', error);
 			toast({

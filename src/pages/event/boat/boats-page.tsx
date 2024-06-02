@@ -1,53 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {getEventById} from '../../../services/event-service';
 import {createBoat, deleteBoat} from '../../../services/boat-service';
-import {type BoatDto} from '../../../models/api/boat.model';
+import {defaultBoatDto, type BoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
-import BoatForm, {type boatFormSchema} from '../../../components/forms/boat';
-import type {SubmitHandler} from 'react-hook-form';
-import {type z} from 'zod';
+import BoatForm from '../../../components/forms/boat';
 
 const BoatsOverview: React.FC = () => {
-	const {t} = useTranslation();
-	const location = useLocation();
-	const navigate = useNavigate();
-	const pathSegments = location.pathname.split('/');
-	const eventId = pathSegments[pathSegments.length - 2];
-	const [boats, setBoats] = useState<BoatDto[]>([]);
+	const {id} = useParams<{id: string}>();
+	const eventId = Number(id);
 
-	const createNewBoat: SubmitHandler<z.infer<typeof boatFormSchema>> = async (
-		values,
-	) => {
-		const boat: BoatDto = {
-			id: 0,
-			name: values.boatName,
-			operator: values.boatDriver,
-			type: values.boatType,
-			seatsRider: values.riderSeats,
-			seatsViewer: values.viewerSeats,
-			activityTypeId: values.activityTypeId,
-			availableFrom: values.boatAvailableForm,
-			availableUntil: values.boatAvailableUntil,
-			eventId: Number(eventId),
-		};
-		try {
-			const createdBoat = await createBoat(boat);
-			console.log('Created boat:', createdBoat);
-			setBoats([...boats, createdBoat]);
-		} catch (error) {
-			console.error('Failed to create boat:', error);
-		}
-	};
+	const [boats, setBoats] = useState<BoatDto[]>([]);
+	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
+	const {t} = useTranslation();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchBoat = async () => {
 			try {
 				const event = await getEventById(Number(eventId), 'boats');
 
-				setBoats(event.boats ?? []);
+				setBoats(event?.boats ?? []);
 			} catch (error) {
 				console.error('Error fetching boats:', error);
 			}
@@ -78,6 +54,29 @@ const BoatsOverview: React.FC = () => {
 		return false;
 	};
 
+	const handleCreateNewBoat = async (dto: BoatDto) => {
+		// Todo! trigger page reload after success
+		try {
+			const createdBoat = await createBoat(dto);
+			console.log('Created boat:', createdBoat);
+
+			setBoats([...boats, createdBoat]);
+		} catch (error) {
+			console.error('Failed to create activity type:', error);
+			return false;
+		}
+
+		return true;
+	};
+
+	const openCreateDialog = () => {
+		setIsCreateDialogOpen(true);
+	};
+
+	const closeCreateDialog = () => {
+		setIsCreateDialogOpen(false);
+	};
+
 	return (
 		<div className="flex flex-col items-center">
 			<div className="w-full my-2 flex flex-col justify-start">
@@ -103,8 +102,16 @@ const BoatsOverview: React.FC = () => {
 				<StlDialog
 					title="Create Boat"
 					description="Add a new boat by entering the necessary data."
-					triggerLabel="Add new boat">
-					<BoatForm onSubmit={createNewBoat} />
+					triggerLabel="Add new boat"
+					isOpen={isCreateDialogOpen}
+					onClose={closeCreateDialog}
+					onOpen={openCreateDialog}>
+					<BoatForm
+						onSubmit={handleCreateNewBoat}
+						onSuccessfullySubmitted={closeCreateDialog}
+						model={defaultBoatDto}
+						isCreate={false}
+					/>
 				</StlDialog>
 			</div>
 		</div>
