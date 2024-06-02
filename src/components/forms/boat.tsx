@@ -33,11 +33,11 @@ import {useParams} from 'react-router-dom';
 import {useToast} from '../ui/use-toast';
 
 const boatFormSchema = z.object({
-	id: z.number(),
+	id: z.number().min(0).optional(),
 	name: z.string().min(5),
 	type: z.string(),
-	seatsRider: z.coerce.number(),
-	seatsViewer: z.coerce.number(),
+	seatsRider: z.coerce.number().min(0),
+	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
 	availableFrom: z.string().refine((val) => !isNaN(Date.parse(val)), {
@@ -181,11 +181,11 @@ const BoatForm: React.FC<BoatFormProps> = ({
 											<SelectValue placeholder="Select Activity Type">
 												{field.value
 													? getTranslation(
-														i18n.language,
-														activityTypes.find(
-															(type) => type.id === field.value,
-														)?.name,
-													)
+															i18n.language,
+															activityTypes.find(
+																(type) => type.id === field.value,
+															)?.name,
+														)
 													: 'Select Activity Type'}
 											</SelectValue>
 										</SelectTrigger>

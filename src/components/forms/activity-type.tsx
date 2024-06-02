@@ -31,7 +31,7 @@ const localizedStringSchema = z.object({
 });
 
 const activityTypeSchema = z.object({
-	id: z.number().optional(),
+	id: z.number().min(0).optional(),
 	name: z.object({
 		en: z.string().min(5).max(20),
 		de: z.string().min(5).max(20),
