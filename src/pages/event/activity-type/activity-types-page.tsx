@@ -68,9 +68,9 @@ const ActivityTypesPage = () => {
 	const createNewActivityType = async (dto: ActivityTypeDto) => {
 		try {
 			const createdType = await createActivityType(dto);
-			console.log('Created type:', createdType);
+			console.log('Created activity type:', createdType);
 		} catch (error) {
-			console.error('Failed to create type:', error);
+			console.error('Failed to create activity type:', error);
 			return false;
 		}
 
@@ -105,35 +105,36 @@ const ActivityTypesPage = () => {
 							/>
 						</div>
 					))}
-			</div>
 
-			<StlDialog
-				title="Create Activity Type"
-				description="Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language."
-				triggerLabel="Add new Activity Type"
-				onSubmit={() => {
-					// Mock form submit event to trigger validation
-					document.querySelector('form')?.dispatchEvent(
-						new Event('submit', {
-							cancelable: true,
-							bubbles: true,
-						}),
-					);
-					// Todo! trigger page reload
-					return true;
-				}}>
-				<ActivityTypeForm
-					onSubmit={createNewActivityType}
-					model={{
-						id: undefined,
-						name: undefined,
-						description: undefined,
-						checklist: undefined,
-						icon: undefined,
-						eventId: undefined,
-					}}
-				/>
-			</StlDialog>
+				<StlDialog
+					title="Create Activity Type"
+					description="Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language."
+					triggerLabel="Add new Activity Type"
+					onSubmit={() => {
+						// Mock form submit event to trigger validation
+						document.querySelector('form')?.dispatchEvent(
+							new Event('submit', {
+								cancelable: true,
+								bubbles: true,
+							}),
+						);
+						// Todo! trigger page reload
+						return true;
+					}}>
+					<ActivityTypeForm
+						onSubmit={createNewActivityType}
+						model={{
+							id: undefined,
+							name: undefined,
+							description: undefined,
+							checklist: undefined,
+							icon: undefined,
+							eventId: undefined,
+						}}
+						isCreate={true}
+					/>
+				</StlDialog>
+			</div>
 		</div>
 	);
 };

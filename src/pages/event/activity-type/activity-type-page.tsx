@@ -27,10 +27,10 @@ const ActivityTypePage: React.FC = () => {
 
 	const handleUpdateActivityType = async (dto: ActivityTypeDto) => {
 		try {
-			const createdType = await updateActivityType(activityType?.id ?? 0, dto);
-			console.log('Created type:', createdType);
+			const updatedType = await updateActivityType(activityType?.id ?? 0, dto);
+			console.log('Updated activity type:', updatedType);
 		} catch (error) {
-			console.error('Failed to create type:', error);
+			console.error('Failed to update activity type:', error);
 			return false;
 		}
 
@@ -48,6 +48,7 @@ const ActivityTypePage: React.FC = () => {
 						key={activityType.id}
 						onSubmit={handleUpdateActivityType}
 						model={activityType}
+						isCreate={false}
 					/>
 				)}
 			</div>
