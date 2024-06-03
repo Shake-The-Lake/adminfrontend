@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {z} from 'zod';
 import {
 	type SubmitHandler,
@@ -69,9 +69,13 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	const eventId = Number(id);
 	const {toast} = useToast();
 
+	const [tabWithErrors, setTabWithErrors] = useState<string[]>([]);
+
 	const onPrepareSubmit: SubmitHandler<ActivityTypeFormSchema> = async (
 		values,
 	) => {
+		setTabWithErrors([]);
+
 		const activityType: ActivityTypeDto = {
 			...values,
 			id: values.id ?? 0,
@@ -97,6 +101,23 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
 		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead, make it global
 
+		const englishErrors =
+			errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
+		const germanErrors =
+			errors.name?.de ?? errors.description?.de ?? errors.checklist?.de;
+		const swissGermanErrors =
+			errors.name?.swissGerman ??
+			errors.description?.swissGerman ??
+			errors.checklist?.swissGerman;
+
+		const errorLanguages = [
+			englishErrors ? 'en' : '',
+			germanErrors ? 'de' : '',
+			swissGermanErrors ? 'gsw' : '',
+		];
+
+		setTabWithErrors(errorLanguages);
+
 		toast({
 			variant: 'destructive',
 			title: 'Could not be saved.',
@@ -112,9 +133,27 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<Tabs defaultValue={i18n.language}>
 						<TabsList className="w-full justify-start">
-							<TabsTrigger value="en">English</TabsTrigger>
-							<TabsTrigger value="de">German</TabsTrigger>
-							<TabsTrigger value="gsw">Swiss German</TabsTrigger>
+							<TabsTrigger
+								value="en"
+								className={
+									tabWithErrors.includes('en') ? 'text-destructive' : ''
+								}>
+								English
+							</TabsTrigger>
+							<TabsTrigger
+								value="de"
+								className={
+									tabWithErrors.includes('de') ? 'text-destructive' : ''
+								}>
+								German
+							</TabsTrigger>
+							<TabsTrigger
+								value="gsw"
+								className={
+									tabWithErrors.includes('gsw') ? 'text-destructive' : ''
+								}>
+								Swiss German
+							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="en">
 							<p className="text-primary-dark-stroke mb-2 mt-2">
