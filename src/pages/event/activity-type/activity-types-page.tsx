@@ -35,13 +35,14 @@ const ActivityTypesPage = () => {
 				const activityTypeData = await getAllActivityTypesFromEvent(
 					Number(eventId),
 				);
+
 				setActivityTypes(activityTypeData);
-				setLoading(false);
 			} catch (error) {
 				console.error(error);
 				setError('Failed to load activeTypes');
-				setLoading(false);
 			}
+
+			setLoading(false);
 		}
 
 		fetchActivityTypes()
@@ -62,19 +63,25 @@ const ActivityTypesPage = () => {
 			return false;
 		}
 
+		setLoading(true);
+
 		try {
 			await deleteActivityType(id);
 			setActivityTypes((prev) => prev.filter((e) => e.id !== id));
 		} catch (error) {
 			console.error(error);
+			setLoading(false);
 			return tryGetErrorMessage(error);
 		}
 
+		setLoading(false);
 		return true;
 	};
 
 	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
 		// Todo! trigger page reload after success
+		setLoading(true);
+
 		try {
 			const createdType = await createActivityType(dto);
 			console.log('Created activity type:', createdType);
@@ -82,9 +89,11 @@ const ActivityTypesPage = () => {
 			setActivityTypes([...activityTypes, createdType]);
 		} catch (error) {
 			console.error('Failed to create activity type:', error);
+			setLoading(false);
 			return tryGetErrorMessage(error);
 		}
 
+		setLoading(false);
 		return true;
 	};
 

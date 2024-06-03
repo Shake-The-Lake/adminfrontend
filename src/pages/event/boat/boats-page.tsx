@@ -8,6 +8,7 @@ import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import BoatForm from '../../../components/forms/boat';
 import {tryGetErrorMessage} from '../../../lib/utils';
+import LoadingSpinner from '../../../components/animations/loading';
 
 const BoatsOverview: React.FC = () => {
 	const {id} = useParams<{id: string}>();
@@ -16,11 +17,13 @@ const BoatsOverview: React.FC = () => {
 	const [boats, setBoats] = useState<BoatDto[]>([]);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
+	const [loading, setLoading] = useState(true);
+
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const fetchBoat = async () => {
+		const fetchBoats = async () => {
 			try {
 				const event = await getEventById(Number(eventId), 'boats');
 
@@ -28,9 +31,11 @@ const BoatsOverview: React.FC = () => {
 			} catch (error) {
 				console.error('Error fetching boats:', error);
 			}
+
+			setLoading(false);
 		};
 
-		fetchBoat()
+		fetchBoats()
 			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
 			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, [eventId]);
@@ -44,19 +49,25 @@ const BoatsOverview: React.FC = () => {
 			return false;
 		}
 
+		setLoading(true);
+
 		try {
 			await deleteBoat(id);
 			setBoats((prevBoats) => prevBoats.filter((boat) => boat.id !== id));
 		} catch (error) {
 			console.error(error);
+			setLoading(false);
 			return tryGetErrorMessage(error);
 		}
 
+		setLoading(false);
 		return true;
 	};
 
 	const handleCreateNewBoat = async (dto: BoatDto) => {
 		// Todo! trigger page reload after success
+		setLoading(true);
+
 		try {
 			const createdBoat = await createBoat(dto);
 			console.log('Created boat:', createdBoat);
@@ -64,9 +75,11 @@ const BoatsOverview: React.FC = () => {
 			setBoats([...boats, createdBoat]);
 		} catch (error) {
 			console.error('Failed to create boat:', error);
+			setLoading(false);
 			return tryGetErrorMessage(error);
 		}
 
+		setLoading(false);
 		return true;
 	};
 
@@ -80,6 +93,8 @@ const BoatsOverview: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center">
+			<LoadingSpinner isLoading={loading} />
+
 			<div className="w-full mb-8 flex flex-col justify-start">
 				<h1>Boats</h1>
 			</div>
