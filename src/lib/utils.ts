@@ -10,11 +10,21 @@ export function getTranslation(
 	locale: string,
 	object?: LocalizedStringDto,
 ): string {
-	if (!object) return '';
-	if (locale === 'en') return object.en;
-	if (locale === 'de') return object.de;
-	if (locale === 'swissGerman') return object.swissGerman;
-	return object.de; // Make german the default language
+	if (!object) {
+		return '';
+	}
+
+	let translation = '';
+
+	if (locale === 'en') {
+		translation = object.en;
+	} else if (locale === 'de') {
+		translation = object.de;
+	} else if (locale === 'gsw') {
+		translation = object.swissGerman;
+	}
+
+	return translation ?? object.de; // Make german the default language
 }
 
 export function tryGetErrorMessage(error: unknown) {
