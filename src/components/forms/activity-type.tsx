@@ -17,7 +17,7 @@ import {Input} from '../ui/input';
 import {Button} from '../ui/button';
 import {Tabs, TabsList, TabsTrigger, TabsContent} from '../ui/tabs';
 import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import {type LocalizedStringDto} from '../../models/api/localized-string';
+import {defaultLocalizedStringDto} from '../../models/api/localized-string';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
@@ -25,8 +25,8 @@ import {useToast} from '../ui/use-toast';
 import {Textarea} from '../ui/textarea';
 
 const localizedStringSchema = z.object({
-	en: z.string().optional(),
-	de: z.string(),
+	en: z.string(),
+	de: z.string().optional(),
 	swissGerman: z.string().optional(),
 });
 
@@ -34,8 +34,8 @@ const activityTypeSchema = z.object({
 	id: z.number().min(0).optional(),
 	name: z.object({
 		en: z.string().min(5).max(20),
-		de: z.string().min(5).max(20),
-		swissGerman: z.string().min(5).max(20).optional(),
+		de: z.string().max(20).optional(),
+		swissGerman: z.string().max(20).optional(),
 	}),
 	description: localizedStringSchema,
 	checklist: localizedStringSchema,
@@ -75,10 +75,11 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		const activityType: ActivityTypeDto = {
 			...values,
 			id: values.id ?? 0,
-			name: values.name as LocalizedStringDto,
-			description: values.description as LocalizedStringDto,
-			checklist: values.checklist as LocalizedStringDto,
 			eventId: model.eventId ?? eventId,
+			// Avoid null values on localized strings
+			name: {...defaultLocalizedStringDto, ...values.name},
+			description: {...defaultLocalizedStringDto, ...values.description},
+			checklist: {...defaultLocalizedStringDto, ...values.checklist},
 		};
 
 		const success = await onSubmit(activityType);
