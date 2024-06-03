@@ -89,17 +89,18 @@ const BoatsOverview: React.FC = () => {
 				</div>
 			)}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-				{boats.map((boat) => (
-					<div key={boat.id} className="mb-2 flex justify-center">
-						<StlCard
-							id={boat.id}
-							title={boat.name}
-							description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
-							handleEdit={handleEdit}
-							handleDelete={handleDelete}
-						/>
-					</div>
-				))}
+				{boats.length > 0 &&
+					boats.map((boat) => (
+						<div key={boat.id} className="flex justify-center">
+							<StlCard
+								id={boat.id}
+								title={boat.name}
+								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
+								handleEdit={handleEdit}
+								handleDelete={handleDelete}
+							/>
+						</div>
+					))}
 				<StlDialog
 					title="Create Boat"
 					description="Add a new boat by entering the necessary data."
@@ -111,7 +112,7 @@ const BoatsOverview: React.FC = () => {
 						onSubmit={handleCreateNewBoat}
 						onSuccessfullySubmitted={closeCreateDialog}
 						model={defaultBoatDto}
-						isCreate={false}
+						isCreate={true}
 					/>
 				</StlDialog>
 			</div>

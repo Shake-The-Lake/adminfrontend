@@ -100,7 +100,7 @@ const ActivityTypesPage = () => {
 		<div className="flex flex-col items-center">
 			<LoadingSpinner isLoading={loading} />
 
-			<div className="w-full my-2 flex flex-col justify-start">
+			<div className="w-full mb-8 flex flex-col justify-start">
 				<h1>Activity Types</h1>
 			</div>
 			{activityTypes.length === 0 && (
@@ -111,7 +111,7 @@ const ActivityTypesPage = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 				{activityTypes.length > 0 &&
 					activityTypes.map((activityType) => (
-						<div key={activityType.id} className="mb-4 flex justify-center">
+						<div key={activityType.id} className="flex justify-center">
 							<StlCard
 								id={activityType.id}
 								title={getTranslation(i18n.language, activityType.name)}
