@@ -18,7 +18,7 @@ export type BoatDto = {
 	activityType?: ActivityTypeDto | undefined;
 };
 
-export const defaultBoatDto: BoatDto  = {
+export const defaultBoatDto: BoatDto = {
 	id: 0,
 	name: '',
 	type: '',

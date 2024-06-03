@@ -35,13 +35,14 @@ const ActivityTypesPage = () => {
 				const activityTypeData = await getAllActivityTypesFromEvent(
 					Number(eventId),
 				);
+
 				setActivityTypes(activityTypeData);
-				setLoading(false);
 			} catch (error) {
 				console.error(error);
 				setError('Failed to load activeTypes');
-				setLoading(false);
 			}
+
+			setLoading(false);
 		}
 
 		fetchActivityTypes()
@@ -62,19 +63,25 @@ const ActivityTypesPage = () => {
 			return false;
 		}
 
+		setLoading(true);
+
 		try {
 			await deleteActivityType(id);
 			setActivityTypes((prev) => prev.filter((e) => e.id !== id));
 		} catch (error) {
 			console.error(error);
+			setLoading(false);
 			return tryGetErrorMessage(error);
 		}
 
+		setLoading(false);
 		return true;
 	};
 
 	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
 		// Todo! trigger page reload after success
+		setLoading(true);
+
 		try {
 			const createdType = await createActivityType(dto);
 			console.log('Created activity type:', createdType);
@@ -82,9 +89,11 @@ const ActivityTypesPage = () => {
 			setActivityTypes([...activityTypes, createdType]);
 		} catch (error) {
 			console.error('Failed to create activity type:', error);
+			setLoading(false);
 			return tryGetErrorMessage(error);
 		}
 
+		setLoading(false);
 		return true;
 	};
 
@@ -100,7 +109,7 @@ const ActivityTypesPage = () => {
 		<div className="flex flex-col items-center">
 			<LoadingSpinner isLoading={loading} />
 
-			<div className="w-full my-2 flex flex-col justify-start">
+			<div className="w-full mb-8 flex flex-col justify-start">
 				<h1>Activity Types</h1>
 			</div>
 			{activityTypes.length === 0 && (
@@ -111,7 +120,7 @@ const ActivityTypesPage = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 				{activityTypes.length > 0 &&
 					activityTypes.map((activityType) => (
-						<div key={activityType.id} className="mb-4 flex justify-center">
+						<div key={activityType.id} className="flex justify-center">
 							<StlCard
 								id={activityType.id}
 								title={getTranslation(i18n.language, activityType.name)}
