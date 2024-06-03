@@ -21,6 +21,7 @@ export type StlDialogProps = {
 	isOpen?: boolean;
 	onClose?: () => void;
 	onOpen?: () => void;
+	isCard?: boolean;
 };
 
 const StlDialog: React.FC<StlDialogProps> = ({
@@ -32,6 +33,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	isOpen,
 	onClose,
 	onOpen,
+	isCard = true,
 }) => {
 	const [open, setOpen] = useState(false);
 
@@ -86,11 +88,15 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
-				<Button
-					className="h-40 w-full flex items-center justify-center"
-					title={triggerLabel}>
-					<Plus className="size-24" />
-				</Button>
+				{isCard
+					? <Button
+						className="h-40 w-full flex items-center justify-center"
+						title={triggerLabel}>
+						<Plus className="size-24" />
+					</Button>
+					: 
+					<Button type="button" title={triggerLabel}>Add</Button>
+				}
 			</DialogTrigger>
 			<DialogContent className="flex flex-col">
 				<DialogHeader>

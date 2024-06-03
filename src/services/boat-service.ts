@@ -9,7 +9,7 @@ export const getAllBoats = async (): Promise<BoatDto[]> => {
 };
 
 export const getBoatById = async (id: number): Promise<BoatDto> => {
-	const response = await axios.get<BoatDto>(`${baseUrl}/boat/${id}`);
+	const response = await axios.get<BoatDto>(`${baseUrl}/boat/${id}?expand=timeSlots`);
 	return response.data;
 };
 

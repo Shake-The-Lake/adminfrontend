@@ -7,6 +7,7 @@ import BoatForm from '../../../components/forms/boat';
 import {useToast} from '../../../components/ui/use-toast';
 import {updateBoat} from '../../../services/boat-service';
 import {tryGetErrorMessage} from '../../../lib/utils';
+import TimeSlots from './time-slots';
 
 const BoatPage: React.FC = () => {
 	const [boat, setBoat] = useState<BoatDto | undefined>(undefined);
@@ -62,6 +63,7 @@ const BoatPage: React.FC = () => {
 					/>
 				)}
 			</div>
+			<TimeSlots timeSlots={boat?.timeSlots}></TimeSlots>
 		</>
 	);
 };
