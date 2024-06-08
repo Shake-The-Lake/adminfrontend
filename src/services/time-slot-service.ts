@@ -5,7 +5,7 @@ import {type TimeSlotDto} from '../models/api/time-slot.model';
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 const timeSlotUrl = `${baseUrl}/timeslot`;
 
-export const getAllTimeSlots = async (): Promise<TimeSlotDto[]> => {
+export const getAllTimeSlots = async (boatId?: string): Promise<TimeSlotDto[]> => {
 	const response = await axios.get<TimeSlotDto[]>(
 		`${timeSlotUrl}`,
 	);
@@ -32,7 +32,7 @@ export const createTimeSlot = async (
 };
 
 export const updateTimeSlot = async (
-	id: number,
+	id: string,
 	TimeSlot: TimeSlotDto,
 ): Promise<TimeSlotDto> => {
 	const response = await axios.put<TimeSlotDto>(

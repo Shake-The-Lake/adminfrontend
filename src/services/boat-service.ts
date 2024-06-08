@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {type BoatDto} from '../models/api/boat.model';
+import {time} from 'console';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
@@ -19,7 +20,7 @@ export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
 };
 
 export const updateBoat = async (
-	id: number,
+	id: string,
 	boat: BoatDto,
 ): Promise<BoatDto> => {
 	const response = await axios.put<BoatDto>(`${baseUrl}/boat/${id}`, boat);

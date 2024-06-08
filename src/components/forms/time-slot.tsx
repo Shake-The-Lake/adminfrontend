@@ -17,14 +17,19 @@ import {Input} from '../ui/input';
 import {Button} from '../ui/button';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useTranslation} from 'react-i18next';
 import {useToast} from '../ui/use-toast';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '../ui/select';
 
 const TimeSlotSchema = z.object({
-	from: z.string(),
-	to: z.string(),
+	from: z.string().refine(value => {
+		const [hours, minutes] = value.split(':').map(Number);
+		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+	}, 'Invalid time format'),
+	to: z.string().refine(value => {
+		const [hours, minutes] = value.split(':').map(Number);
+		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+	}, 'Invalid time format'),
 	// Status: z.string().oneOf(['AVAILABLE', 'ON_BREAK']),
 	status: z.string(),
 });
@@ -57,8 +62,8 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		values,
 	) => {
 		const TimeSlot: TimeSlotDto = {
-			fromTime: values.from ?? '',
-			untilTime: values.to ?? '',
+			fromTime: values.from,
+			untilTime: values.to,
 			boatId,
 		};
 
@@ -101,6 +106,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 										placeholder="Time in HH:MM format"
 										{...field}
 										className="input"
+										type="time"
 									/>
 								</FormControl>
 								<FormMessage />
@@ -117,6 +123,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 										placeholder="Time in HH:MM format"
 										{...field}
 										className="input"
+										type="time"
 									/>
 								</FormControl>
 								<FormMessage />
