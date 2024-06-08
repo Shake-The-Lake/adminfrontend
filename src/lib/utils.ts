@@ -24,7 +24,7 @@ export function getTranslation(
 		translation = object.swissGerman;
 	}
 
-	return translation ?? object.de; // Make german the default language
+	return translation ?? object.en; // Make english the default language
 }
 
 export function tryGetErrorMessage(error: unknown) {

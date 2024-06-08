@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {z} from 'zod';
 import {
 	type SubmitHandler,
@@ -17,7 +17,7 @@ import {Input} from '../ui/input';
 import {Button} from '../ui/button';
 import {Tabs, TabsList, TabsTrigger, TabsContent} from '../ui/tabs';
 import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import {type LocalizedStringDto} from '../../models/api/localized-string';
+import {defaultLocalizedStringDto} from '../../models/api/localized-string';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
@@ -25,8 +25,8 @@ import {useToast} from '../ui/use-toast';
 import {Textarea} from '../ui/textarea';
 
 const localizedStringSchema = z.object({
-	en: z.string().optional(),
-	de: z.string(),
+	en: z.string(),
+	de: z.string().optional(),
 	swissGerman: z.string().optional(),
 });
 
@@ -34,8 +34,8 @@ const activityTypeSchema = z.object({
 	id: z.number().min(0).optional(),
 	name: z.object({
 		en: z.string().min(5).max(20),
-		de: z.string().min(5).max(20),
-		swissGerman: z.string().min(5).max(20).optional(),
+		de: z.string().max(20).optional(),
+		swissGerman: z.string().max(20).optional(),
 	}),
 	description: localizedStringSchema,
 	checklist: localizedStringSchema,
@@ -69,16 +69,21 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	const eventId = Number(id);
 	const {toast} = useToast();
 
+	const [tabWithErrors, setTabWithErrors] = useState<string[]>([]);
+
 	const onPrepareSubmit: SubmitHandler<ActivityTypeFormSchema> = async (
 		values,
 	) => {
+		setTabWithErrors([]);
+
 		const activityType: ActivityTypeDto = {
 			...values,
 			id: values.id ?? 0,
-			name: values.name as LocalizedStringDto,
-			description: values.description as LocalizedStringDto,
-			checklist: values.checklist as LocalizedStringDto,
 			eventId: model.eventId ?? eventId,
+			// Avoid null values on localized strings
+			name: {...defaultLocalizedStringDto, ...values.name},
+			description: {...defaultLocalizedStringDto, ...values.description},
+			checklist: {...defaultLocalizedStringDto, ...values.checklist},
 		};
 
 		const success = await onSubmit(activityType);
@@ -96,6 +101,23 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
 		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead, make it global
 
+		const englishErrors =
+			errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
+		const germanErrors =
+			errors.name?.de ?? errors.description?.de ?? errors.checklist?.de;
+		const swissGermanErrors =
+			errors.name?.swissGerman ??
+			errors.description?.swissGerman ??
+			errors.checklist?.swissGerman;
+
+		const errorLanguages = [
+			englishErrors ? 'en' : '',
+			germanErrors ? 'de' : '',
+			swissGermanErrors ? 'gsw' : '',
+		];
+
+		setTabWithErrors(errorLanguages);
+
 		toast({
 			variant: 'destructive',
 			title: 'Could not be saved.',
@@ -111,9 +133,27 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<Tabs defaultValue={i18n.language}>
 						<TabsList className="w-full justify-start">
-							<TabsTrigger value="en">English</TabsTrigger>
-							<TabsTrigger value="de">German</TabsTrigger>
-							<TabsTrigger value="gsw">Swiss German</TabsTrigger>
+							<TabsTrigger
+								value="en"
+								className={
+									tabWithErrors.includes('en') ? 'text-destructive' : ''
+								}>
+								English
+							</TabsTrigger>
+							<TabsTrigger
+								value="de"
+								className={
+									tabWithErrors.includes('de') ? 'text-destructive' : ''
+								}>
+								German
+							</TabsTrigger>
+							<TabsTrigger
+								value="gsw"
+								className={
+									tabWithErrors.includes('gsw') ? 'text-destructive' : ''
+								}>
+								Swiss German
+							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="en">
 							<p className="text-primary-dark-stroke mb-2 mt-2">

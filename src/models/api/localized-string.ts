@@ -3,3 +3,9 @@ export type LocalizedStringDto = {
 	de: string;
 	swissGerman: string;
 };
+
+export const defaultLocalizedStringDto: LocalizedStringDto = {
+	en: '',
+	de: '',
+	swissGerman: '',
+};
