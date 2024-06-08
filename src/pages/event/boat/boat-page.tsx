@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLoaderData} from 'react-router-dom';
-import {type BoatDto} from '../../../models/api/boat.model';
+import {defaultBoatDto, type BoatDto} from '../../../models/api/boat.model';
 import LoadingSpinner from '../../../components/animations/loading';
 import BoatForm from '../../../components/forms/boat';
 import {useToast} from '../../../components/ui/use-toast';
 import {updateBoat} from '../../../services/boat-service';
 import {tryGetErrorMessage} from '../../../lib/utils';
 import TimeSlots from './time-slots';
+import {Separator} from '../../../components/ui/separator';
 
 const BoatPage: React.FC = () => {
-	const [boat, setBoat] = useState<BoatDto | undefined>(undefined);
+	const [boat, setBoat] = useState<BoatDto>(defaultBoatDto);
 	const [isLoading, setIsLoading] = useState(true);
 	const routeData = useLoaderData();
 	const {toast} = useToast();
@@ -22,6 +23,7 @@ const BoatPage: React.FC = () => {
 			setIsLoading(false);
 		} else {
 			console.error('Error fetching boat');
+			setIsLoading(false);
 		}
 	}, [routeData]);
 
@@ -63,7 +65,8 @@ const BoatPage: React.FC = () => {
 					/>
 				)}
 			</div>
-			<TimeSlots timeSlots={boat?.timeSlots}></TimeSlots>
+			<Separator className="w-full my-10" />
+			<TimeSlots {...boat}></TimeSlots>
 		</>
 	);
 };

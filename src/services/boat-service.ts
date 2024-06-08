@@ -20,7 +20,7 @@ export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
 };
 
 export const updateBoat = async (
-	id: string,
+	id: number,
 	boat: BoatDto,
 ): Promise<BoatDto> => {
 	const response = await axios.put<BoatDto>(`${baseUrl}/boat/${id}`, boat);

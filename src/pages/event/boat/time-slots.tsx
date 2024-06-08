@@ -1,21 +1,35 @@
 import React, {useEffect, useState} from 'react';
-import {type TimeSlotDto} from '../../../models/api/time-slot.model';
+import {
+	defaultTimeSlot,
+	type TimeSlotDto,
+} from '../../../models/api/time-slot.model';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
-import {updateTimeSlot} from '../../../services/time-slot-service';
+import {
+	createTimeSlot,
+	updateTimeSlot,
+} from '../../../services/time-slot-service';
 import {useToast} from '../../../components/ui/use-toast';
 import {tryGetErrorMessage} from '../../../lib/utils';
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '../../../components/ui/table';
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '../../../components/ui/table';
 import {useParams} from 'react-router-dom';
-import {updateBoat} from '../../../services/boat-service';
 import {type BoatDto} from '../../../models/api/boat.model';
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-	const [timeSlots, setTimeSlots] = useState<Set<TimeSlotDto>>(new Set());
+	const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+	const [timeSlots, setTimeSlots] = useState<TimeSlotDto[]>([]);
 	useEffect(() => {
 		if (boat.timeSlots) {
-			setTimeSlots(boat.timeSlots);
+			setTimeSlots([...boat.timeSlots]);
 		}
 	}, [boat]);
 
@@ -30,20 +44,50 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 		setIsCreateDialogOpen(false);
 	};
 
-	const handleUpdateTimeSlots = async (timeSlot: TimeSlotDto) => {
+	const openUpdateDialog = () => {
+		setIsUpdateDialogOpen(true);
+	};
+
+	const closeUpdateDialog = () => {
+		setIsUpdateDialogOpen(false);
+	};
+
+	const handleCreateTimeSlot = async (timeSlot: TimeSlotDto) => {
 		try {
 			if (!boatId) {
-				return;
+				return false;
 			}
 
 			timeSlot.boatId = Number(boatId);
-			console.log('Time slot:', timeSlot);
+			const createdTimeSlot = await createTimeSlot(timeSlot);
+			console.log('Created time slot:', createdTimeSlot);
+
+			setTimeSlots([...timeSlots, createdTimeSlot]);
+		} catch (error) {
+			console.error('Failed to create time slot:', error);
+			return tryGetErrorMessage(error);
+		}
+
+		return true;
+	};
+
+	const handleUpdateTimeSlot = async (timeSlot: TimeSlotDto) => {
+		try {
+			if (!boatId) {
+				return false;
+			}
+
+			timeSlot.boatId = Number(boatId);
 			const updatedTimeSlot = await updateTimeSlot(boatId, timeSlot);
 			console.log('Updated time slot:', updatedTimeSlot);
+
+			setTimeSlots([...timeSlots, updatedTimeSlot]);
 		} catch (error) {
 			console.error('Failed to update time slot:', error);
 			return tryGetErrorMessage(error);
 		}
+
+		return true;
 	};
 
 	return (
@@ -52,21 +96,22 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				<>
 					<h1>Time Slots</h1>
 					<StlDialog
-						title="Add time Slots"
+						title="Add Time Slot"
 						description="Add time slots to the boat"
-						triggerLabel="Add time slots"
+						triggerLabel="Add time slot"
 						isOpen={isCreateDialogOpen}
 						onClose={closeCreateDialog}
 						onOpen={openCreateDialog}
-						isCard={false}
-					>
-						<TimeSlotForm 
-							onSubmit={handleUpdateTimeSlots}
+						isCard={false}>
+						<TimeSlotForm
+							model={{...defaultTimeSlot, boatId: boat.id}}
+							onSubmit={handleCreateTimeSlot}
 							isCreate={true}
 							onSuccessfullySubmitted={() => {
 								toast({
 									description: 'Time slot successfully saved.',
 								});
+								closeCreateDialog();
 							}}
 						/>
 					</StlDialog>
@@ -84,12 +129,34 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{[...timeSlots].map((slot, index) => (
+					{timeSlots.map((slot, index) => (
 						<TableRow key={index}>
 							<TableCell>{slot.fromTime?.toString()}</TableCell>
 							<TableCell>{slot.untilTime?.toString()}</TableCell>
 							<TableCell>{slot.status}</TableCell>
-							<TableCell>edit</TableCell>
+							<TableCell>
+								edit
+								<StlDialog
+									title="Edit Time Slot"
+									description="Edit time slots for the boat"
+									triggerLabel="Edit time slot"
+									isOpen={isUpdateDialogOpen}
+									onClose={closeUpdateDialog}
+									onOpen={openUpdateDialog}
+									isCard={false}>
+									<TimeSlotForm
+										model={slot}
+										onSubmit={handleUpdateTimeSlot}
+										isCreate={true}
+										onSuccessfullySubmitted={() => {
+											toast({
+												description: 'Time slot successfully saved.',
+											});
+											closeUpdateDialog();
+										}}
+									/>
+								</StlDialog>
+							</TableCell>
 							<TableCell>delete</TableCell>
 						</TableRow>
 					))}

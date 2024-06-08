@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
 	Dialog,
 	DialogClose,
@@ -35,6 +35,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	onOpen,
 	isCard = true,
 }) => {
+	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
@@ -77,28 +78,35 @@ const StlDialog: React.FC<StlDialogProps> = ({
 
 	const submitForm = () => {
 		// Mock form submit event to trigger validation
-		document.querySelector('form')?.dispatchEvent(
-			new Event('submit', {
-				cancelable: true,
-				bubbles: true,
-			}),
-		);
+		if (dialogContentRef.current) {
+			const form = dialogContentRef.current.querySelector('form');
+			if (form) {
+				form.dispatchEvent(
+					new Event('submit', {
+						cancelable: true,
+						bubbles: true,
+					}),
+				);
+			}
+		}
 	};
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
-				{isCard
-					? <Button
+				{isCard ? (
+					<Button
 						className="h-40 w-full flex items-center justify-center"
 						title={triggerLabel}>
 						<Plus className="size-24" />
 					</Button>
-					: 
-					<Button type="button" title={triggerLabel}>Add</Button>
-				}
+				) : (
+					<Button type="button" title={triggerLabel}>
+						Add
+					</Button>
+				)}
 			</DialogTrigger>
-			<DialogContent className="flex flex-col">
+			<DialogContent ref={dialogContentRef} className="flex flex-col">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>

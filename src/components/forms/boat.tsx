@@ -107,6 +107,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			...values,
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
+			timeSlotIds: model.timeSlotIds,
 		};
 
 		const success = await onSubmit(boat);
@@ -181,11 +182,11 @@ const BoatForm: React.FC<BoatFormProps> = ({
 											<SelectValue placeholder="Select Activity Type">
 												{field.value
 													? getTranslation(
-															i18n.language,
-															activityTypes.find(
-																(type) => type.id === field.value,
-															)?.name,
-														)
+														i18n.language,
+														activityTypes.find(
+															(type) => type.id === field.value,
+														)?.name,
+													)
 													: 'Select Activity Type'}
 											</SelectValue>
 										</SelectTrigger>

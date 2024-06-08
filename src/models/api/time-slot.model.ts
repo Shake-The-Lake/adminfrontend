@@ -6,3 +6,12 @@ export type TimeSlotDto = {
 	boatId?: number;
 	bookingIds?: Set<number>;
 };
+
+export const defaultTimeSlot: TimeSlotDto = {
+	id: 0,
+	status: 'AVAILABLE',
+	fromTime: new Date(),
+	untilTime: new Date(),
+	boatId: 0,
+	bookingIds: undefined,
+};

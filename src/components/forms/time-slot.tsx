@@ -19,55 +19,73 @@ import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useToast} from '../ui/use-toast';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '../ui/select';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select';
+import {
+	getTimeStringFromWholeDate,
+	getWholeDateFromTimeString,
+} from '../../lib/utils';
 
 const TimeSlotSchema = z.object({
-	from: z.string().refine(value => {
+	id: z.number().min(0).optional(),
+	boatId: z.number().min(0).optional(),
+	status: z.string(),
+	fromTime: z.string().refine((value) => {
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
 	}, 'Invalid time format'),
-	to: z.string().refine(value => {
+	untilTime: z.string().refine((value) => {
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
 	}, 'Invalid time format'),
 	// Status: z.string().oneOf(['AVAILABLE', 'ON_BREAK']),
-	status: z.string(),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
 
 type TimeSlotFormProps = {
 	onSubmit: (dto: TimeSlotDto) => Promise<boolean | string>; // True if successfully saved, error if not
-	// model: TimeSlotDto;
+	model: TimeSlotDto;
 	isCreate: boolean;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	onSubmit,
+	model,
 	isCreate,
 	onSuccessfullySubmitted,
 }) => {
 	const form = useForm<TimeSlotFormSchema>({
 		mode: 'onChange',
-		// DefaultValues: model,
+		defaultValues: {
+			...model,
+			fromTime: getTimeStringFromWholeDate(model.fromTime),
+			untilTime: getTimeStringFromWholeDate(model.untilTime),
+		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
-	
+
 	const {id} = useParams<{id: string}>();
 	const boatId = Number(id);
 	const {toast} = useToast();
 
-	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (
-		values,
-	) => {
-		const TimeSlot: TimeSlotDto = {
-			fromTime: values.from,
-			untilTime: values.to,
+	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
+		const timeSlot: TimeSlotDto = {
+			...values,
+			// Todo! probably need to pass event date here... but how?
+			fromTime: getWholeDateFromTimeString(new Date(), values.fromTime),
+			untilTime: getWholeDateFromTimeString(new Date(), values.untilTime),
 			boatId,
+			status: values.status === 'ON_BREAK' ? 'ON_BREAK' : 'AVAILABLE',
 		};
 
-		const success = await onSubmit(TimeSlot);
+		const success = await onSubmit(timeSlot);
 		if (success === true) {
 			onSuccessfullySubmitted();
 		} else if (typeof success === 'string') {
@@ -96,7 +114,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<FormField
-						name="from"
+						name="fromTime"
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
@@ -113,7 +131,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 							</FormItem>
 						)}></FormField>
 					<FormField
-						name="to"
+						name="untilTime"
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
@@ -136,23 +154,15 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 							<FormItem>
 								<FormLabel>Is Bookable</FormLabel>
 								<FormControl>
-									<Select
-										value={field.value}
-										onValueChange={(value) => {
-											console.log('value', value);
-										}}>
+									<Select value={field.value} onValueChange={field.onChange}>
 										<SelectTrigger>
 											<SelectValue placeholder="Select Activity Type">
-												{field.value}
+												{field.value === 'ON_BREAK' ? 'On Break' : 'Available'}
 											</SelectValue>
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="AVAILABLE">
-												Available
-											</SelectItem>
-											<SelectItem value="ON_BREAK">
-												On Break
-											</SelectItem>
+											<SelectItem value="AVAILABLE">Available</SelectItem>
+											<SelectItem value="ON_BREAK">On Break</SelectItem>
 										</SelectContent>
 									</Select>
 								</FormControl>

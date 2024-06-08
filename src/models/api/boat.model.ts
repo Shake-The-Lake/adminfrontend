@@ -11,7 +11,7 @@ export type BoatDto = {
 	slotDurationInMins?: number;
 	availableFrom: string; // Assuming ISO string format for LocalDateTime
 	availableUntil: string; // Assuming ISO string format for LocalDateTime
-	timeSlotIds: Set<number>;
+	timeSlotIds?: Set<number>;
 	activityTypeId?: number;
 	eventId?: number;
 	timeSlots?: Set<TimeSlotDto> | undefined;
