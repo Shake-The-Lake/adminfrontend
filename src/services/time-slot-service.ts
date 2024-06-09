@@ -25,7 +25,7 @@ export const createTimeSlot = async (
 };
 
 export const updateTimeSlot = async (
-	id: string,
+	id: number,
 	timeSlot: TimeSlotDto,
 ): Promise<TimeSlotDto> => {
 	const response = await axios.put<TimeSlotDto>(

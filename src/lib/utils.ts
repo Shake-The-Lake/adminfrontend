@@ -54,7 +54,7 @@ export function tryGetErrorMessage(error: unknown) {
 }
 
 export function getTimeStringFromWholeDate(date: Date | undefined) {
-	if (date === undefined) {
+	if (date) {
 		return '00:00';
 	}
 

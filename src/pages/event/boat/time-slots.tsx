@@ -8,6 +8,7 @@ import TimeSlotForm from '../../../components/forms/time-slot';
 import {
 	createTimeSlot,
 	updateTimeSlot,
+	deleteTimeSlot,
 } from '../../../services/time-slot-service';
 import {useToast} from '../../../components/ui/use-toast';
 import {tryGetErrorMessage} from '../../../lib/utils';
@@ -22,6 +23,8 @@ import {
 } from '../../../components/ui/table';
 import {useParams} from 'react-router-dom';
 import {type BoatDto} from '../../../models/api/boat.model';
+import {Trash} from 'lucide-react';
+import {Button} from '../../../components/ui/button';
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -60,8 +63,6 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 			timeSlot.boatId = Number(boatId);
 			const createdTimeSlot = await createTimeSlot(timeSlot);
-			console.log('Created time slot:', createdTimeSlot);
-
 			setTimeSlots([...timeSlots, createdTimeSlot]);
 		} catch (error) {
 			console.error('Failed to create time slot:', error);
@@ -78,9 +79,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 			}
 
 			timeSlot.boatId = Number(boatId);
-			const updatedTimeSlot = await updateTimeSlot(boatId, timeSlot);
-			console.log('Updated time slot:', updatedTimeSlot);
-
+			const updatedTimeSlot = await updateTimeSlot(timeSlot.id, timeSlot);
 			setTimeSlots([...timeSlots, updatedTimeSlot]);
 		} catch (error) {
 			console.error('Failed to update time slot:', error);
@@ -88,6 +87,20 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 		}
 
 		return true;
+	};
+
+	const handleDelete = async (timeSlotId: number) => {
+		try {
+			await deleteTimeSlot(timeSlotId);
+			const updatedTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
+			setTimeSlots(updatedTimeSlots);
+			toast({
+				description: 'Time slot successfully deleted.',
+			});
+		} catch (error) {
+			console.error('Failed to delete time slot:', error);
+			return tryGetErrorMessage(error);
+		}
 	};
 
 	return (
@@ -131,11 +144,11 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				</TableHeader>
 				<TableBody>
 					{timeSlots.map((slot, index) => (
-						<TableRow key={index}>
+						<TableRow key={index} className="w-full justify-between">
 							<TableCell>{new Date(slot?.untilTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
 							<TableCell>{new Date(slot.untilTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
 							<TableCell>{slot.status === 'AVAILABLE' ? 'ride' : 'break'}</TableCell>
-							<TableCell>
+							<TableCell className='text-right'>
 								<StlDialog
 									title="Edit Time Slot"
 									description="Edit time slots for the boat"
@@ -149,6 +162,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 										model={slot}
 										onSubmit={handleUpdateTimeSlot}
 										isCreate={true}
+										boat={boat}
 										onSuccessfullySubmitted={() => {
 											toast({
 												description: 'Time slot successfully saved.',
@@ -158,7 +172,15 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 									/>
 								</StlDialog>
 							</TableCell>
-							<TableCell>delete</TableCell>
+							<TableCell className='text-right'>
+								<Button
+									variant="ghost"
+									size="icon"
+									className="items-center"
+									onClick={async () => handleDelete(slot.id)}>
+									<Trash className="cursor-pointer hover:text-red-600" />
+								</Button>
+							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>

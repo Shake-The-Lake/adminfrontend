@@ -70,7 +70,6 @@ const BoatsOverview: React.FC = () => {
 
 		try {
 			const createdBoat = await createBoat(dto);
-			console.log('Created boat:', createdBoat);
 
 			setBoats([...boats, createdBoat]);
 		} catch (error) {
