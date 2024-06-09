@@ -10,7 +10,7 @@ import {
 	DialogTrigger,
 } from '../ui/dialog';
 import {Button} from '../ui/button';
-import {Plus} from 'lucide-react';
+import {PencilIcon, Plus} from 'lucide-react';
 
 export type StlDialogProps = {
 	title: string;
@@ -22,6 +22,7 @@ export type StlDialogProps = {
 	onClose?: () => void;
 	onOpen?: () => void;
 	isCard?: boolean;
+	isIcon?: boolean;
 };
 
 const StlDialog: React.FC<StlDialogProps> = ({
@@ -34,6 +35,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	onClose,
 	onOpen,
 	isCard = true,
+	isIcon = false,
 }) => {
 	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
@@ -100,6 +102,10 @@ const StlDialog: React.FC<StlDialogProps> = ({
 						title={triggerLabel}>
 						<Plus className="size-24" />
 					</Button>
+				) : isIcon ? (
+					<button type="button" title={triggerLabel}>
+						<PencilIcon></PencilIcon>
+					</button>
 				) : (
 					<Button type="button" title={triggerLabel}>
 						Add

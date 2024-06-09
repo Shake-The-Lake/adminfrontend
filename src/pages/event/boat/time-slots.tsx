@@ -106,6 +106,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						<TimeSlotForm
 							model={{...defaultTimeSlot, boatId: boat.id}}
 							onSubmit={handleCreateTimeSlot}
+							boat={boat}
 							isCreate={true}
 							onSuccessfullySubmitted={() => {
 								toast({
@@ -131,11 +132,10 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				<TableBody>
 					{timeSlots.map((slot, index) => (
 						<TableRow key={index}>
-							<TableCell>{slot.fromTime?.toString()}</TableCell>
-							<TableCell>{slot.untilTime?.toString()}</TableCell>
-							<TableCell>{slot.status}</TableCell>
+							<TableCell>{new Date(slot?.untilTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
+							<TableCell>{new Date(slot.untilTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
+							<TableCell>{slot.status === 'AVAILABLE' ? 'ride' : 'break'}</TableCell>
 							<TableCell>
-								edit
 								<StlDialog
 									title="Edit Time Slot"
 									description="Edit time slots for the boat"
@@ -143,7 +143,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 									isOpen={isUpdateDialogOpen}
 									onClose={closeUpdateDialog}
 									onOpen={openUpdateDialog}
-									isCard={false}>
+									isCard={false}
+									isIcon={true}>
 									<TimeSlotForm
 										model={slot}
 										onSubmit={handleUpdateTimeSlot}

@@ -30,6 +30,7 @@ import {
 	getTimeStringFromWholeDate,
 	getWholeDateFromTimeString,
 } from '../../lib/utils';
+import {type BoatDto} from '../../models/api/boat.model';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -38,11 +39,11 @@ const TimeSlotSchema = z.object({
 	fromTime: z.string().refine((value) => {
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}, 'Invalid time format'),
+	}, 'Invalid time'),
 	untilTime: z.string().refine((value) => {
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}, 'Invalid time format'),
+	}),
 	// Status: z.string().oneOf(['AVAILABLE', 'ON_BREAK']),
 });
 
@@ -52,6 +53,7 @@ type TimeSlotFormProps = {
 	onSubmit: (dto: TimeSlotDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: TimeSlotDto;
 	isCreate: boolean;
+	boat?: BoatDto;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
@@ -60,6 +62,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	model,
 	isCreate,
 	onSuccessfullySubmitted,
+	boat,
 }) => {
 	const form = useForm<TimeSlotFormSchema>({
 		mode: 'onChange',
@@ -76,11 +79,11 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	const {toast} = useToast();
 
 	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
+		console.log(boat);
 		const timeSlot: TimeSlotDto = {
 			...values,
-			// Todo! probably need to pass event date here... but how?
-			fromTime: getWholeDateFromTimeString(new Date(), values.fromTime),
-			untilTime: getWholeDateFromTimeString(new Date(), values.untilTime),
+			fromTime: getWholeDateFromTimeString(new Date(boat?.availableFrom), values.fromTime),
+			untilTime: getWholeDateFromTimeString(new Date(boat?.availableUntil), values.untilTime),
 			boatId,
 			status: values.status === 'ON_BREAK' ? 'ON_BREAK' : 'AVAILABLE',
 		};

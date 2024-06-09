@@ -58,7 +58,6 @@ export function getTimeStringFromWholeDate(date: Date | undefined) {
 		return '00:00';
 	}
 
-	console.log('trying to get time from ', date);
 	// Todo! this only somewhat works; we get utc from backend. also the getHours method fails on timeslot update?
 	return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 }
