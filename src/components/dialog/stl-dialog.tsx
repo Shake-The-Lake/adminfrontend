@@ -103,9 +103,9 @@ const StlDialog: React.FC<StlDialogProps> = ({
 						<Plus className="size-24" />
 					</Button>
 				) : isIcon ? (
-					<button type="button" title={triggerLabel}>
+					<Button type="button" title={triggerLabel} variant='ghost'>
 						<PencilIcon></PencilIcon>
-					</button>
+					</Button>
 				) : (
 					<Button type="button" title={triggerLabel}>
 						Add
