@@ -25,6 +25,7 @@ import {useParams} from 'react-router-dom';
 import {type BoatDto} from '../../../models/api/boat.model';
 import {Trash} from 'lucide-react';
 import {Button} from '../../../components/ui/button';
+import {create} from 'domain';
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -61,8 +62,10 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				return false;
 			}
 
+			console.log('timeslot from form', timeSlot);
 			timeSlot.boatId = Number(boatId);
 			const createdTimeSlot = await createTimeSlot(timeSlot);
+			console.log('timeslot from backend callback', createdTimeSlot);
 			setTimeSlots([...timeSlots, createdTimeSlot]);
 		} catch (error) {
 			console.error('Failed to create time slot:', error);
@@ -80,6 +83,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 			timeSlot.boatId = Number(boatId);
 			const updatedTimeSlot = await updateTimeSlot(timeSlot.id, timeSlot);
+			// Console.log(updatedTimeSlot);
 			setTimeSlots([...timeSlots, updatedTimeSlot]);
 		} catch (error) {
 			console.error('Failed to update time slot:', error);
@@ -145,7 +149,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				<TableBody>
 					{timeSlots.map((slot, index) => (
 						<TableRow key={index} className="w-full justify-between">
-							<TableCell>{new Date(slot?.untilTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
+							<TableCell>{new Date(slot?.fromTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
 							<TableCell>{new Date(slot.untilTime).toLocaleString('de-CH', {hour: '2-digit', minute: '2-digit'})}</TableCell>
 							<TableCell>{slot.status === 'AVAILABLE' ? 'ride' : 'break'}</TableCell>
 							<TableCell className='text-right'>
