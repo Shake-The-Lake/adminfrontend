@@ -74,17 +74,24 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		resolver: zodResolver(TimeSlotSchema),
 	});
 
-	const {id} = useParams<{id: string}>();
-	const boatId = Number(id);
+	const {boatId} = useParams<{boatId: string}>();
+	const boatIdNum = Number(boatId);
 	const {toast} = useToast();
 
 	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		console.log(boat);
 		const timeSlot: TimeSlotDto = {
 			...values,
-			fromTime: getWholeDateFromTimeString(new Date(boat?.availableFrom), values.fromTime),
-			untilTime: getWholeDateFromTimeString(new Date(boat?.availableUntil), values.untilTime),
-			boatId,
+			fromTime: getWholeDateFromTimeString(
+				new Date(boat?.availableFrom ?? new Date()),
+				values.fromTime,
+			),
+			untilTime: getWholeDateFromTimeString(
+				new Date(boat?.availableFrom ?? new Date()),
+				values.untilTime,
+			),
+			boatId: boatIdNum,
+			id: model.id,
 			status: values.status === 'ON_BREAK' ? 'ON_BREAK' : 'AVAILABLE',
 		};
 

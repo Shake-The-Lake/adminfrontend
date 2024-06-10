@@ -54,12 +54,23 @@ export function tryGetErrorMessage(error: unknown) {
 }
 
 export function getTimeStringFromWholeDate(date: Date | undefined) {
-	if (date) {
+	if (date === undefined) {
 		return '00:00';
 	}
 
-	// Todo! this only somewhat works; we get utc from backend. also the getHours method fails on timeslot update?
-	return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+	// Ensure the date is a Date object
+	const validDate = date instanceof Date ? date : new Date(date);
+
+	if (isNaN(validDate.getTime())) {
+		// Handle invalid date object
+		return '00:00';
+	}
+
+	// Extract the time portion from the ISO string
+	const isoString = validDate.toISOString();
+	const timeString = isoString.substring(11, 16); // HH:mm format
+
+	return timeString;
 }
 
 export function getWholeDateFromTimeString(date: Date, timeString: string) {
