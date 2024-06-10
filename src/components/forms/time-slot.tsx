@@ -79,7 +79,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	const {toast} = useToast();
 
 	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
-		console.log(boat);
 		const timeSlot: TimeSlotDto = {
 			...values,
 			fromTime: getWholeDateFromTimeString(
@@ -94,7 +93,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			id: model.id,
 			status: values.status === 'ON_BREAK' ? 'ON_BREAK' : 'AVAILABLE',
 		};
-
 		const success = await onSubmit(timeSlot);
 		if (success === true) {
 			onSuccessfullySubmitted();
@@ -179,11 +177,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 								<FormMessage />
 							</FormItem>
 						)}></FormField>
-					<div
-						className="mt-16 flex justify-end w-full"
-						style={isCreate ? {display: 'none'} : {}}>
-						<Button type="submit">Save Changes</Button>
-					</div>
 				</form>
 			</Form>
 		</>

@@ -54,11 +54,6 @@ export function tryGetErrorMessage(error: unknown) {
 }
 
 export function getTimeStringFromWholeDate(date: Date | undefined) {
-	if (date === undefined) {
-		return '00:00';
-	}
-
-	// Ensure the date is a Date object
 	const validDate = date instanceof Date ? date : new Date(date);
 
 	if (isNaN(validDate.getTime())) {
@@ -66,11 +61,9 @@ export function getTimeStringFromWholeDate(date: Date | undefined) {
 		return '00:00';
 	}
 
-	// Extract the time portion from the ISO string
-	const isoString = validDate.toISOString();
-	const timeString = isoString.substring(11, 16); // HH:mm format
-
-	return timeString;
+	const hours = String(validDate.getHours()).padStart(2, '0');
+	const minutes = String(validDate.getMinutes()).padStart(2, '0');
+	return `${hours}:${minutes}`;
 }
 
 export function getWholeDateFromTimeString(date: Date, timeString: string) {

@@ -120,7 +120,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 				<div className="flex-grow overflow-auto p-1">{children}</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary" onClick={handleClose}>
+						<Button type="button" variant="secondary" className="max-sm:mt-2" onClick={handleClose}>
 							Cancel
 						</Button>
 					</DialogClose>

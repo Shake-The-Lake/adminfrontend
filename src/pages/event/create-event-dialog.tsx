@@ -45,7 +45,6 @@ const CreateEventDialog: React.FC = () => {
 					return response.id;
 				},
 			);
-			console.log('Created event:', createdEvent);
 		} catch (error) {
 			console.error('Failed to create event:', error);
 			return false;
