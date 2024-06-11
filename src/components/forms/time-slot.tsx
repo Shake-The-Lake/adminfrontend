@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {z} from 'zod';
 import {
 	type SubmitHandler,
 	useForm,
 	type SubmitErrorHandler,
+	Controller,
 } from 'react-hook-form';
 import {
 	Form,
@@ -14,7 +15,6 @@ import {
 	FormMessage,
 } from '../ui/form';
 import {Input} from '../ui/input';
-import {Button} from '../ui/button';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useToast} from '../ui/use-toast';
@@ -28,14 +28,17 @@ import {
 } from '../ui/select';
 import {
 	getTimeStringFromWholeDate,
+	getTranslation,
 	getWholeDateFromTimeString,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
+import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
+import {type ActivityTypeDto} from '../../models/api/activity-type.model';
+import {useTranslation} from 'react-i18next';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
 	boatId: z.number().min(0).optional(),
-	status: z.string(),
 	fromTime: z.string().refine((value) => {
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
@@ -44,7 +47,7 @@ const TimeSlotSchema = z.object({
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
 	}),
-	// Status: z.string().oneOf(['AVAILABLE', 'ON_BREAK']),
+	activityTypeId: z.number(),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
@@ -54,6 +57,7 @@ type TimeSlotFormProps = {
 	model: TimeSlotDto;
 	isCreate: boolean;
 	boat?: BoatDto;
+	status: string;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
@@ -70,10 +74,30 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			...model,
 			fromTime: getTimeStringFromWholeDate(model.fromTime),
 			untilTime: getTimeStringFromWholeDate(model.untilTime),
+			activityTypeId: 0,
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
 	const {toast} = useToast();
+	const {id} = useParams<{id: string}>();
+	const eventId = Number(id);
+	const {i18n} = useTranslation();
+	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
+
+	useEffect(() => {
+		const fetchActivityTypes = async () => {
+			try {
+				const response = await getAllActivityTypesFromEvent(eventId);
+				setActivityTypes(response);
+			} catch (error) {
+				console.error('Failed to fetch activity types:', error);
+			}
+		};
+
+		fetchActivityTypes()
+			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
+			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
+	}, [eventId]);
 
 	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		const timeSlot: TimeSlotDto = {
@@ -88,7 +112,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			),
 			boatId: boat?.id ?? 0,
 			id: model.id,
-			status: values.status === 'ON_BREAK' ? 'ON_BREAK' : 'AVAILABLE',
+			status: 'AVAILABLE',
 		};
 		const success = await onSubmit(timeSlot);
 		if (success === true) {
@@ -152,28 +176,43 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 								<FormMessage />
 							</FormItem>
 						)}></FormField>
-					<FormField
-						name="status"
+					<Controller
+						name="activityTypeId"
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Is Bookable</FormLabel>
+								<FormLabel>Activity Type</FormLabel>
 								<FormControl>
-									<Select value={field.value} onValueChange={field.onChange}>
+									<Select
+										value={field.value ? field.value.toString() : ''}
+										onValueChange={(value) => {
+											field.onChange(Number(value));
+										}}>
 										<SelectTrigger>
 											<SelectValue placeholder="Select Activity Type">
-												{field.value === 'ON_BREAK' ? 'On Break' : 'Available'}
+												{field.value
+													? getTranslation(
+														i18n.language,
+														activityTypes.find(
+															(type) => type.id === field.value,
+														)?.name,
+													)
+													: 'Select Activity Type'}
 											</SelectValue>
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="AVAILABLE">Available</SelectItem>
-											<SelectItem value="ON_BREAK">On Break</SelectItem>
+											{activityTypes.map((type) => (
+												<SelectItem key={type.id} value={type.id.toString()}>
+													{getTranslation(i18n.language, type.name)}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
-						)}></FormField>
+						)}
+					/>
 				</form>
 			</Form>
 		</>
