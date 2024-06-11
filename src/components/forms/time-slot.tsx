@@ -74,7 +74,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			...model,
 			fromTime: getTimeStringFromWholeDate(model.fromTime),
 			untilTime: getTimeStringFromWholeDate(model.untilTime),
-			activityTypeId: 0,
+			activityTypeId: model.activityTypeId ?? 0,
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
