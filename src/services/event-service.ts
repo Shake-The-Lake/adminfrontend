@@ -17,9 +17,14 @@ export const getAllEvents = async (): Promise<EventDto[]> => {
 	return response.data;
 };
 
-export const getEventById = async (id: number, expand = ''): Promise<EventDto> => {
+export const getEventById = async (
+	id: number,
+	expand = '',
+): Promise<EventDto> => {
 	const params = expand ? {expand} : {};
-	const response = await axios.get<EventDto>(`${baseUrl}/event/${id}`, {params});
+	const response = await axios.get<EventDto>(`${baseUrl}/event/${id}`, {
+		params,
+	});
 	return response.data;
 };
 
@@ -36,58 +41,58 @@ export const deleteEvent = async (id?: number): Promise<void> => {
 export const updateEvent = async (
 	id: number,
 	event: TypeOf<
-	ZodObject<
-	{
-		date: ZodString;
-		customerOnlyTime: ZodString;
-		description: ZodString;
-		startedAt: ZodString;
-		location: ZodString;
-		title: ZodString;
-	},
-	'strip',
-	ZodTypeAny,
-	{
-		[k in keyof objectUtil.addQuestionMarks<
-		baseObjectOutputType<{
-			date: ZodString;
-			customerOnlyTime: ZodString;
-			description: ZodString;
-			startedAt: ZodString;
-			location: ZodString;
-			title: ZodString;
-		}>,
-		any
-		>]: objectUtil.addQuestionMarks<
-		baseObjectOutputType<{
-			date: ZodString;
-			customerOnlyTime: ZodString;
-			description: ZodString;
-			startedAt: ZodString;
-			location: ZodString;
-			title: ZodString;
-		}>,
-		any
-		>[k];
-	},
-	{
-		[k_1 in keyof baseObjectInputType<{
-			date: ZodString;
-			customerOnlyTime: ZodString;
-			description: ZodString;
-			startedAt: ZodString;
-			location: ZodString;
-			title: ZodString;
-		}>]: baseObjectInputType<{
-			date: ZodString;
-			customerOnlyTime: ZodString;
-			description: ZodString;
-			startedAt: ZodString;
-			location: ZodString;
-			title: ZodString;
-		}>[k_1];
-	}
-	>
+		ZodObject<
+			{
+				date: ZodString;
+				customerOnlyTime: ZodString;
+				description: ZodString;
+				startedAt: ZodString;
+				location: ZodString;
+				title: ZodString;
+			},
+			'strip',
+			ZodTypeAny,
+			{
+				[k in keyof objectUtil.addQuestionMarks<
+					baseObjectOutputType<{
+						date: ZodString;
+						customerOnlyTime: ZodString;
+						description: ZodString;
+						startedAt: ZodString;
+						location: ZodString;
+						title: ZodString;
+					}>,
+					any
+				>]: objectUtil.addQuestionMarks<
+					baseObjectOutputType<{
+						date: ZodString;
+						customerOnlyTime: ZodString;
+						description: ZodString;
+						startedAt: ZodString;
+						location: ZodString;
+						title: ZodString;
+					}>,
+					any
+				>[k];
+			},
+			{
+				[k_1 in keyof baseObjectInputType<{
+					date: ZodString;
+					customerOnlyTime: ZodString;
+					description: ZodString;
+					startedAt: ZodString;
+					location: ZodString;
+					title: ZodString;
+				}>]: baseObjectInputType<{
+					date: ZodString;
+					customerOnlyTime: ZodString;
+					description: ZodString;
+					startedAt: ZodString;
+					location: ZodString;
+					title: ZodString;
+				}>[k_1];
+			}
+		>
 	>,
 ): Promise<EventDto> => {
 	const response = await axios.put<EventDto>(`${baseUrl}/event/${id}`, event);

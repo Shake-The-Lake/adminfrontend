@@ -6,12 +6,16 @@ import {
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
 import {getBookingsByEventId} from '../../../services/booking-search-service';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
+import LoadingSpinner from '../../../components/animations/loading';
 
 const BookingsPage: React.FC = () => {
 	const [data, setData] = useState<BookingSearchDto[]>([]);
-	const eventId = location.pathname.split('/').pop();
+	const location = useLocation();
+	const pathSegments = location.pathname.split('/');
+	const eventId = pathSegments[pathSegments.length - 2];
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -21,10 +25,12 @@ const BookingsPage: React.FC = () => {
 					navigate('/');
 					return;
 				}
-				const bookings = await getBookingsByEventId(1);
+				const bookings = await getBookingsByEventId(Number(eventId));
 				setData(bookings);
+				setIsLoading(false);
 			} catch (error) {
 				console.error('Failed to fetch bookings:', error);
+				setIsLoading(false);
 			}
 		};
 		fetchData();
@@ -39,6 +45,7 @@ const BookingsPage: React.FC = () => {
 				</div>
 				<div className="w-full">
 					<DataTable columns={bookingColumns} data={data} />
+					<LoadingSpinner isLoading={isLoading} />
 				</div>
 			</div>
 		</>
