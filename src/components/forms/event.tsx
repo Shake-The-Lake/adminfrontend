@@ -74,7 +74,7 @@ const EventForm: React.FC<EventFormProps> = ({
 	return (
 		<>
 			<Form {...form}>
-				<form className="p-1 space-y-4" onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)} id="eventFrom">
+				<form className="p-1 space-y-4" onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)} id="event">
 					<FormField
 						name="title"
 						control={form.control}

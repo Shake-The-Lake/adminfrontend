@@ -4,18 +4,20 @@ import EventForm, {
 	useEventForm,
 } from '../../../components/forms/event';
 import {getEventById, updateEvent} from '../../../services/event-service';
-import {type SubmitHandler} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {Button} from '../../../components/ui/button';
+import {toast} from '../../../components/ui/use-toast';
+import {defaultEventDto, type EventDto} from '../../../models/api/event.model';
+import {tryGetErrorMessage} from '../../../lib/utils';
 
 const EventOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const eventId = location.pathname.split('/').pop();
-	const [defaultValues, setDefaultValues] = useState<
-	Partial<EventFormSchema> | undefined
-	>(undefined);
+
+	const [defaultValues, setDefaultValues] = useState<EventDto>(defaultEventDto);
+
 	const form = useEventForm();
 	const [isLoading, setIsLoading] = useState(true);
 	useEffect(() => {
@@ -28,10 +30,10 @@ const EventOverview: React.FC = () => {
 				}
 
 				const event = await getEventById(Number(eventId));
-				const transformedEvent = {
+				const transformedEvent: EventDto = {
 					title: event.title,
 					description: event.description,
-					date: event.date.split('.')[0],
+					date: event.date,
 				};
 				setDefaultValues(transformedEvent);
 				setIsLoading(false);
@@ -46,16 +48,17 @@ const EventOverview: React.FC = () => {
 			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	}, [eventId, navigate]);
 
-	const handleUpdate: SubmitHandler<EventFormSchema> = async (event) => {
+	const handleUpdate = async (event: EventDto) => {
 		try {
-			const updatedEvent = {
-				...event,
-			};
-			await updateEvent(Number(eventId), updatedEvent);
+			await updateEvent(Number(eventId), event);
 		} catch (error) {
 			console.error('Error updating event:', error);
+			return tryGetErrorMessage(error);
 		}
+
+		return true;
 	};
+
 
 	return (
 		<div className="flex flex-col items-start justify-between max-h-fit w-full">
@@ -67,7 +70,14 @@ const EventOverview: React.FC = () => {
 					<p className="mt-2 mb-8 text-gray-600">
 						Enter the basic data for the event
 					</p>
-					<EventForm form={form} defaultValues={defaultValues} />
+					<EventForm 
+						onSubmit={handleUpdate}						
+						onSuccessfullySubmitted={() => {
+							toast({
+								description: 'Event successfully saved.',
+							});
+						}}
+						model={defaultValues} />
 				</div>
 				{/*
 				<Separator orientation="vertical" className="h-full" />

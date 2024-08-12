@@ -16,7 +16,6 @@ export type StlDialogProps = {
 	title: string;
 	description: string;
 	triggerLabel: string;
-	onSubmit?: () => void; // Default submit logic is triggering a form submit
 	children: React.ReactNode;
 	isOpen?: boolean;
 	onClose?: () => void;

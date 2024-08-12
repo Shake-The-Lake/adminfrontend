@@ -20,7 +20,7 @@ export const defaultEventDto: EventDto = {
 	id: 0,
 	title: '',
 	description: '',
-	date: '',
+	date: new Date(),
 	isStarted: false,
 	activityTypeIds: [],
 	boatIds: [],

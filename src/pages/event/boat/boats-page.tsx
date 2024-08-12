@@ -120,6 +120,7 @@ const BoatsOverview: React.FC = () => {
 					description="Add a new boat by entering the necessary data."
 					triggerLabel="Add new boat"
 					isOpen={isCreateDialogOpen}
+					formId="boat"
 					onClose={closeCreateDialog}
 					onOpen={openCreateDialog}>
 					<BoatForm

@@ -27,7 +27,7 @@ const CreateEventDialog: React.FC = () => {
 			title="Create Event"
 			description="Add a new event by entering the basic meta data needed."
 			triggerLabel="Add new event"
-			formId='eventFrom'>
+			formId="event">
 			<EventForm
 				onSubmit={handleSubmit}						
 				onSuccessfullySubmitted={() => {

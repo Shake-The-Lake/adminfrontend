@@ -97,6 +97,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		<>
 			<Form {...form}>
 				<form
+					id="boat"
 					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<FormField
