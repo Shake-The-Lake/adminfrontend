@@ -30,7 +30,6 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	title,
 	description,
 	triggerLabel,
-	onSubmit,
 	children,
 	isOpen,
 	onClose,
@@ -72,29 +71,6 @@ const StlDialog: React.FC<StlDialogProps> = ({
 		setOpen(true);
 	};
 
-	const handleSubmit = () => {
-		if (onSubmit) {
-			onSubmit();
-		} else {
-			submitForm();
-		}
-	};
-
-	const submitForm = () => {
-		// Mock form submit event to trigger validation
-		if (dialogContentRef.current) {
-			const form = dialogContentRef.current.querySelector('form');
-			if (form && !formId) {
-				form.dispatchEvent(
-					new Event('submit', {
-						cancelable: true,
-						bubbles: true,
-					}),
-				);
-			}
-		}
-	};
-
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
@@ -126,9 +102,11 @@ const StlDialog: React.FC<StlDialogProps> = ({
 							Cancel
 						</Button>
 					</DialogClose>
-					<Button type="submit" form={formId} onClick={handleSubmit}>
-						Save
-					</Button>
+					{formId && (
+						<Button type="submit" form={formId}>
+							Save
+						</Button>
+					)}
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

@@ -5,8 +5,8 @@ export type EventDto = {
 	id?: number;
 	title: string;
 	description: string;
-	location: Location;
-	date: string;
+	// Location: Location; not part of MVP
+	date: Date;
 	// CustomerCode: string; not part of MVP
 	// employeeCode: string; not part of MVP
 	isStarted?: boolean;
@@ -14,6 +14,18 @@ export type EventDto = {
 	boatIds?: number[];
 	boats?: BoatDto[] | undefined;
 	activityTypes?: ActivityTypeDto[] | undefined;
+};
+
+export const defaultEventDto: EventDto = {
+	id: 0,
+	title: '',
+	description: '',
+	date: '',
+	isStarted: false,
+	activityTypeIds: [],
+	boatIds: [],
+	boats: undefined,
+	activityTypes: undefined,
 };
 
 export type Location = {

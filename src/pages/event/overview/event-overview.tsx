@@ -32,7 +32,6 @@ const EventOverview: React.FC = () => {
 					title: event.title,
 					description: event.description,
 					date: event.date.split('.')[0],
-					location: event.location?.name || '',
 				};
 				setDefaultValues(transformedEvent);
 				setIsLoading(false);

@@ -31,7 +31,7 @@ const BoatPage: React.FC = () => {
 
 	const handleUpdateBoat = async (dto: BoatDto) => {
 		try {
-			const updatedBoat = await updateBoat(boat?.id ?? 0, dto);
+			await updateBoat(boat?.id ?? 0, dto);
 			// Todo! trigger page reload after success
 		} catch (error) {
 			console.error('Failed to update boat:', error);
