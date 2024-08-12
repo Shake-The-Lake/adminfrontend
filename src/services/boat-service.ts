@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {type BoatDto} from '../models/api/boat.model';
+import {time} from 'console';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
@@ -9,7 +10,7 @@ export const getAllBoats = async (): Promise<BoatDto[]> => {
 };
 
 export const getBoatById = async (id: number): Promise<BoatDto> => {
-	const response = await axios.get<BoatDto>(`${baseUrl}/boat/${id}`);
+	const response = await axios.get<BoatDto>(`${baseUrl}/boat/${id}?expand=timeSlots`);
 	return response.data;
 };
 
@@ -22,6 +23,7 @@ export const updateBoat = async (
 	id: number,
 	boat: BoatDto,
 ): Promise<BoatDto> => {
+	console.log('update boat', boat);
 	const response = await axios.put<BoatDto>(`${baseUrl}/boat/${id}`, boat);
 	return response.data;
 };

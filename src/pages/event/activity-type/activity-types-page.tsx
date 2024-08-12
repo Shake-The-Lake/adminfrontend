@@ -140,7 +140,8 @@ const ActivityTypesPage = () => {
 					triggerLabel="Add new Activity Type"
 					isOpen={isCreateDialogOpen}
 					onClose={closeCreateDialog}
-					onOpen={openCreateDialog}>
+					onOpen={openCreateDialog}
+					formId='activityType'>
 					<ActivityTypeForm
 						onSubmit={handleCreateNewActivityType}
 						onSuccessfullySubmitted={closeCreateDialog}

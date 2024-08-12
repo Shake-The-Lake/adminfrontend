@@ -130,6 +130,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 			<Form {...form}>
 				<form
 					className="p-1 space-y-4 w-full"
+					id="activityType"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<Tabs defaultValue={i18n.language}>
 						<TabsList className="w-full justify-start">

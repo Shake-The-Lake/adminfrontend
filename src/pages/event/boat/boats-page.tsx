@@ -70,7 +70,6 @@ const BoatsOverview: React.FC = () => {
 
 		try {
 			const createdBoat = await createBoat(dto);
-			console.log('Created boat:', createdBoat);
 
 			setBoats([...boats, createdBoat]);
 		} catch (error) {
@@ -121,6 +120,7 @@ const BoatsOverview: React.FC = () => {
 					description="Add a new boat by entering the necessary data."
 					triggerLabel="Add new boat"
 					isOpen={isCreateDialogOpen}
+					formId="boat"
 					onClose={closeCreateDialog}
 					onOpen={openCreateDialog}>
 					<BoatForm

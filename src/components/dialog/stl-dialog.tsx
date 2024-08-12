@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
 	Dialog,
 	DialogClose,
@@ -10,29 +10,34 @@ import {
 	DialogTrigger,
 } from '../ui/dialog';
 import {Button} from '../ui/button';
-import {Plus} from 'lucide-react';
+import {PencilIcon, Plus} from 'lucide-react';
 
 export type StlDialogProps = {
 	title: string;
 	description: string;
 	triggerLabel: string;
-	onSubmit?: () => void; // Default submit logic is triggering a form submit
 	children: React.ReactNode;
 	isOpen?: boolean;
 	onClose?: () => void;
 	onOpen?: () => void;
+	isCard?: boolean;
+	isIcon?: boolean;
+	formId?: string;
 };
 
 const StlDialog: React.FC<StlDialogProps> = ({
 	title,
 	description,
 	triggerLabel,
-	onSubmit,
 	children,
 	isOpen,
 	onClose,
 	onOpen,
+	isCard = true,
+	isIcon = false,
+	formId,
 }) => {
+	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
@@ -65,34 +70,26 @@ const StlDialog: React.FC<StlDialogProps> = ({
 		setOpen(true);
 	};
 
-	const handleSubmit = () => {
-		if (onSubmit) {
-			onSubmit();
-		} else {
-			submitForm();
-		}
-	};
-
-	const submitForm = () => {
-		// Mock form submit event to trigger validation
-		document.querySelector('form')?.dispatchEvent(
-			new Event('submit', {
-				cancelable: true,
-				bubbles: true,
-			}),
-		);
-	};
-
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
-				<Button
-					className="h-40 w-full flex items-center justify-center"
-					title={triggerLabel}>
-					<Plus className="size-24" />
-				</Button>
+				{isCard ? (
+					<Button
+						className="h-40 w-full flex items-center justify-center"
+						title={triggerLabel}>
+						<Plus className="size-24" />
+					</Button>
+				) : isIcon ? (
+					<Button type="button" title={triggerLabel} variant='ghost'>
+						<PencilIcon></PencilIcon>
+					</Button>
+				) : (
+					<Button type="button" title={triggerLabel}>
+						Add
+					</Button>
+				)}
 			</DialogTrigger>
-			<DialogContent className="flex flex-col">
+			<DialogContent ref={dialogContentRef} className="flex flex-col">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
@@ -100,13 +97,15 @@ const StlDialog: React.FC<StlDialogProps> = ({
 				<div className="flex-grow overflow-auto p-1">{children}</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary" onClick={handleClose}>
+						<Button type="button" variant="secondary" className="max-sm:mt-2" onClick={handleClose}>
 							Cancel
 						</Button>
 					</DialogClose>
-					<Button type="submit" onClick={handleSubmit}>
-						Save
-					</Button>
+					{formId && (
+						<Button type="submit" form={formId}>
+							Save
+						</Button>
+					)}
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

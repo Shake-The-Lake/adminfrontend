@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {z} from 'zod';
 import {
-	Controller,
 	type SubmitHandler,
 	useForm,
 	type SubmitErrorHandler,
@@ -15,15 +14,6 @@ import {
 	FormMessage,
 } from '../ui/form';
 import {Input} from '../ui/input';
-import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '../ui/select';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
 import {useTranslation} from 'react-i18next';
@@ -46,17 +36,7 @@ const boatFormSchema = z.object({
 	availableUntil: z.string().refine((val) => !isNaN(Date.parse(val)), {
 		message: 'Invalid date format',
 	}),
-	activityTypeId: z.number().optional(),
 	eventId: z.number().optional(),
-	// Timeslots are not yet part of the form
-	// timeSlots: z
-	// 	.instanceof(Set<TimeSlotDto>)
-	// 	.optional()
-	// 	.or(z.undefined()),
-	// timeSlotIds: z
-	// 	.instanceof(Set<number>)
-	// 	.optional()
-	// 	.or(z.undefined()),
 });
 
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
@@ -79,34 +59,16 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		defaultValues: model,
 		resolver: zodResolver(boatFormSchema),
 	});
-
-	const {i18n} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 	const {toast} = useToast();
-
-	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
-
-	useEffect(() => {
-		const fetchActivityTypes = async () => {
-			try {
-				const response = await getAllActivityTypesFromEvent(eventId);
-				setActivityTypes(response);
-			} catch (error) {
-				console.error('Failed to fetch activity types:', error);
-			}
-		};
-
-		fetchActivityTypes()
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, []);
 
 	const onPrepareSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
 		const boat: BoatDto = {
 			...values,
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
+			timeSlotIds: model.timeSlotIds,
 		};
 
 		const success = await onSubmit(boat);
@@ -135,6 +97,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		<>
 			<Form {...form}>
 				<form
+					id="boat"
 					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<FormField
@@ -164,45 +127,6 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							</FormItem>
 						)}
 					/>
-
-					<Controller
-						name="activityTypeId"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Activity Type</FormLabel>
-								<FormControl>
-									<Select
-										value={field.value ? field.value.toString() : ''}
-										onValueChange={(value) => {
-											field.onChange(Number(value));
-										}}>
-										<SelectTrigger>
-											<SelectValue placeholder="Select Activity Type">
-												{field.value
-													? getTranslation(
-															i18n.language,
-															activityTypes.find(
-																(type) => type.id === field.value,
-															)?.name,
-														)
-													: 'Select Activity Type'}
-											</SelectValue>
-										</SelectTrigger>
-										<SelectContent>
-											{activityTypes.map((type) => (
-												<SelectItem key={type.id} value={type.id.toString()}>
-													{getTranslation(i18n.language, type.name)}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
 					<FormField
 						name="operator"
 						control={form.control}
