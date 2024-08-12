@@ -23,6 +23,7 @@ export type StlDialogProps = {
 	onOpen?: () => void;
 	isCard?: boolean;
 	isIcon?: boolean;
+	formId?: string;
 };
 
 const StlDialog: React.FC<StlDialogProps> = ({
@@ -36,6 +37,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	onOpen,
 	isCard = true,
 	isIcon = false,
+	formId,
 }) => {
 	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
@@ -82,7 +84,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 		// Mock form submit event to trigger validation
 		if (dialogContentRef.current) {
 			const form = dialogContentRef.current.querySelector('form');
-			if (form) {
+			if (form && !formId) {
 				form.dispatchEvent(
 					new Event('submit', {
 						cancelable: true,
@@ -124,7 +126,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 							Cancel
 						</Button>
 					</DialogClose>
-					<Button type="submit" onClick={handleSubmit}>
+					<Button type="submit" form={formId} onClick={handleSubmit}>
 						Save
 					</Button>
 				</DialogFooter>

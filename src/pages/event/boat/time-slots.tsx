@@ -82,7 +82,9 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const handleDelete = async (timeSlotId: number) => {
 		try {
 			await deleteTimeSlot(timeSlotId);
-			const updatedTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
+			const updatedTimeSlots = timeSlots.filter(
+				(slot) => slot.id !== timeSlotId,
+			);
 			setTimeSlots(updatedTimeSlots);
 			toast({
 				description: 'Time slot successfully deleted.',
@@ -105,7 +107,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						isOpen={isCreateDialogOpen}
 						onClose={closeCreateDialog}
 						onOpen={openCreateDialog}
-						isCard={false}>
+						isCard={false}
+						formId="timeSlot">
 						<TimeSlotForm
 							model={{...defaultTimeSlot, boatId: boat.id}}
 							onSubmit={handleCreateTimeSlot}

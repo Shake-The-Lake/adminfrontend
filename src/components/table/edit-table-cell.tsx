@@ -36,7 +36,7 @@ const EditTableCell: React.FC<EditTableCellProps> = ({
   
 
 	return (
-		<TableCell className='text-right'>
+		<TableCell className="text-right">
 			<StlDialog
 				title="Edit Time Slot"
 				description="Edit time slots for the boat"
@@ -45,7 +45,8 @@ const EditTableCell: React.FC<EditTableCellProps> = ({
 				onClose={closeUpdateDialog}
 				onOpen={openUpdateDialog}
 				isCard={false}
-				isIcon={true}>
+				isIcon={true}
+				formId="timeSlot">
 				<TimeSlotForm
 					model={slot}
 					onSubmit={onUpdate}
@@ -64,7 +65,7 @@ const EditTableCell: React.FC<EditTableCellProps> = ({
 				size="icon"
 				className="items-center"
 				onClick={async () => {
-					onDelete(slot.id); 
+					onDelete(slot.id);
 				}}>
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>

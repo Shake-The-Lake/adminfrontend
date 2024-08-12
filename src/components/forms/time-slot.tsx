@@ -57,7 +57,7 @@ type TimeSlotFormProps = {
 	model: TimeSlotDto;
 	isCreate: boolean;
 	boat?: BoatDto;
-	status: string;
+	// status: string; // todo!still necessary?
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
@@ -140,6 +140,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		<>
 			<Form {...form}>
 				<form
+					id="timeSlot"
 					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
 					<FormField
