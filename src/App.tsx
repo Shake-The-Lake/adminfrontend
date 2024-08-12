@@ -18,7 +18,7 @@ import {
 } from './pages';
 import {getEventById} from './services/event-service';
 import {getActivityTypeById} from './services/activity-type-service';
-import {getBoatById} from './services/boat-service';
+import {getAllBoatsWithTimeSlots, getBoatById} from './services/boat-service';
 
 const router = createBrowserRouter([
 	{
@@ -67,6 +67,9 @@ const router = createBrowserRouter([
 			{
 				path: eventDetailRoutes.schedule,
 				element: <SchedulePage />,
+				async loader() {
+					return getAllBoatsWithTimeSlots();
+				},
 			},
 			{
 				path: eventDetailRoutes.bookings,
