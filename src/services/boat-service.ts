@@ -8,6 +8,11 @@ export const getAllBoats = async (): Promise<BoatDto[]> => {
 	return response.data;
 };
 
+export const getAllBoatsWithTimeSlots = async (): Promise<BoatDto[]> => {
+	const response = await axios.get<BoatDto[]>(`${baseUrl}/boat?expand=timeSlots`);
+	return response.data;
+};
+
 export const getBoatById = async (id: number): Promise<BoatDto> => {
 	const response = await axios.get<BoatDto>(`${baseUrl}/boat/${id}`);
 	return response.data;
