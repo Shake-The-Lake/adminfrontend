@@ -34,7 +34,6 @@ const ActivityTypePage: React.FC = () => {
 				activityType?.id ?? 0,
 				dto,
 			);
-			console.log('Updated activity type:', updatedActivityType);
 			// Todo! trigger page reload after success
 		} catch (error) {
 			console.error('Failed to update activity type:', error);

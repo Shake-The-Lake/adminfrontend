@@ -52,3 +52,24 @@ export function tryGetErrorMessage(error: unknown) {
 
 	return errorMessage;
 }
+
+export function getTimeStringFromWholeDate(date: Date | undefined) {
+	const validDate = date instanceof Date ? date : new Date(date);
+
+	if (isNaN(validDate.getTime())) {
+		// Handle invalid date object
+		return '00:00';
+	}
+
+	const hours = String(validDate.getHours()).padStart(2, '0');
+	const minutes = String(validDate.getMinutes()).padStart(2, '0');
+	return `${hours}:${minutes}`;
+}
+
+export function getWholeDateFromTimeString(date: Date, timeString: string) {
+	const [hours, minutes] = timeString.split(':').map(Number);
+	date.setHours(hours);
+	date.setMinutes(minutes);
+
+	return date; // Todo! or maybe make completely new date
+}
