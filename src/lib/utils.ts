@@ -13,7 +13,7 @@ export function getTranslation(
 	if (!object) {
 		return '';
 	}
-
+	
 	let translation = '';
 
 	if (locale === 'en') {
@@ -72,4 +72,12 @@ export function getWholeDateFromTimeString(date: Date, timeString: string) {
 	date.setMinutes(minutes);
 
 	return date; // Todo! or maybe make completely new date
+}
+
+export function formatTimeLocal(date: Date) {
+
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+
+	return `${hours}:${minutes}`;
 }

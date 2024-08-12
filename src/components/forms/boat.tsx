@@ -4,6 +4,7 @@ import {
 	type SubmitHandler,
 	useForm,
 	type SubmitErrorHandler,
+	Controller,
 } from 'react-hook-form';
 import {
 	Form,
@@ -16,11 +17,36 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {useTranslation} from 'react-i18next';
-import {getTranslation} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {useToast} from '../ui/use-toast';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select';
+import {useTranslation} from 'react-i18next';
+import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
+import {getTranslation} from '../../lib/utils';
+import {type ActivityTypeDto} from '../../models/api/activity-type.model';
+
+// Helper function to parse and format time strings
+const parseTime = (timeString: string): Date => {
+	const [hours, minutes] = timeString.split(':').map(Number);
+	const date = new Date();
+	date.setHours(hours);
+	date.setMinutes(minutes);
+	return date;
+};
+
+const formatTimeLocal = (date: Date): string=> {
+	const padZero = (num) => (num < 10 ? `0${num}` : num);
+	const hours = padZero(date.getHours());
+	const minutes = padZero(date.getMinutes());
+	return `${hours}:${minutes}`;
+};
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -30,13 +56,14 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.string().refine((val) => !isNaN(Date.parse(val)), {
-		message: 'Invalid date format',
-	}),
-	availableUntil: z.string().refine((val) => !isNaN(Date.parse(val)), {
-		message: 'Invalid date format',
-	}),
+	availableFrom: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
+		message: 'Invalid time format',
+	}).transform(parseTime),
+	availableUntil: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
+		message: 'Invalid time format',
+	}).transform(parseTime),
 	eventId: z.number().optional(),
+	activityTypeId: z.number(),
 });
 
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
@@ -56,12 +83,34 @@ const BoatForm: React.FC<BoatFormProps> = ({
 }) => {
 	const form = useForm<BoatFormSchema>({
 		mode: 'onChange',
-		defaultValues: model,
+		defaultValues: {
+			...model,
+			availableFrom: formatTimeLocal(new Date(model.availableFrom)),
+			availableUntil: formatTimeLocal(new Date(model.availableUntil)),
+		},
 		resolver: zodResolver(boatFormSchema),
 	});
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 	const {toast} = useToast();
+
+	const {i18n} = useTranslation();
+	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
+	
+	useEffect(() => {
+		const fetchActivityTypes = async () => {
+			try {
+				const response = await getAllActivityTypesFromEvent(eventId);
+				setActivityTypes(response);
+			} catch (error) {
+				console.error('Failed to fetch activity types:', error);
+			}
+		};
+
+		fetchActivityTypes()
+			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
+			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
+	}, [eventId]);
 
 	const onPrepareSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
 		const boat: BoatDto = {
@@ -69,6 +118,9 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
 			timeSlotIds: model.timeSlotIds,
+			activityTypeId: values.activityTypeId,
+			availableFrom: values.availableFrom,
+			availableUntil: values.availableUntil,
 		};
 
 		const success = await onSubmit(boat);
@@ -190,7 +242,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							<FormItem>
 								<FormLabel>Boat Available From</FormLabel>
 								<FormControl>
-									<Input type="datetime-local" {...field} className="input" />
+									<Input type="time" {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -204,7 +256,45 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							<FormItem>
 								<FormLabel>Boat Available Until</FormLabel>
 								<FormControl>
-									<Input type="datetime-local" {...field} className="input" />
+									<Input type="time" {...field} className="input" />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<Controller
+						name="activityTypeId"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Activity Type</FormLabel>
+								<FormControl>
+									<Select
+										value={field.value ? field.value.toString() : ''}
+										onValueChange={(value) => {
+											field.onChange(Number(value));
+										}}>
+										<SelectTrigger>
+											<SelectValue placeholder="Select Activity Type">
+												{field.value
+													? getTranslation(
+														i18n.language,
+														activityTypes.find(
+															(type) => type.id === field.value,
+														)?.name,
+													)
+													: 'Select Activity Type'}
+											</SelectValue>
+										</SelectTrigger>
+										<SelectContent>
+											{activityTypes.map((type) => (
+												<SelectItem key={type.id} value={type.id.toString()}>
+													{getTranslation(i18n.language, type.name)}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

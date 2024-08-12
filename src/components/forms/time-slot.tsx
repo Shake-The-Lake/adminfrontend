@@ -20,21 +20,11 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {useToast} from '../ui/use-toast';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '../ui/select';
-import {
 	getTimeStringFromWholeDate,
-	getTranslation,
 	getWholeDateFromTimeString,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import {useTranslation} from 'react-i18next';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -57,7 +47,7 @@ type TimeSlotFormProps = {
 	model: TimeSlotDto;
 	isCreate: boolean;
 	boat?: BoatDto;
-	// status: string; // todo!still necessary?
+	// Status: string; // todo!still necessary?
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
@@ -74,21 +64,17 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			...model,
 			fromTime: getTimeStringFromWholeDate(model.fromTime),
 			untilTime: getTimeStringFromWholeDate(model.untilTime),
-			activityTypeId: model.activityTypeId ?? 0,
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
 	const {toast} = useToast();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const {i18n} = useTranslation();
-	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
 
 	useEffect(() => {
 		const fetchActivityTypes = async () => {
 			try {
 				const response = await getAllActivityTypesFromEvent(eventId);
-				setActivityTypes(response);
 			} catch (error) {
 				console.error('Failed to fetch activity types:', error);
 			}
@@ -177,43 +163,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 								<FormMessage />
 							</FormItem>
 						)}></FormField>
-					<Controller
-						name="activityTypeId"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Activity Type</FormLabel>
-								<FormControl>
-									<Select
-										value={field.value ? field.value.toString() : ''}
-										onValueChange={(value) => {
-											field.onChange(Number(value));
-										}}>
-										<SelectTrigger>
-											<SelectValue placeholder="Select Activity Type">
-												{field.value
-													? getTranslation(
-														i18n.language,
-														activityTypes.find(
-															(type) => type.id === field.value,
-														)?.name,
-													)
-													: 'Select Activity Type'}
-											</SelectValue>
-										</SelectTrigger>
-										<SelectContent>
-											{activityTypes.map((type) => (
-												<SelectItem key={type.id} value={type.id.toString()}>
-													{getTranslation(i18n.language, type.name)}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 				</form>
 			</Form>
 		</>
