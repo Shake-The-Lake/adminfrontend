@@ -4,13 +4,6 @@ import {type ActivityTypeDto} from '../models/api/activity-type.model';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
-export const getAllActivityTypes = async (): Promise<ActivityTypeDto[]> => {
-	const response = await axios.get<ActivityTypeDto[]>(
-		`${baseUrl}/activitytype`,
-	); // Todo! is this really needed??
-	return response.data;
-};
-
 export const getAllActivityTypesFromEvent = async (
 	eventId: number,
 ): Promise<ActivityTypeDto[]> => {

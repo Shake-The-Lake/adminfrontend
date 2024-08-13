@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {z} from 'zod';
 import {
 	type SubmitHandler,
@@ -21,9 +21,10 @@ import {defaultLocalizedStringDto} from '../../models/api/localized-string';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
-import {useToast} from '../ui/use-toast';
 import {Textarea} from '../ui/textarea';
 import {onInvalidFormHandler} from '../../lib/utils';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {MutationToaster} from '../common/mutation-toaster';
 
 const localizedStringSchema = z.object({
 	en: z.string(),
@@ -47,15 +48,15 @@ const activityTypeSchema = z.object({
 export type ActivityTypeFormSchema = z.infer<typeof activityTypeSchema>;
 
 type ActivityTypeFormProps = {
-	onSubmit: (dto: ActivityTypeDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: ActivityTypeDto;
+	mutation: UseMutationResult<any, Error, ActivityTypeDto>; // First any is return type, second is input
 	isCreate: boolean;
-	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
+	onSuccessfullySubmitted?: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	model,
-	onSubmit,
+	mutation,
 	isCreate,
 	onSuccessfullySubmitted,
 }) => {
@@ -68,13 +69,21 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	const {i18n} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const {toast} = useToast();
 
 	const [tabWithErrors, setTabWithErrors] = useState<string[]>([]);
 
-	const onPrepareSubmit: SubmitHandler<ActivityTypeFormSchema> = async (
-		values,
-	) => {
+	useEffect(() => {
+		if (
+			onSuccessfullySubmitted &&
+			mutation &&
+			mutation.isSuccess &&
+			Boolean(mutation.data?.id)
+		) {
+			onSuccessfullySubmitted();
+		}
+	}, [mutation?.isSuccess, mutation?.data?.id]);
+
+	const onSubmit: SubmitHandler<ActivityTypeFormSchema> = async (values) => {
 		setTabWithErrors([]);
 
 		const activityType: ActivityTypeDto = {
@@ -87,16 +96,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 			checklist: {...defaultLocalizedStringDto, ...values.checklist},
 		};
 
-		const success = await onSubmit(activityType);
-		if (success === true) {
-			onSuccessfullySubmitted();
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when saving.',
-				description: success,
-			});
-		}
+		await mutation.mutateAsync(activityType);
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
@@ -122,11 +122,15 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 
 	return (
 		<>
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={mutation}
+			/>
 			<Form {...form}>
 				<form
 					className="p-1 space-y-4 w-full"
 					id="activityType"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
+					onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
 					<Tabs defaultValue={i18n.language}>
 						<TabsList className="w-full justify-start">
 							<TabsTrigger

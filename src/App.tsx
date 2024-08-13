@@ -18,13 +18,14 @@ import {
 	HomePage,
 	SchedulePage,
 } from './pages';
-import {getActivityTypeById} from './services/activity-type-service';
 import {getBoatById} from './services/boat-service';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {Toaster} from './components/ui/sonner';
 import {loader as eventsLoader} from './pages/event/event-list';
 import {loader as eventDetailLoader} from './pages/event/overview/event-overview';
+import {loader as activityTypesLoader} from './pages/event/activity-type/activity-types-page';
+import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -60,13 +61,12 @@ const router = createBrowserRouter([
 			{
 				path: eventDetailRoutes.activityTypes,
 				element: <ActivityTypesPage />,
+				loader: activityTypesLoader(queryClient),
 			},
 			{
 				path: `${eventDetailRoutes.activityTypes}/${eventDetailRoutes.activityTypeId}`,
 				element: <ActivityTypePage />,
-				async loader({params}) {
-					return getActivityTypeById(Number(params.activityTypeId));
-				},
+				loader: activityTypeDetailLoader(queryClient),
 			},
 			{
 				path: eventDetailRoutes.boats,

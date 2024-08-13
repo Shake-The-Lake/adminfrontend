@@ -56,7 +56,7 @@ export function useCreateEvent() {
 		mutationFn: createEvent,
 		async onSuccess(data) {
 			if (data) {
-				queryClient.setQueryData([keys.detail(data.id ?? 0, false)], data);
+				queryClient.setQueryData(keys.detail(data.id ?? 0, false), data);
 			}
 
 			await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
@@ -80,8 +80,8 @@ export function useUpdateEvent(id: number) {
 				activityTypes: oldData?.activityTypes,
 				activityTypeIds: oldData?.activityTypeIds,
 			};
-			queryClient.setQueryData([keys.detail(id, false)], newData);
-			queryClient.setQueryData([keys.detail(id, true)], newData);
+			queryClient.setQueryData(keys.detail(id, false), newData);
+			queryClient.setQueryData(keys.detail(id, true), newData);
 
 			await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
 		},

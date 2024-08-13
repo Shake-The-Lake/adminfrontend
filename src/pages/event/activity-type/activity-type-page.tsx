@@ -1,67 +1,65 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import ActivityTypeForm from '../../../components/forms/activity-type';
-import {type ActivityTypeDto} from '../../../models/api/activity-type.model';
-import {updateActivityType} from '../../../services/activity-type-service';
-import {useLoaderData} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
-import {useToast} from '../../../components/ui/use-toast';
-import {getTranslation, tryGetErrorMessage} from '../../../lib/utils';
+import {getTranslation} from '../../../lib/utils';
+import {
+	activityTypeDetailOptions,
+	useActivityTypeDetail,
+	useUpdateActivityType,
+} from '../../../queries/activity-type';
+import {type QueryClient} from '@tanstack/react-query';
+
+export const loader =
+	(queryClient: QueryClient) =>
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
+
+			if (!params.activityTypeId) {
+				throw new Error('No event ID provided');
+			}
+
+			await queryClient.ensureQueryData(
+				activityTypeDetailOptions(Number(params.activityTypeId)),
+			);
+			return {
+				eventId: Number(params.id),
+				activityTypeId: Number(params.activityTypeId),
+			};
+		};
 
 const ActivityTypePage: React.FC = () => {
-	const [activityType, setActivityType] = useState<ActivityTypeDto | undefined>(
-		undefined,
-	);
-	const [isLoading, setIsLoading] = useState(true);
-	const routeData = useLoaderData();
-	const {toast} = useToast();
+	const {eventId, activityTypeId} = useLoaderData() as Awaited<
+	ReturnType<ReturnType<typeof loader>>
+	>;
+	const {
+		data: activityType,
+		isPending,
+		error,
+	} = useActivityTypeDetail(activityTypeId, eventId);
 
-	useEffect(() => {
-		setIsLoading(true);
-		if (routeData) {
-			setActivityType(routeData as ActivityTypeDto);
-			setIsLoading(false);
-		} else {
-			console.error('Error fetching activity type');
-		}
-	}, [routeData]);
+	const updateMutation = useUpdateActivityType(activityTypeId);
 
 	const {t, i18n} = useTranslation();
-
-	const handleUpdateActivityType = async (dto: ActivityTypeDto) => {
-		try {
-			const updatedActivityType = await updateActivityType(
-				activityType?.id ?? 0,
-				dto,
-			);
-			// Todo! trigger page reload after success
-		} catch (error) {
-			console.error('Failed to update activity type:', error);
-			return tryGetErrorMessage(error);
-		}
-
-		return true;
-	};
 
 	return (
 		<>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isLoading} />
+				<LoadingSpinner isLoading={isPending || updateMutation.isPending} />
 
 				<h2 className="w-full mb-6">
 					{t('activityType')} -{' '}
 					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
 
+				{error && <p>Error fetching Activity Type.</p>}
 				{activityType && (
 					<ActivityTypeForm
 						key={activityType.id}
-						onSubmit={handleUpdateActivityType}
-						onSuccessfullySubmitted={() => {
-							toast({
-								description: 'Activity Type successfully saved.',
-							});
-						}}
+						mutation={updateMutation}
 						model={activityType}
 						isCreate={false}
 					/>
