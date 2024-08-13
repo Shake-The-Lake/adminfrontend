@@ -25,7 +25,7 @@ const BoatsOverview: React.FC = () => {
 	useEffect(() => {
 		const fetchBoats = async () => {
 			try {
-				const event = await getEventById(Number(eventId), 'boats');
+				const event = await getEventById(Number(eventId), 'boats'); // todo! move this wrapper to boat service
 
 				setBoats(event?.boats ?? []);
 			} catch (error) {
@@ -110,7 +110,7 @@ const BoatsOverview: React.FC = () => {
 								id={boat.id}
 								title={boat.name}
 								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
-								handleEdit={handleEdit}
+								onArrowClick={handleEdit}
 								handleDelete={handleDelete}
 							/>
 						</div>

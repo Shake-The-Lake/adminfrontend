@@ -1,19 +1,24 @@
-import React, {useEffect} from 'react';
-import {type SubmitErrorHandler, type SubmitHandler, useForm} from 'react-hook-form';
+import React from 'react';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
 import {Button} from '../ui/button';
 import {type EventDto} from '../../models/api/event.model';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {toast} from '../ui/use-toast';
+import {onInvalidFormHandler} from '../../lib/utils';
+import {UseMutationResult} from '@tanstack/react-query';
+import {MutationToaster} from '../common/mutation-toaster';
 
 export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
-	date: z.string().refine(val => !isNaN(Date.parse(val)), {
-		message: 'Invalid date',
-	}).transform(val => new Date(val)),
+	date: z
+		.string()
+		.refine((val) => !isNaN(Date.parse(val)), {
+			message: 'Invalid date',
+		})
+		.transform((val) => new Date(val)),
 });
 
 export const useEventForm = () =>
@@ -21,60 +26,43 @@ export const useEventForm = () =>
 		// Resolver: zodResolver(eventFormSchema), validation disabled because of missing error handling & onSubmit doesnt work
 		mode: 'onChange',
 	});
-	
+
 export type EventFormSchema = z.infer<typeof eventFormSchema>;
 
 type EventFormProps = {
-	onSubmit: (dto: EventDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: EventDto;
-	onSuccessfullySubmitted: () => void; 
+	mutation: UseMutationResult<any, Error, EventDto, unknown>; // first any is return type, second is input
+	isCreate: boolean;
 };
 
-const EventForm: React.FC<EventFormProps> = ({
-	model,
-	onSubmit,
-	onSuccessfullySubmitted,
-}) => {
+const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 	const form = useForm<EventFormSchema>({
 		mode: 'onChange',
 		defaultValues: model,
 		resolver: zodResolver(eventFormSchema),
 	});
 
-	const onPrepareSubmit: SubmitHandler<EventFormSchema> = async (values) => {
+	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
 			...values,
 			title: values.title,
 			date: values.date,
-		}; 
+		};
 
-		const success = await onSubmit(event);
-	
-		if (success === true) {
-			onSuccessfullySubmitted();
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when saving.',
-				description: success,
-			});
-		}
-	};
-
-	const onInvalid: SubmitErrorHandler<EventFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
-
-		toast({
-			variant: 'destructive',
-			title: 'Could not be saved.',
-			description: 'There are validation errors in the form.',
-		});
+		await mutation.mutateAsync(event);
 	};
 
 	return (
 		<>
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={mutation}
+			/>
 			<Form {...form}>
-				<form className="p-1 space-y-4" onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)} id="event">
+				<form
+					className="p-1 space-y-4"
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
+					id="event">
 					<FormField
 						name="title"
 						control={form.control}
@@ -119,7 +107,12 @@ const EventForm: React.FC<EventFormProps> = ({
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" style={{display: 'none'}} />
+
+					<div
+						className="mt-16 flex justify-end w-full"
+						style={isCreate ? {display: 'none'} : {}}>
+						<Button type="submit">Save Changes</Button>
+					</div>
 				</form>
 			</Form>
 		</>

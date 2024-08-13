@@ -16,7 +16,7 @@ import {
 
 export const keys = {
 	all: () => ['events'],
-	detail: (id: number, expand?: string) => ['events', 'detail', {id, expand}],
+	detail: (id: number, expanded: boolean) => ['events', 'detail', { id, expanded }],
 };
 
 export const eventsOptions = () => {
@@ -30,20 +30,20 @@ export function useGetEvents() {
 	return useQuery(eventsOptions());
 }
 
-export const eventDetailOptions = (id: number, expand = '') => {
+export const eventDetailOptions = (id: number, expanded: boolean = false) => {
 	return queryOptions({
-		queryKey: keys.detail(id, expand),
-		queryFn: async () => getEventById(id, expand),
+		queryKey: keys.detail(id, expanded),
+		queryFn: async () => getEventById(id, expanded ? 'boats,activityTypes' : undefined),
 	});
 };
 
 export function useEventDetail(
 	queryClient: QueryClient,
 	id: number,
-	expand = '',
+	expanded: boolean,
 ) {
 	return useQuery({
-		...eventDetailOptions(id, expand),
+		...eventDetailOptions(id, expanded),
 		initialData: () => {
 			const queryData: EventDto[] | undefined = queryClient.getQueryData(
 				keys.all(),
@@ -57,19 +57,36 @@ export function useCreateEvent() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: createEvent,
-		onSuccess: () => {
+		onSuccess: (data) => {
+			if (data) {
+				queryClient.setQueryData([keys.detail(data.id ?? 0, false)], data);
+			}
+
 			queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
 		},
 	});
 }
 
-export function useUpdateEvent(id: number, event: EventDto) {
+export function useUpdateEvent(id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async () => updateEvent(id, event),
-		onSuccess: () => {
+		mutationFn: async (event: EventDto) => updateEvent(id, event),
+		onSuccess: (data) => {
+			const oldData: EventDto | undefined = queryClient.getQueryData(
+				keys.detail(id, true),
+			);
+
+			const newData: EventDto = {
+				...data,
+				boats: oldData?.boats,
+				boatIds: oldData?.boatIds,
+				activityTypes: oldData?.activityTypes,
+				activityTypeIds: oldData?.activityTypeIds,
+			};
+			queryClient.setQueryData([keys.detail(id, false)], newData);
+			queryClient.setQueryData([keys.detail(id, true)], newData);
+
 			queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
-			queryClient.invalidateQueries({queryKey: keys.detail(id)});
 		},
 	});
 }

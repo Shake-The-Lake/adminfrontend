@@ -9,34 +9,43 @@ import {
 } from '../ui/card';
 import {Button} from '../ui/button';
 import {useToast} from '../ui/use-toast';
+import {UseMutationResult} from '@tanstack/react-query';
 
 export type StlCardProps = {
 	id?: number;
 	title?: string;
 	description?: string;
-	handleEdit: (id?: number) => Promise<void> | void;
-	handleDelete: (id?: number) => Promise<boolean | string>;
+	onArrowClick: (id?: number) => Promise<void> | void;
+	handleDelete?: (id?: number) => Promise<boolean | string>;
+	deleteMutation?: UseMutationResult<any, Error, number | undefined, unknown>; // first any is return type, second is input
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
 	const {toast} = useToast();
 
 	const handleEdit = async () => {
-		await props.handleEdit(props.id);
+		await props.onArrowClick(props.id);
 	};
 
+	// todo! slowly refactor all these!
 	const handleDelete = async () => {
-		const success = await props.handleDelete(props.id);
-		if (success === true) {
-			toast({
-				description: 'Successfully deleted.',
-			});
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when deleting.',
-				description: success,
-			});
+		if (props.deleteMutation) {
+			props.deleteMutation.mutate(props.id);
+		}
+
+		if (props.handleDelete) {
+			const success = await props.handleDelete(props.id);
+			if (success === true) {
+				toast({
+					description: 'Successfully deleted.',
+				});
+			} else if (typeof success === 'string') {
+				toast({
+					variant: 'destructive',
+					title: 'There was an error when deleting.',
+					description: success,
+				});
+			}
 		}
 	};
 

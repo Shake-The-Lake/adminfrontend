@@ -1,68 +1,38 @@
-import React, {useEffect, useState} from 'react';
-import EventForm, {
-	type EventFormSchema,
-	useEventForm,
-} from '../../../components/forms/event';
-import {getEventById, updateEvent} from '../../../services/event-service';
-import {useLocation, useNavigate} from 'react-router-dom';
+import React from 'react';
+import EventForm from '../../../components/forms/event';
+import {LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
-import {Button} from '../../../components/ui/button';
-import {toast} from '../../../components/ui/use-toast';
-import {defaultEventDto, type EventDto} from '../../../models/api/event.model';
-import {tryGetErrorMessage} from '../../../lib/utils';
+import {defaultEventDto} from '../../../models/api/event.model';
+import {eventDetailOptions, useUpdateEvent} from '../../../queries/events';
+import {QueryClient, useQuery} from '@tanstack/react-query';
 
-const EventOverview: React.FC = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
-	const eventId = location.pathname.split('/').pop();
-
-	const [defaultValues, setDefaultValues] = useState<EventDto>(defaultEventDto);
-
-	const form = useEventForm();
-	const [isLoading, setIsLoading] = useState(true);
-	useEffect(() => {
-		const fetchEvent = async () => {
-			try {
-				if (!eventId) {
-					console.error('Event ID is not defined');
-					navigate('/');
-					return;
-				}
-
-				const event = await getEventById(Number(eventId));
-				const transformedEvent: EventDto = {
-					title: event.title,
-					description: event.description,
-					date: event.date,
-				};
-				setDefaultValues(transformedEvent);
-				setIsLoading(false);
-			} catch (error) {
-				console.error('Error fetching event:', error);
-				setIsLoading(false);
-			}
-		};
-
-		fetchEvent()
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, [eventId, navigate]);
-
-	const handleUpdate = async (event: EventDto) => {
-		try {
-			await updateEvent(Number(eventId), event);
-		} catch (error) {
-			console.error('Error updating event:', error);
-			return tryGetErrorMessage(error);
+export const loader =
+	(queryClient: QueryClient) =>
+	async ({params}: LoaderFunctionArgs) => {
+		if (!params.id) {
+			// const navigate = useNavigate();
+			throw new Error('No event ID provided');
+			// navigate('/'); // todo! see which makes more sense
 		}
 
-		return true;
+		await queryClient.ensureQueryData(eventDetailOptions(Number(params.id)));
+		return {eventId: params.id};
 	};
 
+const EventOverview: React.FC = () => {
+	const {eventId} = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
+	>;
+	const {data: event, isPending} = useQuery({
+		...eventDetailOptions(Number(eventId)),
+		initialData: defaultEventDto,
+	});
+
+	const updateEventMutation = useUpdateEvent(Number(eventId));
 
 	return (
 		<div className="flex flex-col items-start justify-between max-h-fit w-full">
-			<LoadingSpinner isLoading={isLoading} />
+			<LoadingSpinner isLoading={isPending} />
 
 			<div className="w-full flex flex-col lg:flex-row">
 				<div className="w-full my-2">
@@ -70,14 +40,11 @@ const EventOverview: React.FC = () => {
 					<p className="mt-2 mb-8 text-gray-600">
 						Enter the basic data for the event
 					</p>
-					<EventForm 
-						onSubmit={handleUpdate}						
-						onSuccessfullySubmitted={() => {
-							toast({
-								description: 'Event successfully saved.',
-							});
-						}}
-						model={defaultValues} />
+					<EventForm
+						mutation={updateEventMutation}
+						model={event}
+						isCreate={false}
+					/>
 				</div>
 				{/*
 				<Separator orientation="vertical" className="h-full" />
@@ -86,11 +53,6 @@ const EventOverview: React.FC = () => {
 				</div>
 				<div className="hidden lg:block mx-4"></div>
 				*/}
-			</div>
-			<div className="mt-4 flex justify-end w-full">
-				<Button type="submit" onClick={form.handleSubmit(handleUpdate)}>
-					Save Changes
-				</Button>
 			</div>
 		</div>
 	);

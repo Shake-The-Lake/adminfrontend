@@ -128,7 +128,7 @@ const ActivityTypesPage = () => {
 									i18n.language,
 									activityType.description,
 								)}
-								handleEdit={handleEdit}
+								onArrowClick={handleEdit}
 								handleDelete={handleDelete}
 							/>
 						</div>
@@ -141,7 +141,7 @@ const ActivityTypesPage = () => {
 					isOpen={isCreateDialogOpen}
 					onClose={closeCreateDialog}
 					onOpen={openCreateDialog}
-					formId='activityType'>
+					formId="activityType">
 					<ActivityTypeForm
 						onSubmit={handleCreateNewActivityType}
 						onSuccessfullySubmitted={closeCreateDialog}

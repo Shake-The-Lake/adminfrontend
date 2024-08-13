@@ -1,26 +1,21 @@
-import React from 'react';
-import {z} from 'zod';
-import {defaultEventDto, type EventDto} from '../../models/api/event.model';
-import {createEvent} from '../../services/event-service';
+import React, {useEffect} from 'react';
+import {defaultEventDto} from '../../models/api/event.model';
 import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm from '../../components/forms/event';
-import {tryGetErrorMessage} from '../../lib/utils';
-import {toast} from '../../components/ui/use-toast';
+import {useCreateEvent} from '../../queries/events';
+import {useNavigate} from 'react-router-dom';
 
 // Todo! sometimes this generates an error, investigate sometime
 // Cannot update a component (`CreateEventDialog`) while rendering a different component (`Controller`). To locate the bad setState() call inside `Controller`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 const CreateEventDialog: React.FC = () => {
+	const navigate = useNavigate();
+	const createEventMutation = useCreateEvent();
 
-	const handleSubmit = async (dto: EventDto) => {
-		try {
-			await createEvent(dto);
-		} catch (error) {
-			console.error('Failed to create event:', error);
-			return tryGetErrorMessage(error);
+	useEffect(() => {
+		if (createEventMutation.isSuccess && !!createEventMutation.data?.id) {
+			navigate('/event/' + createEventMutation.data.id);
 		}
-
-		return true;
-	};
+	}, [createEventMutation.isSuccess, createEventMutation.data?.id]);
 
 	return (
 		<StlDialog
@@ -29,13 +24,9 @@ const CreateEventDialog: React.FC = () => {
 			triggerLabel="Add new event"
 			formId="event">
 			<EventForm
-				onSubmit={handleSubmit}						
-				onSuccessfullySubmitted={() => {
-					toast({
-						description: 'Event successfully saved.',
-					});
-				}}
+				mutation={createEventMutation}
 				model={defaultEventDto}
+				isCreate={true}
 			/>
 		</StlDialog>
 	);
