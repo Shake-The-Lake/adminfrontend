@@ -1,11 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {z} from 'zod';
-import {
-	type SubmitHandler,
-	useForm,
-	type SubmitErrorHandler,
-	Controller,
-} from 'react-hook-form';
+import {type SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -30,6 +25,7 @@ import {
 	getTimeStringFromWholeDate,
 	getTranslation,
 	getWholeDateFromTimeString,
+	onInvalidFormHandler,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
@@ -126,23 +122,13 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		}
 	};
 
-	const onInvalid: SubmitErrorHandler<TimeSlotFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead, make it global
-
-		toast({
-			variant: 'destructive',
-			title: 'Could not be saved.',
-			description: 'There are validation errors in the form.',
-		});
-	};
-
 	return (
 		<>
 			<Form {...form}>
 				<form
 					id="timeSlot"
 					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
+					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="fromTime"
 						control={form.control}

@@ -1,10 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {z} from 'zod';
-import {
-	type SubmitHandler,
-	useForm,
-	type SubmitErrorHandler,
-} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -16,8 +12,7 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {useTranslation} from 'react-i18next';
-import {getTranslation} from '../../lib/utils';
+import {onInvalidFormHandler} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {useToast} from '../ui/use-toast';
@@ -83,23 +78,13 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		}
 	};
 
-	const onInvalid: SubmitErrorHandler<BoatFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
-
-		toast({
-			variant: 'destructive',
-			title: 'Could not be saved.',
-			description: 'There are validation errors in the form.',
-		});
-	};
-
 	return (
 		<>
 			<Form {...form}>
 				<form
 					id="boat"
 					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
+					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="name"
 						control={form.control}

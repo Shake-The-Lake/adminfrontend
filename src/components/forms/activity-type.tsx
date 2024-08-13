@@ -23,6 +23,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
 import {useToast} from '../ui/use-toast';
 import {Textarea} from '../ui/textarea';
+import {onInvalidFormHandler} from '../../lib/utils';
 
 const localizedStringSchema = z.object({
 	en: z.string(),
@@ -99,8 +100,6 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead, make it global
-
 		const englishErrors =
 			errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
 		const germanErrors =
@@ -118,11 +117,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 
 		setTabWithErrors(errorLanguages);
 
-		toast({
-			variant: 'destructive',
-			title: 'Could not be saved.',
-			description: 'There are validation errors in the form.',
-		});
+		onInvalidFormHandler.call(this, errors);
 	};
 
 	return (

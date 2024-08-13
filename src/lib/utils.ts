@@ -1,6 +1,8 @@
 import {type ClassValue, clsx} from 'clsx';
 import {twMerge} from 'tailwind-merge';
 import {type LocalizedStringDto} from '../models/api/localized-string';
+import {FieldErrors, SubmitErrorHandler} from 'react-hook-form';
+import {toast} from 'sonner';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -52,6 +54,17 @@ export function tryGetErrorMessage(error: unknown) {
 
 	return errorMessage;
 }
+
+// todo! maybe put into better place?
+export const onInvalidFormHandler: SubmitErrorHandler<any> = (
+	errors: FieldErrors<any>,
+) => {
+	console.log('form has failed to submit on error, ', errors);
+
+	toast.error('Could not be saved.', {
+		description: 'There are validation errors in the form.',
+	});
+};
 
 export function getTimeStringFromWholeDate(date: Date | undefined) {
 	const validDate = date instanceof Date ? date : new Date(date);
