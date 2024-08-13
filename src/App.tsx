@@ -21,6 +21,7 @@ import {getActivityTypeById} from './services/activity-type-service';
 import {getBoatById} from './services/boat-service';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import {Toaster} from './components/ui/sonner';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -96,6 +97,7 @@ function App() {
 				fallbackElement={<div>{t('loading')}</div>}
 			/>
 			<ReactQueryDevtools initialIsOpen={false} />
+			<Toaster position="top-center" closeButton />
 		</QueryClientProvider>
 	);
 }
