@@ -10,7 +10,7 @@ import {
 } from './navigation/navigation-models';
 import {Toaster} from './ui/toaster';
 import {type QueryClient, useQuery} from '@tanstack/react-query';
-import {eventDetailOptions} from '../queries/events';
+import {eventDetailOptions} from '../queries/event';
 
 export const loader =
 	(queryClient: QueryClient) =>

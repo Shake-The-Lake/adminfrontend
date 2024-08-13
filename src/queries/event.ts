@@ -5,6 +5,7 @@ import {
 	useMutation,
 	useQuery,
 	useQueryClient,
+	type QueryKey,
 } from '@tanstack/react-query';
 import {
 	getAllEvents,
@@ -15,8 +16,8 @@ import {
 } from '../services/event-service';
 
 export const keys = {
-	all: () => ['events'],
-	detail: (id: number, expanded: boolean) => ['events', 'detail', {id, expanded}],
+	all: () => ['events'] as QueryKey,
+	detail: (id: number, expanded: boolean) => ['events', 'detail', id, expanded] as QueryKey,
 };
 
 export const eventsOptions = () => queryOptions({

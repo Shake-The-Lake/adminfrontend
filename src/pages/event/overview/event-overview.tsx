@@ -2,9 +2,13 @@ import React from 'react';
 import EventForm from '../../../components/forms/event';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
+import {
+	eventDetailOptions,
+	useEventDetail,
+	useUpdateEvent,
+} from '../../../queries/event';
+import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import {defaultEventDto} from '../../../models/api/event.model';
-import {eventDetailOptions, useUpdateEvent} from '../../../queries/events';
-import {type QueryClient, useQuery} from '@tanstack/react-query';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -15,20 +19,20 @@ export const loader =
 			// Navigate('/'); // todo! see which makes more sense
 			}
 
-			await queryClient.ensureQueryData(eventDetailOptions(Number(params.id)));
-			return {eventId: params.id};
+			await queryClient.ensureQueryData(
+				eventDetailOptions(Number(params.id), false),
+			);
+			return {eventId: Number(params.id)};
 		};
 
 const EventOverview: React.FC = () => {
+	const queryClient = useQueryClient();
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: event, isPending} = useQuery({
-		...eventDetailOptions(Number(eventId)),
-		initialData: defaultEventDto,
-	});
+	const {data: event, isPending} = useEventDetail(queryClient, eventId, false);
 
-	const updateEventMutation = useUpdateEvent(Number(eventId));
+	const updateMutation = useUpdateEvent(eventId);
 
 	return (
 		<div className="flex flex-col items-start justify-between max-h-fit w-full">
@@ -41,8 +45,8 @@ const EventOverview: React.FC = () => {
 						Enter the basic data for the event
 					</p>
 					<EventForm
-						mutation={updateEventMutation}
-						model={event}
+						mutation={updateMutation}
+						model={event ?? defaultEventDto}
 						isCreate={false}
 					/>
 				</div>

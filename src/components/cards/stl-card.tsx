@@ -17,7 +17,7 @@ export type StlCardProps = {
 	description?: string;
 	onArrowClick: (id?: number) => Promise<void> | void;
 	handleDelete?: (id?: number) => Promise<boolean | string>;
-	deleteMutation?: UseMutationResult<any, Error, number | undefined>; // First any is return type, second is input
+	deleteMutation?: UseMutationResult<any, Error, number>; // First any is return type, second is input
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {

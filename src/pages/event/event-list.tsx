@@ -4,7 +4,7 @@ import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
 import {useNavigate} from 'react-router-dom';
 import {type QueryClient, useQuery} from '@tanstack/react-query';
-import {eventsOptions, useDeleteEvent} from '../../queries/events';
+import {eventsOptions, useDeleteEvent, useGetEvents} from '../../queries/event';
 import {MutationToaster} from '../../components/common/mutation-toaster';
 
 export const loader = (queryClient: QueryClient) => async () =>
@@ -18,8 +18,8 @@ const EventList = () => {
 
 	// todo! error, when navigating back by browser button.. need replace suspense?
 	// console.js:273 React Router caught the following error during render Error: A component suspended while responding to synchronous input. This will cause the UI to be replaced with a loading indicator. To fix, updates that suspend should be wrapped with startTransition.
-	const {data: events, isPending, error} = useQuery(eventsOptions());
-	const deleteEventMutation = useDeleteEvent();
+	const {data: events, isPending, error} = useGetEvents();
+	const deleteMutation = useDeleteEvent();
 
 	// Todo! add "real" error handling. maybe use the mutation.error to handle this? make an error component that takes that as an input and displays the sonner. important! not per default on card, because then it would get triggered for each
 
@@ -29,8 +29,8 @@ const EventList = () => {
 
 	return (
 		<div className="flex justify-center w-full max-w-lg">
-			<LoadingSpinner isLoading={isPending} />
-			<MutationToaster type="delete" mutation={deleteEventMutation} />
+			<LoadingSpinner isLoading={isPending || deleteMutation.isPending} />
+			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="w-full max-w-6xl p-4">
 				<div className="mb-5">
@@ -44,7 +44,7 @@ const EventList = () => {
 									<StlCard
 										{...event}
 										onArrowClick={handleEdit}
-										deleteMutation={deleteEventMutation}
+										deleteMutation={deleteMutation}
 									/>
 								</li>
 							))
@@ -53,7 +53,7 @@ const EventList = () => {
 						)}
 					</ul>
 				) : (
-					<p>{error.message}</p>
+					<p>Failed to load events!</p>
 				)}
 			</div>
 		</div>

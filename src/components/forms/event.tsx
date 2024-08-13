@@ -21,12 +21,6 @@ export const eventFormSchema = z.object({
 		.transform((val) => new Date(val)),
 });
 
-export const useEventForm = () =>
-	useForm<z.infer<typeof eventFormSchema>>({
-		// Resolver: zodResolver(eventFormSchema), validation disabled because of missing error handling & onSubmit doesnt work
-		mode: 'onChange',
-	});
-
 export type EventFormSchema = z.infer<typeof eventFormSchema>;
 
 type EventFormProps = {
