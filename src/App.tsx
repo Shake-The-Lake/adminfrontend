@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
-import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DefaultLayout from './components/default-layout';
 import EventDetailLayout from './components/event-detail-layout';
 import {eventDetailRoutes} from './constants';
@@ -19,6 +19,16 @@ import {
 import {getEventById} from './services/event-service';
 import {getActivityTypeById} from './services/activity-type-service';
 import {getBoatById} from './services/boat-service';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 1000 * 60,
+		},
+	},
+});
 
 const router = createBrowserRouter([
 	{
@@ -78,11 +88,15 @@ const router = createBrowserRouter([
 
 function App() {
 	const {t} = useTranslation();
+
 	return (
-		<RouterProvider
-			router={router}
-			fallbackElement={<div>{t('loading')}</div>}
-		/>
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider
+				router={router}
+				fallbackElement={<div>{t('loading')}</div>}
+			/>
+			<ReactQueryDevtools initialIsOpen={false} />
+		</QueryClientProvider>
 	);
 }
 
