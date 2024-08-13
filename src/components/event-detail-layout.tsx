@@ -1,6 +1,6 @@
 import React from 'react';
 import SideNavigation from './navigation/side-navigation';
-import {LoaderFunctionArgs, Outlet, useLoaderData} from 'react-router-dom';
+import {type LoaderFunctionArgs, Outlet, useLoaderData} from 'react-router-dom';
 import HeaderEvent from './header/header-event';
 import Footer from './footer/footer';
 import {useTranslation} from 'react-i18next';
@@ -9,27 +9,27 @@ import {
 	getNavigationItemsForEvent,
 } from './navigation/navigation-models';
 import {Toaster} from './ui/toaster';
-import {QueryClient, useQuery} from '@tanstack/react-query';
+import {type QueryClient, useQuery} from '@tanstack/react-query';
 import {eventDetailOptions} from '../queries/events';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			// const navigate = useNavigate();
-			throw new Error('No event ID provided');
-			// navigate('/'); // todo! see which makes more sense
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+			// Const navigate = useNavigate();
+				throw new Error('No event ID provided');
+			// Navigate('/'); // todo! see which makes more sense
+			}
 
-		await queryClient.ensureQueryData(
-			eventDetailOptions(Number(params.id), true),
-		);
-		return {eventId: params.id};
-	};
+			await queryClient.ensureQueryData(
+				eventDetailOptions(Number(params.id), true),
+			);
+			return {eventId: params.id};
+		};
 
 const EventDetailLayout: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event} = useQuery(eventDetailOptions(Number(eventId), true));
 	const {i18n} = useTranslation();

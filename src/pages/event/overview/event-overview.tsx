@@ -1,27 +1,27 @@
 import React from 'react';
 import EventForm from '../../../components/forms/event';
-import {LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {defaultEventDto} from '../../../models/api/event.model';
 import {eventDetailOptions, useUpdateEvent} from '../../../queries/events';
-import {QueryClient, useQuery} from '@tanstack/react-query';
+import {type QueryClient, useQuery} from '@tanstack/react-query';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			// const navigate = useNavigate();
-			throw new Error('No event ID provided');
-			// navigate('/'); // todo! see which makes more sense
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+			// Const navigate = useNavigate();
+				throw new Error('No event ID provided');
+			// Navigate('/'); // todo! see which makes more sense
+			}
 
-		await queryClient.ensureQueryData(eventDetailOptions(Number(params.id)));
-		return {eventId: params.id};
-	};
+			await queryClient.ensureQueryData(eventDetailOptions(Number(params.id)));
+			return {eventId: params.id};
+		};
 
 const EventOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event, isPending} = useQuery({
 		...eventDetailOptions(Number(eventId)),

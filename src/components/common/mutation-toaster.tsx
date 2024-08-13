@@ -1,18 +1,19 @@
+import React from 'react';
 import {useEffect} from 'react';
 import {toast} from 'sonner';
 import {tryGetErrorMessage} from '../../lib/utils';
-import {UseMutationResult} from '@tanstack/react-query';
+import {type UseMutationResult} from '@tanstack/react-query';
 
 type MutationToasterProps = {
 	type: 'create' | 'update' | 'delete';
-	mutation?: UseMutationResult<any, Error, any, unknown>; // first any is return type, second is input
-	error?: Error | null;
+	mutation?: UseMutationResult<any, Error, any>; // First any is return type, second is input
+	error?: Error | undefined;
 	isValidationError?: boolean;
 };
 
 const MutationToaster = ({...props}: MutationToasterProps) => {
 	useEffect(() => {
-		// todo! test a lot!
+		// Todo! test a lot!
 		if (props.error) {
 			const message = tryGetErrorMessage(props.error);
 			toast.error(getErrorMessageDependingOnType(props.type), {
@@ -28,7 +29,7 @@ const MutationToaster = ({...props}: MutationToasterProps) => {
 		}
 	}, [props.mutation?.isSuccess]);
 
-	// todo! handle styling better, make error red
+	// Todo! handle styling better, make error red
 	return <></>;
 };
 
@@ -44,9 +45,6 @@ function getSuccessMessageDependingOnType(
 			return 'Item was saved successfully!';
 		case 'delete':
 			return 'Item was deleted successfully!';
-
-		default:
-			return 'It was a success!';
 	}
 }
 
@@ -58,8 +56,5 @@ function getErrorMessageDependingOnType(type: 'create' | 'update' | 'delete') {
 			return 'There was an error when saving.';
 		case 'delete':
 			return 'There was an error when deleting.';
-
-		default:
-			return 'An error occurred!';
 	}
 }

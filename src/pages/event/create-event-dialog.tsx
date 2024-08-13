@@ -12,7 +12,7 @@ const CreateEventDialog: React.FC = () => {
 	const createEventMutation = useCreateEvent();
 
 	useEffect(() => {
-		if (createEventMutation.isSuccess && !!createEventMutation.data?.id) {
+		if (createEventMutation.isSuccess && Boolean(createEventMutation.data?.id)) {
 			navigate('/event/' + createEventMutation.data.id);
 		}
 	}, [createEventMutation.isSuccess, createEventMutation.data?.id]);

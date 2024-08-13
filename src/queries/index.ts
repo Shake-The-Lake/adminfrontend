@@ -1,5 +1,5 @@
-import { keys as eventKeys } from "./events";
+import {keys as eventKeys} from './events';
 
 export const queries = {
-    event: eventKeys
+	event: eventKeys,
 };

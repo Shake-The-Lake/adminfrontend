@@ -53,7 +53,7 @@ type TimeSlotFormProps = {
 	model: TimeSlotDto;
 	isCreate: boolean;
 	boat?: BoatDto;
-	// status: string; // todo!still necessary?
+	// Status: string; // todo!still necessary?
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 

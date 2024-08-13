@@ -9,7 +9,7 @@ import {
 } from '../ui/card';
 import {Button} from '../ui/button';
 import {useToast} from '../ui/use-toast';
-import {UseMutationResult} from '@tanstack/react-query';
+import {type UseMutationResult} from '@tanstack/react-query';
 
 export type StlCardProps = {
 	id?: number;
@@ -17,7 +17,7 @@ export type StlCardProps = {
 	description?: string;
 	onArrowClick: (id?: number) => Promise<void> | void;
 	handleDelete?: (id?: number) => Promise<boolean | string>;
-	deleteMutation?: UseMutationResult<any, Error, number | undefined, unknown>; // first any is return type, second is input
+	deleteMutation?: UseMutationResult<any, Error, number | undefined>; // First any is return type, second is input
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
@@ -27,7 +27,7 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 		await props.onArrowClick(props.id);
 	};
 
-	// todo! slowly refactor all these!
+	// Todo! slowly refactor all these!
 	const handleDelete = async () => {
 		if (props.deleteMutation) {
 			props.deleteMutation.mutate(props.id);

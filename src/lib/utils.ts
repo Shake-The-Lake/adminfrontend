@@ -1,7 +1,7 @@
 import {type ClassValue, clsx} from 'clsx';
 import {twMerge} from 'tailwind-merge';
 import {type LocalizedStringDto} from '../models/api/localized-string';
-import {FieldErrors, SubmitErrorHandler} from 'react-hook-form';
+import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
 import {toast} from 'sonner';
 
 export function cn(...inputs: ClassValue[]) {
@@ -55,7 +55,7 @@ export function tryGetErrorMessage(error: unknown) {
 	return errorMessage;
 }
 
-// todo! maybe put into better place?
+// Todo! maybe put into better place?
 export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	errors: FieldErrors<any>,
 ) => {

@@ -1,13 +1,14 @@
+import React from 'react';
 import CreateEventDialog from './create-event-dialog';
 import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
 import {useNavigate} from 'react-router-dom';
-import {QueryClient, useQuery} from '@tanstack/react-query';
+import {type QueryClient, useQuery} from '@tanstack/react-query';
 import {eventsOptions, useDeleteEvent} from '../../queries/events';
 import {MutationToaster} from '../../components/common/mutation-toaster';
 
 export const loader = (queryClient: QueryClient) => async () =>
-	await queryClient.ensureQueryData(eventsOptions());
+	queryClient.ensureQueryData(eventsOptions());
 
 const EventList = () => {
 	const navigate = useNavigate();
@@ -35,9 +36,7 @@ const EventList = () => {
 				<div className="mb-5">
 					<CreateEventDialog />
 				</div>
-				{error != null ? (
-					<p>{error.message}</p>
-				) : (
+				{error === null ? (
 					<ul className="mb-5">
 						{events && events.length > 0 ? (
 							events.map((event) => (
@@ -53,6 +52,8 @@ const EventList = () => {
 							<p className="text-center">No events yet.</p>
 						)}
 					</ul>
+				) : (
+					<p>{error.message}</p>
 				)}
 			</div>
 		</div>

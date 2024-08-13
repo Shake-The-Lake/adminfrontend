@@ -25,7 +25,7 @@ const BoatsOverview: React.FC = () => {
 	useEffect(() => {
 		const fetchBoats = async () => {
 			try {
-				const event = await getEventById(Number(eventId), 'boats'); // todo! move this wrapper to boat service
+				const event = await getEventById(Number(eventId), 'boats'); // Todo! move this wrapper to boat service
 
 				setBoats(event?.boats ?? []);
 			} catch (error) {

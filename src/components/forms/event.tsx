@@ -7,7 +7,7 @@ import {Button} from '../ui/button';
 import {type EventDto} from '../../models/api/event.model';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {onInvalidFormHandler} from '../../lib/utils';
-import {UseMutationResult} from '@tanstack/react-query';
+import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 
 export const eventFormSchema = z.object({
@@ -31,7 +31,7 @@ export type EventFormSchema = z.infer<typeof eventFormSchema>;
 
 type EventFormProps = {
 	model: EventDto;
-	mutation: UseMutationResult<any, Error, EventDto, unknown>; // first any is return type, second is input
+	mutation: UseMutationResult<any, Error, EventDto>; // First any is return type, second is input
 	isCreate: boolean;
 };
 

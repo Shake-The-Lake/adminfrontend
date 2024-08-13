@@ -1,6 +1,6 @@
 import {type EventDto} from '../models/api/event.model';
 import {
-	QueryClient,
+	type QueryClient,
 	queryOptions,
 	useMutation,
 	useQuery,
@@ -16,26 +16,22 @@ import {
 
 export const keys = {
 	all: () => ['events'],
-	detail: (id: number, expanded: boolean) => ['events', 'detail', { id, expanded }],
+	detail: (id: number, expanded: boolean) => ['events', 'detail', {id, expanded}],
 };
 
-export const eventsOptions = () => {
-	return queryOptions({
-		queryKey: keys.all(),
-		queryFn: getAllEvents,
-	});
-};
+export const eventsOptions = () => queryOptions({
+	queryKey: keys.all(),
+	queryFn: getAllEvents,
+});
 
 export function useGetEvents() {
 	return useQuery(eventsOptions());
 }
 
-export const eventDetailOptions = (id: number, expanded: boolean = false) => {
-	return queryOptions({
-		queryKey: keys.detail(id, expanded),
-		queryFn: async () => getEventById(id, expanded ? 'boats,activityTypes' : undefined),
-	});
-};
+export const eventDetailOptions = (id: number, expanded = false) => queryOptions({
+	queryKey: keys.detail(id, expanded),
+	queryFn: async () => getEventById(id, expanded ? 'boats,activityTypes' : undefined),
+});
 
 export function useEventDetail(
 	queryClient: QueryClient,
@@ -44,7 +40,7 @@ export function useEventDetail(
 ) {
 	return useQuery({
 		...eventDetailOptions(id, expanded),
-		initialData: () => {
+		initialData() {
 			const queryData: EventDto[] | undefined = queryClient.getQueryData(
 				keys.all(),
 			);
@@ -57,12 +53,12 @@ export function useCreateEvent() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: createEvent,
-		onSuccess: (data) => {
+		async onSuccess(data) {
 			if (data) {
 				queryClient.setQueryData([keys.detail(data.id ?? 0, false)], data);
 			}
 
-			queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
+			await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
 		},
 	});
 }
@@ -71,7 +67,7 @@ export function useUpdateEvent(id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async (event: EventDto) => updateEvent(id, event),
-		onSuccess: (data) => {
+		async onSuccess(data) {
 			const oldData: EventDto | undefined = queryClient.getQueryData(
 				keys.detail(id, true),
 			);
@@ -86,7 +82,7 @@ export function useUpdateEvent(id: number) {
 			queryClient.setQueryData([keys.detail(id, false)], newData);
 			queryClient.setQueryData([keys.detail(id, true)], newData);
 
-			queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
+			await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
 		},
 	});
 }
@@ -95,8 +91,8 @@ export function useDeleteEvent() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: deleteEvent,
-		onSuccess: () => {
-			queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
+		async onSuccess() {
+			await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
 		},
 	});
 }
