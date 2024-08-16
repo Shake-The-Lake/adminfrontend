@@ -1,33 +1,25 @@
-import React, {useEffect} from 'react';
-import {type SubmitErrorHandler, type SubmitHandler, useForm} from 'react-hook-form';
+import React from 'react';
+import {useForm, type SubmitErrorHandler, type SubmitHandler} from 'react-hook-form';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
-import {Button} from '../ui/button';
 import {type EventDto} from '../../models/api/event.model';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {toast} from '../ui/use-toast';
 
+// Schema definition
 export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
-	date: z.string().refine(val => !isNaN(Date.parse(val)), {
-		message: 'Invalid date',
-	}).transform(val => new Date(val)),
+	date: z.string().transform(val => new Date(val)),
 });
 
-export const useEventForm = () =>
-	useForm<z.infer<typeof eventFormSchema>>({
-		// Resolver: zodResolver(eventFormSchema), validation disabled because of missing error handling & onSubmit doesnt work
-		mode: 'onChange',
-	});
-	
 export type EventFormSchema = z.infer<typeof eventFormSchema>;
 
 type EventFormProps = {
-	onSubmit: (dto: EventDto) => Promise<boolean | string>; // True if successfully saved, error if not
+	onSubmit: (dto: EventDto) => Promise<boolean | string>;
 	model: EventDto;
-	onSuccessfullySubmitted: () => void; 
+	onSuccessfullySubmitted: () => void;
 };
 
 const EventForm: React.FC<EventFormProps> = ({
@@ -37,7 +29,11 @@ const EventForm: React.FC<EventFormProps> = ({
 }) => {
 	const form = useForm<EventFormSchema>({
 		mode: 'onChange',
-		defaultValues: model,
+		defaultValues: {
+			title: model.title,
+			description: model.description,
+			date: new Date(model.date).toISOString().slice(0, 10),
+		},
 		resolver: zodResolver(eventFormSchema),
 	});
 
@@ -45,11 +41,11 @@ const EventForm: React.FC<EventFormProps> = ({
 		const event: EventDto = {
 			...values,
 			title: values.title,
-			date: values.date,
-		}; 
+			date: new Date(values.date),
+		};
 
 		const success = await onSubmit(event);
-	
+
 		if (success === true) {
 			onSuccessfullySubmitted();
 		} else if (typeof success === 'string') {
@@ -62,7 +58,7 @@ const EventForm: React.FC<EventFormProps> = ({
 	};
 
 	const onInvalid: SubmitErrorHandler<EventFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
+		console.log('form has failed to submit on error, ', errors);
 
 		toast({
 			variant: 'destructive',
@@ -114,12 +110,11 @@ const EventForm: React.FC<EventFormProps> = ({
 							<FormItem>
 								<FormLabel>Event Date</FormLabel>
 								<FormControl>
-									<Input type="datetime-local" {...field} className="input" />
+									<Input type="date" {...field} className="input" />
 								</FormControl>
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" style={{display: 'none'}} />
 				</form>
 			</Form>
 		</>

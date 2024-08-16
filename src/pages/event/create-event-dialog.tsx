@@ -1,5 +1,4 @@
 import React from 'react';
-import {z} from 'zod';
 import {defaultEventDto, type EventDto} from '../../models/api/event.model';
 import {createEvent} from '../../services/event-service';
 import StlDialog from '../../components/dialog/stl-dialog';
@@ -8,22 +7,18 @@ import {tryGetErrorMessage} from '../../lib/utils';
 import {toast} from '../../components/ui/use-toast';
 import {useNavigate} from 'react-router-dom';
 
-// Todo! sometimes this generates an error, investigate sometime
-// Cannot update a component (`CreateEventDialog`) while rendering a different component (`Controller`). To locate the bad setState() call inside `Controller`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
+
 	const handleSubmit = async (dto: EventDto) => {
 		try {
-			await createEvent(dto).then((response) => {
-				navigate('/event/' + response.id);
-				return response;
-			});
+			const response = await createEvent(dto);
+			navigate('/event/' + response.id);
+			return true;
 		} catch (error) {
 			console.error('Failed to create event:', error);
 			return tryGetErrorMessage(error);
 		}
-
-		return true;
 	};
 
 	return (
@@ -31,9 +26,10 @@ const CreateEventDialog: React.FC = () => {
 			title="Create Event"
 			description="Add a new event by entering the basic meta data needed."
 			triggerLabel="Add new event"
-			formId="event">
+			formId="event"
+		>
 			<EventForm
-				onSubmit={handleSubmit}						
+				onSubmit={handleSubmit}
 				onSuccessfullySubmitted={() => {
 					toast({
 						description: 'Event successfully saved.',

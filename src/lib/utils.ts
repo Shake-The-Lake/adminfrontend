@@ -74,6 +74,13 @@ export function getWholeDateFromTimeString(date: Date, timeString: string) {
 	return date; // Todo! or maybe make completely new date
 }
 
+// Utility function to format date
+export function formatDateTimeLocal(date: Date): string {
+	const offset = date.getTimezoneOffset();
+	const adjustedDate = new Date(date.getTime() - offset * 60 * 1000);
+	return adjustedDate.toISOString().slice(0, 16);
+}
+
 export function formatTimeLocal(date: Date) {
 
 	const hours = date.getHours();

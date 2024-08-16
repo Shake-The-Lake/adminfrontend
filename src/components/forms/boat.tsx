@@ -29,7 +29,7 @@ import {
 } from '../ui/select';
 import {useTranslation} from 'react-i18next';
 import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {getTranslation} from '../../lib/utils';
+import {formatTimeLocal, getTranslation} from '../../lib/utils';
 import {type ActivityTypeDto} from '../../models/api/activity-type.model';
 
 // Helper function to parse and format time strings
@@ -41,13 +41,6 @@ const parseTime = (timeString: string): Date => {
 	return date;
 };
 
-const formatTimeLocal = (date: Date): string=> {
-	const padZero = (num) => (num < 10 ? `0${num}` : num);
-	const hours = padZero(date.getHours());
-	const minutes = padZero(date.getMinutes());
-	return `${hours}:${minutes}`;
-};
-
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
 	name: z.string().min(5),
@@ -56,10 +49,10 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
+	availableFrom: z.date().refine(val => /^\d{2}:\d{2}$/.exec(val), {
 		message: 'Invalid time format',
 	}).transform(parseTime),
-	availableUntil: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
+	availableUntil: z.date().refine(val => /^\d{2}:\d{2}$/.exec(val), {
 		message: 'Invalid time format',
 	}).transform(parseTime),
 	eventId: z.number().optional(),

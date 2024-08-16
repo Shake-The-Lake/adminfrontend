@@ -1,8 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import EventForm, {
-	type EventFormSchema,
-	useEventForm,
-} from '../../../components/forms/event';
+import React, {useEffect, useState, useRef} from 'react';
+import EventForm from '../../../components/forms/event';
 import {getEventById, updateEvent} from '../../../services/event-service';
 import {useLocation, useNavigate} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
@@ -17,9 +14,8 @@ const EventOverview: React.FC = () => {
 	const eventId = location.pathname.split('/').pop();
 
 	const [defaultValues, setDefaultValues] = useState<EventDto>(defaultEventDto);
-
-	const form = useEventForm();
 	const [isLoading, setIsLoading] = useState(true);
+
 	useEffect(() => {
 		const fetchEvent = async () => {
 			try {
@@ -59,7 +55,6 @@ const EventOverview: React.FC = () => {
 		return true;
 	};
 
-
 	return (
 		<div className="flex flex-col items-start justify-between max-h-fit w-full">
 			<LoadingSpinner isLoading={isLoading} />
@@ -77,18 +72,12 @@ const EventOverview: React.FC = () => {
 								description: 'Event successfully saved.',
 							});
 						}}
-						model={defaultValues} />
+						model={defaultValues}
+					/>
 				</div>
-				{/*
-				<Separator orientation="vertical" className="h-full" />
-				<div className="w-full lg:w-1/2 flex flex-col">
-					<EntryValidation />
-				</div>
-				<div className="hidden lg:block mx-4"></div>
-				*/}
 			</div>
 			<div className="mt-4 flex justify-end w-full">
-				<Button type="submit" onClick={form.handleSubmit(handleUpdate)}>
+				<Button type="submit" form="event">
 					Save Changes
 				</Button>
 			</div>
