@@ -6,14 +6,18 @@ import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm from '../../components/forms/event';
 import {tryGetErrorMessage} from '../../lib/utils';
 import {toast} from '../../components/ui/use-toast';
+import {useNavigate} from 'react-router-dom';
 
 // Todo! sometimes this generates an error, investigate sometime
 // Cannot update a component (`CreateEventDialog`) while rendering a different component (`Controller`). To locate the bad setState() call inside `Controller`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 const CreateEventDialog: React.FC = () => {
-
+	const navigate = useNavigate();
 	const handleSubmit = async (dto: EventDto) => {
 		try {
-			await createEvent(dto);
+			await createEvent(dto).then((response) => {
+				navigate('/event/' + response.id);
+				return response;
+			});
 		} catch (error) {
 			console.error('Failed to create event:', error);
 			return tryGetErrorMessage(error);

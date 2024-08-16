@@ -37,7 +37,7 @@ const TimeSlotSchema = z.object({
 		const [hours, minutes] = value.split(':').map(Number);
 		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
 	}),
-	activityTypeId: z.number(),
+	activityTypeId: z.number().min(0).optional(),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
