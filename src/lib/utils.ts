@@ -3,6 +3,8 @@ import {twMerge} from 'tailwind-merge';
 import {type LocalizedStringDto} from '../models/api/localized-string';
 import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
 import {toast} from 'sonner';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useEffect} from 'react';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -65,6 +67,16 @@ export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 		description: 'There are validation errors in the form.',
 	});
 };
+
+export function useEmitSuccessIfSucceeded(onSuccessfullySubmitted: (() => void) | undefined, mutation: UseMutationResult<any, Error, any>) {
+	useEffect(() => {
+		if (onSuccessfullySubmitted &&
+			mutation?.isSuccess &&
+			Boolean(mutation.data?.id)) {
+			onSuccessfullySubmitted();
+		}
+	}, [mutation?.isSuccess, mutation?.data?.id]);
+}
 
 export function getTimeStringFromWholeDate(date: Date | undefined) {
 	const validDate = date instanceof Date ? date : new Date(date);

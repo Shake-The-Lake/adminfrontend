@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {z} from 'zod';
 import {type SubmitHandler, useForm} from 'react-hook-form';
 import {
@@ -12,10 +12,11 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {onInvalidFormHandler} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
-import {useToast} from '../ui/use-toast';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {MutationToaster} from '../common/mutation-toaster';
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -37,15 +38,15 @@ const boatFormSchema = z.object({
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
 
 type BoatFormProps = {
-	onSubmit: (dto: BoatDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: BoatDto;
+	mutation: UseMutationResult<any, Error, BoatDto>; // First any is return type, second is input
 	isCreate: boolean;
-	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
+	onSuccessfullySubmitted?: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const BoatForm: React.FC<BoatFormProps> = ({
 	model,
-	onSubmit,
+	mutation,
 	isCreate,
 	onSuccessfullySubmitted,
 }) => {
@@ -56,9 +57,10 @@ const BoatForm: React.FC<BoatFormProps> = ({
 	});
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const {toast} = useToast();
 
-	const onPrepareSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
+	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
+
+	const onSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
 		const boat: BoatDto = {
 			...values,
 			id: values.id ?? 0,
@@ -66,25 +68,20 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			timeSlotIds: model.timeSlotIds,
 		};
 
-		const success = await onSubmit(boat);
-		if (success === true) {
-			onSuccessfullySubmitted();
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when saving.',
-				description: success,
-			});
-		}
+		await mutation.mutateAsync(boat);
 	};
 
 	return (
 		<>
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={mutation}
+			/>
 			<Form {...form}>
 				<form
 					id="boat"
 					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalidFormHandler)}>
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="name"
 						control={form.control}

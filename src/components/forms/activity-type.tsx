@@ -22,7 +22,7 @@ import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useTranslation} from 'react-i18next';
 import {Textarea} from '../ui/textarea';
-import {onInvalidFormHandler} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 
@@ -72,16 +72,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 
 	const [tabWithErrors, setTabWithErrors] = useState<string[]>([]);
 
-	useEffect(() => {
-		if (
-			onSuccessfullySubmitted &&
-			mutation &&
-			mutation.isSuccess &&
-			Boolean(mutation.data?.id)
-		) {
-			onSuccessfullySubmitted();
-		}
-	}, [mutation?.isSuccess, mutation?.data?.id]);
+	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
 	const onSubmit: SubmitHandler<ActivityTypeFormSchema> = async (values) => {
 		setTabWithErrors([]);

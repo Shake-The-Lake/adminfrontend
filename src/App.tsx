@@ -1,4 +1,3 @@
-import React from 'react';
 import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
@@ -18,7 +17,6 @@ import {
 	HomePage,
 	SchedulePage,
 } from './pages';
-import {getBoatById} from './services/boat-service';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {Toaster} from './components/ui/sonner';
@@ -26,6 +24,8 @@ import {loader as eventsLoader} from './pages/event/event-list';
 import {loader as eventDetailLoader} from './pages/event/overview/event-overview';
 import {loader as activityTypesLoader} from './pages/event/activity-type/activity-types-page';
 import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
+import {loader as boatsLoader} from './pages/event/boat/boats-page';
+import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -71,13 +71,12 @@ const router = createBrowserRouter([
 			{
 				path: eventDetailRoutes.boats,
 				element: <BoatsOverview />,
+				loader: boatsLoader(queryClient),
 			},
 			{
 				path: `${eventDetailRoutes.boats}/${eventDetailRoutes.boatId}`,
 				element: <BoatPage />,
-				async loader({params}) {
-					return getBoatById(Number(params.boatId));
-				},
+				loader: boatDetailLoader(queryClient),
 			},
 			{
 				path: eventDetailRoutes.schedule,

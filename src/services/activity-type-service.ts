@@ -2,8 +2,7 @@ import axios from 'axios';
 import {type ActivityTypeDto} from '../models/api/activity-type.model';
 import sortBy from 'lodash-es/sortBy';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
 export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) =>
 	activityTypes

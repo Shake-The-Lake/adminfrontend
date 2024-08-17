@@ -19,7 +19,7 @@ export const loader =
 			}
 
 			if (!params.activityTypeId) {
-				throw new Error('No event ID provided');
+				throw new Error('No activity type ID provided');
 			}
 
 			await queryClient.ensureQueryData(
