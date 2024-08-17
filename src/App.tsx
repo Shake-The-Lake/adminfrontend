@@ -1,3 +1,4 @@
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';

@@ -26,11 +26,15 @@ import {
 	getTranslation,
 	getWholeDateFromTimeString,
 	onInvalidFormHandler,
+	useEmitSuccessIfSucceeded,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
 import {type ActivityTypeDto} from '../../models/api/activity-type.model';
 import {useTranslation} from 'react-i18next';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useGetActivityTypes} from '../../queries/activity-type';
+import {MutationToaster} from '../common/mutation-toaster';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -49,8 +53,8 @@ const TimeSlotSchema = z.object({
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
 
 type TimeSlotFormProps = {
-	onSubmit: (dto: TimeSlotDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: TimeSlotDto;
+	mutation: UseMutationResult<any, Error, TimeSlotDto>; // First any is return type, second is input
 	isCreate: boolean;
 	boat?: BoatDto;
 	// Status: string; // todo!still necessary?
@@ -58,11 +62,11 @@ type TimeSlotFormProps = {
 };
 
 const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
-	onSubmit,
 	model,
+	mutation,
 	isCreate,
-	onSuccessfullySubmitted,
 	boat,
+	onSuccessfullySubmitted,
 }) => {
 	const form = useForm<TimeSlotFormSchema>({
 		mode: 'onChange',
@@ -74,28 +78,16 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
-	const {toast} = useToast();
+
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 	const {i18n} = useTranslation();
-	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
 
-	useEffect(() => {
-		const fetchActivityTypes = async () => {
-			try {
-				const response = await getAllActivityTypesFromEvent(eventId);
-				setActivityTypes(response);
-			} catch (error) {
-				console.error('Failed to fetch activity types:', error);
-			}
-		};
+	const {data: activityTypes} = useGetActivityTypes(eventId);
 
-		fetchActivityTypes()
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, [eventId]);
+	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-	const onPrepareSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
+	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		const timeSlot: TimeSlotDto = {
 			...values,
 			fromTime: getWholeDateFromTimeString(
@@ -110,25 +102,21 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			id: model.id,
 			status: 'AVAILABLE',
 		};
-		const success = await onSubmit(timeSlot);
-		if (success === true) {
-			onSuccessfullySubmitted();
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when saving.',
-				description: success,
-			});
-		}
+
+		await mutation.mutateAsync(timeSlot);
 	};
 
 	return (
 		<>
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={mutation}
+			/>
 			<Form {...form}>
 				<form
 					id="timeSlot"
 					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalidFormHandler)}>
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="fromTime"
 						control={form.control}
@@ -180,7 +168,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 												{field.value
 													? getTranslation(
 														i18n.language,
-														activityTypes.find(
+														activityTypes?.find(
 															(type) => type.id === field.value,
 														)?.name,
 													)
@@ -188,7 +176,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 											</SelectValue>
 										</SelectTrigger>
 										<SelectContent>
-											{activityTypes.map((type) => (
+											{activityTypes?.map((type) => (
 												<SelectItem key={type.id} value={type.id.toString()}>
 													{getTranslation(i18n.language, type.name)}
 												</SelectItem>
