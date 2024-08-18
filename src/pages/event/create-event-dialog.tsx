@@ -1,25 +1,23 @@
-import React from 'react';
-import {defaultEventDto, type EventDto} from '../../models/api/event.model';
-import {createEvent} from '../../services/event-service';
+import React, {useEffect} from 'react';
+import {defaultEventDto} from '../../models/api/event.model';
 import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm from '../../components/forms/event';
-import {tryGetErrorMessage} from '../../lib/utils';
-import {toast} from '../../components/ui/use-toast';
+import {useCreateEvent} from '../../queries/event';
 import {useNavigate} from 'react-router-dom';
 
 const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
+	const createMutation = useCreateEvent();
 
-	const handleSubmit = async (dto: EventDto) => {
-		try {
-			const response = await createEvent(dto);
-			navigate('/event/' + response.id);
-			return true;
-		} catch (error) {
-			console.error('Failed to create event:', error);
-			return tryGetErrorMessage(error);
+	useEffect(() => {
+		if (
+			createMutation &&
+			createMutation.isSuccess &&
+			Boolean(createMutation.data?.id)
+		) {
+			navigate('/event/' + createMutation.data.id);
 		}
-	};
+	}, [createMutation?.isSuccess, createMutation?.data?.id]);
 
 	return (
 		<StlDialog
@@ -29,13 +27,9 @@ const CreateEventDialog: React.FC = () => {
 			formId="event"
 		>
 			<EventForm
-				onSubmit={handleSubmit}
-				onSuccessfullySubmitted={() => {
-					toast({
-						description: 'Event successfully saved.',
-					});
-				}}
+				mutation={createMutation}
 				model={defaultEventDto}
+				isCreate={true}
 			/>
 		</StlDialog>
 	);

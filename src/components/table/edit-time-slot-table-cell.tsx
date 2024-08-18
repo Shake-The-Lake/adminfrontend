@@ -7,23 +7,25 @@ import TimeSlotForm from '../forms/time-slot';
 import {type BoatDto} from '../../models/api/boat.model';
 import {toast} from '../ui/use-toast';
 import {Button} from '../ui/button';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useUpdateTimeSlot} from '../../queries/time-slot';
+import timeSlot from '../forms/time-slot';
 
-type EditTableCellProps = {
-	onUpdate: (dto: TimeSlotDto) => Promise<boolean | string>;
-	slot: TimeSlotDto;
+type EditTimeSlotTableCellProps = {
+	timeSlot: TimeSlotDto;
 	boat: BoatDto;
-	onDelete: (id: number) => void;
+	deleteMutation: UseMutationResult<any, Error, number>; // First any is return type, second is input
 };
 
-const EditTableCell: React.FC<EditTableCellProps> = ({
-	onUpdate,
-	onDelete,
-	slot,
+const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
+	timeSlot,
 	boat,
+	deleteMutation,
 }) => {
-
 	const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
+	const updateMutation = useUpdateTimeSlot(timeSlot?.id);
+	const handleDelete = async () => deleteMutation.mutateAsync(timeSlot?.id);
 
 	const openUpdateDialog = () => {
 		setIsUpdateDialogOpen(true);
@@ -32,8 +34,6 @@ const EditTableCell: React.FC<EditTableCellProps> = ({
 	const closeUpdateDialog = () => {
 		setIsUpdateDialogOpen(false);
 	};
-
-  
 
 	return (
 		<TableCell className="text-right">
@@ -48,29 +48,22 @@ const EditTableCell: React.FC<EditTableCellProps> = ({
 				isIcon={true}
 				formId="timeSlot">
 				<TimeSlotForm
-					model={slot}
-					onSubmit={onUpdate}
-					isCreate={true}
+					model={timeSlot}
+					mutation={updateMutation}
+					isCreate={false}
 					boat={boat}
-					onSuccessfullySubmitted={() => {
-						toast({
-							description: 'Time slot successfully updated.',
-						});
-						closeUpdateDialog();
-					}}
+					onSuccessfullySubmitted={closeUpdateDialog}
 				/>
 			</StlDialog>
 			<Button
 				variant="ghost"
 				size="icon"
 				className="items-center"
-				onClick={async () => {
-					onDelete(slot.id);
-				}}>
+				onClick={handleDelete}>
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
 		</TableCell>
 	);
 };
 
-export default EditTableCell;
+export default EditTimeSlotTableCell;

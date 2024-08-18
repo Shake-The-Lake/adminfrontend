@@ -1,25 +1,26 @@
 import axios from 'axios';
 import {type ActivityTypeDto} from '../models/api/activity-type.model';
+import sortBy from 'lodash-es/sortBy';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
-export const getAllActivityTypes = async (): Promise<ActivityTypeDto[]> => {
-	const response = await axios.get<ActivityTypeDto[]>(
-		`${baseUrl}/activitytype`,
-	); // Todo! is this really needed??
-	return response.data;
-};
+export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) =>
+	activityTypes
+		? sortBy(activityTypes, 'name.en')
+		: [];
 
+// Todo! refactor usage to use expanded event instead
 export const getAllActivityTypesFromEvent = async (
 	eventId: number,
 ): Promise<ActivityTypeDto[]> => {
 	const response = await axios.get<ActivityTypeDto[]>(
 		`${baseUrl}/activitytype`,
 	);
-	return response.data.filter(
+	const result = response.data.filter(
 		(activityType) => activityType.eventId === eventId,
 	);
+
+	return getSortedActivityTypes(result);
 };
 
 export const getActivityTypeById = async (

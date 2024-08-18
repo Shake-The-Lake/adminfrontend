@@ -1,11 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {z} from 'zod';
-import {
-	type SubmitHandler,
-	useForm,
-	type SubmitErrorHandler,
-	Controller,
-} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -16,21 +11,12 @@ import {
 } from '../ui/form';
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Button} from '../ui/button'; 
+import {Button} from '../ui/button';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
-import {useToast} from '../ui/use-toast';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '../ui/select';
-import {useTranslation} from 'react-i18next';
-import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {formatTimeLocal, getTranslation} from '../../lib/utils';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {MutationToaster} from '../common/mutation-toaster';
 
 // Helper function to parse and format time strings
 const parseTime = (timeString: string): Date => {
@@ -62,15 +48,15 @@ const boatFormSchema = z.object({
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
 
 type BoatFormProps = {
-	onSubmit: (dto: BoatDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: BoatDto;
+	mutation: UseMutationResult<any, Error, BoatDto>; // First any is return type, second is input
 	isCreate: boolean;
-	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
+	onSuccessfullySubmitted?: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const BoatForm: React.FC<BoatFormProps> = ({
 	model,
-	onSubmit,
+	mutation,
 	isCreate,
 	onSuccessfullySubmitted,
 }) => {
@@ -85,27 +71,10 @@ const BoatForm: React.FC<BoatFormProps> = ({
 	});
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const {toast} = useToast();
 
-	const {i18n} = useTranslation();
-	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
-	
-	useEffect(() => {
-		const fetchActivityTypes = async () => {
-			try {
-				const response = await getAllActivityTypesFromEvent(eventId);
-				setActivityTypes(response);
-			} catch (error) {
-				console.error('Failed to fetch activity types:', error);
-			}
-		};
+	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-		fetchActivityTypes()
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, [eventId]);
-
-	const onPrepareSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
+	const onSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
 		const boat: BoatDto = {
 			...values,
 			id: values.id ?? 0,
@@ -116,35 +85,20 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			availableUntil: values.availableUntil,
 		};
 
-		const success = await onSubmit(boat);
-		if (success === true) {
-			onSuccessfullySubmitted();
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when saving.',
-				description: success,
-			});
-		}
-	};
-
-	const onInvalid: SubmitErrorHandler<BoatFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
-
-		toast({
-			variant: 'destructive',
-			title: 'Could not be saved.',
-			description: 'There are validation errors in the form.',
-		});
+		await mutation.mutateAsync(boat);
 	};
 
 	return (
 		<>
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={mutation}
+			/>
 			<Form {...form}>
 				<form
 					id="boat"
 					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="name"
 						control={form.control}

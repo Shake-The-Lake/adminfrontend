@@ -1,17 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
 	defaultTimeSlot,
-	type TimeSlotDto,
 } from '../../../models/api/time-slot.model';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
 import {
-	createTimeSlot,
-	updateTimeSlot,
-	deleteTimeSlot,
-} from '../../../services/time-slot-service';
-import {useToast} from '../../../components/ui/use-toast';
-import {getTimeStringFromWholeDate, tryGetErrorMessage} from '../../../lib/utils';
+	getTimeStringFromWholeDate,
+} from '../../../lib/utils';
 import {
 	Table,
 	TableBody,
@@ -20,21 +15,45 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import {useParams} from 'react-router-dom';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+} from 'react-router-dom';
 import {type BoatDto} from '../../../models/api/boat.model';
-import EditTableCell from '../../../components/table/edit-table-cell';
+import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
+import {type QueryClient} from '@tanstack/react-query';
+import {
+	timeslotsOptions,
+	useCreateTimeSlot,
+	useDeleteTimeSlot,
+	useGetTimeSlots,
+} from '../../../queries/time-slot';
+import LoadingSpinner from '../../../components/animations/loading';
+import {MutationToaster} from '../../../components/common/mutation-toaster';
+
+export const loader =
+	(queryClient: QueryClient) =>
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.boatId) {
+				throw new Error('No boat ID provided');
+			}
+
+			await queryClient.ensureQueryData(
+				timeslotsOptions(Number(params.boatId), queryClient),
+			);
+			return {boatId: Number(params.boatId)};
+		};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
-	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-	const [timeSlots, setTimeSlots] = useState<TimeSlotDto[]>([]);
-	useEffect(() => {
-		if (boat.timeSlots) {
-			setTimeSlots([...boat.timeSlots]);
-		}
-	}, [boat]);
+	const {boatId} = useLoaderData() as Awaited<
+	ReturnType<ReturnType<typeof loader>>
+	>;
+	const {data: timeSlots, isPending, error} = useGetTimeSlots(boatId);
 
-	const {toast} = useToast();
-	const {boatId} = useParams<{boatId: string}>();
+	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
+	const createMutation = useCreateTimeSlot(boatId);
+	const deleteMutation = useDeleteTimeSlot(boatId);
 
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
@@ -44,59 +63,15 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 		setIsCreateDialogOpen(false);
 	};
 
-	const handleCreateTimeSlot = async (timeSlot: TimeSlotDto) => {
-		try {
-			if (!boatId) {
-				return false;
-			}
-
-			timeSlot.boatId = Number(boatId);
-			const createdTimeSlot = await createTimeSlot(timeSlot);
-			setTimeSlots([...timeSlots, createdTimeSlot]);
-		} catch (error) {
-			console.error('Failed to create time slot:', error);
-			return tryGetErrorMessage(error);
-		}
-
-		return true;
-	};
-
-	const handleUpdateTimeSlot = async (timeSlot: TimeSlotDto) => {
-		try {
-			if (!boatId) {
-				return false;
-			}
-
-			timeSlot.boatId = Number(boatId);
-			const updatedTimeSlot = await updateTimeSlot(timeSlot.id, timeSlot);
-			// Console.log(updatedTimeSlot);
-			setTimeSlots([...timeSlots, updatedTimeSlot]);
-		} catch (error) {
-			console.error('Failed to update time slot:', error);
-			return tryGetErrorMessage(error);
-		}
-
-		return true;
-	};
-
-	const handleDelete = async (timeSlotId: number) => {
-		try {
-			await deleteTimeSlot(timeSlotId);
-			const updatedTimeSlots = timeSlots.filter(
-				(slot) => slot.id !== timeSlotId,
-			);
-			setTimeSlots(updatedTimeSlots);
-			toast({
-				description: 'Time slot successfully deleted.',
-			});
-		} catch (error) {
-			console.error('Failed to delete time slot:', error);
-			return tryGetErrorMessage(error);
-		}
-	};
-
 	return (
 		<div>
+			<LoadingSpinner
+				isLoading={
+					isPending || deleteMutation.isPending || createMutation.isPending
+				}
+			/>
+			<MutationToaster type="delete" mutation={deleteMutation} />
+
 			<div className="flex justify-between">
 				<>
 					<h1>Time Slots</h1>
@@ -111,15 +86,10 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						formId="timeSlot">
 						<TimeSlotForm
 							model={{...defaultTimeSlot, boatId: boat.id}}
-							onSubmit={handleCreateTimeSlot}
+							mutation={createMutation}
 							boat={boat}
 							isCreate={true}
-							onSuccessfullySubmitted={() => {
-								toast({
-									description: 'Time slot successfully saved.',
-								});
-								closeCreateDialog();
-							}}
+							onSuccessfullySubmitted={closeCreateDialog}
 						/>
 					</StlDialog>
 				</>
@@ -134,12 +104,21 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{timeSlots.map((slot, index) => (
+					{timeSlots?.map((slot, index) => (
 						<TableRow key={index} className="w-full justify-between">
-							<TableCell>{getTimeStringFromWholeDate(slot?.fromTime)}</TableCell>
-							<TableCell>{getTimeStringFromWholeDate(slot.untilTime)}</TableCell>
-							<TableCell>{slot.status === 'AVAILABLE' ? 'ride' : 'break'}</TableCell>
-							<EditTableCell boat={boat} slot={slot} onDelete={handleDelete} onUpdate={handleUpdateTimeSlot}></EditTableCell>
+							<TableCell>
+								{getTimeStringFromWholeDate(slot?.fromTime)}
+							</TableCell>
+							<TableCell>
+								{getTimeStringFromWholeDate(slot.untilTime)}
+							</TableCell>
+							<TableCell>
+								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
+							</TableCell>
+							<EditTimeSlotTableCell
+								boat={boat}
+								timeSlot={slot}
+								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
 						</TableRow>
 					))}
 				</TableBody>
