@@ -1,8 +1,8 @@
-import {TimeSlotDto} from './time-slot.model';
-import {ColumnDef} from '@tanstack/react-table';
-import {PersonDto} from './person.model';
-import {BoatDto} from './boat.model';
-import {ActivityTypeDto} from './activity-type.model';
+import {type TimeSlotDto} from './time-slot.model';
+import {type ColumnDef} from '@tanstack/react-table';
+import {type PersonDto} from './person.model';
+import {type BoatDto} from './boat.model';
+import {type ActivityTypeDto} from './activity-type.model';
 
 export type BookingSearchDto = {
 	person: PersonDto;
@@ -11,8 +11,17 @@ export type BookingSearchDto = {
 	activityType: ActivityTypeDto;
 };
 
-export const bookingColumns: ColumnDef<BookingSearchDto>[] = [
+export type BookingSearchParams = {
+	personName?: string;
+	boatName?: string;
+	from?: string;
+	to?: string;
+	activity?: number;
+};
+
+export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 	{
+		id: 'name', // Todo! adjust data table impl to not need this
 		accessorKey: 'person.firstName',
 		header: 'First Name',
 	},

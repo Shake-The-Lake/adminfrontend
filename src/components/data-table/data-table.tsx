@@ -1,8 +1,7 @@
-'use client';
-
+import React from 'react';
 import {
-	ColumnDef,
-	ColumnFiltersState,
+	type ColumnDef,
+	type ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -16,18 +15,17 @@ import {
 	TableHeader,
 	TableRow,
 } from '../ui/table';
-import React from 'react';
 import {Input} from '../ui/input';
 
-interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[];
-	data: TData[];
-}
+type DataTableProps<TyData, TyValue> = {
+	columns: Array<ColumnDef<TyData, TyValue>>;
+	data: TyData[];
+};
 
-export function DataTable<TData, TValue>({
+export function DataTable<TyData, TyValue>({
 	columns,
 	data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TyData, TyValue>) {
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[],
 	);
@@ -63,18 +61,16 @@ export function DataTable<TData, TValue>({
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
-										</TableHead>
-									);
-								})}
+								{headerGroup.headers.map((header) => (
+									<TableHead key={header.id}>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+												header.column.columnDef.header,
+												header.getContext(),
+											)}
+									</TableHead>
+								))}
 							</TableRow>
 						))}
 					</TableHeader>
