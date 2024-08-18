@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {z} from 'zod';
 import {type SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {
@@ -12,7 +12,6 @@ import {
 import {Input} from '../ui/input';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useToast} from '../ui/use-toast';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
 	Select,
@@ -29,8 +28,6 @@ import {
 	useEmitSuccessIfSucceeded,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
-import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
 import {useTranslation} from 'react-i18next';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useGetActivityTypes} from '../../queries/activity-type';

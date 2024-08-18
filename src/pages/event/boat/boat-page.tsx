@@ -1,12 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import {defaultBoatDto, type BoatDto} from '../../../models/api/boat.model';
 import LoadingSpinner from '../../../components/animations/loading';
 import BoatForm from '../../../components/forms/boat';
-import {useToast} from '../../../components/ui/use-toast';
-import {updateBoat} from '../../../services/boat-service';
-import {tryGetErrorMessage} from '../../../lib/utils';
 import TimeSlots from './time-slots';
 import {Separator} from '../../../components/ui/separator';
 import {type QueryClient} from '@tanstack/react-query';
