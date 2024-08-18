@@ -1,11 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {z} from 'zod';
-import {
-	Controller,
-	type SubmitHandler,
-	useForm,
-	type SubmitErrorHandler,
-} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -15,22 +10,13 @@ import {
 	FormMessage,
 } from '../ui/form';
 import {Input} from '../ui/input';
-import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '../ui/select';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {useTranslation} from 'react-i18next';
-import {getTranslation} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
-import {useToast} from '../ui/use-toast';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {MutationToaster} from '../common/mutation-toaster';
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -46,31 +32,21 @@ const boatFormSchema = z.object({
 	availableUntil: z.string().refine((val) => !isNaN(Date.parse(val)), {
 		message: 'Invalid date format',
 	}),
-	activityTypeId: z.number().optional(),
 	eventId: z.number().optional(),
-	// Timeslots are not yet part of the form
-	// timeSlots: z
-	// 	.instanceof(Set<TimeSlotDto>)
-	// 	.optional()
-	// 	.or(z.undefined()),
-	// timeSlotIds: z
-	// 	.instanceof(Set<number>)
-	// 	.optional()
-	// 	.or(z.undefined()),
 });
 
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
 
 type BoatFormProps = {
-	onSubmit: (dto: BoatDto) => Promise<boolean | string>; // True if successfully saved, error if not
 	model: BoatDto;
+	mutation: UseMutationResult<any, Error, BoatDto>; // First any is return type, second is input
 	isCreate: boolean;
-	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
+	onSuccessfullySubmitted?: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const BoatForm: React.FC<BoatFormProps> = ({
 	model,
-	onSubmit,
+	mutation,
 	isCreate,
 	onSuccessfullySubmitted,
 }) => {
@@ -79,64 +55,33 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		defaultValues: model,
 		resolver: zodResolver(boatFormSchema),
 	});
-
-	const {i18n} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const {toast} = useToast();
 
-	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
+	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-	useEffect(() => {
-		const fetchActivityTypes = async () => {
-			try {
-				const response = await getAllActivityTypesFromEvent(eventId);
-				setActivityTypes(response);
-			} catch (error) {
-				console.error('Failed to fetch activity types:', error);
-			}
-		};
-
-		fetchActivityTypes()
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, []);
-
-	const onPrepareSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
+	const onSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
 		const boat: BoatDto = {
 			...values,
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
+			timeSlotIds: model.timeSlotIds,
 		};
 
-		const success = await onSubmit(boat);
-		if (success === true) {
-			onSuccessfullySubmitted();
-		} else if (typeof success === 'string') {
-			toast({
-				variant: 'destructive',
-				title: 'There was an error when saving.',
-				description: success,
-			});
-		}
-	};
-
-	const onInvalid: SubmitErrorHandler<BoatFormSchema> = (errors) => {
-		console.log('form has failed to submit on error, ', errors); // Todo! add proper error handling instead
-
-		toast({
-			variant: 'destructive',
-			title: 'Could not be saved.',
-			description: 'There are validation errors in the form.',
-		});
+		await mutation.mutateAsync(boat);
 	};
 
 	return (
 		<>
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={mutation}
+			/>
 			<Form {...form}>
 				<form
+					id="boat"
 					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onPrepareSubmit, onInvalid)}>
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="name"
 						control={form.control}
@@ -164,45 +109,6 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							</FormItem>
 						)}
 					/>
-
-					<Controller
-						name="activityTypeId"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Activity Type</FormLabel>
-								<FormControl>
-									<Select
-										value={field.value ? field.value.toString() : ''}
-										onValueChange={(value) => {
-											field.onChange(Number(value));
-										}}>
-										<SelectTrigger>
-											<SelectValue placeholder="Select Activity Type">
-												{field.value
-													? getTranslation(
-															i18n.language,
-															activityTypes.find(
-																(type) => type.id === field.value,
-															)?.name,
-														)
-													: 'Select Activity Type'}
-											</SelectValue>
-										</SelectTrigger>
-										<SelectContent>
-											{activityTypes.map((type) => (
-												<SelectItem key={type.id} value={type.id.toString()}>
-													{getTranslation(i18n.language, type.name)}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
 					<FormField
 						name="operator"
 						control={form.control}

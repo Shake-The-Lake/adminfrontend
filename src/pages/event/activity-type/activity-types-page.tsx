@@ -1,56 +1,51 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-	createActivityType,
-	deleteActivityType,
-	getAllActivityTypesFromEvent,
-} from '../../../services/activity-type-service';
 import {
 	defaultActivityTypeDto,
 	type ActivityTypeDto,
 } from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
 import {getTranslation, tryGetErrorMessage} from '../../../lib/utils';
-import {useNavigate, useParams} from 'react-router-dom';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import ActivityTypeForm from '../../../components/forms/activity-type';
+import {type QueryClient} from '@tanstack/react-query';
+import {
+	activityTypesOptions,
+	useCreateActivityType,
+	useDeleteActivityType,
+	useGetActivityTypes,
+} from '../../../queries/activity-type';
+import {MutationToaster} from '../../../components/common/mutation-toaster';
+
+export const loader =
+	(queryClient: QueryClient) =>
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
+
+			await queryClient.ensureQueryData(
+				activityTypesOptions(Number(params.id), queryClient),
+			);
+			return {eventId: Number(params.id)};
+		};
 
 const ActivityTypesPage = () => {
-	const {id} = useParams<{id: string}>();
-	const eventId = Number(id);
+	const {eventId} = useLoaderData() as Awaited<
+	ReturnType<ReturnType<typeof loader>>
+	>;
+	const {data: activityTypes, isPending, error} = useGetActivityTypes(eventId);
 
-	const [activityTypes, setActivityTypes] = useState<ActivityTypeDto[]>([]);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | undefined>(undefined);
 
 	const {i18n} = useTranslation();
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		async function fetchActivityTypes() {
-			try {
-				const activityTypeData = await getAllActivityTypesFromEvent(
-					Number(eventId),
-				);
-
-				setActivityTypes(activityTypeData);
-			} catch (error) {
-				console.error(error);
-				setError('Failed to load activeTypes');
-			}
-
-			setLoading(false);
-		}
-
-		fetchActivityTypes()
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
-	}, [id]);
-
-	if (error) return <p>{error}</p>;
 
 	const handleEdit = (id?: number) => {
 		if (id) {
@@ -58,44 +53,8 @@ const ActivityTypesPage = () => {
 		}
 	};
 
-	const handleDelete = async (id?: number) => {
-		if (!id) {
-			return false;
-		}
-
-		setLoading(true);
-
-		try {
-			await deleteActivityType(id);
-			setActivityTypes((prev) => prev.filter((e) => e.id !== id));
-		} catch (error) {
-			console.error(error);
-			setLoading(false);
-			return tryGetErrorMessage(error);
-		}
-
-		setLoading(false);
-		return true;
-	};
-
-	const handleCreateNewActivityType = async (dto: ActivityTypeDto) => {
-		// Todo! trigger page reload after success
-		setLoading(true);
-
-		try {
-			const createdType = await createActivityType(dto);
-			console.log('Created activity type:', createdType);
-
-			setActivityTypes([...activityTypes, createdType]);
-		} catch (error) {
-			console.error('Failed to create activity type:', error);
-			setLoading(false);
-			return tryGetErrorMessage(error);
-		}
-
-		setLoading(false);
-		return true;
-	};
+	const createMutation = useCreateActivityType(eventId);
+	const deleteMutation = useDeleteActivityType(eventId);
 
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
@@ -107,18 +66,25 @@ const ActivityTypesPage = () => {
 
 	return (
 		<div className="flex flex-col items-center">
-			<LoadingSpinner isLoading={loading} />
+			<LoadingSpinner
+				isLoading={
+					isPending || deleteMutation.isPending || createMutation.isPending
+				}
+			/>
+			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="w-full mb-8 flex flex-col justify-start">
 				<h1>Activity Types</h1>
 			</div>
-			{activityTypes.length === 0 && (
+			{activityTypes?.length === 0 && (
 				<div className="w-full py-5">
 					<p className="text-lg">No activity types yet.</p>
 				</div>
 			)}
+			{error && <p>Failed to load ActivityTypes!</p>}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-				{activityTypes.length > 0 &&
+				{activityTypes &&
+					activityTypes.length > 0 &&
 					activityTypes.map((activityType) => (
 						<div key={activityType.id} className="flex justify-center">
 							<StlCard
@@ -128,8 +94,8 @@ const ActivityTypesPage = () => {
 									i18n.language,
 									activityType.description,
 								)}
-								handleEdit={handleEdit}
-								handleDelete={handleDelete}
+								onArrowClick={handleEdit}
+								deleteMutation={deleteMutation}
 							/>
 						</div>
 					))}
@@ -140,9 +106,10 @@ const ActivityTypesPage = () => {
 					triggerLabel="Add new Activity Type"
 					isOpen={isCreateDialogOpen}
 					onClose={closeCreateDialog}
-					onOpen={openCreateDialog}>
+					onOpen={openCreateDialog}
+					formId="activityType">
 					<ActivityTypeForm
-						onSubmit={handleCreateNewActivityType}
+						mutation={createMutation}
 						onSuccessfullySubmitted={closeCreateDialog}
 						model={defaultActivityTypeDto}
 						isCreate={true}

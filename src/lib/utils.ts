@@ -1,6 +1,10 @@
 import {type ClassValue, clsx} from 'clsx';
 import {twMerge} from 'tailwind-merge';
 import {type LocalizedStringDto} from '../models/api/localized-string';
+import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
+import {toast} from 'sonner';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useEffect} from 'react';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -51,4 +55,46 @@ export function tryGetErrorMessage(error: unknown) {
 	}
 
 	return errorMessage;
+}
+
+// Todo! maybe put into better place?
+export const onInvalidFormHandler: SubmitErrorHandler<any> = (
+	errors: FieldErrors<any>,
+) => {
+	console.log('form has failed to submit on error, ', errors);
+
+	toast.error('Could not be saved.', {
+		description: 'There are validation errors in the form.',
+	});
+};
+
+export function useEmitSuccessIfSucceeded(onSuccessfullySubmitted: (() => void) | undefined, mutation: UseMutationResult<any, Error, any>) {
+	useEffect(() => {
+		if (onSuccessfullySubmitted &&
+			mutation?.isSuccess &&
+			Boolean(mutation.data?.id)) {
+			onSuccessfullySubmitted();
+		}
+	}, [mutation?.isSuccess, mutation?.data?.id]);
+}
+
+export function getTimeStringFromWholeDate(date: Date | undefined) {
+	const validDate = date instanceof Date ? date : new Date(date);
+
+	if (isNaN(validDate.getTime())) {
+		// Handle invalid date object
+		return '00:00';
+	}
+
+	const hours = String(validDate.getHours()).padStart(2, '0');
+	const minutes = String(validDate.getMinutes()).padStart(2, '0');
+	return `${hours}:${minutes}`;
+}
+
+export function getWholeDateFromTimeString(date: Date, timeString: string) {
+	const [hours, minutes] = timeString.split(':').map(Number);
+	date.setHours(hours);
+	date.setMinutes(minutes);
+
+	return date; // Todo! or maybe make completely new date
 }
