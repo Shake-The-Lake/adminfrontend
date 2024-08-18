@@ -12,21 +12,20 @@ import {
 import {Input} from '../ui/input';
 import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useToast} from '../ui/use-toast';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
 	getTimeStringFromWholeDate,
+	getTranslation,
 	getWholeDateFromTimeString,
 	onInvalidFormHandler,
 	useEmitSuccessIfSucceeded,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
-import {getAllActivityTypesFromEvent} from '../../services/activity-type-service';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
 import {useTranslation} from 'react-i18next';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useGetActivityTypes} from '../../queries/activity-type';
 import {MutationToaster} from '../common/mutation-toaster';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '../ui/select';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),

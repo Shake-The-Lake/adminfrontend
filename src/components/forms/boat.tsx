@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {z} from 'zod';
-import {type SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, type SubmitHandler, useForm} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -12,7 +12,7 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {formatTimeLocal, onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
@@ -204,44 +204,6 @@ const BoatForm: React.FC<BoatFormProps> = ({
 								<FormLabel>Boat Available Until</FormLabel>
 								<FormControl>
 									<Input type="time" {...field} className="input" />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<Controller
-						name="activityTypeId"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Activity Type</FormLabel>
-								<FormControl>
-									<Select
-										value={field.value ? field.value.toString() : ''}
-										onValueChange={(value) => {
-											field.onChange(Number(value));
-										}}>
-										<SelectTrigger>
-											<SelectValue placeholder="Select Activity Type">
-												{field.value
-													? getTranslation(
-														i18n.language,
-														activityTypes.find(
-															(type) => type.id === field.value,
-														)?.name,
-													)
-													: 'Select Activity Type'}
-											</SelectValue>
-										</SelectTrigger>
-										<SelectContent>
-											{activityTypes.map((type) => (
-												<SelectItem key={type.id} value={type.id.toString()}>
-													{getTranslation(i18n.language, type.name)}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
