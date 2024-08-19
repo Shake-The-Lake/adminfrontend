@@ -12,20 +12,11 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {formatTimeLocal, onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {formatTimeLocal, onInvalidFormHandler, parseTime, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
-
-// Helper function to parse and format time strings
-const parseTime = (timeString: string): Date => {
-	const [hours, minutes] = timeString.split(':').map(Number);
-	const date = new Date();
-	date.setHours(hours);
-	date.setMinutes(minutes);
-	return date;
-};
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
