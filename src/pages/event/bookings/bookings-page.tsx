@@ -1,16 +1,14 @@
 import React from 'react';
 import {DataTable} from '../../../components/data-table/data-table';
-import {
-	bookingColumns,
-} from '../../../models/api/booking-search.model';
+import {bookingColumns} from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {bookingsOptions, useGetBookings} from '../../../queries/booking';
 import {type QueryClient} from '@tanstack/react-query';
+import StlFilter, {
+	StlSearchConfigValues,
+} from '../../../components/data-table/stl-filter';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -43,7 +41,10 @@ const BookingsPage: React.FC = () => {
 				</div>
 				<div className="w-full">
 					{error === null ? (
-						<DataTable columns={bookingColumns} data={bookings} />
+						<>
+							<StlFilter config={StlSearchConfigValues.All}></StlFilter>
+							<DataTable columns={bookingColumns} data={bookings} />
+						</>
 					) : (
 						<p>Failed to load bookings!</p>
 					)}

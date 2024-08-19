@@ -19,7 +19,7 @@ import {Input} from '../ui/input';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
-	data: TyData[];
+	data?: TyData[];
 };
 
 export function DataTable<TyData, TyValue>({

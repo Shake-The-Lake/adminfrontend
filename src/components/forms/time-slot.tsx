@@ -14,7 +14,6 @@ import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
-	getTranslation,
 	onInvalidFormHandler,
 	useEmitSuccessIfSucceeded,
 	validateTime,
@@ -24,7 +23,7 @@ import {useTranslation} from 'react-i18next';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useGetActivityTypes} from '../../queries/activity-type';
 import {MutationToaster} from '../common/mutation-toaster';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '../ui/select';
+import ActivityTypeSelect from '../dropdowns/activity-type-select';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -131,39 +130,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 					<Controller
 						name="activityTypeId"
 						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>Activity Type</FormLabel>
-								<FormControl>
-									<Select
-										value={field.value ? field.value.toString() : ''}
-										onValueChange={(value) => {
-											field.onChange(Number(value));
-										}}>
-										<SelectTrigger>
-											<SelectValue placeholder="Select Activity Type">
-												{field.value
-													? getTranslation(
-														i18n.language,
-														activityTypes?.find(
-															(type) => type.id === field.value,
-														)?.name,
-													)
-													: 'Select Activity Type'}
-											</SelectValue>
-										</SelectTrigger>
-										<SelectContent>
-											{activityTypes?.map((type) => (
-												<SelectItem key={type.id} value={type.id.toString()}>
-													{getTranslation(i18n.language, type.name)}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
+						render={({field}) => <ActivityTypeSelect field={field} />}
 					/>
 				</form>
 			</Form>
