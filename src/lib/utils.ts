@@ -105,20 +105,3 @@ export function formatDateTimeLocal(date: Date): string {
 	const adjustedDate = new Date(date.getTime() - offset * 60 * 1000);
 	return adjustedDate.toISOString().slice(0, 16);
 }
-
-export function formatTimeLocal(date: Date): string {
-
-	const hours = date.getHours();
-	const minutes = date.getMinutes();
-
-	return `${hours}:${minutes}`;
-}
-
-// Helper function to parse and format time strings
-export function parseTime(timeString: string): Date {
-	const [hours, minutes] = timeString.split(':').map(Number);
-	const date = new Date();
-	date.setHours(hours);
-	date.setMinutes(minutes);
-	return date;
-}

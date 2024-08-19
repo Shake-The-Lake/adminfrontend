@@ -48,7 +48,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const {boatId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: timeSlots, isPending, error} = useGetTimeSlots(boatId);
+	const {data: timeSlots, isPending} = useGetTimeSlots(boatId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 

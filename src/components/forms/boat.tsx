@@ -12,7 +12,7 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {formatTimeLocal, onInvalidFormHandler, parseTime, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {formatTimeLocal, getTimeStringFromWholeDate, getWholeDateFromTimeString, onInvalidFormHandler, useEmitSuccessIfSucceeded, validateTime} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
@@ -26,12 +26,14 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
-		message: 'Invalid time format',
-	}).transform(parseTime),
-	availableUntil: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
-		message: 'Invalid time format',
-	}).transform(parseTime),
+	availableFrom: z.string().refine((value) => {
+		const [hours, minutes] = value.split(':').map(Number);
+		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+	}, 'Invalid time'),
+	availableUntil: z.string().refine((value) => {
+		const [hours, minutes] = value.split(':').map(Number);
+		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+	}, 'Invalid time'),
 	eventId: z.number().optional(),
 });
 
@@ -54,8 +56,8 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		mode: 'onChange',
 		defaultValues: {
 			...model,
-			availableFrom: formatTimeLocal(new Date(model.availableFrom)),
-			availableUntil: formatTimeLocal(new Date(model.availableUntil)),
+			availableFrom: getTimeStringFromWholeDate(model.availableFrom),
+			availableUntil: getTimeStringFromWholeDate(model.availableUntil),
 		},
 		resolver: zodResolver(boatFormSchema),
 	});
@@ -70,8 +72,14 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
 			timeSlotIds: model.timeSlotIds,
-			availableFrom: values.availableFrom,
-			availableUntil: values.availableUntil,
+			availableFrom: getWholeDateFromTimeString(
+				new Date(model?.availableFrom ?? new Date()),
+				values.availableFrom,
+			),
+			availableUntil: getWholeDateFromTimeString(
+				new Date(model?.availableFrom ?? new Date()),
+				values.availableUntil,
+			),
 			activityTypeId: 0,
 		};
 
