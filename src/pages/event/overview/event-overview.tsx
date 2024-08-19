@@ -50,13 +50,6 @@ const EventOverview: React.FC = () => {
 						isCreate={false}
 					/>
 				</div>
-				{/*
-				<Separator orientation="vertical" className="h-full" />
-				<div className="w-full lg:w-1/2 flex flex-col">
-					<EntryValidation />
-				</div>
-				<div className="hidden lg:block mx-4"></div>
-				*/}
 			</div>
 		</div>
 	);

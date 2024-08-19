@@ -8,10 +8,11 @@ export type BoatDto = {
 	seatsViewer: number;
 	operator: string;
 	slotDurationInMins?: number;
-	availableFrom: string; // Assuming ISO string format for LocalDateTime
-	availableUntil: string; // Assuming ISO string format for LocalDateTime
+	availableFrom: string; // Assuming hh:mm:ss format for time
+	availableUntil: string; // Assuming hh:mm:ss format for time
 	timeSlotIds?: Set<number>;
 	eventId?: number;
+	activityTypeId?: number;
 	timeSlots?: Set<TimeSlotDto> | undefined;
 };
 
@@ -23,8 +24,8 @@ export const defaultBoatDto: BoatDto = {
 	seatsViewer: 0,
 	operator: '',
 	slotDurationInMins: undefined,
-	availableFrom: '',
-	availableUntil: '',
+	availableFrom: new Date(),
+	availableUntil: new Date(),
 	timeSlotIds: undefined,
 	eventId: undefined,
 	timeSlots: undefined,
