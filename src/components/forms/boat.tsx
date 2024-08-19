@@ -35,14 +35,13 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.date().refine(val => /^\d{2}:\d{2}$/.exec(val), {
+	availableFrom: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
 		message: 'Invalid time format',
 	}).transform(parseTime),
-	availableUntil: z.date().refine(val => /^\d{2}:\d{2}$/.exec(val), {
+	availableUntil: z.string().refine(val => /^\d{2}:\d{2}$/.exec(val), {
 		message: 'Invalid time format',
 	}).transform(parseTime),
 	eventId: z.number().optional(),
-	activityTypeId: z.number(),
 });
 
 export type BoatFormSchema = z.infer<typeof boatFormSchema>;
@@ -80,9 +79,9 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
 			timeSlotIds: model.timeSlotIds,
-			activityTypeId: values.activityTypeId,
 			availableFrom: values.availableFrom,
 			availableUntil: values.availableUntil,
+			activityTypeId: 0,
 		};
 
 		await mutation.mutateAsync(boat);

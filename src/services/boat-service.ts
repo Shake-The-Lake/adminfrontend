@@ -30,7 +30,11 @@ export const getBoatById = async (id: number): Promise<BoatDto> => {
 };
 
 export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
-	const response = await axios.post<BoatDto>(`${baseUrl}/boat`, boat);
+	const boatWithActivityType = {
+		...boat,
+		activityTypeId: 1,
+	};
+	const response = await axios.post<BoatDto>(`${baseUrl}/boat`, boatWithActivityType);
 	return response.data;
 };
 

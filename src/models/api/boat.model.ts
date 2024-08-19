@@ -11,8 +11,8 @@ export type BoatDto = {
 	availableFrom: Date; // Assuming ISO string format for LocalDateTime
 	availableUntil: Date; // Assuming ISO string format for LocalDateTime
 	timeSlotIds?: Set<number>;
-	activityTypeId?: number;
 	eventId?: number;
+	activityTypeId?: number;
 	timeSlots?: Set<TimeSlotDto> | undefined;
 };
 
@@ -29,5 +29,4 @@ export const defaultBoatDto: BoatDto = {
 	timeSlotIds: undefined,
 	eventId: undefined,
 	timeSlots: undefined,
-	activityTypeId: 0,
 };
