@@ -19,6 +19,7 @@ import {
 	getWholeDateFromTimeString,
 	onInvalidFormHandler,
 	useEmitSuccessIfSucceeded,
+	validateTime,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useTranslation} from 'react-i18next';
@@ -30,14 +31,8 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '../
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
 	boatId: z.number().min(0).optional(),
-	fromTime: z.string().refine((value) => {
-		const [hours, minutes] = value.split(':').map(Number);
-		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}, 'Invalid time'),
-	untilTime: z.string().refine((value) => {
-		const [hours, minutes] = value.split(':').map(Number);
-		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}),
+	fromTime: z.string().refine((value) => validateTime(value), 'Invalid time'),
+	untilTime: z.string().refine((value) => validateTime(value), 'Invalid time'),
 	activityTypeId: z.number().min(0).optional(),
 });
 

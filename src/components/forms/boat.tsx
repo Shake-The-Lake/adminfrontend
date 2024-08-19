@@ -26,14 +26,8 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.string().refine((value) => {
-		const [hours, minutes] = value.split(':').map(Number);
-		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}, 'Invalid time'),
-	availableUntil: z.string().refine((value) => {
-		const [hours, minutes] = value.split(':').map(Number);
-		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}, 'Invalid time'),
+	availableFrom: z.string().refine((value) => validateTime(value), 'Invalid time'),
+	availableUntil: z.string().refine((value) => validateTime(value), 'Invalid time'),
 	eventId: z.number().optional(),
 });
 
@@ -73,11 +67,11 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			eventId: model.eventId ?? eventId,
 			timeSlotIds: model.timeSlotIds,
 			availableFrom: getWholeDateFromTimeString(
-				new Date(model?.availableFrom ?? new Date()),
+				new Date(model?.availableFrom),
 				values.availableFrom,
 			),
 			availableUntil: getWholeDateFromTimeString(
-				new Date(model?.availableFrom ?? new Date()),
+				new Date(model?.availableFrom),
 				values.availableUntil,
 			),
 			activityTypeId: 0,
