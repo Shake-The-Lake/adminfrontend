@@ -1,4 +1,12 @@
 {
   "editor.formatOnSave": true,
-  "editor.formatOnPaste": true
+  "editor.formatOnPaste": true,
+  "cSpell.words": [
+    "hookform",
+    "lucide",
+    "sonner",
+    "tanstack",
+    "timeslot",
+    "timeslots"
+  ]
 }

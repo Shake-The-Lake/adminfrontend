@@ -14,37 +14,24 @@ import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '../ui/select';
-import {
-	getTimeStringFromWholeDate,
 	getTranslation,
-	getWholeDateFromTimeString,
 	onInvalidFormHandler,
 	useEmitSuccessIfSucceeded,
+	validateTime,
 } from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useTranslation} from 'react-i18next';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useGetActivityTypes} from '../../queries/activity-type';
 import {MutationToaster} from '../common/mutation-toaster';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '../ui/select';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
 	boatId: z.number().min(0).optional(),
-	fromTime: z.string().refine((value) => {
-		const [hours, minutes] = value.split(':').map(Number);
-		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}, 'Invalid time'),
-	untilTime: z.string().refine((value) => {
-		const [hours, minutes] = value.split(':').map(Number);
-		return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
-	}),
-	activityTypeId: z.number(),
+	fromTime: z.string().refine((value) => validateTime(value), 'Invalid time'),
+	untilTime: z.string().refine((value) => validateTime(value), 'Invalid time'),
+	activityTypeId: z.number().min(0).optional(),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
@@ -69,9 +56,8 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		mode: 'onChange',
 		defaultValues: {
 			...model,
-			fromTime: getTimeStringFromWholeDate(model.fromTime),
-			untilTime: getTimeStringFromWholeDate(model.untilTime),
-			activityTypeId: model.activityTypeId ?? 0,
+			fromTime: model.fromTime,
+			untilTime: model.untilTime,
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
@@ -87,14 +73,8 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		const timeSlot: TimeSlotDto = {
 			...values,
-			fromTime: getWholeDateFromTimeString(
-				new Date(boat?.availableFrom ?? new Date()),
-				values.fromTime,
-			),
-			untilTime: getWholeDateFromTimeString(
-				new Date(boat?.availableFrom ?? new Date()),
-				values.untilTime,
-			),
+			fromTime: values.fromTime,
+			untilTime: values.untilTime,
 			boatId: boat?.id ?? 0,
 			id: model.id,
 			status: 'AVAILABLE',
