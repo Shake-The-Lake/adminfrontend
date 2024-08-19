@@ -3,13 +3,14 @@ import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
-import {Button} from '../ui/button';
 import {type EventDto} from '../../models/api/event.model';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {onInvalidFormHandler} from '../../lib/utils';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
+import {Button} from '../ui/button';
 
+// Schema definition
 export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
 	description: z.string(),
@@ -32,7 +33,11 @@ type EventFormProps = {
 const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 	const form = useForm<EventFormSchema>({
 		mode: 'onChange',
-		defaultValues: model,
+		defaultValues: {
+			title: model.title,
+			description: model.description,
+			date: new Date(model.date).toISOString().slice(0, 10),
+		},
 		resolver: zodResolver(eventFormSchema),
 	});
 
@@ -96,7 +101,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 							<FormItem>
 								<FormLabel>Event Date</FormLabel>
 								<FormControl>
-									<Input type="datetime-local" {...field} className="input" />
+									<Input type="date" {...field} className="input" />
 								</FormControl>
 							</FormItem>
 						)}

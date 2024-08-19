@@ -2,10 +2,9 @@ import {type ActivityTypeDto} from './activity-type.model';
 
 export type TimeSlotDto = {
 	id: number;
-	fromTime?: Date; // Assuming ISO string format for LocalDateTime
-	untilTime?: Date; // Assuming ISO string format for LocalDateTime
+	fromTime?: string; // Assuming ISO string format for LocalDateTime
+	untilTime?: string; // Assuming ISO string format for LocalDateTime
 	boatId?: number;
-	activityTypeId?: number;
 	activityType?: ActivityTypeDto | undefined;
 	bookingIds?: Set<number>;
 	status: string; // Todo! remove this status after backend is updated
@@ -19,5 +18,4 @@ export const defaultTimeSlot: TimeSlotDto = {
 	status: 'AVAILABLE', // Todo! remove this status after backend is updated
 	bookingIds: undefined,
 	activityType: undefined,
-	activityTypeId: 0,
 };
