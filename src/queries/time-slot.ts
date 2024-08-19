@@ -1,3 +1,4 @@
+import {type EventDto} from '../models/api/event.model';
 import {type TimeSlotDto} from '../models/api/time-slot.model';
 import {
 	type QueryClient,
@@ -6,7 +7,6 @@ import {
 	useQuery,
 	useQueryClient,
 	type QueryKey,
-	type DefinedUseQueryResult,
 } from '@tanstack/react-query';
 import {createTimeSlot, deleteTimeSlot, getTimeSlotById, updateTimeSlot, getAllTimeSlotsFromBoat} from '../services/time-slot-service';
 import {keys as boatKeys} from './boat';
@@ -26,7 +26,7 @@ export const timeslotsOptions = (boatId: number, queryClient: QueryClient) => qu
 	},
 });
 
-export function useGetTimeSlots(boatId: number): DefinedUseQueryResult<TimeSlotDto[]> {
+export function useGetTimeSlots(boatId: number) {
 	const queryClient = useQueryClient();
 	return useQuery(timeslotsOptions(boatId, queryClient));
 }

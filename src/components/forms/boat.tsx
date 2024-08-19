@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {z} from 'zod';
-import {Controller, type SubmitHandler, useForm} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
