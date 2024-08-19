@@ -14,6 +14,13 @@ import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {PersonDto} from '../../models/api/person.model';
 import {Input} from '../ui/input';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select';
 
 const PersonSchema = z.object({
 	id: z.number(),
@@ -21,7 +28,8 @@ const PersonSchema = z.object({
 	lastName: z.string(),
 	email: z.string(),
 	phoneNumber: z.number(),
-	personType: z.string(),
+	personType: z.enum(['employee', 'customer']),
+	pagerNumber: z.string(),
 });
 
 export type PersonFormSchema = z.infer<typeof PersonSchema>;
@@ -41,7 +49,7 @@ const PersonForm: React.FC<PersonFormProps> = ({model, mutation, isCreate}) => {
 			lastName: model.lastName ?? '',
 			email: model.email ?? '',
 			phoneNumber: model.phoneNumber ?? 0,
-			personType: '',
+			personType: 'customer',
 		},
 		resolver: zodResolver(PersonSchema),
 	});
@@ -125,6 +133,40 @@ const PersonForm: React.FC<PersonFormProps> = ({model, mutation, isCreate}) => {
 										className="input"
 										type="tel"
 									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						name="personType"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Person Type</FormLabel>
+								<FormControl>
+									<Select value={field.value} onValueChange={field.onChange}>
+										<SelectTrigger>
+											<SelectValue placeholder="Select Person Type" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="employee">Employee</SelectItem>
+											<SelectItem value="customer">Customer</SelectItem>
+										</SelectContent>
+									</Select>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						name="pagerNumber"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Pager Number</FormLabel>
+								<FormControl>
+									<Input placeholder="XC23832" {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

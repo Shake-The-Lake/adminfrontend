@@ -19,9 +19,7 @@ export const loader =
 			throw new Error('No event ID provided');
 		}
 
-		await queryClient.ensureQueryData(
-			bookingsOptions(Number(params.id), queryClient),
-		);
+		await queryClient.ensureQueryData(bookingsOptions(Number(params.id)));
 		return {eventId: Number(params.id)};
 	};
 
@@ -52,7 +50,7 @@ const BookingsPage: React.FC = () => {
 				</div>
 				<div className="w-full">
 					{error === null ? (
-						<DataTable columns={bookingColumns} data={bookings} />
+						<DataTable columns={bookingColumns} data={bookings!} />
 					) : (
 						<p>Failed to load bookings!</p>
 					)}

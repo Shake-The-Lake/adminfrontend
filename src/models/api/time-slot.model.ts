@@ -1,4 +1,5 @@
 import {type ActivityTypeDto} from './activity-type.model';
+import type {ColumnDef} from '@tanstack/react-table';
 
 export type TimeSlotDto = {
 	id: number;
@@ -21,3 +22,29 @@ export const defaultTimeSlot: TimeSlotDto = {
 	activityType: undefined,
 	activityTypeId: 0,
 };
+
+export const timeSlotColumns: Array<ColumnDef<TimeSlotDto>> = [
+	{
+		id: 'from',
+		accessorKey: 'fromTime',
+		header: 'From',
+	},
+	{
+		id: 'tp',
+		accessorKey: 'untilTime',
+		header: 'To',
+	},
+
+	{
+		accessorKey: 'boat.name',
+		header: 'Boat',
+	},
+	{
+		accessorKey: 'person.emailAddress',
+		header: 'Email',
+	},
+	{
+		accessorKey: 'person.phoneNumber',
+		header: 'Phone',
+	},
+];

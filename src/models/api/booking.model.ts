@@ -10,7 +10,7 @@ export type BookingDto = {
 export const defaultBooking: BookingDto = {
 	id: 0,
 	isRider: false,
-	isManual: false,
+	isManual: true,
 	pagerNumber: undefined,
 	personId: 0,
 	timeSlotId: 0,
