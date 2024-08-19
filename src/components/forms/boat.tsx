@@ -12,7 +12,7 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded, validateTime} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
@@ -26,12 +26,8 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.string().refine((val) => !isNaN(Date.parse(val)), {
-		message: 'Invalid date format',
-	}),
-	availableUntil: z.string().refine((val) => !isNaN(Date.parse(val)), {
-		message: 'Invalid date format',
-	}),
+	availableFrom: z.string().refine((value) => validateTime(value), 'Invalid time'),
+	availableUntil: z.string().refine((value) => validateTime(value), 'Invalid time'),
 	eventId: z.number().optional(),
 });
 
@@ -52,7 +48,11 @@ const BoatForm: React.FC<BoatFormProps> = ({
 }) => {
 	const form = useForm<BoatFormSchema>({
 		mode: 'onChange',
-		defaultValues: model,
+		defaultValues: {
+			...model,
+			availableFrom: model.availableFrom,
+			availableUntil: model.availableUntil,
+		},
 		resolver: zodResolver(boatFormSchema),
 	});
 	const {id} = useParams<{id: string}>();
@@ -66,6 +66,9 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
 			timeSlotIds: model.timeSlotIds,
+			availableFrom: values.availableFrom,
+			availableUntil: values.availableUntil,
+			activityTypeId: 0,
 		};
 
 		await mutation.mutateAsync(boat);
@@ -172,7 +175,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							<FormItem>
 								<FormLabel>Boat Available From</FormLabel>
 								<FormControl>
-									<Input type="datetime-local" {...field} className="input" />
+									<Input type="time" {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -186,7 +189,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							<FormItem>
 								<FormLabel>Boat Available Until</FormLabel>
 								<FormControl>
-									<Input type="datetime-local" {...field} className="input" />
+									<Input type="time" {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

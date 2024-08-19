@@ -60,7 +60,7 @@ const BoatPage: React.FC = () => {
 				)}
 			</div>
 			<Separator className="w-full my-10" />
-			<TimeSlots {...boat}></TimeSlots>
+			<TimeSlots {...boat} ></TimeSlots>
 		</>
 	);
 };

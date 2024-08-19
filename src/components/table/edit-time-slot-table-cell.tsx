@@ -5,11 +5,9 @@ import {TableCell} from '../ui/table';
 import StlDialog from '../dialog/stl-dialog';
 import TimeSlotForm from '../forms/time-slot';
 import {type BoatDto} from '../../models/api/boat.model';
-import {toast} from '../ui/use-toast';
 import {Button} from '../ui/button';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useUpdateTimeSlot} from '../../queries/time-slot';
-import timeSlot from '../forms/time-slot';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
