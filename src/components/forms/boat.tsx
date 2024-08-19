@@ -12,7 +12,7 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {formatTimeLocal, getTimeStringFromWholeDate, getWholeDateFromTimeString, onInvalidFormHandler, useEmitSuccessIfSucceeded, validateTime} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded, validateTime} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
@@ -50,8 +50,8 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		mode: 'onChange',
 		defaultValues: {
 			...model,
-			availableFrom: getTimeStringFromWholeDate(model.availableFrom),
-			availableUntil: getTimeStringFromWholeDate(model.availableUntil),
+			availableFrom: model.availableFrom,
+			availableUntil: model.availableUntil,
 		},
 		resolver: zodResolver(boatFormSchema),
 	});
@@ -66,14 +66,8 @@ const BoatForm: React.FC<BoatFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId ?? eventId,
 			timeSlotIds: model.timeSlotIds,
-			availableFrom: getWholeDateFromTimeString(
-				new Date(model?.availableFrom),
-				values.availableFrom,
-			),
-			availableUntil: getWholeDateFromTimeString(
-				new Date(model?.availableFrom),
-				values.availableUntil,
-			),
+			availableFrom: values.availableFrom,
+			availableUntil: values.availableUntil,
 			activityTypeId: 0,
 		};
 

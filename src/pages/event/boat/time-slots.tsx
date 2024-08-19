@@ -5,9 +5,6 @@ import {
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
 import {
-	getTimeStringFromWholeDate,
-} from '../../../lib/utils';
-import {
 	Table,
 	TableBody,
 	TableCell,
@@ -106,19 +103,16 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				<TableBody>
 					{timeSlots?.map((slot, index) => (
 						<TableRow key={index} className="w-full justify-between">
-							<TableCell>
-								{getTimeStringFromWholeDate(slot?.fromTime)}
-							</TableCell>
-							<TableCell>
-								{getTimeStringFromWholeDate(slot.untilTime)}
-							</TableCell>
+							<TableCell>{slot?.fromTime?.slice(0, 5) ?? ''}</TableCell>
+							<TableCell>{slot?.untilTime?.slice(0, 5)}</TableCell>
 							<TableCell>
 								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
 							</TableCell>
 							<EditTimeSlotTableCell
 								boat={boat}
 								timeSlot={slot}
-								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+								deleteMutation={deleteMutation}
+							></EditTimeSlotTableCell>
 						</TableRow>
 					))}
 				</TableBody>

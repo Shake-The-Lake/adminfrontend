@@ -8,8 +8,8 @@ export type BoatDto = {
 	seatsViewer: number;
 	operator: string;
 	slotDurationInMins?: number;
-	availableFrom: Date; // Assuming ISO string format for LocalDateTime
-	availableUntil: Date; // Assuming ISO string format for LocalDateTime
+	availableFrom: string; // Assuming hh:mm:ss format for time
+	availableUntil: string; // Assuming hh:mm:ss format for time
 	timeSlotIds?: Set<number>;
 	eventId?: number;
 	activityTypeId?: number;

@@ -14,9 +14,7 @@ import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
-	getTimeStringFromWholeDate,
 	getTranslation,
-	getWholeDateFromTimeString,
 	onInvalidFormHandler,
 	useEmitSuccessIfSucceeded,
 	validateTime,
@@ -58,8 +56,8 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		mode: 'onChange',
 		defaultValues: {
 			...model,
-			fromTime: getTimeStringFromWholeDate(model.fromTime),
-			untilTime: getTimeStringFromWholeDate(model.untilTime),
+			fromTime: model.fromTime,
+			untilTime: model.untilTime,
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
@@ -75,14 +73,8 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		const timeSlot: TimeSlotDto = {
 			...values,
-			fromTime: getWholeDateFromTimeString(
-				new Date(boat?.availableFrom ?? new Date()),
-				values.fromTime,
-			),
-			untilTime: getWholeDateFromTimeString(
-				new Date(boat?.availableFrom ?? new Date()),
-				values.untilTime,
-			),
+			fromTime: values.fromTime,
+			untilTime: values.untilTime,
 			boatId: boat?.id ?? 0,
 			id: model.id,
 			status: 'AVAILABLE',
