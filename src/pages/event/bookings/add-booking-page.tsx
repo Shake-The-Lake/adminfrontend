@@ -7,6 +7,8 @@ import {useCreatePerson} from '../../../queries/person';
 import {boatDetailOptions} from '../../../queries/boat';
 import {useGetTimeSlots} from '../../../queries/time-slot';
 import {Button} from '../../../components/ui/button';
+import {DataTable} from '../../../components/data-table/data-table';
+import {timeSlotColumns} from '../../../models/api/time-slot.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -27,7 +29,7 @@ const AddBookingPage: React.FC = () => {
 		ReturnType<ReturnType<typeof loader>>
 	>;
 
-	const {data: timeSlots} = useGetTimeSlots(boatId);
+	const {data: timeSlots, isPending, error} = useGetTimeSlots(boatId);
 	const createPersonMutation = useCreatePerson();
 
 	return (
@@ -40,7 +42,14 @@ const AddBookingPage: React.FC = () => {
 				<div className="w-full p-4 flex justify-center">
 					<div className="flex flex-col w-full">
 						<h3>Timeslots</h3>
-						//TODO
+
+						<div className="w-full">
+							{error === null ? (
+								<DataTable columns={timeSlotColumns} data={timeSlots!} />
+							) : (
+								<p>Failed to load bookings!</p>
+							)}
+						</div>
 					</div>
 				</div>
 				<div className="w-full flex mt-20">
