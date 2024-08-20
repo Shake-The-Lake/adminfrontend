@@ -28,21 +28,18 @@ export const timeSlotColumns: Array<ColumnDef<TimeSlotDto>> = [
 		header: 'From',
 	},
 	{
-		id: 'tp',
+		id: 'to',
 		accessorKey: 'untilTime',
 		header: 'To',
 	},
 
+	/*	{
+      accessorKey: 'boat.name',
+      header: 'Boat',
+    },*/
+
 	{
-		accessorKey: 'boat.name',
-		header: 'Boat',
-	},
-	{
-		accessorKey: 'person.emailAddress',
-		header: 'Email',
-	},
-	{
-		accessorKey: 'person.phoneNumber',
-		header: 'Phone',
+		accessorKey: 'activityType.name',
+		header: 'Activity Type',
 	},
 ];
