@@ -1,35 +1,42 @@
 import type {QueryClient} from '@tanstack/react-query';
-import {LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import React from 'react';
 import PersonForm from '../../../components/forms/person';
 import {defaultPerson} from '../../../models/api/person.model';
 import {useCreatePerson} from '../../../queries/person';
-import {boatDetailOptions} from '../../../queries/boat';
-import {useGetTimeSlots} from '../../../queries/time-slot';
+import {
+	timeslotsForEventOptions,
+	useGetTimeSlotsForEvent,
+} from '../../../queries/time-slot';
 import {Button} from '../../../components/ui/button';
 import {DataTable} from '../../../components/data-table/data-table';
 import {timeSlotColumns} from '../../../models/api/time-slot.model';
+import {useTranslation} from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.boatId) {
-			throw new Error('No boat ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(boatDetailOptions(Number(params.boatId)));
-		return {
-			eventId: Number(params.id),
-			boatId: Number(params.boatId),
+			await queryClient.ensureQueryData(
+				timeslotsForEventOptions(Number(params.id)),
+			);
+			return {
+				eventId: Number(params.id),
+			};
 		};
-	};
 
 const AddBookingPage: React.FC = () => {
-	const {eventId, boatId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	const {eventId} = useLoaderData() as Awaited<
+	ReturnType<ReturnType<typeof loader>>
 	>;
 
-	const {data: timeSlots, isPending, error} = useGetTimeSlots(boatId);
+	const {data: timeSlots, isPending, error} = useGetTimeSlotsForEvent(eventId);
+
+	const {i18n} = useTranslation();
+
 	const createPersonMutation = useCreatePerson();
 
 	return (
@@ -45,7 +52,10 @@ const AddBookingPage: React.FC = () => {
 
 						<div className="w-full">
 							{error === null ? (
-								<DataTable columns={timeSlotColumns} data={timeSlots!} />
+								<DataTable
+									columns={timeSlotColumns(i18n.language)}
+									data={timeSlots ?? []}
+								/>
 							) : (
 								<p>Failed to load bookings!</p>
 							)}

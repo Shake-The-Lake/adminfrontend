@@ -12,7 +12,7 @@ import {
 import {zodResolver} from '@hookform/resolvers/zod';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
-import {PersonDto} from '../../models/api/person.model';
+import {type PersonDto} from '../../models/api/person.model';
 import {Input} from '../ui/input';
 import {
 	Select,
@@ -61,6 +61,7 @@ const PersonForm: React.FC<PersonFormProps> = ({model, mutation, isCreate}) => {
 		};
 		await mutation.mutateAsync(person);
 	};
+
 	return (
 		<>
 			<MutationToaster

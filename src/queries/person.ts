@@ -7,11 +7,11 @@ export function useCreatePerson() {
 		mutationFn: createPerson,
 		async onSuccess(data) {
 			if (data) {
-				//queryClient.setQueryData(keys.detail(data.id ?? 0, false), data);
+				// QueryClient.setQueryData(keys.detail(data.id ?? 0, false), data);
 				// TODO
 			}
 
-			//await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
+			// Await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
 			// TODO
 		},
 	});

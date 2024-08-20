@@ -47,8 +47,8 @@ export function useCreateBooking() {
 				// TODO
 			}
 
-			//await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
-			//TODO
+			// Await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
+			// TODO
 		},
 	});
 }

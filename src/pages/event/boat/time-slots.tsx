@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import {
-	defaultTimeSlot,
-} from '../../../models/api/time-slot.model';
+import {defaultTimeSlot} from '../../../models/api/time-slot.model';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
 import {
@@ -12,18 +10,15 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import {type BoatDto} from '../../../models/api/boat.model';
 import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
 import {type QueryClient} from '@tanstack/react-query';
 import {
-	timeslotsOptions,
+	timeslotsForBoatOptions,
 	useCreateTimeSlot,
 	useDeleteTimeSlot,
-	useGetTimeSlots,
+	useGetTimeSlotsForBoat,
 } from '../../../queries/time-slot';
 import LoadingSpinner from '../../../components/animations/loading';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
@@ -36,7 +31,7 @@ export const loader =
 			}
 
 			await queryClient.ensureQueryData(
-				timeslotsOptions(Number(params.boatId), queryClient),
+				timeslotsForBoatOptions(Number(params.boatId), queryClient),
 			);
 			return {boatId: Number(params.boatId)};
 		};
@@ -45,7 +40,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const {boatId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: timeSlots, isPending} = useGetTimeSlots(boatId);
+	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(boatId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
@@ -111,8 +106,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 							<EditTimeSlotTableCell
 								boat={boat}
 								timeSlot={slot}
-								deleteMutation={deleteMutation}
-							></EditTimeSlotTableCell>
+								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
 						</TableRow>
 					))}
 				</TableBody>

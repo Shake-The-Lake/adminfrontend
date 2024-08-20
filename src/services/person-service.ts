@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {PersonDto} from '../models/api/person.model';
+import {type PersonDto} from '../models/api/person.model';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 

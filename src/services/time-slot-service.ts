@@ -13,12 +13,16 @@ export const getSortedTimeSlots = (timeSlot: Set<TimeSlotDto> | undefined) =>
 		? new Set(sortBy(Array.from(timeSlot), timeSlotSortBy)) 
 		: new Set<TimeSlotDto>();
 
-// Todo! actually make filterable by event
+// Todo! actually make filterable by event once implemented in backend
 export const getAllTimeSlotsFromEvent = async (
 	eventId?: number,
 ): Promise<TimeSlotDto[]> => {
-	const response = await axios.get<TimeSlotDto[]>(timeSlotUrl);
-	const result = response.data;
+	const expand = 'boat,activitytype';
+	const params = {expand};
+	const response = await axios.get<TimeSlotDto[]>(timeSlotUrl, {params});
+	const result = response.data.filter(
+		(timeSlot) => timeSlot.activityType?.eventId === eventId || timeSlot.boat?.eventId === eventId,
+	);
 
 	return sortBy(result, timeSlotSortBy);
 };

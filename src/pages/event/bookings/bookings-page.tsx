@@ -14,18 +14,18 @@ import {eventDetailRoutes} from '../../../constants';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(bookingsOptions(Number(params.id)));
-		return {eventId: Number(params.id)};
-	};
+			await queryClient.ensureQueryData(bookingsOptions(Number(params.id)));
+			return {eventId: Number(params.id)};
+		};
 
 const BookingsPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: bookings, isPending, error} = useGetBookings(eventId);
 
