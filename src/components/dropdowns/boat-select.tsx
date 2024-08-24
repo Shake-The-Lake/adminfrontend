@@ -9,9 +9,10 @@ import {type BoatDto} from '../../models/api/boat.model';
 
 export type BoatSelectProps = {
 	field: ControllerRenderProps<any, 'boatId'>;
+	className?: string | undefined;
 };
 
-const BoatSelect: React.FC<BoatSelectProps> = ({field}) => {
+const BoatSelect: React.FC<BoatSelectProps> = ({field, className}) => {
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 	const {data: boats} = useGetBoats(eventId);
@@ -20,15 +21,15 @@ const BoatSelect: React.FC<BoatSelectProps> = ({field}) => {
 	const getKey = (b?: BoatDto | undefined) => b?.id;
 
 	return (
-		<FormItem>
+		<FormItem className={className}>
 			<FormLabel>Boat</FormLabel>
 			<FormControl>
 				<ComboBox
 					value={field.value}
-					onValueChange={(value) => {
-						field.onChange(Number(value));
+					onValueChange={(value?: BoatDto) => {
+						field.onChange(value?.id);
 					}}
-					list={boats}
+					list={boats ?? []}
 					getLabel={getLabel}
 					getKey={getKey}></ComboBox>
 			</FormControl>

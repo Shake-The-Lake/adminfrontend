@@ -3,7 +3,7 @@ import CreateEventDialog from './create-event-dialog';
 import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
 import {useNavigate} from 'react-router-dom';
-import {type QueryClient, useQuery} from '@tanstack/react-query';
+import {type QueryClient} from '@tanstack/react-query';
 import {eventsOptions, useDeleteEvent, useGetEvents} from '../../queries/event';
 import {MutationToaster} from '../../components/common/mutation-toaster';
 

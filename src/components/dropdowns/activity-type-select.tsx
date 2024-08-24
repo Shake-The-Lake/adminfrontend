@@ -15,15 +15,19 @@ import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
 
 export type ActivityTypeSelectProps = {
 	field: ControllerRenderProps<any, 'activityTypeId'>;
+	className?: string | undefined;
 };
 
-const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({field}) => {
+const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
+	field,
+	className,
+}) => {
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 	const {data: activityTypes} = useGetActivityTypes(eventId);
 
 	return (
-		<FormItem>
+		<FormItem className={className}>
 			<FormLabel>Activity Type</FormLabel>
 			<FormControl>
 				<Select
@@ -32,14 +36,14 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({field}) => {
 						field.onChange(Number(value));
 					}}>
 					<SelectTrigger>
-						<SelectValue placeholder="Select Activity Type">
+						<SelectValue placeholder="Select">
 							{field.value
 								? getTranslation(
 									i18n.language,
 									activityTypes?.find((type) => type.id === field.value)
 										?.name,
 								)
-								: 'Select Activity Type'}
+								: 'Select'}
 						</SelectValue>
 					</SelectTrigger>
 					<SelectContent>

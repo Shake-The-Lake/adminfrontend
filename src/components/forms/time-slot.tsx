@@ -61,12 +61,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		resolver: zodResolver(TimeSlotSchema),
 	});
 
-	const {id} = useParams<{id: string}>();
-	const eventId = Number(id);
-	const {i18n} = useTranslation();
-
-	const {data: activityTypes} = useGetActivityTypes(eventId);
-
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
 	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
