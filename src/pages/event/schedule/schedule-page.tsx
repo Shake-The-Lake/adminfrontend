@@ -3,11 +3,9 @@ import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
-import {time} from 'console';
-import {describe} from 'node:test';
-import {Description} from '@radix-ui/react-toast';
 import {fromTimeToCurrentDate} from '../../../lib/utils';
 import {eventDetailOptions, useEventDetail} from '../../../queries/event';
+import {ProgramItem} from '../../../components/planby/programm-item';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -35,7 +33,6 @@ const SchedulePage: React.FC = () => {
 	const {data: event} = useEventDetail(queryClient, eventId, false);
 
 	if (boats === undefined) return <div>Add a boat</div>;
-
 	const program: Program[] = boats.flatMap((boat) =>
 		Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
 			id: timeSlot.id.toString(),
@@ -117,6 +114,9 @@ const SchedulePage: React.FC = () => {
 				<Epg {...getEpgProps()} >
 					<Layout
 					  {...getLayoutProps()}
+						renderProgram={({program}) => (
+							<ProgramItem key={program.data.id} program={program} />
+						)}
 						renderChannel={({channel}) => (
 							<div style={{padding: '10px', fontWeight: 'bold'}} key={channel.uuid}>
 								{channel.name}

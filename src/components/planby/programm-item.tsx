@@ -1,0 +1,51 @@
+import React from 'react';
+import {
+	ProgramBox,
+	ProgramContent,
+	ProgramFlex,
+	ProgramStack,
+	ProgramTitle,
+	ProgramText,
+	ProgramImage,
+	useProgram,
+} from 'planby';
+import {Link} from 'react-router-dom';
+
+export const ProgramItem = ({program, ...rest}) => {
+	const {
+		styles,
+		formatTime,
+		set12HoursTimeFormat,
+		isLive,
+		isMinWidth,
+	} = useProgram({
+		program,
+		...rest,
+	});
+
+	const {data} = program;
+	const {image, title, since, till} = data;
+
+	const sinceTime = formatTime(since, set12HoursTimeFormat()).toLowerCase();
+	const tillTime = formatTime(till, set12HoursTimeFormat()).toLowerCase();
+
+	return (
+		<ProgramBox width={styles.width} style={styles.position} className='relative'>
+			<ProgramContent width={styles.width} isLive={isLive}>
+				<ProgramFlex>
+					{isLive && isMinWidth}
+					<ProgramStack>
+						<Link
+							to={`/bookings/${program.id}`}
+							className='after:absolute after:inset-0'>
+						</Link>
+						<ProgramTitle>{title}</ProgramTitle>
+						<ProgramText>
+							{sinceTime} - {tillTime}
+						</ProgramText>
+					</ProgramStack>
+				</ProgramFlex>
+			</ProgramContent>
+		</ProgramBox>
+	);
+};
