@@ -1,5 +1,9 @@
 import {QueryClient} from '@tanstack/react-query';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import React, {useState} from 'react';
 import {z} from 'zod';
 import {SubmitHandler, useForm} from 'react-hook-form';
@@ -79,12 +83,16 @@ const AddBookingPage: React.FC = () => {
 
 	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
 	const {i18n} = useTranslation();
+	const navigate = useNavigate();
 	const createPersonMutation = useCreatePerson();
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | null>(null);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<number | null>(
 		null,
 	);
+	const handleCancel = () => {
+		navigate(`/event/${eventId}/bookings`);
+	};
 
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
@@ -271,7 +279,7 @@ const AddBookingPage: React.FC = () => {
 			</div>
 
 			<div className="flex w-full justify-end mt-auto p-4">
-				<Button type="button" onClick={() => form.reset()}>
+				<Button type="button" variant="secondary" onClick={handleCancel}>
 					Cancel
 				</Button>
 				<Button type="submit" form="personForm" className="ml-4">
