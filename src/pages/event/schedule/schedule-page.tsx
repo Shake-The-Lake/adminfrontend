@@ -1,12 +1,13 @@
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
-import {type QueryClient} from '@tanstack/react-query';
+import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
 import {time} from 'console';
 import {describe} from 'node:test';
 import {Description} from '@radix-ui/react-toast';
 import {fromTimeToCurrentDate} from '../../../lib/utils';
+import {eventDetailOptions, useEventDetail} from '../../../queries/event';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -28,7 +29,10 @@ const SchedulePage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: boats, isPending, error} = useGetBoats(eventId);
+	const {data: boats} = useGetBoats(eventId);
+
+	const queryClient = useQueryClient();
+	const {data: event} = useEventDetail(queryClient, eventId, false);
 
 	if (boats === undefined) return <div>Add a boat</div>;
 
@@ -44,7 +48,7 @@ const SchedulePage: React.FC = () => {
 			image: '',
 		})),
 	);
-	console.log(program);
+
 	const channels: Channel[] = boats.map((boat) => ({
 	  id: boat.id,
 	  name: boat.name,
@@ -56,18 +60,60 @@ const SchedulePage: React.FC = () => {
 	const {
 		getEpgProps,
 		getLayoutProps,
-		onScrollToNow,
-		onScrollLeft,
-		onScrollRight,
 	} = useEpg({
 		epg: program,
 		channels,
-		startDate: '2024-08-26',
+		startDate: event?.date,
+		theme: {
+			primary: {
+				600: '#CBD5E1',
+				900: '#fff',
+			},
+			white: '#fff',
+			green: {
+				300: '#0EC8C8',
+			},
+			scrollbar: {
+				border: '#ffffff',
+				thumb: {
+					bg: '#CBD5E1',
+				},
+			},
+			gradient: {
+				blue: {
+					300: '#FFFFFF',
+					600: '#CBD5E1',
+					900: '#768BA5',
+				},
+			},
+	
+			text: {
+				grey: {
+					300: '#002650',
+					500: '#002650',
+				},
+			},
+	
+			timeline: {
+				divider: {
+					bg: '#718096',
+				},
+			},
+			grey: {
+				300: '#e2e8f0',
+			},
+			loader: {
+				teal: '',
+				purple: '',
+				pink: '',
+				bg: '',
+			},
+		},
 	});
 
 	return (
 		<div>
-			<div style={{height: '600px', width: '1200px'}}>
+			<div>
 				<Epg {...getEpgProps()}>
 					<Layout
 						{...getLayoutProps()}
