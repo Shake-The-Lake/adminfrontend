@@ -36,7 +36,7 @@ export const ProgramItem = ({program, ...rest}) => {
 					{isLive && isMinWidth}
 					<ProgramStack>
 						<Link
-							to={`/bookings/${program.id}`}
+							to={`${data.id}`}
 							className='after:absolute after:inset-0'>
 						</Link>
 						<ProgramTitle>{title}</ProgramTitle>
