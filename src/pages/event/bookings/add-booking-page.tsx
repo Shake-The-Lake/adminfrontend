@@ -121,7 +121,7 @@ const AddBookingPage: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
+		<div className="flex flex-col items-center h-full">
 			<div className="w-full mb-8 flex justify-between items-center">
 				<h1>Add Booking</h1>
 			</div>
@@ -142,7 +142,7 @@ const AddBookingPage: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="w-full flex mt-20">
+			<div className="w-full flex mt-10">
 				<div className="p-4">
 					<h3>Person Data</h3>
 					<p className="text-primary-dark-stroke mb-2 mt-2">
@@ -265,15 +265,18 @@ const AddBookingPage: React.FC = () => {
 								</FormControl>
 								<FormMessage />
 							</FormItem>
-							<div className="flex w-full flex-row justify-end gap-x-3">
-								<Button type="button" onClick={() => form.reset()}>
-									Cancel
-								</Button>
-								<Button type="submit">Save</Button>
-							</div>
 						</form>
 					</Form>
 				</div>
+			</div>
+
+			<div className="flex w-full justify-end mt-auto p-4">
+				<Button type="button" onClick={() => form.reset()}>
+					Cancel
+				</Button>
+				<Button type="submit" form="personForm" className="ml-4">
+					Save
+				</Button>
 			</div>
 		</div>
 	);
