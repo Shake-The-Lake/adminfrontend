@@ -1,5 +1,5 @@
 export type BookingDto = {
-	id: number;
+	id?: number;
 	isRider: boolean;
 	isManual: boolean;
 	pagerNumber?: number;

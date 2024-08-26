@@ -3,8 +3,8 @@ export type PersonDto = {
 	personType: string;
 	firstName: string;
 	lastName: string;
-	email: string;
-	phoneNumber: number;
+	emailAddress: string;
+	phoneNumber: string;
 	bookingIds?: number[];
 };
 
@@ -13,7 +13,7 @@ export const defaultPerson: PersonDto = {
 	personType: '',
 	firstName: '',
 	lastName: '',
-	email: '',
-	phoneNumber: 0,
+	emailAddress: '',
+	phoneNumber: '',
 	bookingIds: [],
 };

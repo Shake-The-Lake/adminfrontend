@@ -47,7 +47,7 @@ const PersonForm: React.FC<PersonFormProps> = ({model, mutation, isCreate}) => {
 			id: model.id ?? 0,
 			firstName: model.firstName ?? '',
 			lastName: model.lastName ?? '',
-			email: model.email ?? '',
+			email: model.emailAddress ?? '',
 			phoneNumber: model.phoneNumber ?? 0,
 			personType: 'customer',
 		},
@@ -57,9 +57,14 @@ const PersonForm: React.FC<PersonFormProps> = ({model, mutation, isCreate}) => {
 	const onSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		const person: PersonDto = {
 			...values,
-			id: values.id ?? model.id, // Ensure id is taken from values or fallback to model.id
+			id: values.id ?? model.id,
 		};
-		await mutation.mutateAsync(person);
+
+		try {
+			await mutation.mutateAsync(person);
+		} catch (error) {
+			console.error('Failed to submit form:', error);
+		}
 	};
 
 	return (

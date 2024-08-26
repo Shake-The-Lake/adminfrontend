@@ -12,11 +12,14 @@ import {
 	searchBookings,
 } from '../services/booking-search-service';
 import {createBooking} from '../services/booking-service';
+import {BookingDto} from '../models/api/booking.model';
 
 export const keys = {
 	all: (eventId: number) => ['bookings', eventId] as QueryKey,
 	search: (eventId: number, params: BookingSearchParams) =>
 		['bookings', 'search', eventId, params] as QueryKey,
+	detail: (id: number, expanded: boolean) =>
+		['bookings', 'detail', id, expanded] as QueryKey,
 };
 
 export const bookingsOptions = (eventId: number) =>
@@ -38,17 +41,19 @@ export const bookingsSearchOptions = (
 		},
 	});
 
-export function useCreateBooking() {
+export function useCreateBooking(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: createBooking,
-		async onSuccess(data) {
-			if (data) {
-				// TODO
-			}
-
-			// Await queryClient.invalidateQueries({queryKey: keys.all(), exact: true});
-			// TODO
+		onSuccess: (data) => {
+			queryClient.setQueryData(
+				['bookings', eventId],
+				(oldData: BookingDto[] | undefined) =>
+					oldData ? [...oldData, data] : [data],
+			);
+		},
+		onError: (error) => {
+			console.error('Error creating booking:', error);
 		},
 	});
 }

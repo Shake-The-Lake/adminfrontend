@@ -1,7 +1,5 @@
 import {type ActivityTypeDto} from './activity-type.model';
-import type {ColumnDef} from '@tanstack/react-table';
 import {type BoatDto} from './boat.model';
-import {localeToLocalizedStringProperty} from '../../lib/utils';
 
 export type TimeSlotDto = {
 	id: number;
@@ -24,25 +22,3 @@ export const defaultTimeSlot: TimeSlotDto = {
 	bookingIds: undefined,
 	activityType: undefined,
 };
-
-export const timeSlotColumns = (locale: string): Array<ColumnDef<TimeSlotDto>> => [
-	{
-		id: 'from',
-		accessorKey: 'fromTime',
-		header: 'From',
-	},
-	{
-		id: 'to',
-		accessorKey: 'untilTime',
-		header: 'To',
-	},
-	{
-		accessorKey: 'boat.name',
-		header: 'Boat',
-	},
-	{
-		id: 'name',
-		accessorKey: 'activityType.name.' + localeToLocalizedStringProperty(locale),
-		header: 'Activity Type',
-	},
-];
