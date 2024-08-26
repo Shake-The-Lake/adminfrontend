@@ -63,34 +63,32 @@ const SchedulePage: React.FC = () => {
 		startDate: event?.date,
 		theme: {
 			primary: {
-				600: '#CBD5E1',
-				900: '#fff',
+				600: '#002650',
+				900: '#ffffff',
 			},
-			white: '#fff',
+			white: '#ffffff',
 			green: {
 				300: '#0EC8C8',
 			},
 			scrollbar: {
-				border: '#ffffff',
+				border: '#e2e8f0',
 				thumb: {
 					bg: '#CBD5E1',
 				},
 			},
 			gradient: {
 				blue: {
-					300: '#FFFFFF',
+					300: '#ffffff',
 					600: '#CBD5E1',
 					900: '#768BA5',
 				},
 			},
-	
 			text: {
 				grey: {
-					300: '#002650',
-					500: '#002650',
+					300: '#CBD5E1',
+					500: '#768BA5',
 				},
 			},
-	
 			timeline: {
 				divider: {
 					bg: '#718096',
@@ -100,12 +98,13 @@ const SchedulePage: React.FC = () => {
 				300: '#e2e8f0',
 			},
 			loader: {
-				teal: '',
-				purple: '',
-				pink: '',
-				bg: '',
+				teal: '#0EC8C8',
+				purple: '#6B46C1',
+				pink: '#D53F8C',
+				bg: '#002650',
 			},
 		},
+
 	});
 
 	return (
@@ -118,7 +117,7 @@ const SchedulePage: React.FC = () => {
 							<ProgramItem key={program.data.id} program={program} />
 						)}
 						renderChannel={({channel}) => (
-							<div style={{padding: '10px', fontWeight: 'bold'}} key={channel.uuid}>
+							<div className='w-full h-full font-semibold p-3' key={channel.uuid}>
 								{channel.name}
 							</div>
 						)}
