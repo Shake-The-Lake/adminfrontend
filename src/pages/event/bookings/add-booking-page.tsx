@@ -37,7 +37,6 @@ import {
 import {BookingDto} from '../../../models/api/booking.model';
 import {PersonDto} from '../../../models/api/person.model';
 
-// Define the schema for person form validation
 const PersonSchema = z.object({
 	id: z.number().optional(),
 	firstName: z.string().min(1, 'First Name is required'),
@@ -120,11 +119,8 @@ const AddBookingPage: React.FC = () => {
 			};
 
 			await createBookingMutation.mutateAsync(bookingData);
-
-			alert('Booking created successfully!');
 		} catch (error) {
 			console.error('Failed to submit booking:', error);
-			alert('Failed to create booking. Please try again.');
 		}
 	};
 
@@ -257,7 +253,6 @@ const AddBookingPage: React.FC = () => {
 									</FormItem>
 								)}
 							/>
-							{/* Separate input for pagerNumber, which is part of the booking */}
 							<FormItem>
 								<FormLabel>Pager Number</FormLabel>
 								<FormControl>
