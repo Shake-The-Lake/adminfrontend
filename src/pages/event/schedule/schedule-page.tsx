@@ -1,5 +1,5 @@
 import React from 'react';
-import {useEpg, Epg, Layout} from 'planby';
+import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 
 const SchedulePage: React.FC = () => {
 	const epg: Program[] = [
@@ -30,18 +30,27 @@ const SchedulePage: React.FC = () => {
 		// Add more programs as needed
 	];
 
-	const channels = [
+	const channels: Channel[] = [
 		{
 			id: 'channel-1',
 			name: 'Channel 1',
 			logo: 'https://via.placeholder.com/150',
+			uuid: 'channel-1-uuid',
+			position: {
+				top: 0,
+				height: 0,
+			},
 		},
 		{
 			id: 'channel-2',
 			name: 'Channel 2',
 			logo: 'https://via.placeholder.com/150',
+			uuid: 'channel-1-uuid',
+			position: {
+				top: 0,
+				height: 0,
+			},
 		},
-		// Add more channels as needed
 	];
 
 	const {
