@@ -14,8 +14,8 @@ export type BookingSearchDto = {
 export type BookingSearchParams = {
 	personName?: string;
 	boatName?: string;
-	from?: string;
-	to?: string;
+	fromTime?: string;
+	untilTime?: string;
 	activity?: number;
 };
 
@@ -30,20 +30,16 @@ export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 		header: 'Last Name',
 	},
 	{
+		id: 'from',
 		accessorKey: 'timeSlot.fromTime',
 		header: 'From',
-		cell: ({row}) =>
-			row.original.timeSlot.fromTime
-				? new Date(row.original.timeSlot.fromTime).toLocaleString()
-				: '',
+		cell: ({row}) => row.original.timeSlot.fromTime?.slice(0, 5) ?? '',
 	},
 	{
+		id: 'to',
 		accessorKey: 'timeSlot.untilTime',
-		header: 'Until',
-		cell: ({row}) =>
-			row.original.timeSlot.untilTime
-				? new Date(row.original.timeSlot.untilTime).toLocaleString()
-				: '',
+		header: 'To',
+		cell: ({row}) => row.original.timeSlot.untilTime?.slice(0, 5) ?? '',
 	},
 	{
 		accessorKey: 'activityType.name.en',

@@ -122,6 +122,7 @@ const AddBookingPage: React.FC = () => {
 		} catch (error) {
 			console.error('Failed to submit booking:', error);
 		}
+		navigate(`/event/${eventId}/bookings`);
 	};
 
 	return (
