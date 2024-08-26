@@ -64,18 +64,6 @@ const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-
-	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
-	const {i18n} = useTranslation();
-
-	const createPersonMutation = useCreatePerson();
-	const createBookingMutation = useCreateBooking(eventId);
-
-	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<number | null>(
-		null,
-	);
-	const [pagerNumber, setPagerNumber] = useState<number | null>(null);
-
 	const form = useForm<PersonFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -89,6 +77,15 @@ const AddBookingPage: React.FC = () => {
 		resolver: zodResolver(PersonSchema),
 	});
 
+	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
+	const {i18n} = useTranslation();
+	const createPersonMutation = useCreatePerson();
+	const createBookingMutation = useCreateBooking(eventId);
+	const [pagerNumber, setPagerNumber] = useState<number | null>(null);
+	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<number | null>(
+		null,
+	);
+
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
 			alert('Please select a time slot.');
@@ -96,7 +93,6 @@ const AddBookingPage: React.FC = () => {
 		}
 
 		try {
-			// Step 1: Create the person
 			const personData: PersonDto = {
 				firstName: values.firstName,
 				lastName: values.lastName,
@@ -107,11 +103,10 @@ const AddBookingPage: React.FC = () => {
 
 			const newPerson = await createPersonMutation.mutateAsync(personData);
 
-			// Step 2: Create the booking with the new person ID, selected timeslot, and pager number
 			const bookingData: BookingDto = {
 				isRider: false,
 				isManual: false,
-				pagerNumber: pagerNumber || undefined, // Add pagerNumber if provided
+				pagerNumber: pagerNumber || undefined,
 				personId: newPerson.id as number,
 				timeSlotId: selectedTimeSlotId,
 			};
