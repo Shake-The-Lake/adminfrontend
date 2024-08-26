@@ -113,10 +113,15 @@ const SchedulePage: React.FC = () => {
 
 	return (
 		<div>
-			<div>
-				<Epg {...getEpgProps()}>
+			<div style={{height: '80vh', width: '90vw'}}>
+				<Epg {...getEpgProps()} >
 					<Layout
-						{...getLayoutProps()}
+					  {...getLayoutProps()}
+						renderChannel={({channel}) => (
+							<div style={{padding: '10px', fontWeight: 'bold'}} key={channel.uuid}>
+								{channel.name}
+							</div>
+						)}
 					/>
 				</Epg>
 			</div>
