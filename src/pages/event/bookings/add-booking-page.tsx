@@ -136,7 +136,11 @@ const AddBookingPage: React.FC = () => {
 					<div className="w-full">
 						{error === null ? (
 							<DataTable
-								columns={timeSlotColumns(i18n.language, setSelectedTimeSlotId)}
+								columns={timeSlotColumns(
+									i18n.language,
+									setSelectedTimeSlotId,
+									selectedTimeSlotId,
+								)}
 								data={timeSlots ?? []}
 							/>
 						) : (

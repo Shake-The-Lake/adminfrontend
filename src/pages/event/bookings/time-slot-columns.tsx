@@ -7,15 +7,17 @@ import {localeToLocalizedStringProperty} from '../../../lib/utils';
 export const timeSlotColumns = (
 	locale: string,
 	setSelectedTimeSlotId: (id: number) => void,
+	selectedTimeSlotId: number | null,
 ): Array<ColumnDef<TimeSlotDto>> => [
 	{
 		id: 'select',
 		cell: ({row}) => (
 			<Checkbox
-				checked={row.getIsSelected()}
+				checked={row.original.id === selectedTimeSlotId}
 				onCheckedChange={(value) => {
-					row.toggleSelected(!!value);
-					setSelectedTimeSlotId(row.original.id);
+					if (value) {
+						setSelectedTimeSlotId(row.original.id);
+					}
 				}}
 				aria-label="Select row"
 			/>
