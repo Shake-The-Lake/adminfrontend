@@ -1,57 +1,57 @@
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
+import {type QueryClient} from '@tanstack/react-query';
+import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
+import {boatsOptions, useGetBoats} from '../../../queries/boat';
+import {time} from 'console';
+import {describe} from 'node:test';
+import {Description} from '@radix-ui/react-toast';
+import {fromTimeToCurrentDate} from '../../../lib/utils';
+
+export const loader =
+	(queryClient: QueryClient) =>
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
+
+			await queryClient.ensureQueryData(
+				boatsOptions(Number(params.id), queryClient),
+			);
+
+			return {
+				eventId: Number(params.id),
+			};
+		};
 
 const SchedulePage: React.FC = () => {
-	const epg: Program[] = [
-		{
-			id: 'program-1',
-			channelId: 'channel-1',
-			title: 'Program 1',
-			start: '2022-02-02T00:00:00',
-			end: '2022-02-02T01:00:00',
-			channelUuid: 'channel-1-uuid',
-			description: 'Program 1 description',
-			since: '2022-02-02T00:00:00',
-			till: '2022-02-02T01:00:00',
-			image: 'program-1-image-url',
-		},
-		{
-			id: 'program-2',
-			channelId: 'channel-2',
-			title: 'Program 2',
-			start: '2022-02-02T01:00:00',
-			end: '2022-02-02T02:00:00',
-			channelUuid: 'channel-2-uuid',
-			description: 'Program 2 description',
-			since: '2022-02-02T01:00:00',
-			till: '2022-02-02T02:00:00',
-			image: 'program-2-image-url',
-		},
-		// Add more programs as needed
-	];
+	const {eventId} = useLoaderData() as Awaited<
+	ReturnType<ReturnType<typeof loader>>
+	>;
+	const {data: boats, isPending, error} = useGetBoats(eventId);
 
-	const channels: Channel[] = [
-		{
-			id: 'channel-1',
-			name: 'Channel 1',
-			logo: 'https://via.placeholder.com/150',
-			uuid: 'channel-1-uuid',
-			position: {
-				top: 0,
-				height: 0,
-			},
-		},
-		{
-			id: 'channel-2',
-			name: 'Channel 2',
-			logo: 'https://via.placeholder.com/150',
-			uuid: 'channel-1-uuid',
-			position: {
-				top: 0,
-				height: 0,
-			},
-		},
-	];
+	if (boats === undefined) return <div>Add a boat</div>;
+
+	const program: Program[] = boats.flatMap((boat) =>
+		Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
+			id: timeSlot.id.toString(),
+			title: boat.name,
+			channelId: boat.id,
+			channelUuid: boat.id.toString(),
+			description: '',
+			since: fromTimeToCurrentDate(timeSlot.fromTime ?? ''),
+			till: fromTimeToCurrentDate(timeSlot.untilTime ?? ''),
+			image: '',
+		})),
+	);
+	console.log(program);
+	const channels: Channel[] = boats.map((boat) => ({
+	  id: boat.id,
+	  name: boat.name,
+	  logo: 'https://via.placeholder.com/150',
+	  uuid: boat.id.toString(),
+	  position: {top: 0, height: 0},
+	}));
 
 	const {
 		getEpgProps,
@@ -60,9 +60,9 @@ const SchedulePage: React.FC = () => {
 		onScrollLeft,
 		onScrollRight,
 	} = useEpg({
-		epg,
+		epg: program,
 		channels,
-		startDate: '2022/02/02', // Or 2022-02-02T00:00:00
+		startDate: '2024-08-26',
 	});
 
 	return (

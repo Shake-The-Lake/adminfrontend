@@ -13,7 +13,6 @@ export const getEventWithSortedProperties = (event: EventDto) => {
 };
 
 export const getAllEvents = async (): Promise<EventDto[]> => {
-	console.log(baseUrl);
 	const response = await axios.get<EventDto[]>(`${baseUrl}/event`);
 	const result = response.data.map(e => getEventWithSortedProperties(e));
 

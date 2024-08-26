@@ -23,7 +23,6 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 	}, [props.error, props.isValidationError]);
 
 	useEffect(() => {
-		console.log(props);
 		console.log(
 			'Mutation Context:',
 			props.mutation?.context,
