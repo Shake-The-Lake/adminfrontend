@@ -5,7 +5,6 @@ import {
 	defaultBookingSearchParams,
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
@@ -68,11 +67,14 @@ const BookingOverview: React.FC = () => {
 			<LoadingSpinner isLoading={isPending} />
 			<div className="w-full mb-8 flex justify-between items-center">
 				<h1>Bookings</h1>
-				<Button onClick={() => {
-					navigate(
-						`/event/${eventId}/${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
-					);
-				}}>Add Booking</Button>
+				<Button
+					onClick={() => {
+						navigate(
+							`/event/${eventId}/${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
+						);
+					}}>
+					Add Booking
+				</Button>
 			</div>
 			<div className="w-full">
 				{error === null ? (
