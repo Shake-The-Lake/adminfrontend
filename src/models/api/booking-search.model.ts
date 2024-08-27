@@ -30,7 +30,6 @@ export const defaultBookingSearchParams: BookingSearchParams = {
 
 export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 	{
-		id: 'name', // Todo! adjust data table impl to not need this
 		accessorKey: 'person.firstName',
 		header: 'First Name',
 	},

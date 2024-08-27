@@ -28,7 +28,6 @@ const StlSelect = <T,>({
 	getLabel,
 }: StlSelectProps<T>) => {
 	const resetValue = () => {
-		console.log('get here');
 		onValueChange(undefined);
 	};
 

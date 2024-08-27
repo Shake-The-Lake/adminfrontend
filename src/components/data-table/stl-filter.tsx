@@ -49,7 +49,6 @@ const StlFilter: React.FC<StlFilterProps> = ({config, params}) => {
 
 	useEffect(() => {
 		const subscription = form.watch((value, {name, type}) => {
-			console.log(value, name, type);
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
 			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {

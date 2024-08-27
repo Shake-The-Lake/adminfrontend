@@ -42,7 +42,6 @@ export const updateBoat = async (
 	id: number,
 	boat: BoatDto,
 ): Promise<BoatDto> => {
-	console.log('update boat', boat);
 	const response = await axios.put<BoatDto>(`${baseUrl}/boat/${id}`, boat);
 	return response.data;
 };
