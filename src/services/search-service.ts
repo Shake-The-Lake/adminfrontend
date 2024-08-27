@@ -6,7 +6,7 @@ const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 export const getSearchParams = async (
 	eventId: number,
 ): Promise<SearchParameterDto> => {
-	const response = await axios.get<SearchParameterDto>(		`${baseUrl}/search/${eventId}`	);
+	const response = await axios.get<SearchParameterDto>(`${baseUrl}/search/${eventId}/parameters`);
 	
 	return response.data;
 };

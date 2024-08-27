@@ -14,7 +14,7 @@ export const searchParamsOptions = (eventId: number, queryClient: QueryClient) =
 	queryFn: async () => getSearchParams(eventId),
 	initialData() {
 		const queryData: EventDto | undefined = queryClient.getQueryData(eventKeys.detail(eventId, true));
-		return queryData && {boats: queryData?.boats, activityTypes: queryData?.activityTypes};
+		return (queryData?.boats && queryData?.activityTypes) && {boats: queryData?.boats, activityTypes: queryData?.activityTypes};
 	},
 });
 
