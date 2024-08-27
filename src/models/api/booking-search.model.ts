@@ -19,6 +19,15 @@ export type BookingSearchParams = {
 	activity?: number;
 };
 
+export const defaultBookingSearchParams: BookingSearchParams = {
+	personName: undefined,
+	activity: undefined,
+	boatName: undefined,
+	from: undefined,
+	to: undefined,
+	
+};
+
 export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 	{
 		id: 'name', // Todo! adjust data table impl to not need this

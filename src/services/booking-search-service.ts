@@ -23,8 +23,7 @@ export const searchBookings = async (
 	eventId: number,
 	searchParams: BookingSearchParams,
 ): Promise<BookingSearchDto[]> => {
-	const params = cleanEmptyParams({... searchParams,
-	});
+	const params = cleanEmptyParams(searchParams);
 	const response = await axios.get<BookingSearchDto[]>(
 		`${baseUrl}/search/${eventId}`, {params},
 	);
