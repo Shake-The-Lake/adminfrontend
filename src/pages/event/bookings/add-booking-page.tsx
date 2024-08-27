@@ -36,6 +36,11 @@ import {
 } from '../../../components/ui/select';
 import {BookingDto} from '../../../models/api/booking.model';
 import {PersonDto} from '../../../models/api/person.model';
+import StlFilter, {
+	defaultFilterParams,
+	StlFilterConfig,
+} from '../../../components/data-table/stl-filter';
+import {defaultBookingSearchParams} from '../../../models/api/booking-search.model';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -93,6 +98,16 @@ const AddBookingPage: React.FC = () => {
 		navigate(`/event/${eventId}/bookings`);
 	};
 
+	const searchParams = defaultFilterParams;
+	const [filter, setFilter] = useState(defaultBookingSearchParams);
+
+	searchParams.onSearchTermChange = (searchTerm?: string) => {
+		setFilter({...filter, personName: searchTerm});
+	};
+	searchParams.onActivityTypeChange = (activityTypeId?: number) => {
+		setFilter({...filter, activity: activityTypeId});
+	};
+
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
 			alert('Please select a time slot.');
@@ -136,14 +151,19 @@ const AddBookingPage: React.FC = () => {
 					<h3>Timeslots</h3>
 					<div className="w-full">
 						{error === null ? (
-							<DataTable
-								columns={timeSlotColumns(
-									i18n.language,
-									setSelectedTimeSlotId,
-									selectedTimeSlotId,
-								)}
-								data={timeSlots ?? []}
-							/>
+							<>
+								<StlFilter
+									config={StlFilterConfig.All}
+									params={searchParams}></StlFilter>
+								<DataTable
+									columns={timeSlotColumns(
+										i18n.language,
+										setSelectedTimeSlotId,
+										selectedTimeSlotId,
+									)}
+									data={timeSlots ?? []}
+								/>
+							</>
 						) : (
 							<p>Failed to load timeslots!</p>
 						)}
