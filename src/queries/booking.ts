@@ -8,27 +8,27 @@ import {
 } from '@tanstack/react-query';
 import {getBookingsByEventId, searchBookings} from '../services/booking-search-service';
 
-export const keys = {
+export const bookingKeys = {
 	all: (eventId: number) => ['bookings', eventId] as QueryKey,
 	search: (eventId: number, params: BookingSearchParams) => ['bookings', 'search', eventId, params] as QueryKey,
 };
 
 export const bookingsOptions = (eventId: number) => queryOptions({
-	queryKey: keys.all(eventId),
+	queryKey: bookingKeys.all(eventId),
 	queryFn: async () => getBookingsByEventId(eventId),
-});
-
-export const bookingsSearchOptions = (eventId: number, params: BookingSearchParams, queryClient: QueryClient) => queryOptions({
-	queryKey: keys.search(eventId, params),
-	queryFn: async () => searchBookings(eventId, params),
-	initialData() {
-		return queryClient.getQueryData(keys.all(eventId));
-	},
 });
 
 export function useGetBookings(eventId: number) {
 	return useQuery(bookingsOptions(eventId));
 }
+
+export const bookingsSearchOptions = (eventId: number, params: BookingSearchParams, queryClient: QueryClient) => queryOptions({
+	queryKey: bookingKeys.search(eventId, params),
+	queryFn: async () => searchBookings(eventId, params),
+	initialData() {
+		return queryClient.getQueryData(bookingKeys.all(eventId));
+	},
+});
 
 export function useSearchBookings(eventId: number, params: BookingSearchParams) {
 	const queryClient = useQueryClient();

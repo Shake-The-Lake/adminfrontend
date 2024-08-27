@@ -1,8 +1,8 @@
-import {keys as eventKeys} from './event';
-import {keys as activityTypeKeys} from './activity-type';
-import {keys as boatKeys} from './boat';
-import {keys as timeSlotKeys} from './time-slot';
-import {keys as bookingKeys} from './booking';
+import {eventKeys} from './event';
+import {activityTypeKeys} from './activity-type';
+import {boatKeys} from './boat';
+import {timeSlotKeys} from './time-slot';
+import {bookingKeys} from './booking';
 
 export const queries = {
 	event: eventKeys,
