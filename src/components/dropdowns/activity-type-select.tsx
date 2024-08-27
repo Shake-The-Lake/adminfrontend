@@ -2,7 +2,6 @@ import React from 'react';
 import {useParams} from 'react-router-dom';
 import i18n from '../../assets/i18n/i18n';
 import {getTranslation} from '../../lib/utils';
-import {useGetActivityTypes} from '../../queries/activity-type';
 import {
 	Select,
 	SelectContent,
@@ -12,6 +11,7 @@ import {
 } from '../ui/select';
 import {type ControllerRenderProps} from 'react-hook-form';
 import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
+import {useGetSearchParameters} from '../../queries/search';
 
 export type ActivityTypeSelectProps = {
 	field: ControllerRenderProps<any, 'activityTypeId'>;
@@ -24,7 +24,7 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 }) => {
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const {data: activityTypes} = useGetActivityTypes(eventId);
+	const {data: searchParams} = useGetSearchParameters(eventId);
 
 	return (
 		<FormItem className={className}>
@@ -40,14 +40,15 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 							{field.value
 								? getTranslation(
 									i18n.language,
-									activityTypes?.find((type) => type.id === field.value)
-										?.name,
+									searchParams?.activityTypes?.find(
+										(type) => type.id === field.value,
+									)?.name,
 								)
 								: 'Select'}
 						</SelectValue>
 					</SelectTrigger>
 					<SelectContent>
-						{activityTypes?.map((type) => (
+						{searchParams?.activityTypes?.map((type) => (
 							<SelectItem key={type.id} value={type.id.toString()}>
 								{getTranslation(i18n.language, type.name)}
 							</SelectItem>

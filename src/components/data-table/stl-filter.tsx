@@ -5,7 +5,6 @@ import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Controller, useForm} from 'react-hook-form';
 import ActivityTypeSelect from '../dropdowns/activity-type-select';
-import {validateTime} from '../../lib/utils';
 import BoatSelect from '../dropdowns/boat-select';
 import {
 	Form,
@@ -16,27 +15,8 @@ import {
 	FormMessage,
 } from '../ui/form';
 import {Input} from '../ui/input';
-
-export type StlFilterParams = {
-	searchTerm?: string;
-	onSearchTermChange?: (searchTerm?: string) => void;
-	activityTypeId?: number;
-	onActivityTypeChange?: (activityTypeId?: number) => void;
-	boatId?: number;
-	onBoatChange?: (boatId?: number) => void;
-	from?: string; // In HH:mm format
-	onFromChange?: (from?: string) => void;
-	to?: string; // In HH:mm format
-	onToChange?: (to?: string) => void;
-};
-
-export const defaultFilterParams: StlFilterParams = {
-	searchTerm: '',
-	activityTypeId: undefined,
-	boatId: undefined,
-	from: '',
-	to: '',
-};
+import {type StlFilterParams} from '../../models/api/search.model';
+import {validateTime} from '../../lib/date-time.utils';
 
 export enum StlFilterConfig {
 	SearchTerm = 1 << 0, // 0001 -- the bitshift is unnecessary, but done for consistency
@@ -83,7 +63,7 @@ const StlFilter: React.FC<StlFilterProps> = ({config, params}) => {
 			}
 		});
 		return () => {
-			subscription.unsubscribe(); 
+			subscription.unsubscribe();
 		};
 	}, [form.watch]);
 
