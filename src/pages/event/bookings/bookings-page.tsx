@@ -13,30 +13,30 @@ import {
 } from '../../../queries/booking';
 import {type QueryClient} from '@tanstack/react-query';
 import StlFilter, {
-	defaultFilterParams,
 	StlFilterConfig,
 } from '../../../components/data-table/stl-filter';
+import {defaultFilterParams} from '../../../models/api/search.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			bookingsSearchOptions(
-				Number(params.id),
-				defaultBookingSearchParams,
-				queryClient,
-			),
-		);
-		return {eventId: Number(params.id)};
-	};
+			await queryClient.ensureQueryData(
+				bookingsSearchOptions(
+					Number(params.id),
+					defaultBookingSearchParams,
+					queryClient,
+				),
+			);
+			return {eventId: Number(params.id)};
+		};
 
 const BookingsPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 
@@ -48,12 +48,21 @@ const BookingsPage: React.FC = () => {
 		setFilter({...filter, personName: searchTerm});
 	};
 
-	// Todo! add other conditions; investigate why backend logic doesn't work??
 	searchParams.onActivityTypeChange = (activityTypeId?: number) => {
-		setFilter({...filter, activity: activityTypeId});
+		setFilter({...filter, activityId: activityTypeId});
 	};
 
-	// Todo! make filterable in backend?!
+	searchParams.onBoatChange = (boatId?: number) => {
+		setFilter({...filter, boatId});
+	};
+
+	searchParams.onFromChange = (from?: string) => {
+		setFilter({...filter, from});
+	};
+
+	searchParams.onToChange = (to?: string) => {
+		setFilter({...filter, from: to});
+	};
 
 	return (
 		<div className="flex flex-col items-center">

@@ -9,6 +9,7 @@ import {onInvalidFormHandler} from '../../lib/utils';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {Button} from '../ui/button';
+import {validateDate} from '../../lib/date-time.utils';
 
 // Schema definition
 export const eventFormSchema = z.object({
@@ -16,7 +17,7 @@ export const eventFormSchema = z.object({
 	description: z.string(),
 	date: z
 		.string()
-		.refine((val) => !isNaN(Date.parse(val)), {
+		.refine((val) => validateDate(val), {
 			message: 'Invalid date',
 		})
 		.transform((val) => new Date(val)),
@@ -36,7 +37,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 		defaultValues: {
 			title: model.title,
 			description: model.description,
-			date: new Date(model.date).toISOString().slice(0, 10),
+			date: model.date,
 		},
 		resolver: zodResolver(eventFormSchema),
 	});

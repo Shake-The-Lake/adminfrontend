@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import {
-	defaultTimeSlot,
-} from '../../../models/api/time-slot.model';
+import {defaultTimeSlot} from '../../../models/api/time-slot.model';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
 import {
@@ -12,10 +10,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import {type BoatDto} from '../../../models/api/boat.model';
 import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
 import {type QueryClient} from '@tanstack/react-query';
@@ -27,6 +22,7 @@ import {
 } from '../../../queries/time-slot';
 import LoadingSpinner from '../../../components/animations/loading';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
+import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -103,16 +99,17 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 				<TableBody>
 					{timeSlots?.map((slot, index) => (
 						<TableRow key={index} className="w-full justify-between">
-							<TableCell>{slot?.fromTime?.slice(0, 5) ?? ''}</TableCell>
-							<TableCell>{slot?.untilTime?.slice(0, 5)}</TableCell>
+							<TableCell>{getDisplayTimeFromBackend(slot?.fromTime)}</TableCell>
+							<TableCell>
+								{getDisplayTimeFromBackend(slot?.untilTime)}
+							</TableCell>
 							<TableCell>
 								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
 							</TableCell>
 							<EditTimeSlotTableCell
 								boat={boat}
 								timeSlot={slot}
-								deleteMutation={deleteMutation}
-							></EditTimeSlotTableCell>
+								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
 						</TableRow>
 					))}
 				</TableBody>
