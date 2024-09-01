@@ -16,7 +16,7 @@ import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
-import ActivityTypeSelect from '../dropdowns/activity-type-select';
+import ActivityTypeSelect from '../select/activity-type-select';
 import {validateTime} from '../../lib/date-time.utils';
 
 const TimeSlotSchema = z.object({

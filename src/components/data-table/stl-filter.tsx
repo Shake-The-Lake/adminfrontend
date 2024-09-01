@@ -4,8 +4,8 @@ import React, {useEffect} from 'react';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Controller, useForm} from 'react-hook-form';
-import ActivityTypeSelect from '../dropdowns/activity-type-select';
-import BoatSelect from '../dropdowns/boat-select';
+import ActivityTypeSelect from '../select/activity-type-select';
+import BoatSelect from '../select/boat-select';
 import {
 	Form,
 	FormControl,
