@@ -13,7 +13,7 @@ import {
 } from '../../../queries/booking';
 import {type QueryClient} from '@tanstack/react-query';
 import StlFilter, {
-	StlFilterConfig,
+	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
 import {defaultFilterParams} from '../../../models/api/search.model';
 
@@ -61,7 +61,7 @@ const BookingsPage: React.FC = () => {
 	};
 
 	searchParams.onToChange = (to?: string) => {
-		setFilter({...filter, from: to});
+		setFilter({...filter, to});
 	};
 
 	return (
@@ -75,7 +75,7 @@ const BookingsPage: React.FC = () => {
 				{error === null ? (
 					<>
 						<StlFilter
-							config={StlFilterConfig.All}
+							options={StlFilterOptions.All}
 							params={searchParams}></StlFilter>
 						<DataTable columns={bookingColumns} data={bookings ?? []} />
 					</>
