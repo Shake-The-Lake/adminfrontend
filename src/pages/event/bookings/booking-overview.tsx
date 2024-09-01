@@ -17,31 +17,32 @@ import {
 } from '../../../queries/booking';
 import {type QueryClient} from '@tanstack/react-query';
 import StlFilter, {
-	defaultFilterParams,
-	StlFilterConfig,
+	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
+import {defaultFilterParams} from '../../../models/api/search.model';
 import {eventDetailRoutes} from '../../../constants';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			bookingsSearchOptions(
-				Number(params.id),
-				defaultBookingSearchParams,
-				queryClient,
-			),
-		);
-		return {eventId: Number(params.id)};
-	};
+			await queryClient.ensureQueryData(
+				bookingsSearchOptions(
+					Number(params.id),
+					defaultBookingSearchParams,
+					queryClient,
+				),
+			);
+			return {eventId: Number(params.id)};
+		};
 
 const BookingOverview: React.FC = () => {
+	const navigate = useNavigate();
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 
@@ -53,20 +54,28 @@ const BookingOverview: React.FC = () => {
 		setFilter({...filter, personName: searchTerm});
 	};
 
-	// Todo! add other conditions; investigate why backend logic doesn't work??
 	searchParams.onActivityTypeChange = (activityTypeId?: number) => {
-		setFilter({...filter, activity: activityTypeId});
+		setFilter({...filter, activityId: activityTypeId});
 	};
 
-	const navigate = useNavigate();
+	searchParams.onBoatChange = (boatId?: number) => {
+		setFilter({...filter, boatId});
+	};
 
-	// Todo! make filterable in backend?!
+	searchParams.onFromChange = (from?: string) => {
+		setFilter({...filter, from});
+	};
+
+	searchParams.onToChange = (to?: string) => {
+		setFilter({...filter, to});
+	};
 
 	return (
 		<div className="flex flex-col items-center">
 			<LoadingSpinner isLoading={isPending} />
 			<div className="w-full mb-8 flex justify-between items-center">
 				<h1>Bookings</h1>
+
 				<Button
 					onClick={() => {
 						navigate(
@@ -80,7 +89,7 @@ const BookingOverview: React.FC = () => {
 				{error === null ? (
 					<>
 						<StlFilter
-							config={StlFilterConfig.All}
+							options={StlFilterOptions.All}
 							params={searchParams}></StlFilter>
 						<DataTable columns={bookingColumns} data={bookings ?? []} />
 					</>

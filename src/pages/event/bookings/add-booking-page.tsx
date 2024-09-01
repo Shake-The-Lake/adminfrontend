@@ -1,4 +1,4 @@
-import {QueryClient} from '@tanstack/react-query';
+import {type QueryClient} from '@tanstack/react-query';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import React, {useState} from 'react';
 import {z} from 'zod';
-import {SubmitHandler, useForm} from 'react-hook-form';
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useCreatePerson} from '../../../queries/person';
 import {useCreateBooking} from '../../../queries/booking';
@@ -34,13 +34,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../../../components/ui/select';
-import {BookingDto} from '../../../models/api/booking.model';
-import {PersonDto} from '../../../models/api/person.model';
+import {type BookingDto} from '../../../models/api/booking.model';
+import {type PersonDto} from '../../../models/api/person.model';
 import StlFilter, {
-	defaultFilterParams,
-	StlFilterConfig,
+	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
 import {defaultBookingSearchParams} from '../../../models/api/booking-search.model';
+import {defaultFilterParams} from '../../../models/api/search.model';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -55,22 +55,22 @@ type PersonFormSchema = z.infer<typeof PersonSchema>;
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			timeslotsForEventOptions(Number(params.id)),
-		);
-		return {
-			eventId: Number(params.id),
+			await queryClient.ensureQueryData(
+				timeslotsForEventOptions(Number(params.id)),
+			);
+			return {
+				eventId: Number(params.id),
+			};
 		};
-	};
 
 const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const form = useForm<PersonFormSchema>({
 		mode: 'onChange',
@@ -90,10 +90,10 @@ const AddBookingPage: React.FC = () => {
 	const navigate = useNavigate();
 	const createPersonMutation = useCreatePerson();
 	const createBookingMutation = useCreateBooking(eventId);
-	const [pagerNumber, setPagerNumber] = useState<number | null>(null);
-	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<number | null>(
-		null,
-	);
+	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
+	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
+	number | undefined
+	>(undefined);
 	const handleCancel = () => {
 		navigate(`/event/${eventId}/bookings`);
 	};
@@ -104,8 +104,9 @@ const AddBookingPage: React.FC = () => {
 	searchParams.onSearchTermChange = (searchTerm?: string) => {
 		setFilter({...filter, personName: searchTerm});
 	};
+
 	searchParams.onActivityTypeChange = (activityTypeId?: number) => {
-		setFilter({...filter, activity: activityTypeId});
+		setFilter({...filter, activityId: activityTypeId});
 	};
 
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
@@ -128,8 +129,8 @@ const AddBookingPage: React.FC = () => {
 			const bookingData: BookingDto = {
 				isRider: false,
 				isManual: false,
-				pagerNumber: pagerNumber || undefined,
-				personId: newPerson.id as number,
+				pagerNumber,
+				personId: newPerson.id!,
 				timeSlotId: selectedTimeSlotId,
 			};
 
@@ -137,6 +138,7 @@ const AddBookingPage: React.FC = () => {
 		} catch (error) {
 			console.error('Failed to submit booking:', error);
 		}
+
 		navigate(`/event/${eventId}/bookings`);
 	};
 
@@ -153,7 +155,7 @@ const AddBookingPage: React.FC = () => {
 						{error === null ? (
 							<>
 								<StlFilter
-									config={StlFilterConfig.All}
+									options={StlFilterOptions.All}
 									params={searchParams}></StlFilter>
 								<DataTable
 									columns={timeSlotColumns(
@@ -285,10 +287,10 @@ const AddBookingPage: React.FC = () => {
 										placeholder="XC23832"
 										className="input"
 										type="number"
-										value={pagerNumber || ''}
-										onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-											setPagerNumber(Number(e.target.value))
-										}
+										value={pagerNumber ?? ''}
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+											setPagerNumber(Number(e.target.value));
+										}}
 									/>
 								</FormControl>
 								<FormMessage />

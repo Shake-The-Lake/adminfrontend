@@ -3,6 +3,7 @@ import {type ColumnDef} from '@tanstack/react-table';
 import {type PersonDto} from './person.model';
 import {type BoatDto} from './boat.model';
 import {type ActivityTypeDto} from './activity-type.model';
+import {getDisplayTimeFromBackend} from '../../lib/date-time.utils';
 
 export type BookingSearchDto = {
 	person: PersonDto;
@@ -13,24 +14,22 @@ export type BookingSearchDto = {
 
 export type BookingSearchParams = {
 	personName?: string;
-	boatName?: string;
-	fromTime?: string;
-	untilTime?: string;
-	activity?: number;
+	boatId?: number;
+	from?: string;
+	to?: string;
+	activityId?: number;
 };
 
 export const defaultBookingSearchParams: BookingSearchParams = {
 	personName: undefined,
-	activity: undefined,
-	boatName: undefined,
+	activityId: undefined,
+	boatId: undefined,
 	from: undefined,
-	to: undefined,
-	
+	to: undefined,	
 };
 
 export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 	{
-		id: 'name', // Todo! adjust data table impl to not need this
 		accessorKey: 'person.firstName',
 		header: 'First Name',
 	},
@@ -39,16 +38,14 @@ export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 		header: 'Last Name',
 	},
 	{
-		id: 'from',
 		accessorKey: 'timeSlot.fromTime',
 		header: 'From',
-		cell: ({row}) => row.original.timeSlot.fromTime?.slice(0, 5) ?? '',
+		cell: ({row}) => getDisplayTimeFromBackend(row.original.timeSlot.fromTime),
 	},
 	{
-		id: 'to',
 		accessorKey: 'timeSlot.untilTime',
-		header: 'To',
-		cell: ({row}) => row.original.timeSlot.untilTime?.slice(0, 5) ?? '',
+		header: 'Until',
+		cell: ({row}) => getDisplayTimeFromBackend(row.original.timeSlot.untilTime),
 	},
 	{
 		accessorKey: 'activityType.name.en',

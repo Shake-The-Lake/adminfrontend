@@ -1,5 +1,5 @@
-import {ColumnDef} from '@tanstack/react-table';
-import {TimeSlotDto} from '../../../models/api/time-slot.model';
+import {type ColumnDef} from '@tanstack/react-table';
+import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import React from 'react';
 import {Checkbox} from '../../../components/ui/checkbox';
 import {localeToLocalizedStringProperty} from '../../../lib/utils';
@@ -7,7 +7,7 @@ import {localeToLocalizedStringProperty} from '../../../lib/utils';
 export const timeSlotColumns = (
 	locale: string,
 	setSelectedTimeSlotId: (id: number) => void,
-	selectedTimeSlotId: number | null,
+	selectedTimeSlotId: number | undefined,
 ): Array<ColumnDef<TimeSlotDto>> => [
 	{
 		id: 'select',

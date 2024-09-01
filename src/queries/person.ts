@@ -18,6 +18,7 @@ export function useCreatePerson() {
 			if (data) {
 				queryClient.setQueryData(personKeys.detail(data.id ?? 0), data);
 			}
+
 			await queryClient.invalidateQueries({
 				queryKey: personKeys.all(),
 				exact: true,

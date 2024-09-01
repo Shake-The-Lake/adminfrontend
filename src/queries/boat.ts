@@ -9,15 +9,15 @@ import {
 	type QueryKey,
 } from '@tanstack/react-query';
 import {createBoat, deleteBoat, getBoatById, getAllBoatsFromEvent, updateBoat} from '../services/boat-service';
-import {keys as eventKeys} from './event';
+import {eventKeys} from './event';
 
-export const keys = {
+export const boatKeys = {
 	all: (eventId: number) => ['boats', eventId] as QueryKey,
 	detail: (id: number) => ['boats', 'detail', id] as QueryKey,
 };
 
 export const boatsOptions = (eventId: number, queryClient: QueryClient) => queryOptions({
-	queryKey: keys.all(eventId),
+	queryKey: boatKeys.all(eventId),
 	queryFn: async () => getAllBoatsFromEvent(eventId),
 	initialData() {
 		const queryData: EventDto | undefined = queryClient.getQueryData(eventKeys.detail(eventId, true));
@@ -31,7 +31,7 @@ export function useGetBoats(eventId: number) {
 }
 
 export const boatDetailOptions = (id: number) => queryOptions({
-	queryKey: keys.detail(id),
+	queryKey: boatKeys.detail(id),
 	queryFn: async () => getBoatById(id),
 });
 
@@ -44,7 +44,7 @@ export function useBoatDetail(
 		...boatDetailOptions(id),
 		initialData() {
 			const queryData: BoatDto[] | undefined = queryClient.getQueryData(
-				keys.all(eventId),
+				boatKeys.all(eventId),
 			);
 			return queryData?.find((d) => d.id === eventId);
 		},
@@ -57,10 +57,10 @@ export function useCreateBoat(eventId: number) {
 		mutationFn: createBoat,
 		async onSuccess(data) {
 			if (data) {
-				queryClient.setQueryData(keys.detail(data.id ?? 0), data);
+				queryClient.setQueryData(boatKeys.detail(data.id ?? 0), data);
 			}
 
-			await queryClient.invalidateQueries({queryKey: keys.all(eventId), exact: true});
+			await queryClient.invalidateQueries({queryKey: boatKeys.all(eventId), exact: true});
 			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
 		},
 	});
@@ -71,9 +71,9 @@ export function useUpdateBoat(id: number) {
 	return useMutation({
 		mutationFn: async (boat: BoatDto) => updateBoat(id, boat),
 		async onSuccess(data) {
-			queryClient.setQueryData(keys.detail(data?.id ?? 0), data);
+			queryClient.setQueryData(boatKeys.detail(data?.id ?? 0), data);
 
-			await queryClient.invalidateQueries({queryKey: keys.all(data?.eventId ?? 0), exact: true});
+			await queryClient.invalidateQueries({queryKey: boatKeys.all(data?.eventId ?? 0), exact: true});
 			await queryClient.invalidateQueries({queryKey: eventKeys.detail(data?.eventId ?? 0, true), exact: true});
 		},
 	});
@@ -84,7 +84,7 @@ export function useDeleteBoat(eventId: number) {
 	return useMutation({
 		mutationFn: deleteBoat,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: keys.all(eventId), exact: true});
+			await queryClient.invalidateQueries({queryKey: boatKeys.all(eventId), exact: true});
 			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
 		},
 	});

@@ -15,7 +15,6 @@ import {
 	TableHeader,
 	TableRow,
 } from '../ui/table';
-import {Input} from '../ui/input';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
@@ -42,21 +41,8 @@ export function DataTable<TyData, TyValue>({
 	});
 
 	return (
-		<div className=" w-full h-full overflow-auto">
-			<div className="flex items-center py-4">
-				<Input
-					placeholder="Filter Bookings..."
-					value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-					onChange={(event: {target: {value: any}}) =>
-						table.getColumn('name')?.setFilterValue(event.target.value)
-					}
-					className="max-w-sm"
-				/>
-			</div>
-
-			<div
-				className="rounded-md border
-		">
+		<div className="p-1 w-full h-full overflow-auto">
+			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

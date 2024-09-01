@@ -10,20 +10,14 @@ import {
 	FormMessage,
 } from '../ui/form';
 import {Input} from '../ui/input';
-import {useParams} from 'react-router-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {type TimeSlotDto} from '../../models/api/time-slot.model';
-import {
-	onInvalidFormHandler,
-	useEmitSuccessIfSucceeded,
-	validateTime,
-} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
-import {useTranslation} from 'react-i18next';
 import {type UseMutationResult} from '@tanstack/react-query';
-import {useGetActivityTypes} from '../../queries/activity-type';
 import {MutationToaster} from '../common/mutation-toaster';
-import ActivityTypeSelect from '../dropdowns/activity-type-select';
+import ActivityTypeSelect from '../select/activity-type-select';
+import {validateTime} from '../../lib/date-time.utils';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),

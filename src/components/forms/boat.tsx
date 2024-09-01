@@ -12,11 +12,12 @@ import {
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Button} from '../ui/button';
-import {onInvalidFormHandler, useEmitSuccessIfSucceeded, validateTime} from '../../lib/utils';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
+import {validateTime} from '../../lib/date-time.utils';
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -26,8 +27,12 @@ const boatFormSchema = z.object({
 	seatsViewer: z.coerce.number().min(0),
 	operator: z.string(),
 	slotDurationInMins: z.number().optional(),
-	availableFrom: z.string().refine((value) => validateTime(value), 'Invalid time'),
-	availableUntil: z.string().refine((value) => validateTime(value), 'Invalid time'),
+	availableFrom: z
+		.string()
+		.refine((value) => validateTime(value), 'Invalid time'),
+	availableUntil: z
+		.string()
+		.refine((value) => validateTime(value), 'Invalid time'),
 	eventId: z.number().optional(),
 });
 
