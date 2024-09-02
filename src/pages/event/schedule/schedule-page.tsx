@@ -34,17 +34,15 @@ const SchedulePage: React.FC = () => {
 
 	const queryClient = useQueryClient();
 	const {data: event} = useEventDetail(queryClient, eventId, false);
-	const mapColor = (type: LocalizedStringDto | undefined) => {
-		console.log(type);
-		if (!type) return '#002650';
-		switch (type.en) {
-			case 'sail':
+	const mapColor = (type: number) => {
+		switch (type) {
+			case 1:
 				return '#0EC8C8';
-			case 'motor':
+			case 2:
 				return '#6B46C1';
-			case 'rowing':
+			case 3:
 				return '#D53F8C';
-			case 'break':
+			case 4:
 				return '#FF0000';
 			default:
 				return '#002650';
@@ -54,7 +52,7 @@ const SchedulePage: React.FC = () => {
 	if (boats === undefined) return <div>Add a boat</div>;
 	const program: Program[] = boats.flatMap((boat) =>Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
 		id: timeSlot.id.toString(),
-		color: mapColor(timeSlot.activityTypeId),
+		color: mapColor(timeSlot?.id ?? 0),
 		title: boat.name,
 		channelId: boat.id,
 		channelUuid: boat.id.toString(),
@@ -126,7 +124,7 @@ const SchedulePage: React.FC = () => {
 
 	return (
 		<div>
-			<div style={{height: '80vh', width: '90vw'}}>
+			<div className='max-w-[75vw]'>
 				<Epg {...getEpgProps()} >
 					<Layout
 					  {...getLayoutProps()}
