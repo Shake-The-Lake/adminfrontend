@@ -27,11 +27,11 @@ import {
 	SelectValue,
 } from '../../../components/ui/select';
 import {type BookingDto} from '../../../models/api/booking.model';
-import {type PersonDto} from '../../../models/api/person.model';
+import {defaultPerson, type PersonDto} from '../../../models/api/person.model';
 import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
-import {TimeSlotDto} from '../../../models/api/time-slot.model';
+import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -48,14 +48,7 @@ const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as {eventId: number};
 	const form = useForm<PersonFormSchema>({
 		mode: 'onChange',
-		defaultValues: {
-			id: 0,
-			firstName: '',
-			lastName: '',
-			emailAddress: '',
-			phoneNumber: '',
-			personType: 'CUSTOMER',
-		},
+		defaultValues: defaultPerson,
 		resolver: zodResolver(PersonSchema),
 	});
 
@@ -66,7 +59,7 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-		number | undefined
+	number | undefined
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
@@ -101,9 +94,9 @@ const AddBookingPage: React.FC = () => {
 			const lowerSearchText = textSearch.toLowerCase();
 			filtered = filtered.filter(
 				(slot) =>
-					slot.boat?.name?.toLowerCase().includes(lowerSearchText) ||
-					slot.activityType?.name?.en.toLowerCase().includes(lowerSearchText) ||
-					slot.activityType?.name?.de.toLowerCase().includes(lowerSearchText) ||
+					slot.boat?.name?.toLowerCase().includes(lowerSearchText) ??
+					slot.activityType?.name?.en.toLowerCase().includes(lowerSearchText) ??
+					slot.activityType?.name?.de.toLowerCase().includes(lowerSearchText) ??
 					slot.activityType?.name?.swissGerman
 						.toLowerCase()
 						.includes(lowerSearchText),
@@ -222,18 +215,16 @@ const AddBookingPage: React.FC = () => {
 								<StlFilter
 									options={StlFilterOptions.All}
 									params={{
-										onSearchTermChange: (searchText?: string) => {
+										onSearchTermChange(searchText?: string) {
 											setFilter((prevFilter) => ({
 												...prevFilter,
 												textSearch: searchText,
 											}));
 										},
-										onActivityTypeChange: (activityTypeId?: number) => {
-											setFilter((prevFilter) => {
-												return {...prevFilter, activityId: activityTypeId};
-											});
+										onActivityTypeChange(activityTypeId?: number) {
+											setFilter((prevFilter) => ({...prevFilter, activityId: activityTypeId}));
 										},
-										onBoatChange: (boatId?: number) => {
+										onBoatChange(boatId?: number) {
 											console.log('Boat ID changed:', boatId);
 											setFilter((prevFilter) => {
 												const newFilter = {...prevFilter, boatId};
@@ -241,15 +232,11 @@ const AddBookingPage: React.FC = () => {
 												return newFilter;
 											});
 										},
-										onFromChange: (from?: string) => {
-											setFilter((prevFilter) => {
-												return {...prevFilter, from};
-											});
+										onFromChange(from?: string) {
+											setFilter((prevFilter) => ({...prevFilter, from}));
 										},
-										onToChange: (to?: string) => {
-											setFilter((prevFilter) => {
-												return {...prevFilter, to};
-											});
+										onToChange(to?: string) {
+											setFilter((prevFilter) => ({...prevFilter, to}));
 										},
 									}}
 								/>

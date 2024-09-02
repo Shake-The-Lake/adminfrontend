@@ -1,6 +1,6 @@
 export type PersonDto = {
 	id?: number;
-	personType: string;
+	personType: 'EMPLOYEE' | 'BOAT_DRIVER' | 'CUSTOMER';
 	firstName: string;
 	lastName: string;
 	emailAddress: string;
@@ -10,7 +10,7 @@ export type PersonDto = {
 
 export const defaultPerson: PersonDto = {
 	id: 0,
-	personType: '',
+	personType: 'CUSTOMER',
 	firstName: '',
 	lastName: '',
 	emailAddress: '',
