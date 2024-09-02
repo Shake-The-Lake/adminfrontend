@@ -1,19 +1,11 @@
-import {type QueryClient} from '@tanstack/react-query';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-	useNavigate,
-} from 'react-router-dom';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData, useNavigate} from 'react-router-dom';
 import {z} from 'zod';
 import {type SubmitHandler, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useCreatePerson} from '../../../queries/person';
 import {useCreateBooking} from '../../../queries/booking';
-import {
-	timeslotsForEventOptions,
-	useGetTimeSlotsForEvent,
-} from '../../../queries/time-slot';
+import {useGetTimeSlotsForEvent} from '../../../queries/time-slot';
 import {Button} from '../../../components/ui/button';
 import {DataTable} from '../../../components/data-table/data-table';
 import {useTranslation} from 'react-i18next';
@@ -39,8 +31,7 @@ import {type PersonDto} from '../../../models/api/person.model';
 import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
-import {defaultBookingSearchParams} from '../../../models/api/booking-search.model';
-import {defaultFilterParams} from '../../../models/api/search.model';
+import {TimeSlotDto} from '../../../models/api/time-slot.model';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -53,25 +44,8 @@ const PersonSchema = z.object({
 
 type PersonFormSchema = z.infer<typeof PersonSchema>;
 
-export const loader =
-	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
-				throw new Error('No event ID provided');
-			}
-
-			await queryClient.ensureQueryData(
-				timeslotsForEventOptions(Number(params.id)),
-			);
-			return {
-				eventId: Number(params.id),
-			};
-		};
-
 const AddBookingPage: React.FC = () => {
-	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
-	>;
+	const {eventId} = useLoaderData() as {eventId: number};
 	const form = useForm<PersonFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -92,22 +66,96 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-	number | undefined
+		number | undefined
 	>(undefined);
+	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
+	const [filter, setFilter] = useState<{
+		activityId?: number;
+		boatId?: number;
+		from?: string;
+		to?: string;
+	}>({
+		activityId: undefined,
+		boatId: undefined,
+		from: undefined,
+		to: undefined,
+	});
+
 	const handleCancel = () => {
 		navigate(`/event/${eventId}/bookings`);
 	};
 
-	const searchParams = defaultFilterParams;
-	const [filter, setFilter] = useState(defaultBookingSearchParams);
+	const filterTimeSlots = (
+		timeSlots: TimeSlotDto[],
+		activityTypeId?: number,
+		boatId?: number,
+		from?: string,
+		to?: string,
+	): TimeSlotDto[] => {
+		let filtered = timeSlots;
 
-	searchParams.onSearchTermChange = (searchTerm?: string) => {
-		setFilter({...filter, personName: searchTerm});
+		if (activityTypeId !== undefined && activityTypeId !== null) {
+			filtered = filtered.filter(
+				(slot) => Number(slot.activityTypeId) === Number(activityTypeId),
+			);
+		}
+
+		if (boatId !== undefined && boatId !== null) {
+			filtered = filtered.filter(
+				(slot) => Number(slot.boatId) === Number(boatId),
+			);
+		}
+
+		const parseTime = (timeString: string) => {
+			if (!timeString) return null;
+
+			const [hours, minutes, seconds] = timeString.split(':');
+			const [wholeSeconds, milliseconds] = seconds
+				? seconds.split('.')
+				: [0, 0];
+			return (
+				Number(hours) * 3600 +
+				Number(minutes) * 60 +
+				Number(wholeSeconds) +
+				(Number(milliseconds) || 0) / 1000
+			);
+		};
+
+		if (from) {
+			const fromTimeValue = parseTime(from);
+			if (fromTimeValue !== null) {
+				filtered = filtered.filter(
+					(slot) => slot.fromTime && parseTime(slot.fromTime)! >= fromTimeValue,
+				);
+			}
+		}
+
+		if (to) {
+			const toTimeValue = parseTime(to);
+			if (toTimeValue !== null) {
+				filtered = filtered.filter(
+					(slot) => slot.untilTime && parseTime(slot.untilTime)! <= toTimeValue,
+				);
+			}
+		}
+
+		return filtered;
 	};
 
-	searchParams.onActivityTypeChange = (activityTypeId?: number) => {
-		setFilter({...filter, activityId: activityTypeId});
+	const updateFilteredTimeSlots = () => {
+		const filtered = filterTimeSlots(
+			timeSlots ?? [],
+			filter.activityId,
+			filter.boatId,
+			filter.from,
+			filter.to,
+		);
+		setFilteredTimeSlots(filtered);
 	};
+
+	useEffect(() => {
+		updateFilteredTimeSlots();
+	}, [timeSlots, filter]);
 
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
@@ -156,14 +204,39 @@ const AddBookingPage: React.FC = () => {
 							<>
 								<StlFilter
 									options={StlFilterOptions.All}
-									params={searchParams}></StlFilter>
+									params={{
+										onActivityTypeChange: (activityTypeId?: number) => {
+											setFilter((prevFilter) => {
+												return {...prevFilter, activityId: activityTypeId};
+											});
+										},
+										onBoatChange: (boatId?: number) => {
+											console.log('Boat ID changed:', boatId);
+											setFilter((prevFilter) => {
+												const newFilter = {...prevFilter, boatId};
+												console.log('Updated filter:', newFilter);
+												return newFilter;
+											});
+										},
+										onFromChange: (from?: string) => {
+											setFilter((prevFilter) => {
+												return {...prevFilter, from};
+											});
+										},
+										onToChange: (to?: string) => {
+											setFilter((prevFilter) => {
+												return {...prevFilter, to};
+											});
+										},
+									}}
+								/>
 								<DataTable
 									columns={timeSlotColumns(
 										i18n.language,
 										setSelectedTimeSlotId,
 										selectedTimeSlotId,
 									)}
-									data={timeSlots ?? []}
+									data={filteredTimeSlots}
 								/>
 							</>
 						) : (
