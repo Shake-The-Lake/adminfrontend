@@ -3,7 +3,7 @@ import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
-import {fromTimeToCurrentDate} from '../../../lib/utils';
+import {fromTimeToCurrentDate, fromTimeToDateTime} from '../../../lib/utils';
 import {eventDetailOptions, useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
 
@@ -40,8 +40,8 @@ const SchedulePage: React.FC = () => {
 			channelId: boat.id,
 			channelUuid: boat.id.toString(),
 			description: '',
-			since: fromTimeToCurrentDate(timeSlot.fromTime ?? ''),
-			till: fromTimeToCurrentDate(timeSlot.untilTime ?? ''),
+			since: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.fromTime ?? ''),
+			till: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.untilTime ?? ''),
 			image: '',
 		})),
 	);
@@ -53,7 +53,6 @@ const SchedulePage: React.FC = () => {
 	  uuid: boat.id.toString(),
 	  position: {top: 0, height: 0},
 	}));
-
 	const {
 		getEpgProps,
 		getLayoutProps,
@@ -104,7 +103,6 @@ const SchedulePage: React.FC = () => {
 				bg: '#002650',
 			},
 		},
-
 	});
 
 	return (

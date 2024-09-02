@@ -68,9 +68,9 @@ export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	});
 };
 
-export const fromTimeToCurrentDate = (time: string): Date => {
+export const fromTimeToDateTime = (date: Date, time: string): Date => {
 	// Get the current date
-	const currentDate = new Date();
+	const currentDate = new Date(date);
 
 	// Split the time string into hours, minutes, and seconds
 	const [hours, minutes, seconds] = time.split(':').map(Number);
