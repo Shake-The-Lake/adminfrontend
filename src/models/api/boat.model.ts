@@ -1,3 +1,4 @@
+import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
 import {type TimeSlotDto} from './time-slot.model';
 
 export type BoatDto = {
@@ -24,8 +25,8 @@ export const defaultBoatDto: BoatDto = {
 	seatsViewer: 0,
 	operator: '',
 	slotDurationInMins: undefined,
-	availableFrom: new Date(),
-	availableUntil: new Date(),
+	availableFrom: toSwissLocaleTimeString(new Date()),
+	availableUntil: toSwissLocaleTimeString(new Date()),
 	timeSlotIds: undefined,
 	eventId: undefined,
 	timeSlots: undefined,
