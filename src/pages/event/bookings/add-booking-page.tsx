@@ -70,11 +70,13 @@ const AddBookingPage: React.FC = () => {
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
+		textSearch?: string;
 		activityId?: number;
 		boatId?: number;
 		from?: string;
 		to?: string;
 	}>({
+		textSearch: undefined,
 		activityId: undefined,
 		boatId: undefined,
 		from: undefined,
@@ -87,12 +89,26 @@ const AddBookingPage: React.FC = () => {
 
 	const filterTimeSlots = (
 		timeSlots: TimeSlotDto[],
+		textSearch?: string,
 		activityTypeId?: number,
 		boatId?: number,
 		from?: string,
 		to?: string,
 	): TimeSlotDto[] => {
 		let filtered = timeSlots;
+
+		if (textSearch) {
+			const lowerSearchText = textSearch.toLowerCase();
+			filtered = filtered.filter(
+				(slot) =>
+					slot.boat?.name?.toLowerCase().includes(lowerSearchText) ||
+					slot.activityType?.name?.en.toLowerCase().includes(lowerSearchText) ||
+					slot.activityType?.name?.de.toLowerCase().includes(lowerSearchText) ||
+					slot.activityType?.name?.swissGerman
+						.toLowerCase()
+						.includes(lowerSearchText),
+			);
+		}
 
 		if (activityTypeId !== undefined && activityTypeId !== null) {
 			filtered = filtered.filter(
@@ -145,6 +161,7 @@ const AddBookingPage: React.FC = () => {
 	const updateFilteredTimeSlots = () => {
 		const filtered = filterTimeSlots(
 			timeSlots ?? [],
+			filter.textSearch,
 			filter.activityId,
 			filter.boatId,
 			filter.from,
@@ -205,6 +222,12 @@ const AddBookingPage: React.FC = () => {
 								<StlFilter
 									options={StlFilterOptions.All}
 									params={{
+										onSearchTermChange: (searchText?: string) => {
+											setFilter((prevFilter) => ({
+												...prevFilter,
+												textSearch: searchText,
+											}));
+										},
 										onActivityTypeChange: (activityTypeId?: number) => {
 											setFilter((prevFilter) => {
 												return {...prevFilter, activityId: activityTypeId};
