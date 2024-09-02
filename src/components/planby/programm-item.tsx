@@ -6,7 +6,6 @@ import {
 	ProgramStack,
 	ProgramTitle,
 	ProgramText,
-	ProgramImage,
 	useProgram,
 } from 'planby';
 import {Link} from 'react-router-dom';
@@ -17,23 +16,21 @@ export const ProgramItem = ({program, ...rest}) => {
 		formatTime,
 		set12HoursTimeFormat,
 		isLive,
-		isMinWidth,
 	} = useProgram({
 		program,
 		...rest,
 	});
 
 	const {data} = program;
-	const {image, title, since, till} = data;
+	const {title, since, till, color} = data;
 
 	const sinceTime = formatTime(since, set12HoursTimeFormat()).toLowerCase();
 	const tillTime = formatTime(till, set12HoursTimeFormat()).toLowerCase();
 
 	return (
 		<ProgramBox width={styles.width} style={styles.position} className='relative'>
-			<ProgramContent width={styles.width} isLive={isLive}>
+			<ProgramContent width={styles.width} isLive={isLive} style={{background: color}}>
 				<ProgramFlex>
-					{isLive && isMinWidth}
 					<ProgramStack>
 						<Link
 							to={`${data.id}`}

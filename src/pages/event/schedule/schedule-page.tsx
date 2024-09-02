@@ -3,9 +3,12 @@ import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
-import {fromTimeToCurrentDate, fromTimeToDateTime} from '../../../lib/utils';
-import {eventDetailOptions, useEventDetail} from '../../../queries/event';
+import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
+import {fromTimeToDateTime} from '../../../lib/utils';
+import {times} from 'lodash-es';
+import {type TimeSlotDto} from '../../../models/api/time-slot.model';
+import {type LocalizedStringDto} from '../../../models/api/localized-string';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -31,19 +34,35 @@ const SchedulePage: React.FC = () => {
 
 	const queryClient = useQueryClient();
 	const {data: event} = useEventDetail(queryClient, eventId, false);
+	const mapColor = (type: LocalizedStringDto | undefined) => {
+		console.log(type);
+		if (!type) return '#002650';
+		switch (type.en) {
+			case 'sail':
+				return '#0EC8C8';
+			case 'motor':
+				return '#6B46C1';
+			case 'rowing':
+				return '#D53F8C';
+			case 'break':
+				return '#FF0000';
+			default:
+				return '#002650';
+		}
+	};
 
 	if (boats === undefined) return <div>Add a boat</div>;
-	const program: Program[] = boats.flatMap((boat) =>
-		Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
-			id: timeSlot.id.toString(),
-			title: boat.name,
-			channelId: boat.id,
-			channelUuid: boat.id.toString(),
-			description: '',
-			since: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.fromTime ?? ''),
-			till: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.untilTime ?? ''),
-			image: '',
-		})),
+	const program: Program[] = boats.flatMap((boat) =>Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
+		id: timeSlot.id.toString(),
+		color: mapColor(timeSlot.activityTypeId),
+		title: boat.name,
+		channelId: boat.id,
+		channelUuid: boat.id.toString(),
+		description: '',
+		since: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.fromTime ?? ''),
+		till: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.untilTime ?? ''),
+		image: '',
+	})),
 	);
 
 	const channels: Channel[] = boats.map((boat) => ({
@@ -112,7 +131,7 @@ const SchedulePage: React.FC = () => {
 					<Layout
 					  {...getLayoutProps()}
 						renderProgram={({program}) => (
-							<ProgramItem key={program.data.id} program={program} />
+							<ProgramItem key={program.data.id} program={program}/>
 						)}
 						renderChannel={({channel}) => (
 							<div className='w-full h-full font-semibold p-3' key={channel.uuid}>
