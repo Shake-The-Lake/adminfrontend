@@ -18,7 +18,7 @@ export const eventDetailRoutes = {
 	boatId: ':boatId',
 	schedule: 'schedule',
 	bookings: 'bookings',
-	addBooking: 'add-booking',
+	addBooking: 'new',
 };
 
 export const iconPaths = {

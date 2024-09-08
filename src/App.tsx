@@ -93,7 +93,7 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
 				element: <AddBookingPage />,
-				loader: eventDetailLoader(queryClient),
+				loader: bookingsLoader(queryClient),
 			},
 		],
 	},

@@ -19,19 +19,14 @@ import {
 	FormMessage,
 } from '../../../components/ui/form';
 import {Input} from '../../../components/ui/input';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '../../../components/ui/select';
 import {type BookingDto} from '../../../models/api/booking.model';
 import {type PersonDto} from '../../../models/api/person.model';
 import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
 import {TimeSlotDto} from '../../../models/api/time-slot.model';
+import StlSelect from '../../../components/select/stl-select';
+import {toast} from 'sonner'; // Importing Sonner's toast
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -70,13 +65,11 @@ const AddBookingPage: React.FC = () => {
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
-		textSearch?: string;
 		activityId?: number;
 		boatId?: number;
 		from?: string;
 		to?: string;
 	}>({
-		textSearch: undefined,
 		activityId: undefined,
 		boatId: undefined,
 		from: undefined,
@@ -89,26 +82,12 @@ const AddBookingPage: React.FC = () => {
 
 	const filterTimeSlots = (
 		timeSlots: TimeSlotDto[],
-		textSearch?: string,
 		activityTypeId?: number,
 		boatId?: number,
 		from?: string,
 		to?: string,
 	): TimeSlotDto[] => {
 		let filtered = timeSlots;
-
-		if (textSearch) {
-			const lowerSearchText = textSearch.toLowerCase();
-			filtered = filtered.filter(
-				(slot) =>
-					slot.boat?.name?.toLowerCase().includes(lowerSearchText) ||
-					slot.activityType?.name?.en.toLowerCase().includes(lowerSearchText) ||
-					slot.activityType?.name?.de.toLowerCase().includes(lowerSearchText) ||
-					slot.activityType?.name?.swissGerman
-						.toLowerCase()
-						.includes(lowerSearchText),
-			);
-		}
 
 		if (activityTypeId !== undefined && activityTypeId !== null) {
 			filtered = filtered.filter(
@@ -161,7 +140,6 @@ const AddBookingPage: React.FC = () => {
 	const updateFilteredTimeSlots = () => {
 		const filtered = filterTimeSlots(
 			timeSlots ?? [],
-			filter.textSearch,
 			filter.activityId,
 			filter.boatId,
 			filter.from,
@@ -176,7 +154,7 @@ const AddBookingPage: React.FC = () => {
 
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
-			alert('Please select a time slot.');
+			toast.error('Please select a time slot.');
 			return;
 		}
 
@@ -200,11 +178,12 @@ const AddBookingPage: React.FC = () => {
 			};
 
 			await createBookingMutation.mutateAsync(bookingData);
-		} catch (error) {
-			console.error('Failed to submit booking:', error);
-		}
+			toast.success('Booking created successfully!');
 
-		navigate(`/event/${eventId}/bookings`);
+			navigate(`/event/${eventId}/bookings`);
+		} catch (error) {
+			toast.error('Failed to submit booking: ');
+		}
 	};
 
 	return (
@@ -220,14 +199,12 @@ const AddBookingPage: React.FC = () => {
 						{error === null ? (
 							<>
 								<StlFilter
-									options={StlFilterOptions.All}
+									options={
+										StlFilterOptions.ActivityType |
+										StlFilterOptions.Boat |
+										StlFilterOptions.TimeRange
+									}
 									params={{
-										onSearchTermChange: (searchText?: string) => {
-											setFilter((prevFilter) => ({
-												...prevFilter,
-												textSearch: searchText,
-											}));
-										},
 										onActivityTypeChange: (activityTypeId?: number) => {
 											setFilter((prevFilter) => {
 												return {...prevFilter, activityId: activityTypeId};
@@ -357,30 +334,28 @@ const AddBookingPage: React.FC = () => {
 									<FormItem>
 										<FormLabel>Person Type</FormLabel>
 										<FormControl>
-											<Select
+											<StlSelect
 												value={field.value}
-												onValueChange={field.onChange}>
-												<SelectTrigger>
-													<SelectValue placeholder="Select Person Type" />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="EMPLOYEE">Employee</SelectItem>
-													<SelectItem value="BOAT_DRIVER">
-														Boat Driver
-													</SelectItem>
-													<SelectItem value="CUSTOMER">Customer</SelectItem>
-												</SelectContent>
-											</Select>
+												onValueChange={field.onChange}
+												list={[
+													{key: 'EMPLOYEE', label: 'Employee'},
+													{key: 'BOAT_DRIVER', label: 'Boat Driver'},
+													{key: 'CUSTOMER', label: 'Customer'},
+												]}
+												getKey={(item) => item?.key}
+												getLabel={(item) => item?.label!}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
+
 							<FormItem>
 								<FormLabel>Pager Number</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="XC23832"
+										placeholder="0"
 										className="input"
 										type="number"
 										value={pagerNumber ?? ''}

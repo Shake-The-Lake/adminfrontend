@@ -6,6 +6,7 @@ import {
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
 import {
+	Link,
 	type LoaderFunctionArgs,
 	useLoaderData,
 	useNavigate,
@@ -24,25 +25,25 @@ import {eventDetailRoutes} from '../../../constants';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		if (!params.id) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				bookingsSearchOptions(
-					Number(params.id),
-					defaultBookingSearchParams,
-					queryClient,
-				),
-			);
-			return {eventId: Number(params.id)};
-		};
+		await queryClient.ensureQueryData(
+			bookingsSearchOptions(
+				Number(params.id),
+				defaultBookingSearchParams,
+				queryClient,
+			),
+		);
+		return {eventId: Number(params.id)};
+	};
 
 const BookingOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 
@@ -76,13 +77,10 @@ const BookingOverview: React.FC = () => {
 			<div className="w-full mb-8 flex justify-between items-center">
 				<h1>Bookings</h1>
 
-				<Button
-					onClick={() => {
-						navigate(
-							`/event/${eventId}/${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
-						);
-					}}>
-					Add Booking
+				<Button>
+					<Link to={`${eventDetailRoutes.addBooking}`} relative="path">
+						Add Booking
+					</Link>
 				</Button>
 			</div>
 			<div className="w-full">

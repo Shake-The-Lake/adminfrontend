@@ -16,29 +16,35 @@ import {type BookingDto} from '../models/api/booking.model';
 
 export const bookingKeys = {
 	all: (eventId: number) => ['bookings', eventId] as QueryKey,
-	search: (eventId: number, params: BookingSearchParams) => ['bookings', 'search', eventId, params] as QueryKey,
+	search: (eventId: number, params: BookingSearchParams) =>
+		['bookings', 'search', eventId, params] as QueryKey,
 	detail: (id: number, expanded: boolean) =>
 		['bookings', 'detail', id, expanded] as QueryKey,
 };
 
-export const bookingsOptions = (eventId: number) => queryOptions({
-	queryKey: bookingKeys.all(eventId),
-	queryFn: async () => getBookingsByEventId(eventId),
-});
+export const bookingsOptions = (eventId: number) =>
+	queryOptions({
+		queryKey: bookingKeys.all(eventId),
+		queryFn: async () => getBookingsByEventId(eventId),
+	});
 
-export function useGetBookings(eventId: number) {
-	return useQuery(bookingsOptions(eventId));
-}
+export const bookingsSearchOptions = (
+	eventId: number,
+	params: BookingSearchParams,
+	queryClient: QueryClient,
+) =>
+	queryOptions({
+		queryKey: bookingKeys.search(eventId, params),
+		queryFn: async () => searchBookings(eventId, params),
+		initialData() {
+			return queryClient.getQueryData(bookingKeys.all(eventId));
+		},
+	});
 
-export const bookingsSearchOptions = (eventId: number, params: BookingSearchParams, queryClient: QueryClient) => queryOptions({
-	queryKey: bookingKeys.search(eventId, params),
-	queryFn: async () => searchBookings(eventId, params),
-	initialData() {
-		return queryClient.getQueryData(bookingKeys.all(eventId));
-	},
-});
-
-export function useSearchBookings(eventId: number, params: BookingSearchParams) {
+export function useSearchBookings(
+	eventId: number,
+	params: BookingSearchParams,
+) {
 	const queryClient = useQueryClient();
 	return useQuery(bookingsSearchOptions(eventId, params, queryClient));
 }
@@ -49,7 +55,7 @@ export function useCreateBooking(eventId: number) {
 		mutationFn: createBooking,
 		onSuccess(data) {
 			queryClient.setQueryData(
-				['bookings', eventId],
+				bookingKeys.all(eventId),
 				(oldData: BookingDto[] | undefined) =>
 					oldData ? [...oldData, data] : [data],
 			);
