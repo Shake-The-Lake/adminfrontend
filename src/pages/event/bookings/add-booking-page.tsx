@@ -20,13 +20,13 @@ import {
 } from '../../../components/ui/form';
 import {Input} from '../../../components/ui/input';
 import {type BookingDto} from '../../../models/api/booking.model';
-import {type PersonDto} from '../../../models/api/person.model';
+import {defaultPerson, type PersonDto} from '../../../models/api/person.model';
 import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
 import {TimeSlotDto} from '../../../models/api/time-slot.model';
 import StlSelect from '../../../components/select/stl-select';
-import {toast} from 'sonner'; // Importing Sonner's toast
+import {toast} from 'sonner';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -43,14 +43,7 @@ const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as {eventId: number};
 	const form = useForm<PersonFormSchema>({
 		mode: 'onChange',
-		defaultValues: {
-			id: 0,
-			firstName: '',
-			lastName: '',
-			emailAddress: '',
-			phoneNumber: '',
-			personType: 'CUSTOMER',
-		},
+		defaultValues: defaultPerson,
 		resolver: zodResolver(PersonSchema),
 	});
 
@@ -61,7 +54,7 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-		number | undefined
+	number | undefined
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
@@ -210,7 +203,7 @@ const AddBookingPage: React.FC = () => {
 												return {...prevFilter, activityId: activityTypeId};
 											});
 										},
-										onBoatChange: (boatId?: number) => {
+										onBoatChange(boatId?: number) {
 											console.log('Boat ID changed:', boatId);
 											setFilter((prevFilter) => {
 												const newFilter = {...prevFilter, boatId};
