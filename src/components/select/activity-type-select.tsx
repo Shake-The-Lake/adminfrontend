@@ -33,7 +33,7 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 					value={field.value?.toString() ?? ''}
 					onValueChange={(value?: string) => {
-						field.onChange(value);
+						field.onChange(Number(value));
 					}}
 					list={searchParams?.activityTypes ?? []}
 					getKey={getKey}
