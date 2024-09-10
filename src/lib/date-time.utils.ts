@@ -14,3 +14,7 @@ export function validateTime(value: string | undefined) {
 export function getDisplayTimeFromBackend(value: string | undefined) {
 	return value?.slice(0, 5) ?? '';
 }
+
+export function toSwissLocaleTimeString(date: Date) {
+	return date.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'});
+}

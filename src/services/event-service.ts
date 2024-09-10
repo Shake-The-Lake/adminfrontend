@@ -6,13 +6,10 @@ import {getBoatWithSortedProperties, getSortedBoats} from './boat-service';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
-export const getEventWithSortedProperties = (event?: EventDto) => {
-	if (event === undefined) {
-		return undefined;
-	}
-
+export const getEventWithSortedProperties = (event: EventDto) => {
 	event.activityTypes = getSortedActivityTypes(event.activityTypes);
 	event.boats = getSortedBoats(event.boats).map(getBoatWithSortedProperties);
+
 	return event;
 };
 
