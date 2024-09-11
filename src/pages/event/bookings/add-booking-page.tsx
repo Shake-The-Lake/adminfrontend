@@ -35,6 +35,7 @@ const PersonSchema = z.object({
 	emailAddress: z.string().email('Invalid email format'),
 	phoneNumber: z.string(),
 	personType: z.enum(['EMPLOYEE', 'BOAT_DRIVER', 'CUSTOMER']),
+	isRider: z.enum(['RIDER', 'VIEWER']),
 });
 
 type PersonFormSchema = z.infer<typeof PersonSchema>;
@@ -54,7 +55,7 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-	number | undefined
+		number | undefined
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
@@ -163,7 +164,7 @@ const AddBookingPage: React.FC = () => {
 			const newPerson = await createPersonMutation.mutateAsync(personData);
 
 			const bookingData: BookingDto = {
-				isRider: false,
+				isRider: values.isRider === 'RIDER',
 				isManual: false,
 				pagerNumber,
 				personId: newPerson.id!,
@@ -334,6 +335,29 @@ const AddBookingPage: React.FC = () => {
 													{key: 'EMPLOYEE', label: 'Employee'},
 													{key: 'BOAT_DRIVER', label: 'Boat Driver'},
 													{key: 'CUSTOMER', label: 'Customer'},
+												]}
+												getKey={(item) => item?.key}
+												getLabel={(item) => item?.label!}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								name="isRider"
+								control={form.control}
+								render={({field}) => (
+									<FormItem>
+										<FormLabel>Rider</FormLabel>
+										<FormControl>
+											<StlSelect
+												value={field.value}
+												onValueChange={field.onChange}
+												list={[
+													{key: 'RIDER', label: 'Yes'},
+													{key: 'VIEWER', label: 'No'},
 												]}
 												getKey={(item) => item?.key}
 												getLabel={(item) => item?.label!}
