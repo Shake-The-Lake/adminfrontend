@@ -7,3 +7,8 @@ export const createPerson = async (person: PersonDto): Promise<PersonDto> => {
 	const response = await axios.post<PersonDto>(`${baseUrl}/person`, person);
 	return response.data;
 };
+
+export const getPersonById = async (id: number): Promise<PersonDto> => {
+	const response = await axios.get<PersonDto>(`${baseUrl}/person/${id}`);
+	return response.data;
+};

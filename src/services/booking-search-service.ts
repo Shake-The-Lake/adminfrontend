@@ -31,3 +31,8 @@ export const searchBookings = async (
 	
 	return getDefaultSortedBoookings(result);
 };
+
+export const deleteBooking = async (bookingId: number) => {
+	if (!bookingId) return;
+	await axios.delete(`${baseUrl}/booking/${bookingId}`);
+};

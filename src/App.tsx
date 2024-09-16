@@ -31,6 +31,7 @@ import {loader as bookingsLoader} from './pages/event/bookings/booking-overview'
 import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
+import AddBookingPage from './pages/event/bookings/add-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {

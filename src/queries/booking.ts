@@ -8,6 +8,7 @@ import {
 	useQueryClient,
 } from '@tanstack/react-query';
 import {
+	deleteBooking,
 	getBookingsByEventId,
 	searchBookings,
 } from '../services/booking-search-service';
@@ -47,6 +48,16 @@ export function useSearchBookings(
 ) {
 	const queryClient = useQueryClient();
 	return useQuery(bookingsSearchOptions(eventId, params, queryClient));
+}
+
+export function useDeleteBooking(eventId: number) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: deleteBooking,
+		async onSuccess() {
+			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId), exact: true});
+		},
+	});
 }
 
 export function useCreateBooking(eventId: number) {
