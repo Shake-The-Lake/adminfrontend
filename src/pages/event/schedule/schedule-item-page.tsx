@@ -1,15 +1,10 @@
 import {type QueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatDetailOptions, boatsOptions} from '../../../queries/boat';
 import {timeslotDetailOptions, useTimeSlotDetail} from '../../../queries/time-slot';
-import {Table} from 'lucide-react';
-import boat from '../../../components/forms/boat';
-import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
-import {TableHeader, TableRow, TableHead, TableBody, TableCell} from '../../../components/ui/table';
-import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import timeSlots from '../boat/time-slots';
+import {TableHeader, TableRow, TableHead, TableBody, TableCell, Table} from '../../../components/ui/table';
+import {GroupIcon, TagIcon, UserIcon, ViewIcon} from 'lucide-react';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
@@ -36,13 +31,16 @@ const ScheduleItemPage: React.FC = () => {
 
 	return (
 		<>
-			<div className="flex flex-col items-center py-24">
-				<h1 className="text-2xl font-bold mb-10">{timeSlot.boat?.name} + {timeSlot.fromTime} + {timeSlot.untilTime}</h1>
-				<div>
-					<p><span>Rider: {timeSlot.boat?.operator}</span><span>Viewer: {timeSlot.boat.seatsViewer}</span><span>Rider: {timeSlot.boat.seatsRider}</span><span>Activity Type: {timeSlot.activityType?.name?.de}</span></p>
+			<div className="mt-10">
+				<h2 className="text-4xl font-bold mb-10">{timeSlot.boat?.name}: {timeSlot.fromTime} - {timeSlot.untilTime}</h2>
+				<div className='flex gap-5'>
+					<span className='flex gap-2'><UserIcon /> {timeSlot.boat?.operator}</span>
+					<span className='flex gap-2'><ViewIcon/> {timeSlot.boat.seatsViewer}</span>
+					<span className='flex gap-2'><GroupIcon /> {timeSlot.boat.seatsRider}</span>
+					<span className='flex gap-2'><TagIcon />{timeSlot.activityType?.name?.de}</span>
 				</div>
-
-				<Table className="mt-5">
+				<h2 className='text-2xl mt-10'>Current Booking</h2>
+				<Table className="mt-10">
 					<TableHeader>
 						<TableRow>
 							<TableHead>Name</TableHead>
@@ -51,6 +49,20 @@ const ScheduleItemPage: React.FC = () => {
 							<TableHead>Manual</TableHead>
 						</TableRow>
 					</TableHeader>
+					<TableBody>
+						<TableRow className="w-full justify-between">
+							<TableCell>Timon</TableCell>
+							<TableCell>
+									Bla
+							</TableCell>
+							<TableCell>
+									Bla
+							</TableCell>
+							<TableCell>
+									Bla
+							</TableCell>
+						</TableRow>
+					</TableBody>
 				</Table>
 			</div>
 		</>
