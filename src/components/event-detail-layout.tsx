@@ -11,20 +11,23 @@ import {
 import {Toaster} from './ui/toaster';
 import {type QueryClient, useQuery} from '@tanstack/react-query';
 import {eventDetailOptions} from '../queries/event';
+import {extractTypedInfoFromRouteParams} from '../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 			// Const navigate = useNavigate();
 				throw new Error('No event ID provided');
 			// Navigate('/'); // todo! see which makes more sense
 			}
 
 			await queryClient.ensureQueryData(
-				eventDetailOptions(Number(params.id), true),
+				eventDetailOptions(routeIds.eventId, true),
 			);
-			return {eventId: params.id};
+
+			return routeIds;
 		};
 
 const EventDetailLayout: React.FC = () => {

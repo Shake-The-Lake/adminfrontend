@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-	defaultActivityTypeDto,
-	type ActivityTypeDto,
-} from '../../../models/api/activity-type.model';
+import {defaultActivityTypeDto} from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
-import {getTranslation, tryGetErrorMessage} from '../../../lib/utils';
+import {
+	extractTypedInfoFromRouteParams,
+	getTranslation,
+} from '../../../lib/utils';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
@@ -26,14 +26,15 @@ import {MutationToaster} from '../../../components/common/mutation-toaster';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
 			}
 
 			await queryClient.ensureQueryData(
-				activityTypesOptions(Number(params.id), queryClient),
+				activityTypesOptions(routeIds.eventId, queryClient),
 			);
-			return {eventId: Number(params.id)};
+			return routeIds;
 		};
 
 const ActivityTypesPage = () => {

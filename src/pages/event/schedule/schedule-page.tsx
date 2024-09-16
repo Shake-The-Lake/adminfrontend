@@ -7,21 +7,21 @@ import {boatsOptions, useGetBoats} from '../../../queries/boat';
 import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
 import {fromTimeToDateTime} from '../../../lib/date-time.utils';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
 			}
 
 			await queryClient.ensureQueryData(
-				boatsOptions(Number(params.id), queryClient),
+				boatsOptions(routeIds.eventId, queryClient),
 			);
 
-			return {
-				eventId: Number(params.id),
-			};
+			return routeIds;
 		};
 
 const SchedulePage: React.FC = () => {
@@ -49,13 +49,12 @@ const SchedulePage: React.FC = () => {
 	};
 
 	if (boats === undefined) return <div>Add a boat</div>;
-	const program: Program[] = boats.flatMap((boat) =>Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
-		
+	const program: Program[] = boats.flatMap((boat) => Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
 		id: timeSlot.id.toString(),
 		color: mapColor(timeSlot?.activityTypeId ?? 0),
 		title: boat.name,
 		channelId: boat.id,
-		channelUuid: boat.id.toString(),
+		channelUuid: boat?.id?.toString() ?? '',
 		description: '',
 		since: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.fromTime ?? ''),
 		till: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.untilTime ?? ''),
@@ -67,7 +66,7 @@ const SchedulePage: React.FC = () => {
 	  id: boat.id,
 	  name: boat.name,
 	  logo: 'https://via.placeholder.com/150',
-	  uuid: boat.id.toString(),
+	  uuid: boat?.id?.toString(),
 	  position: {top: 0, height: 0},
 	}));
 	const {

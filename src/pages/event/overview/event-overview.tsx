@@ -9,20 +9,23 @@ import {
 } from '../../../queries/event';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import {defaultEventDto} from '../../../models/api/event.model';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 			// Const navigate = useNavigate();
 				throw new Error('No event ID provided');
 			// Navigate('/'); // todo! see which makes more sense
 			}
 
 			await queryClient.ensureQueryData(
-				eventDetailOptions(Number(params.id), false),
+				eventDetailOptions(routeIds.eventId, false),
 			);
-			return {eventId: Number(params.id)};
+
+			return routeIds;
 		};
 
 const EventOverview: React.FC = () => {

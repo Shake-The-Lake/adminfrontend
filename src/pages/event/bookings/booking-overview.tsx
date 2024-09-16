@@ -9,7 +9,6 @@ import {
 	Link,
 	type LoaderFunctionArgs,
 	useLoaderData,
-	useNavigate,
 } from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {
@@ -22,22 +21,25 @@ import StlFilter, {
 } from '../../../components/data-table/stl-filter';
 import {defaultFilterParams} from '../../../models/api/search.model';
 import {eventDetailRoutes} from '../../../constants';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
 			}
 
 			await queryClient.ensureQueryData(
 				bookingsSearchOptions(
-					Number(params.id),
+					routeIds.eventId,
 					defaultBookingSearchParams,
 					queryClient,
 				),
 			);
-			return {eventId: Number(params.id)};
+
+			return routeIds;
 		};
 
 const BookingOverview: React.FC = () => {
