@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
- 
- 
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
@@ -54,7 +52,7 @@ const SchedulePage: React.FC = () => {
 	const program: Program[] = boats.flatMap((boat) =>Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
 		
 		id: timeSlot.id.toString(),
-		color: mapColor(timeSlot?.id ?? 0),
+		color: mapColor(timeSlot?.activityTypeId ?? 0),
 		title: boat.name,
 		channelId: boat.id,
 		channelUuid: boat.id.toString(),
