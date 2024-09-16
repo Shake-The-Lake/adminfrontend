@@ -4,7 +4,8 @@ import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatDetailOptions, boatsOptions} from '../../../queries/boat';
 import {timeslotDetailOptions, useTimeSlotDetail} from '../../../queries/time-slot';
 import {TableHeader, TableRow, TableHead, TableBody, TableCell, Table} from '../../../components/ui/table';
-import {GroupIcon, TagIcon, UserIcon, ViewIcon} from 'lucide-react';
+import {FlowerIcon, GroupIcon, TagIcon, UsbIcon, UserIcon, UsersIcon, ViewIcon} from 'lucide-react';
+import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
@@ -32,15 +33,15 @@ const ScheduleItemPage: React.FC = () => {
 	return (
 		<>
 			<div className="mt-10">
-				<h2 className="text-4xl font-bold mb-10">{timeSlot.boat?.name}: {timeSlot.fromTime} - {timeSlot.untilTime}</h2>
+				<h2 className="text-4xl font-bold mb-10">{timeSlot.boat?.name}, {getDisplayTimeFromBackend(timeSlot.fromTime)} - {getDisplayTimeFromBackend(timeSlot.untilTime)}</h2>
 				<div className='flex gap-5'>
 					<span className='flex gap-2'><UserIcon /> {timeSlot.boat?.operator}</span>
 					<span className='flex gap-2'><ViewIcon/> {timeSlot.boat.seatsViewer}</span>
-					<span className='flex gap-2'><GroupIcon /> {timeSlot.boat.seatsRider}</span>
+					<span className='flex gap-2'><UsersIcon /> {timeSlot.boat.seatsRider}</span>
 					<span className='flex gap-2'><TagIcon />{timeSlot.activityType?.name?.de}</span>
 				</div>
 				<h2 className='text-2xl mt-10'>Current Booking</h2>
-				<Table className="mt-10">
+				<Table className="mt-2">
 					<TableHeader>
 						<TableRow>
 							<TableHead>Name</TableHead>
