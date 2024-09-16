@@ -5,7 +5,7 @@ import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
 import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
-import {fromTimeToDateTime} from '../../../lib/utils';
+import {fromTimeToDateTime} from '../../../lib/date-time.utils';
 import {times} from 'lodash-es';
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import {type LocalizedStringDto} from '../../../models/api/localized-string';
