@@ -7,16 +7,26 @@ import {
 	useQueryClient,
 	type QueryKey,
 } from '@tanstack/react-query';
-import {createTimeSlot, deleteTimeSlot, getTimeSlotById, updateTimeSlot, getAllTimeSlotsFromBoat} from '../services/time-slot-service';
+import {createTimeSlot, deleteTimeSlot, getTimeSlotById, updateTimeSlot, getAllTimeSlotsFromBoat, getAllTimeSlotsFromEvent} from '../services/time-slot-service';
 import {boatKeys} from './boat';
 import {type BoatDto} from '../models/api/boat.model';
 
 export const timeSlotKeys = {
+	forEvent: (eventId: number) => ['time-slots', eventId] as QueryKey,
 	forBoat: (boatId: number) => ['time-slots', 'boat', boatId] as QueryKey,
 	detail: (id: number) => ['time-slots', 'boat', 'detail', id] as QueryKey,
 };
 
-export const timeslotsOptions = (boatId: number, queryClient: QueryClient) => queryOptions({
+export const timeslotsForEventOptions = (eventId: number) => queryOptions({
+	queryKey: timeSlotKeys.forEvent(eventId),
+	queryFn: async () => getAllTimeSlotsFromEvent(eventId),
+});
+
+export function useGetTimeSlotsForEvent(eventId: number) {
+	return useQuery(timeslotsForEventOptions(eventId));
+}
+
+export const timeslotsForBoatOptions = (boatId: number, queryClient: QueryClient) => queryOptions({
 	queryKey: timeSlotKeys.forBoat(boatId),
 	queryFn: async () => getAllTimeSlotsFromBoat(boatId),
 	initialData() {
@@ -25,9 +35,9 @@ export const timeslotsOptions = (boatId: number, queryClient: QueryClient) => qu
 	},
 });
 
-export function useGetTimeSlots(boatId: number) {
+export function useGetTimeSlotsForBoat(boatId: number) {
 	const queryClient = useQueryClient();
-	return useQuery(timeslotsOptions(boatId, queryClient));
+	return useQuery(timeslotsForBoatOptions(boatId, queryClient));
 }
 
 export const timeslotDetailOptions = (id: number) => queryOptions({

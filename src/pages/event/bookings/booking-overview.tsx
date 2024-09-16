@@ -5,7 +5,12 @@ import {
 	defaultBookingSearchParams,
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import {
+	Link,
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {
 	bookingsSearchOptions,
@@ -16,27 +21,29 @@ import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
 import {defaultFilterParams} from '../../../models/api/search.model';
+import {eventDetailRoutes} from '../../../constants';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		if (!params.id) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				bookingsSearchOptions(
-					Number(params.id),
-					defaultBookingSearchParams,
-					queryClient,
-				),
-			);
-			return {eventId: Number(params.id)};
-		};
+		await queryClient.ensureQueryData(
+			bookingsSearchOptions(
+				Number(params.id),
+				defaultBookingSearchParams,
+				queryClient,
+			),
+		);
+		return {eventId: Number(params.id)};
+	};
 
-const BookingsPage: React.FC = () => {
+const BookingOverview: React.FC = () => {
+	const navigate = useNavigate();
 	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 
@@ -69,7 +76,12 @@ const BookingsPage: React.FC = () => {
 			<LoadingSpinner isLoading={isPending} />
 			<div className="w-full mb-8 flex justify-between items-center">
 				<h1>Bookings</h1>
-				<Button>Add Booking</Button>
+
+				<Button>
+					<Link to={`${eventDetailRoutes.addBooking}`} relative="path">
+						Add Booking
+					</Link>
+				</Button>
 			</div>
 			<div className="w-full">
 				{error === null ? (
@@ -87,4 +99,4 @@ const BookingsPage: React.FC = () => {
 	);
 };
 
-export default BookingsPage;
+export default BookingOverview;
