@@ -1,5 +1,20 @@
 import React, {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
 
+// Utility to manage cookies
+const setCookie = (name: string, value: string, days: number, path = '/') => {
+	const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+	document.cookie = `${name}=${value}; expires=${expires}; path=${path}; Secure; SameSite=Strict`;
+};
+
+const getCookie = (name: string): string => {
+	const matches = new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[]\\\/+^])/g, '\\$1')}=([^;]*)`).exec(document.cookie);
+	return matches ? decodeURIComponent(matches[1]) : '';
+};
+
+const deleteCookie = (name: string, path = '/') => {
+	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; Secure; SameSite=Strict`;
+};
+
 type AuthContextType = {
 	isAuthenticated: boolean;
 	login: (token: string) => void;
@@ -12,42 +27,28 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-// Set the session to expire after 1 week (in milliseconds)
-const sessionDuration = 7 * 24 * 60 * 60 * 1000; // 1 week
+// Set the session to expire after 1 week (in days)
+const SESSION_DURATION_DAYS = 7;
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
 	useEffect(() => {
-		const token = localStorage.getItem('authToken');
-		const expiration = localStorage.getItem('tokenExpiration');
-
-		if (token && expiration) {
-			// Check if the token is expired
-			const now = Date.now();
-			if (now > parseInt(expiration, 10)) {
-				// Token expired, remove token and logout user
-				logout();
-			} else {
-				// Token is valid
-				setIsAuthenticated(true);
-			}
+		const token = getCookie('authToken');
+		if (token) {
+			setIsAuthenticated(true);
 		}
 	}, []);
 
 	const login = (token: string) => {
-		// Calculate the expiration time (current time + 1 week)
-		const expirationTime = Date.now() + sessionDuration;
-
-		// Store the token and its expiration time in localStorage
-		localStorage.setItem('authToken', token);
-		localStorage.setItem('tokenExpiration', expirationTime.toString());
+		// Set the token in the cookie with a 1-week expiration
+		setCookie('authToken', token, SESSION_DURATION_DAYS);
 		setIsAuthenticated(true);
 	};
 
 	const logout = () => {
-		localStorage.removeItem('authToken');
-		localStorage.removeItem('tokenExpiration');
+		// Remove the token from the cookie
+		deleteCookie('authToken');
 		setIsAuthenticated(false);
 	};
 
