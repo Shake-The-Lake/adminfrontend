@@ -25,25 +25,25 @@ import {eventDetailRoutes} from '../../../constants';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			if (!params.id) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			bookingsSearchOptions(
-				Number(params.id),
-				defaultBookingSearchParams,
-				queryClient,
-			),
-		);
-		return {eventId: Number(params.id)};
-	};
+			await queryClient.ensureQueryData(
+				bookingsSearchOptions(
+					Number(params.id),
+					defaultBookingSearchParams,
+					queryClient,
+				),
+			);
+			return {eventId: Number(params.id)};
+		};
 
 const BookingOverview: React.FC = () => {
 	const navigate = useNavigate();
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 
