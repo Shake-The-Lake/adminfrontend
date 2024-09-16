@@ -16,7 +16,7 @@ export const loader =
 			}
 
 			const timeSlot = await queryClient.ensureQueryData(
-				timeslotDetailOptions(Number(params.id)),
+				timeslotDetailOptions(Number(params.timeSlotId)),
 			);
 
 			return timeSlot;

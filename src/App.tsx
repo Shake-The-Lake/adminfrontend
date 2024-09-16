@@ -90,7 +90,7 @@ const router = createBrowserRouter([
 				element: <SchedulePage />,
 			},
 			{
-				path:`${eventDetailRoutes.schedule}/${eventDetailRoutes.scheduleId}`,
+				path:`${eventDetailRoutes.schedule}/${eventDetailRoutes.timeSlotId}`,
 				loader: scheduleLoaderItem(queryClient),
 				element: <ScheduleItemPage />,
 			},
