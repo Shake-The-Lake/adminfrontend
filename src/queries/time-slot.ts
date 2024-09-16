@@ -14,6 +14,7 @@ import {type BoatDto} from '../models/api/boat.model';
 export const timeSlotKeys = {
 	forEvent: (eventId: number) => ['time-slots', eventId] as QueryKey,
 	forBoat: (boatId: number) => ['time-slots', 'boat', boatId] as QueryKey,
+	all: () => ['time-slots'] as QueryKey,
 	detail: (id: number) => ['time-slots', 'boat', 'detail', id] as QueryKey,
 };
 
@@ -47,17 +48,9 @@ export const timeslotDetailOptions = (id: number) => queryOptions({
 
 export function useTimeSlotDetail(
 	id: number,
-	boatId: number,
 ) {
-	const queryClient = useQueryClient();
 	return useQuery({
 		...timeslotDetailOptions(id),
-		initialData() {
-			const queryData: TimeSlotDto[] | undefined = queryClient.getQueryData(
-				timeSlotKeys.forBoat(boatId),
-			);
-			return queryData?.find((d) => d.id === boatId);
-		},
 	});
 }
 

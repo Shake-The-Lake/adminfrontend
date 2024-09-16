@@ -34,6 +34,7 @@ const SchedulePage: React.FC = () => {
 
 	const queryClient = useQueryClient();
 	const {data: event} = useEventDetail(queryClient, eventId, false);
+	
 	const mapColor = (type: number) => {
 		switch (type) {
 			case 1:
