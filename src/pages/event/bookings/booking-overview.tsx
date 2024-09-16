@@ -41,7 +41,6 @@ export const loader =
 		};
 
 const BookingOverview: React.FC = () => {
-	const navigate = useNavigate();
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
