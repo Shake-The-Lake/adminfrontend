@@ -1,15 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Book, PencilIcon, Trash} from 'lucide-react';
-import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {TableCell} from '../ui/table';
-import StlDialog from '../dialog/stl-dialog';
-import TimeSlotForm from '../forms/time-slot';
-import {type BoatDto} from '../../models/api/boat.model';
 import {Button} from '../ui/button';
 import {type UseMutationResult} from '@tanstack/react-query';
-import {useUpdateTimeSlot} from '../../queries/time-slot';
 import {type BookingDto} from '../../models/api/booking.model';
-import {useUpdateBooking} from '../../queries/booking';
 import {Link} from 'react-router-dom';
 import {eventDetailRoutes} from '../../constants';
 
@@ -28,7 +22,7 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 	return (
 		<TableCell className="text-right">
 			<Link to={`${eventDetailRoutes.addBooking}`} relative='route'>
-				<Button type='button' title='Edit Booking' variant='ghost' >
+				<Button type='button' title='Edit Booking' variant='ghost' disabled={true}>
 					<PencilIcon></PencilIcon>
 				</Button>
 			</Link>

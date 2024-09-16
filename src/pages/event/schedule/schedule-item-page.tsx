@@ -1,14 +1,11 @@
 import {type QueryClient} from '@tanstack/react-query';
 import React from 'react';
 import {useLoaderData, useParams, type LoaderFunctionArgs} from 'react-router-dom';
-import {boatDetailOptions, boatsOptions} from '../../../queries/boat';
-import {timeslotDetailOptions, useTimeSlotDetail} from '../../../queries/time-slot';
+import {timeslotDetailOptions} from '../../../queries/time-slot';
 import {TableHeader, TableRow, TableHead, TableBody, TableCell, Table} from '../../../components/ui/table';
-import {FlowerIcon, GroupIcon, TagIcon, UsbIcon, UserIcon, UsersIcon, ViewIcon} from 'lucide-react';
+import {TagIcon, UserIcon, UsersIcon, ViewIcon} from 'lucide-react';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import timeSlots from '../boat/time-slots';
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
-import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 export const loader =
@@ -49,7 +46,7 @@ const ScheduleItemPage: React.FC = () => {
 					<span className='flex gap-2'><TagIcon />{timeSlot.activityType?.name?.de}</span>
 				</div>
 				<h2 className='text-2xl mt-10'>Current Booking</h2>
-				<Table className="mt-2">
+				<Table className="mt-5">
 					<TableHeader>
 						<TableRow>
 							<TableHead>Name</TableHead>
@@ -64,7 +61,7 @@ const ScheduleItemPage: React.FC = () => {
 								<TableCell>{slot.person?.firstName} {slot.person?.lastName}</TableCell>
 								<TableCell>{slot.person?.phoneNumber}</TableCell>
 								<TableCell>
-									{slot.isManual ? 'Yes' : 'No'}
+									{slot.isRider ? 'Ride' : 'View'}
 								</TableCell>
 								<TableCell>
 									{slot.pagerNumber}
