@@ -45,7 +45,7 @@ const filterSchema = z.object({
 		.refine((value) => validateTime(value), 'Invalid time'),
 });
 
-const StlFilter: React.FC<StlFilterProps> = ({options: config, params}) => {
+const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 	const form = useForm<z.infer<typeof filterSchema>>({
 		mode: 'onChange',
 		defaultValues: params,
@@ -76,7 +76,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options: config, params}) => {
 			<form
 				id="filter"
 				className="p-1 w-full flex flex-wrap gap-4 justify-between items-center">
-				{(config & StlFilterOptions.SearchTerm) ===
+				{(options & StlFilterOptions.SearchTerm) ===
 					StlFilterOptions.SearchTerm && (
 					<FormField
 						name="searchTerm"
@@ -92,7 +92,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options: config, params}) => {
 						)}
 					/>
 				)}
-				{(config & StlFilterOptions.ActivityType) ===
+				{(options & StlFilterOptions.ActivityType) ===
 					StlFilterOptions.ActivityType && (
 					<Controller
 						name="activityTypeId"
@@ -105,7 +105,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options: config, params}) => {
 						)}
 					/>
 				)}
-				{(config & StlFilterOptions.Boat) === StlFilterOptions.Boat && (
+				{(options & StlFilterOptions.Boat) === StlFilterOptions.Boat && (
 					<Controller
 						name="boatId"
 						control={form.control}
@@ -117,7 +117,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options: config, params}) => {
 						)}
 					/>
 				)}
-				{(config & StlFilterOptions.TimeRange) ===
+				{(options & StlFilterOptions.TimeRange) ===
 					StlFilterOptions.TimeRange && (
 					<div className="flex flex-col sm:flex-row sm:items-center min-w-[180px] flex-grow sm:flex-grow-0">
 						<FormField

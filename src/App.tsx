@@ -27,7 +27,10 @@ import {loader as activityTypesLoader} from './pages/event/activity-type/activit
 import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
 import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
+import AddBookingPage from './pages/event/bookings/add-booking-page';
 import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
+import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
+import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
 import AddBookingPage from './pages/event/bookings/add-booking-page';
 import LoginPage from './pages/login-page';
 
@@ -88,7 +91,13 @@ const router = createBrowserRouter([
 			},
 			{
 				path: eventDetailRoutes.schedule,
+				loader: scheduleLoader(queryClient),
 				element: <SchedulePage />,
+			},
+			{
+				path:`${eventDetailRoutes.schedule}/${eventDetailRoutes.scheduleId}`,
+				loader: scheduleLoader(queryClient),
+				element: <ScheduleItemPage />,
 			},
 			{
 				path: eventDetailRoutes.bookings,
