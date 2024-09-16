@@ -1,6 +1,6 @@
 import {type ClassValue, clsx} from 'clsx';
 import {twMerge} from 'tailwind-merge';
-import {type LocalizedStringDto} from '../models/api/localized-string';
+import {type LocalizedStringKey, type LocalizedStringDto} from '../models/api/localized-string';
 import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
 import {toast} from 'sonner';
 import {type UseMutationResult} from '@tanstack/react-query';
@@ -10,6 +10,14 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export function localeToLocalizedStringProperty(locale: string): LocalizedStringKey {
+	if (locale === 'gsw') {
+		return 'swissGerman';
+	}
+
+	return locale as LocalizedStringKey;
+}
+
 export function getTranslation(
 	locale: string,
 	object?: LocalizedStringDto,
@@ -17,18 +25,14 @@ export function getTranslation(
 	if (!object) {
 		return '';
 	}
-	
-	let translation = '';
 
-	if (locale === 'en') {
-		translation = object.en;
-	} else if (locale === 'de') {
-		translation = object.de;
-	} else if (locale === 'gsw') {
-		translation = object.swissGerman;
+	const translation = object[localeToLocalizedStringProperty(locale)];
+
+	if (translation) {
+		return translation;
 	}
 
-	return translation ?? object.en; // Make english the default language
+	return object.en; // Make english the default language
 }
 
 export function tryGetErrorMessage(error: unknown) {
@@ -68,11 +72,16 @@ export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	});
 };
 
-export function useEmitSuccessIfSucceeded(onSuccessfullySubmitted: (() => void) | undefined, mutation: UseMutationResult<any, Error, any>) {
+export function useEmitSuccessIfSucceeded(
+	onSuccessfullySubmitted: (() => void) | undefined,
+	mutation: UseMutationResult<any, Error, any>,
+) {
 	useEffect(() => {
-		if (onSuccessfullySubmitted &&
+		if (
+			onSuccessfullySubmitted &&
 			mutation?.isSuccess &&
-			Boolean(mutation.data?.id)) {
+			Boolean(mutation.data?.id)
+		) {
 			onSuccessfullySubmitted();
 		}
 	}, [mutation?.isSuccess, mutation?.data?.id]);
