@@ -15,7 +15,7 @@ export const getBoatWithSortedProperties = (boat: BoatDto) => {
 
 // Todo! refactor usage to use expanded event instead
 export const getAllBoatsFromEvent = async (eventId: number): Promise<BoatDto[]> => {
-	const response = await axios.get<BoatDto[]>(`${baseUrl}/boat`);
+	const response = await axios.get<BoatDto[]>(`${baseUrl}/boat?expand=timeSlots`);
 	const result = response.data.filter(
 		(boat) => boat.eventId === eventId,
 	);

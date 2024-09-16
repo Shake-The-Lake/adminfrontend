@@ -18,3 +18,19 @@ export function getDisplayTimeFromBackend(value: string | undefined) {
 export function toSwissLocaleTimeString(date: Date) {
 	return date.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'});
 }
+
+export const fromTimeToDateTime = (date: Date, time: string): Date => {
+	// Get the current date
+	const currentDate = new Date(date);
+
+	// Split the time string into hours, minutes, and seconds
+	const [hours, minutes, seconds] = time.split(':').map(Number);
+
+	// Set the hours, minutes, and seconds of the current date
+	currentDate.setHours(hours);
+	currentDate.setMinutes(minutes);
+	currentDate.setSeconds(seconds);
+	currentDate.setMilliseconds(0);
+
+	return currentDate;
+};
