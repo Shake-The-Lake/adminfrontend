@@ -4,7 +4,7 @@
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
-import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
+import {redirect, useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
 import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
@@ -13,6 +13,11 @@ import {fromTimeToDateTime} from '../../../lib/date-time.utils';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
+			const {isAuthenticated} = useAuth();
+			if (!isAuthenticated) {
+				return redirect('/login');
+			}
+
 			if (!params.id) {
 				throw new Error('No event ID provided');
 			}
