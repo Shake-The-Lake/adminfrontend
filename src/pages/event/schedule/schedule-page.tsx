@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+ 
+ 
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';

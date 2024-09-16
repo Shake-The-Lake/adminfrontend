@@ -19,6 +19,7 @@ export const eventDetailRoutes = {
 	schedule: 'schedule',
 	scheduleId: ':scheduleId',
 	bookings: 'bookings',
+	addBooking: 'new',
 };
 
 export const iconPaths = {

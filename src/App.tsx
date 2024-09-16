@@ -12,7 +12,7 @@ import {
 	ActivityTypesPage,
 	BoatPage,
 	BoatsOverview,
-	BookingsPage,
+	BookingOverview,
 	ErrorPage,
 	EventOverview,
 	HomePage,
@@ -95,7 +95,12 @@ const router = createBrowserRouter([
 			},
 			{
 				path: eventDetailRoutes.bookings,
-				element: <BookingsPage />,
+				element: <BookingOverview />,
+				loader: bookingsLoader(queryClient),
+			},
+			{
+				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
+				element: <AddBookingPage />,
 				loader: bookingsLoader(queryClient),
 			},
 		],
