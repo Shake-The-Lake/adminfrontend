@@ -6,7 +6,7 @@ import ActivityTypePage from './event/activity-type/activity-type-page';
 import BoatsOverview from './event/boat/boats-page';
 import BoatPage from './event/boat/boat-page';
 import SchedulePage from './event/schedule/schedule-page';
-import BookingsPage from './event/bookings/bookings-page';
+import BookingOverview from './event/bookings/booking-overview';
 
 export {
 	HomePage,
@@ -17,5 +17,5 @@ export {
 	BoatPage,
 	BoatsOverview,
 	SchedulePage,
-	BookingsPage,
+	BookingOverview,
 };

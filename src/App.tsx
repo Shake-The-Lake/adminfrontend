@@ -12,7 +12,7 @@ import {
 	ActivityTypesPage,
 	BoatPage,
 	BoatsOverview,
-	BookingsPage,
+	BookingOverview,
 	ErrorPage,
 	EventOverview,
 	HomePage,
@@ -27,7 +27,8 @@ import {loader as activityTypesLoader} from './pages/event/activity-type/activit
 import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
 import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
-import {loader as bookingsLoader} from './pages/event/bookings/bookings-page';
+import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
+import AddBookingPage from './pages/event/bookings/add-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -86,7 +87,12 @@ const router = createBrowserRouter([
 			},
 			{
 				path: eventDetailRoutes.bookings,
-				element: <BookingsPage />,
+				element: <BookingOverview />,
+				loader: bookingsLoader(queryClient),
+			},
+			{
+				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
+				element: <AddBookingPage />,
 				loader: bookingsLoader(queryClient),
 			},
 		],

@@ -4,6 +4,8 @@ export type LocalizedStringDto = {
 	swissGerman: string;
 };
 
+export type LocalizedStringKey = keyof LocalizedStringDto;
+
 export const defaultLocalizedStringDto: LocalizedStringDto = {
 	en: '',
 	de: '',
