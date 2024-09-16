@@ -68,22 +68,6 @@ export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	});
 };
 
-export const fromTimeToDateTime = (date: Date, time: string): Date => {
-	// Get the current date
-	const currentDate = new Date(date);
-
-	// Split the time string into hours, minutes, and seconds
-	const [hours, minutes, seconds] = time.split(':').map(Number);
-
-	// Set the hours, minutes, and seconds of the current date
-	currentDate.setHours(hours);
-	currentDate.setMinutes(minutes);
-	currentDate.setSeconds(seconds);
-	currentDate.setMilliseconds(0);
-
-	return currentDate;
-};
-
 export function useEmitSuccessIfSucceeded(onSuccessfullySubmitted: (() => void) | undefined, mutation: UseMutationResult<any, Error, any>) {
 	useEffect(() => {
 		if (onSuccessfullySubmitted &&
