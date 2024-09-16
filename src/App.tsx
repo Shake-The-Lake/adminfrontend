@@ -32,6 +32,8 @@ import {loader as bookingsLoader} from './pages/event/bookings/booking-overview'
 import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
 import LoginPage from './pages/login-page';
+import {AuthProvider} from './AuthContext';
+import ProtectedRoute from './ProtectedRoute';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -60,7 +62,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: `/event/${eventDetailRoutes.id}`,
-		element: <EventDetailLayout />,
+		element: <ProtectedRoute />,
 		loader: sideNavigationLoader(queryClient),
 		children: [
 			{
@@ -116,14 +118,16 @@ function App() {
 	const {t} = useTranslation();
 
 	return (
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider
-				router={router}
-				fallbackElement={<div>{t('loading')}</div>}
-			/>
-			<ReactQueryDevtools initialIsOpen={false} />
-			<Toaster position="top-center" closeButton />
-		</QueryClientProvider>
+		<AuthProvider>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider
+					router={router}
+					fallbackElement={<div>{t('loading')}</div>}
+				/>
+				<ReactQueryDevtools initialIsOpen={false} />
+				<Toaster position="top-center" closeButton />
+			</QueryClientProvider>
+		</AuthProvider>
 	);
 }
 
