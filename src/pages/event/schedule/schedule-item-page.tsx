@@ -10,6 +10,7 @@ import timeSlots from '../boat/time-slots';
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
 import {useDeleteBooking} from '../../../queries/booking';
+import EditBookingTableCell from '../../../components/table/edit-booking';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
@@ -68,10 +69,9 @@ const ScheduleItemPage: React.FC = () => {
 								<TableCell>
 									{slot.pagerNumber}
 								</TableCell>
-								<EditTimeSlotTableCell
-									boat={timeSlot.boat}
-									timeSlot={timeSlot}
-									deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+								<EditBookingTableCell
+									booking={slot}
+									deleteMutation={deleteMutation}></EditBookingTableCell>
 							</TableRow>
 						))}
 					</TableBody>

@@ -12,7 +12,7 @@ import {
 	getBookingsByEventId,
 	searchBookings,
 } from '../services/booking-search-service';
-import {createBooking} from '../services/booking-service';
+import {createBooking, updateBooking} from '../services/booking-service';
 import {type BookingDto} from '../models/api/booking.model';
 
 export const bookingKeys = {
@@ -56,6 +56,16 @@ export function useDeleteBooking(eventId: number) {
 		mutationFn: deleteBooking,
 		async onSuccess() {
 			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId), exact: true});
+		},
+	});
+}
+
+export function useUpdateBooking(booking: BookingDto) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: updateBooking,
+		onSuccess(data) {
+			queryClient.setQueryData(bookingKeys.detail(booking.id, false), data);
 		},
 	});
 }

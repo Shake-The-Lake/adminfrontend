@@ -104,6 +104,11 @@ const router = createBrowserRouter([
 				element: <AddBookingPage />,
 				loader: bookingsLoader(queryClient),
 			},
+			{
+				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}/${eventDetailRoutes.bookingId}`,
+				element: <AddBookingPage />,
+				loader: bookingsLoader(queryClient),
+			},
 		],
 	},
 ]);
