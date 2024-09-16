@@ -7,16 +7,20 @@ import {
 	useQueryClient,
 	type QueryKey,
 } from '@tanstack/react-query';
-import {loginEvent} from '../services/login-service';
+import {type LoginDto} from '../models/api/login.model';
+import {login} from '../services/login-service';
 
+export const loginKey = {
+	detail: (name: string) => ['login', 'detail', name] as QueryKey,
+};
 
-export function useLoginEvent() {
+export function useCreateLogin() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: loginEvent,
+		mutationFn: login,
 		async onSuccess(data) {
 			if (data) {
-				queryClient.setQueryData(['loged in'], data);
+				queryClient.setQueryData(loginKey.detail(data ?? ''), data);
 			}
 		},
 	});

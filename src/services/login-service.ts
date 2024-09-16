@@ -4,7 +4,8 @@ import {type LoginDto} from '../models/api/login.model';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
-export const loginEvent = async (login: LoginDto): Promise<boolean> => {
+export const login = async (login: LoginDto): Promise<string> => {
+	console.log('login', login);
 	const response = await axios.post<EventDto>(`${baseUrl}/`, login);
-	return true;
+	return 'logged in';
 };

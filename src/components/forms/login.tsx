@@ -9,6 +9,9 @@ import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {Button} from '../ui/button';
 import {type LoginDto} from '../../models/api/login.model';
+import {useNavigate, useLocation} from 'react-router-dom'; // Added useLocation
+import {useAuth} from '../../AuthContext';
+import {useCreateLogin} from '../../queries/login';
 
 // Schema definition
 export const loginFormSchema = z.object({
@@ -20,10 +23,18 @@ export type LoginFormSchema = z.infer<typeof loginFormSchema>;
 
 type LoginFormProps = {
 	model: LoginDto;
-	mutation: UseMutationResult<any, Error, LoginDto>; // First any is return type, second is input
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({model, mutation}) => {
+const LoginForm: React.FC<LoginFormProps> = ({model}) => {
+	const navigate = useNavigate();
+	const location = useLocation(); // UseLocation to capture where user is coming from
+	const {login} = useAuth();
+
+	const loginMutation = useCreateLogin();
+
+	// Get the "from" state or default to the home page
+	const from = location.state?.from?.pathname as string || '/';
+
 	const form = useForm<LoginFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -34,20 +45,31 @@ const LoginForm: React.FC<LoginFormProps> = ({model, mutation}) => {
 	});
 
 	const onSubmit: SubmitHandler<LoginFormSchema> = async (values) => {
-		const login: LoginDto = {
+		const loginData: LoginDto = {
 			...values,
 			username: values.username,
 			password: values.password,
 		};
 
-		await mutation.mutateAsync(login);
+		try {
+			await loginMutation.mutateAsync(loginData);
+
+			const token = 'login token';
+			login(token);
+
+			// Redirect to the page the user initially tried to access
+			navigate(from, {replace: true});
+		} catch (error) {
+			// Handle login failure (if needed)
+			console.error('Login failed', error);
+		}
 	};
 
 	return (
 		<>
 			<MutationToaster
 				type='create'
-				mutation={mutation}
+				mutation={loginMutation}
 			/>
 			<Form {...form}>
 				<form
@@ -78,7 +100,8 @@ const LoginForm: React.FC<LoginFormProps> = ({model, mutation}) => {
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="password"
+										type="password"
+										placeholder="Password"
 										{...field}
 										className="input"
 									/>
