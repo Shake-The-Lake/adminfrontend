@@ -1,7 +1,7 @@
 import {type PersonDto} from './person.model';
 
 export type BookingDto = {
-	id: number;
+	id?: number;
 	isRider: boolean;
 	isManual: boolean;
 	pagerNumber?: number;
