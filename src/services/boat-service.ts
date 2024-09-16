@@ -6,7 +6,7 @@ import {getSortedTimeSlots} from './time-slot-service';
 const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 
 export const getSortedBoats = (boats?: BoatDto[]) =>
-	boats ? sortBy(boats, ['name', 'availableFrom']) : [];
+	boats ? sortBy(boats, ['name', 'availableFrom']).map(b => getBoatWithSortedProperties(b)) : [];
 
 export const getBoatWithSortedProperties = (boat: BoatDto) => {
 	boat.timeSlots = getSortedTimeSlots(boat.timeSlots);
@@ -20,7 +20,6 @@ export const getAllBoatsFromEvent = async (eventId: number): Promise<BoatDto[]> 
 		(boat) => boat.eventId === eventId,
 	);
 
-
 	return getSortedBoats(result);
 };
 
@@ -30,11 +29,7 @@ export const getBoatById = async (id: number): Promise<BoatDto> => {
 };
 
 export const createBoat = async (boat: BoatDto): Promise<BoatDto> => {
-	const boatWithActivityType = {
-		...boat,
-		activityTypeId: 1,
-	};
-	const response = await axios.post<BoatDto>(`${baseUrl}/boat`, boatWithActivityType);
+	const response = await axios.post<BoatDto>(`${baseUrl}/boat`, boat);
 	return response.data;
 };
 
@@ -47,5 +42,6 @@ export const updateBoat = async (
 };
 
 export const deleteBoat = async (id: number): Promise<void> => {
+	if (!id) return;
 	await axios.delete(`${baseUrl}/boat/${id}`);
 };

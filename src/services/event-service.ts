@@ -9,17 +9,21 @@ const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
 export const getEventWithSortedProperties = (event: EventDto) => {
 	event.activityTypes = getSortedActivityTypes(event.activityTypes);
 	event.boats = getSortedBoats(event.boats).map(getBoatWithSortedProperties);
+
 	return event;
 };
 
 export const getAllEvents = async (): Promise<EventDto[]> => {
 	const response = await axios.get<EventDto[]>(`${baseUrl}/event`);
-	const result = response.data.map(e => getEventWithSortedProperties(e));
+	const result = response.data?.map(e => getEventWithSortedProperties(e)) ?? [];
 
-	return sortBy(result ?? [], 'date');
+	return sortBy(result, 'date');
 };
 
-export const getEventById = async (id: number, expand = ''): Promise<EventDto> => {
+export const getEventById = async (
+	id: number,
+	expand = '',
+): Promise<EventDto> => {
 	const params = expand ? {expand} : {};
 	const response = await axios.get<EventDto>(`${baseUrl}/event/${id}`, {params});
 	return getEventWithSortedProperties(response.data);

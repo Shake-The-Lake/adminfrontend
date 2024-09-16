@@ -27,8 +27,7 @@ import {loader as activityTypesLoader} from './pages/event/activity-type/activit
 import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
 import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
-import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
-import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
+import {loader as bookingsLoader} from './pages/event/bookings/bookings-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -94,6 +93,7 @@ const router = createBrowserRouter([
 			{
 				path: eventDetailRoutes.bookings,
 				element: <BookingsPage />,
+				loader: bookingsLoader(queryClient),
 			},
 		],
 	},
