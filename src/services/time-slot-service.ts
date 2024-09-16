@@ -1,9 +1,6 @@
 import axios from 'axios';
 import {type TimeSlotDto} from '../models/api/time-slot.model';
 import sortBy from 'lodash-es/sortBy';
-import {type PersonDto} from '../models/api/person.model';
-import {get} from 'http';
-import {useGetPerson} from '../queries/person';
 import {getPersonById} from './person-service';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

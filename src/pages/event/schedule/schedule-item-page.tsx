@@ -1,6 +1,6 @@
 import {type QueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {useLoaderData, useParams, type LoaderFunctionArgs} from 'react-router-dom';
+import {Link, useLoaderData, useParams, type LoaderFunctionArgs} from 'react-router-dom';
 import {timeslotDetailOptions, useTimeSlotDetail} from '../../../queries/time-slot';
 import {TableHeader, TableRow, TableHead, TableBody, TableCell, Table} from '../../../components/ui/table';
 import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
@@ -8,6 +8,8 @@ import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 import LoadingSpinner from '../../../components/animations/loading';
+import {Button} from '../../../components/ui/button';
+import {eventBaseRoute, eventDetailRoutes} from '../../../constants';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
@@ -40,7 +42,9 @@ const ScheduleItemPage: React.FC = () => {
 		<>
 			<div className="mt-10">
 				<LoadingSpinner isLoading={isPending} />
-				<h2 className="text-4xl font-bold mb-10">{timeSlot?.boat?.name}, {getDisplayTimeFromBackend(timeSlot?.fromTime)} - {getDisplayTimeFromBackend(timeSlot?.untilTime)}</h2>
+				<div className='flex justify-between'>
+					<h2 className="text-4xl font-bold mb-10">{timeSlot?.boat?.name}, {getDisplayTimeFromBackend(timeSlot?.fromTime)} - {getDisplayTimeFromBackend(timeSlot?.untilTime)}</h2>
+				</div>
 				<div className='flex gap-5'>
 					<span className='flex gap-2'><SailboatIcon /> {timeSlot?.boat?.operator}</span>
 					<span className='flex gap-2'><EyeIcon/>{signedUpViewers} / {timeSlot?.boat?.seatsViewer}</span>
