@@ -30,6 +30,7 @@ import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
 import {loader as bookingsLoader} from './pages/event/bookings/bookings-page';
 import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
+import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -89,7 +90,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path:`${eventDetailRoutes.schedule}/${eventDetailRoutes.scheduleId}`,
-				loader: scheduleLoader(queryClient),
+				loader: scheduleLoaderItem(queryClient),
 				element: <ScheduleItemPage />,
 			},
 			{

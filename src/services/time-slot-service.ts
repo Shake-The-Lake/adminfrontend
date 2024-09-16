@@ -34,7 +34,7 @@ export const getAllTimeSlotsFromBoat = async (
 };
 
 export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
-	const response = await axios.get<TimeSlotDto>(`${timeSlotUrl}/${id}`);
+	const response = await axios.get<TimeSlotDto>(`${timeSlotUrl}/${id}?expand=activitytype`);
 	return response.data;
 };
 

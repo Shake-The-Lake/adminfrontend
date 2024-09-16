@@ -51,6 +51,7 @@ const SchedulePage: React.FC = () => {
 
 	if (boats === undefined) return <div>Add a boat</div>;
 	const program: Program[] = boats.flatMap((boat) =>Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
+		
 		id: timeSlot.id.toString(),
 		color: mapColor(timeSlot?.id ?? 0),
 		title: boat.name,
