@@ -6,6 +6,9 @@ import {timeslotDetailOptions, useTimeSlotDetail} from '../../../queries/time-sl
 import {TableHeader, TableRow, TableHead, TableBody, TableCell, Table} from '../../../components/ui/table';
 import {FlowerIcon, GroupIcon, TagIcon, UsbIcon, UserIcon, UsersIcon, ViewIcon} from 'lucide-react';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
+import timeSlots from '../boat/time-slots';
+import {type TimeSlotDto} from '../../../models/api/time-slot.model';
+import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
@@ -17,15 +20,11 @@ export const loader =
 				timeslotDetailOptions(Number(params.id)),
 			);
 
-			const boat = await queryClient.ensureQueryData(
-				boatDetailOptions(Number(timeSlot.boatId)),
-			);
-
-			return {...timeSlot, boat};
+			return timeSlot;
 		};
 
 const ScheduleItemPage: React.FC = () => {
-	const timeSlot = useLoaderData() as Awaited<
+	const timeSlot: TimeSlotDto = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	console.log(timeSlot);
@@ -36,8 +35,8 @@ const ScheduleItemPage: React.FC = () => {
 				<h2 className="text-4xl font-bold mb-10">{timeSlot.boat?.name}, {getDisplayTimeFromBackend(timeSlot.fromTime)} - {getDisplayTimeFromBackend(timeSlot.untilTime)}</h2>
 				<div className='flex gap-5'>
 					<span className='flex gap-2'><UserIcon /> {timeSlot.boat?.operator}</span>
-					<span className='flex gap-2'><ViewIcon/> {timeSlot.boat.seatsViewer}</span>
-					<span className='flex gap-2'><UsersIcon /> {timeSlot.boat.seatsRider}</span>
+					<span className='flex gap-2'><ViewIcon/> {timeSlot.boat?.seatsViewer}</span>
+					<span className='flex gap-2'><UsersIcon /> {timeSlot.boat?.seatsRider}</span>
 					<span className='flex gap-2'><TagIcon />{timeSlot.activityType?.name?.de}</span>
 				</div>
 				<h2 className='text-2xl mt-10'>Current Booking</h2>
@@ -45,24 +44,23 @@ const ScheduleItemPage: React.FC = () => {
 					<TableHeader>
 						<TableRow>
 							<TableHead>Name</TableHead>
-							<TableHead>Phone</TableHead>
 							<TableHead>Type</TableHead>
 							<TableHead>Manual</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						<TableRow className="w-full justify-between">
-							<TableCell>Timon</TableCell>
-							<TableCell>
-									Bla
-							</TableCell>
-							<TableCell>
-									Bla
-							</TableCell>
-							<TableCell>
-									Bla
-							</TableCell>
-						</TableRow>
+						{timeSlot.bookings.map((slot, index) => (
+							<TableRow key={index} className="w-full justify-between">
+								<TableCell>{slot.personId}</TableCell>
+								<TableCell>
+									isManual: {slot.isManual}
+								</TableCell>
+								<EditTimeSlotTableCell
+									boat={timeSlot.boat}
+									timeSlot={timeSlot}
+									deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</div>
