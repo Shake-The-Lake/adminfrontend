@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+ 
+ 
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
@@ -6,9 +9,6 @@ import {boatsOptions, useGetBoats} from '../../../queries/boat';
 import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
 import {fromTimeToDateTime} from '../../../lib/date-time.utils';
-import {times} from 'lodash-es';
-import {type TimeSlotDto} from '../../../models/api/time-slot.model';
-import {type LocalizedStringDto} from '../../../models/api/localized-string';
 
 export const loader =
 	(queryClient: QueryClient) =>
