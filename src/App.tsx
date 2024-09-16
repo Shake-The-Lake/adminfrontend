@@ -29,6 +29,7 @@ import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
 import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
 import AddBookingPage from './pages/event/bookings/add-booking-page';
+import LoginPage from './pages/login-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
 				<ErrorPage />
 			</DefaultLayout>
 		),
+	},
+	{
+		path: '/login',
+		element: <LoginPage />,
 	},
 	{
 		path: `/event/${eventDetailRoutes.id}`,
