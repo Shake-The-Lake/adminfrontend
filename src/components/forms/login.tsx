@@ -50,17 +50,11 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			username: values.username,
 			password: values.password,
 		};
-
 		try {
 			await loginMutation.mutateAsync(loginData);
-
-			const token = 'login token';
-			login(token);
-
-			// Redirect to the page the user initially tried to access
+			login(loginData.username, loginData.password);
 			navigate(from, {replace: true});
 		} catch (error) {
-			// Handle login failure (if needed)
 			console.error('Login failed', error);
 		}
 	};

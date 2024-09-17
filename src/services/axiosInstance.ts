@@ -27,7 +27,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
-		// Check if the error response status is 401 (Unauthorized)
+	// Check if the error response status is 401 (Unauthorized)
 		if (error.response && error.response.status === 401) {
 			localStorage.removeItem('authUsername');
 			localStorage.removeItem('authPassword');
@@ -35,8 +35,9 @@ axiosInstance.interceptors.response.use(
 			window.location.href = '/login';
 		}
 
-		return Promise.reject(error);
-	},
+		 Promise.reject(error);
+	}
+	,
 );
 
 export default axiosInstance;

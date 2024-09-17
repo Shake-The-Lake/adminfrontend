@@ -1,16 +1,14 @@
 import React, {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
-import {uint8ArrayToBase64} from 'uint8array-extras';
-// Type definition for AuthContext
+import {Buffer} from 'buffer'; // Importing Buffer for base64 encoding
+
 type AuthContextType = {
 	isAuthenticated: boolean;
 	login: (username: string, password: string) => void;
 	logout: () => void;
 };
 
-// Create a context for authentication
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Props type for AuthProvider
 type AuthProviderProps = {
 	children: ReactNode;
 };
@@ -18,7 +16,6 @@ type AuthProviderProps = {
 // Session expiration duration: 1 week in milliseconds
 const sessionDuration = 7 * 24 * 60 * 60 * 1000; // 1 week
 
-// AuthProvider component
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -39,12 +36,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 		}
 	}, []);
 
+	const encodeBase64 = (data: string) => Buffer.from(data).toString('base64');
+
 	const login = (username: string, password: string) => {
 		// Encode username and password in Base64
-		const encodedData = uint8ArrayToBase64(new TextEncoder().encode(`${username}:${password}`));
+		const encodedData = encodeBase64(`${username}:${password}`); 
 		// Store credentials in localStorage
 		localStorage.setItem('authCredentials', encodedData);
 		localStorage.setItem('credentialsExpiration', (Date.now() + sessionDuration).toString());
+		setIsAuthenticated(true); // Update the authentication status
 	};
 
 	const logout = () => {
