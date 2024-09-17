@@ -1,54 +1,56 @@
 import React, {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
-
-// Utility to manage cookies
-const setCookie = (name: string, value: string, days: number, path = '/') => {
-	const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-	document.cookie = `${name}=${value}; expires=${expires}; path=${path}; Secure; SameSite=Strict`;
-};
-
-const getCookie = (name: string): string => {
-	const matches = new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[]\\\/+^])/g, '\\$1')}=([^;]*)`).exec(document.cookie);
-	return matches ? decodeURIComponent(matches[1]) : '';
-};
-
-const deleteCookie = (name: string, path = '/') => {
-	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; Secure; SameSite=Strict`;
-};
-
+import {uint8ArrayToBase64} from 'uint8array-extras';
+// Type definition for AuthContext
 type AuthContextType = {
 	isAuthenticated: boolean;
-	login: (token: string) => void;
+	login: (username: string, password: string) => void;
 	logout: () => void;
 };
 
+// Create a context for authentication
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Props type for AuthProvider
 type AuthProviderProps = {
 	children: ReactNode;
 };
 
-// Set the session to expire after 1 week (in days)
-const SESSION_DURATION_DAYS = 7;
+// Session expiration duration: 1 week in milliseconds
+const sessionDuration = 7 * 24 * 60 * 60 * 1000; // 1 week
 
+// AuthProvider component
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
 	useEffect(() => {
-		const token = getCookie('authToken');
-		if (token) {
-			setIsAuthenticated(true);
+		const encodedCredentials = localStorage.getItem('authCredentials');
+		const expiration = localStorage.getItem('credentialsExpiration');
+
+		if (encodedCredentials && expiration) {
+			// Check if credentials have expired
+			const now = Date.now();
+			if (now > parseInt(expiration, 10)) {
+				// Credentials expired, log out user
+				logout();
+			} else {
+				// Credentials are valid
+				setIsAuthenticated(true);
+			}
 		}
 	}, []);
 
-	const login = (token: string) => {
-		// Set the token in the cookie with a 1-week expiration
-		setCookie('authToken', token, SESSION_DURATION_DAYS);
-		setIsAuthenticated(true);
+	const login = (username: string, password: string) => {
+		// Encode username and password in Base64
+		const encodedData = uint8ArrayToBase64(new TextEncoder().encode(`${username}:${password}`));
+		// Store credentials in localStorage
+		localStorage.setItem('authCredentials', encodedData);
+		localStorage.setItem('credentialsExpiration', (Date.now() + sessionDuration).toString());
 	};
 
 	const logout = () => {
-		// Remove the token from the cookie
-		deleteCookie('authToken');
+		// Remove credentials from localStorage
+		localStorage.removeItem('authCredentials');
+		localStorage.removeItem('credentialsExpiration');
 		setIsAuthenticated(false);
 	};
 
@@ -59,6 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	);
 };
 
+// Custom hook to use the AuthContext
 export const useAuth = (): AuthContextType => {
 	const context = useContext(AuthContext);
 	if (!context) {
