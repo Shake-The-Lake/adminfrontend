@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, {type AxiosError} from 'axios';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	baseURL: import.meta.env.VITE_APP_BASE_URL as string,
 	timeout: 10000,
 });
@@ -20,13 +21,14 @@ axiosInstance.interceptors.request.use(
 
 		return config;
 	},
-	async (error) => 
-		Promise.reject(error),
+	async (error: AxiosError) => {
+		throw error;
+	},
 );
 
 axiosInstance.interceptors.response.use(
 	(response) => response,
-	async (error) => {
+	async (error: AxiosError) => {
 	// Check if the error response status is 401 (Unauthorized)
 		if (error.response && error.response.status === 401) {
 			localStorage.removeItem('authUsername');
@@ -35,7 +37,7 @@ axiosInstance.interceptors.response.use(
 			window.location.href = '/login';
 		}
 
-		 Promise.reject(error);
+		throw error;
 	}
 	,
 );
