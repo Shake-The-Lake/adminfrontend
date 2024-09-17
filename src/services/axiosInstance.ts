@@ -31,6 +31,9 @@ axiosInstance.interceptors.response.use(
 	async (error: AxiosError) => {
 	// Check if the error response status is 401 (Unauthorized)
 		if (error.response && error.response.status === 401) {
+			const currentLocation = window.location.pathname;
+			localStorage.setItem('redirectAfterLogin', currentLocation);
+			
 			localStorage.removeItem('authUsername');
 			localStorage.removeItem('authPassword');
 

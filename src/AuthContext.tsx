@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
-import {Buffer} from 'buffer'; // Importing Buffer for base64 encoding
+import {Buffer} from 'buffer';
 
 type AuthContextType = {
 	isAuthenticated: boolean;
@@ -24,10 +24,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 		const expiration = localStorage.getItem('credentialsExpiration');
 
 		if (encodedCredentials && expiration) {
-			// Check if credentials have expired
+
 			const now = Date.now();
 			if (now > parseInt(expiration, 10)) {
-				// Credentials expired, log out user
+				const currentLocation = window.location.pathname;
+				localStorage.setItem('redirectAfterLogin', currentLocation);
 				logout();
 			} else {
 				// Credentials are valid

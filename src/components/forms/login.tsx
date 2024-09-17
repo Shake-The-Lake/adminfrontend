@@ -32,9 +32,6 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 
 	const loginMutation = useCreateLogin();
 
-	// Get the "from" state or default to the home page
-	const from = location.state?.from?.pathname as string || '/';
-
 	const form = useForm<LoginFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -53,7 +50,12 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 		try {
 			await loginMutation.mutateAsync(loginData);
 			login(loginData.username, loginData.password);
-			navigate(from, {replace: true});
+
+			// Get the "from" state or default to the home page
+			const redirectTo = localStorage.getItem('redirectAfterLogin');
+			console.log('redirectTo', redirectTo);
+			
+			navigate(redirectTo ?? '/', {replace: true});
 		} catch (error) {
 			console.error('Login failed', error);
 		}

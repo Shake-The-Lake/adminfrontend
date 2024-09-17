@@ -4,7 +4,7 @@
 import React from 'react';
 import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
-import {redirect, useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
+import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {boatsOptions, useGetBoats} from '../../../queries/boat';
 import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
