@@ -13,11 +13,6 @@ import {fromTimeToDateTime} from '../../../lib/date-time.utils';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			const {isAuthenticated} = useAuth();
-			if (!isAuthenticated) {
-				return redirect('/login');
-			}
-
 			if (!params.id) {
 				throw new Error('No event ID provided');
 			}
