@@ -1,10 +1,9 @@
-import axios from 'axios';
 import {type TimeSlotDto} from '../models/api/time-slot.model';
 import sortBy from 'lodash-es/sortBy';
+import axiosInstance from './axiosInstance';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const baseUrl = import.meta.env.VITE_APP_BASE_URL;
-const timeSlotUrl = `${baseUrl}/timeslot`;
+ 
+const timeSlotUrl = '/timeslot';
 
 const timeSlotSortBy = ['fromTime', 'activityType.name.en'];
 
@@ -19,7 +18,7 @@ export const getAllTimeSlotsFromEvent = async (
 ): Promise<TimeSlotDto[]> => {
 	const expand = 'boat,activitytype';
 	const params = {expand};
-	const response = await axios.get<TimeSlotDto[]>(timeSlotUrl, {params});
+	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, {params});
 	const result = response.data.filter(
 		(timeSlot) => timeSlot.activityType?.eventId === eventId || timeSlot.boat?.eventId === eventId,
 	);
@@ -31,21 +30,21 @@ export const getAllTimeSlotsFromEvent = async (
 export const getAllTimeSlotsFromBoat = async (
 	boatId: number,
 ): Promise<TimeSlotDto[]> => {
-	const response = await axios.get<TimeSlotDto[]>(timeSlotUrl);
+	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl);
 	const result = response.data.filter((timeSlot) => timeSlot.boatId === boatId);
 
 	return sortBy(result, timeSlotSortBy);
 };
 
 export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
-	const response = await axios.get<TimeSlotDto>(`${timeSlotUrl}/${id}`);
+	const response = await axiosInstance.get<TimeSlotDto>(`${timeSlotUrl}/${id}`);
 	return response.data;
 };
 
 export const createTimeSlot = async (
 	TimeSlot: TimeSlotDto,
 ): Promise<TimeSlotDto> => {
-	const response = await axios.post<TimeSlotDto>(`${timeSlotUrl}`, TimeSlot);
+	const response = await axiosInstance.post<TimeSlotDto>(`${timeSlotUrl}`, TimeSlot);
 	return response.data;
 };
 
@@ -53,7 +52,7 @@ export const updateTimeSlot = async (
 	id: number,
 	timeSlot: TimeSlotDto,
 ): Promise<TimeSlotDto> => {
-	const response = await axios.put<TimeSlotDto>(
+	const response = await axiosInstance.put<TimeSlotDto>(
 		`${timeSlotUrl}/${id}`,
 		timeSlot,
 	);
@@ -61,5 +60,5 @@ export const updateTimeSlot = async (
 };
 
 export const deleteTimeSlot = async (id: number): Promise<void> => {
-	await axios.delete(`${timeSlotUrl}/${id}`);
+	await axiosInstance.delete(`${timeSlotUrl}/${id}`);
 };
