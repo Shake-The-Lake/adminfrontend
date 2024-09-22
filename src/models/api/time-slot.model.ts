@@ -11,6 +11,7 @@ export type TimeSlotDto = {
 	activityTypeId?: number;
 	activityType?: ActivityTypeDto;
 	bookingIds?: Set<number>;
+	availableSeats: number;
 	status: string; // Todo! remove this status after backend is updated
 };
 
@@ -21,5 +22,6 @@ export const defaultTimeSlot: TimeSlotDto = {
 	boatId: 0,
 	status: 'AVAILABLE', // Todo! remove this status after backend is updated
 	bookingIds: undefined,
+	availableSeats: 0,
 	activityType: undefined,
 };

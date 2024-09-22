@@ -53,4 +53,8 @@ export const timeSlotColumns = (
 			return 'No Activity';
 		},
 	},
+	{
+		accessorKey: 'availableSeats',
+		header: 'Available Seats',
+	},
 ];
