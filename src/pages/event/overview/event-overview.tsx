@@ -7,28 +7,28 @@ import {
 	useEventDetail,
 	useUpdateEvent,
 } from '../../../queries/event';
-import {useQueryClient, type QueryClient} from '@tanstack/react-query';
+import {type QueryClient, useQueryClient} from '@tanstack/react-query';
 import {defaultEventDto} from '../../../models/api/event.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+	async ({params}: LoaderFunctionArgs) => {
+		if (!params.id) {
 			// Const navigate = useNavigate();
-				throw new Error('No event ID provided');
+			throw new Error('No event ID provided');
 			// Navigate('/'); // todo! see which makes more sense
-			}
+		}
 
-			await queryClient.ensureQueryData(
-				eventDetailOptions(Number(params.id), false),
-			);
-			return {eventId: Number(params.id)};
-		};
+		await queryClient.ensureQueryData(
+			eventDetailOptions(Number(params.id), false),
+		);
+		return {eventId: Number(params.id)};
+	};
 
 const EventOverview: React.FC = () => {
 	const queryClient = useQueryClient();
 	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event, isPending} = useEventDetail(queryClient, eventId, false);
 
@@ -49,6 +49,24 @@ const EventOverview: React.FC = () => {
 						model={event ?? defaultEventDto}
 						isCreate={false}
 					/>
+					<h1>QR Codes</h1>
+					<div className="flex flex-row mt-10">
+						<div className="flex flex-col items-center mx-4">
+							<p>Employee QR Code:</p>
+							<img
+								src={`data:image/png;base64,${event?.employeeBarcode}`}
+								alt="Employee QR Code"
+							/>
+						</div>
+
+						<div className="flex flex-col items-center mx-4">
+							<p>Customer QR Code:</p>
+							<img
+								src={`data:image/png;base64,${event?.customerBarcode}`}
+								alt="Customer QR Code"
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
