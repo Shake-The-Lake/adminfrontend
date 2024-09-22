@@ -50,9 +50,13 @@ const EventOverview: React.FC = () => {
 						isCreate={false}
 					/>
 					<h1>QR Codes</h1>
+					<p className="mt-2 mb-8 text-gray-600">
+						Use these QR Codes to enable customers and employees to enter the
+						event
+					</p>
 					<div className="flex flex-row mt-10">
 						<div className="flex flex-col items-center mx-4">
-							<p>Employee QR Code:</p>
+							<p>Employee QR Code</p>
 							<img
 								src={`data:image/png;base64,${event?.employeeBarcode}`}
 								alt="Employee QR Code"
@@ -60,7 +64,7 @@ const EventOverview: React.FC = () => {
 						</div>
 
 						<div className="flex flex-col items-center mx-4">
-							<p>Customer QR Code:</p>
+							<p>Customer QR Code</p>
 							<img
 								src={`data:image/png;base64,${event?.customerBarcode}`}
 								alt="Customer QR Code"
