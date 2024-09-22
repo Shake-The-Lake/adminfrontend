@@ -40,8 +40,17 @@ export const timeSlotColumns = (
 		header: 'Boat',
 	},
 	{
-		id: 'name',
-		accessorKey: 'activityType.name.' + localeToLocalizedStringProperty(locale),
+		id: 'activityType',
 		header: 'Activity Type',
+		cell: ({row}) => {
+			const activityType = row.original.activityType;
+			const localizedStringKey = localeToLocalizedStringProperty(locale);
+
+			if (activityType && activityType.name) {
+				return activityType.name[localizedStringKey] || 'Unknown Activity';
+			}
+
+			return 'No Activity';
+		},
 	},
 ];
