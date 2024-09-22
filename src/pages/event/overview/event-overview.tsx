@@ -57,18 +57,26 @@ const EventOverview: React.FC = () => {
 					<div className="flex flex-row mt-10">
 						<div className="flex flex-col items-center mx-4">
 							<p>Employee QR Code</p>
-							<img
-								src={`data:image/png;base64,${event?.employeeBarcode}`}
-								alt="Employee QR Code"
-							/>
+							{event?.employeeBarcode ? (
+								<img
+									src={`data:image/png;base64,${event?.employeeBarcode}`}
+									alt="Employee QR Code"
+								/>
+							) : (
+								<p className="italic">error while loading QR-Code...</p>
+							)}
 						</div>
 
 						<div className="flex flex-col items-center mx-4">
 							<p>Customer QR Code</p>
-							<img
-								src={`data:image/png;base64,${event?.customerBarcode}`}
-								alt="Customer QR Code"
-							/>
+							{event?.customerBarcode ? (
+								<img
+									src={`data:image/png;base64,${event.customerBarcode}`}
+									alt="Customer QR Code"
+								/>
+							) : (
+								<p className="italic">error while loading QR-Code...</p>
+							)}
 						</div>
 					</div>
 				</div>
