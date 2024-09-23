@@ -55,7 +55,7 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-	number | undefined
+		number | undefined
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
@@ -132,8 +132,11 @@ const AddBookingPage: React.FC = () => {
 	};
 
 	const updateFilteredTimeSlots = () => {
+		const timeslotsWithAvailableSeats = timeSlots?.filter(
+			(slot) => slot.availableSeats > 0,
+		);
 		const filtered = filterTimeSlots(
-			timeSlots ?? [],
+			timeslotsWithAvailableSeats ?? [],
 			filter.activityId,
 			filter.boatId,
 			filter.from,
@@ -200,7 +203,10 @@ const AddBookingPage: React.FC = () => {
 									}
 									params={{
 										onActivityTypeChange(activityTypeId?: number) {
-											setFilter((prevFilter) => ({...prevFilter, activityId: activityTypeId}));
+											setFilter((prevFilter) => ({
+												...prevFilter,
+												activityId: activityTypeId,
+											}));
 										},
 										onBoatChange(boatId?: number) {
 											console.log('Boat ID changed:', boatId);
