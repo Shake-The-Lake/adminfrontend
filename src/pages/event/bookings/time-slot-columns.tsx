@@ -3,6 +3,7 @@ import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import React from 'react';
 import {Checkbox} from '../../../components/ui/checkbox';
 import {localeToLocalizedStringProperty} from '../../../lib/utils';
+import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 
 export const timeSlotColumns = (
 	locale: string,
@@ -26,14 +27,14 @@ export const timeSlotColumns = (
 		enableHiding: false,
 	},
 	{
-		id: 'from',
-		accessorKey: 'fromTime',
+		accessorKey: 'timeSlot.fromTime',
 		header: 'From',
+		cell: ({row}) => getDisplayTimeFromBackend(row.original.fromTime),
 	},
 	{
-		id: 'to',
-		accessorKey: 'untilTime',
-		header: 'To',
+		accessorKey: 'timeSlot.untilTime',
+		header: 'Until',
+		cell: ({row}) => getDisplayTimeFromBackend(row.original.untilTime),
 	},
 	{
 		accessorKey: 'boat.name',
