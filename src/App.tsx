@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DefaultLayout from './components/default-layout';
-import EventDetailLayout, {
+import {
 	loader as sideNavigationLoader,
 } from './components/event-detail-layout';
 import {eventDetailRoutes} from './constants';
