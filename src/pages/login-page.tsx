@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
 
 	return (
 		<>
-			<HeaderLogo />
+			<HeaderLogo hasLink={false}/>
 			<div className="mt-10 flex flex-col items-center gap-4 content-center">
 				<h1 className="text-2xl text-primary">Login</h1>
 				<LoginForm
