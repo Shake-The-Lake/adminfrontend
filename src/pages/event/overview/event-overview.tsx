@@ -49,34 +49,36 @@ const EventOverview: React.FC = () => {
 						model={event ?? defaultEventDto}
 						isCreate={false}
 					/>
-					<h1>QR Codes</h1>
-					<p className="mt-2 mb-8 text-gray-600">
-						Use these QR Codes to enable customers and employees to enter the
-						event
-					</p>
-					<div className="flex flex-row mt-10">
-						<div className="flex flex-col items-center mx-4">
-							<p>Employee QR Code</p>
-							{event?.employeeBarcode ? (
-								<img
-									src={`data:image/png;base64,${event?.employeeBarcode}`}
-									alt="Employee QR Code"
-								/>
-							) : (
-								<p className="italic">error while loading QR-Code...</p>
-							)}
-						</div>
+					<div className="mt-8">
+						<h1>QR Codes</h1>
+						<p className="mt-2 mb-8 text-gray-600">
+							Use these QR Codes to enable customers and employees to enter the
+							event
+						</p>
+						<div className="flex flex-row mt-2">
+							<div className="flex flex-col items-center mx-4">
+								<p>Employee QR Code</p>
+								{event?.employeeBarcode ? (
+									<img
+										src={`data:image/png;base64,${event?.employeeBarcode}`}
+										alt="Employee QR Code"
+									/>
+								) : (
+									<p className="italic">error while loading QR-Code...</p>
+								)}
+							</div>
 
-						<div className="flex flex-col items-center mx-4">
-							<p>Customer QR Code</p>
-							{event?.customerBarcode ? (
-								<img
-									src={`data:image/png;base64,${event.customerBarcode}`}
-									alt="Customer QR Code"
-								/>
-							) : (
-								<p className="italic">error while loading QR-Code...</p>
-							)}
+							<div className="flex flex-col items-center mx-4">
+								<p>Customer QR Code</p>
+								{event?.customerBarcode ? (
+									<img
+										src={`data:image/png;base64,${event.customerBarcode}`}
+										alt="Customer QR Code"
+									/>
+								) : (
+									<p className="italic">error while loading QR-Code...</p>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
