@@ -34,6 +34,7 @@ import LoginPage from './pages/login-page';
 import {AuthProvider} from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
+import AddBookingPage from './pages/event/bookings/add-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {

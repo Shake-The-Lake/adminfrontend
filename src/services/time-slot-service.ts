@@ -1,9 +1,9 @@
-import {type TimeSlotDto} from '../models/api/time-slot.model';
+import { type TimeSlotDto } from '../models/api/time-slot.model';
 import sortBy from 'lodash-es/sortBy';
 import axiosInstance from './axiosInstance';
-import {getPersonById} from './person-service';
+import { getPersonById } from './person-service';
 
- 
+
 const timeSlotUrl = '/timeslot';
 
 const timeSlotSortBy = ['fromTime', 'activityType.name.en'];
@@ -16,17 +16,9 @@ export const getSortedTimeSlots = (timeSlot: Set<TimeSlotDto> | undefined) =>
 export const getAllTimeSlotsFromEvent = async (
 	eventId: number,
 ): Promise<TimeSlotDto[]> => {
-	const expand = 'boat,activityType';
-	const params = {expand};
-	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, {params});
-	const result = response.data.filter(
-		(timeSlot) =>
-			timeSlot.activityType?.eventId === eventId ||
-			timeSlot.boat?.eventId === eventId,
-	);
 	const expand = 'boat,activitytype';
-	const params = {expand, eventId};
-	const response = await axios.get<TimeSlotDto[]>(timeSlotUrl, {params});
+	const params = { expand, eventId };
+	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, { params });
 	const result = response.data;
 
 	return sortBy(result, timeSlotSortBy);
@@ -43,13 +35,12 @@ export const getAllTimeSlotsFromBoat = async (
 };
 
 export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
-	const response = await axiosInstance.get<TimeSlotDto>(`${timeSlotUrl}/${id}`);
-	const response = await axios.get<TimeSlotDto>(`${timeSlotUrl}/${id}?expand=activityType,boat,bookings`);
+	const response = await axiosInstance.get<TimeSlotDto>(`${timeSlotUrl}/${id}?expand=activityType,boat,bookings`);
 	const timeSlot = response.data;
 	if (response?.data?.bookings) {
 		timeSlot.bookings = await Promise.all(response.data.bookings.map(async (booking) => {
 			const person = await getPersonById(booking.personId);
-			return {...booking, person};
+			return { ...booking, person };
 		}));
 	}
 
