@@ -1,8 +1,6 @@
-import axios from 'axios';
 import {type ActivityTypeDto} from '../models/api/activity-type.model';
 import sortBy from 'lodash-es/sortBy';
-
-const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
+import axiosInstance from './axiosInstance';
 
 export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) =>
 	activityTypes
@@ -13,8 +11,8 @@ export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) =>
 export const getAllActivityTypesFromEvent = async (
 	eventId: number,
 ): Promise<ActivityTypeDto[]> => {
-	const response = await axios.get<ActivityTypeDto[]>(
-		`${baseUrl}/activitytype`,
+	const response = await axiosInstance.get<ActivityTypeDto[]>(
+		'/activitytype',
 	);
 	const result = response.data.filter(
 		(activityType) => activityType.eventId === eventId,
@@ -26,8 +24,8 @@ export const getAllActivityTypesFromEvent = async (
 export const getActivityTypeById = async (
 	id: number,
 ): Promise<ActivityTypeDto> => {
-	const response = await axios.get<ActivityTypeDto>(
-		`${baseUrl}/activitytype/${id}`,
+	const response = await axiosInstance.get<ActivityTypeDto>(
+		`/activitytype/${id}`,
 	);
 	return response.data;
 };
@@ -35,8 +33,8 @@ export const getActivityTypeById = async (
 export const createActivityType = async (
 	activityType: ActivityTypeDto,
 ): Promise<ActivityTypeDto> => {
-	const response = await axios.post<ActivityTypeDto>(
-		`${baseUrl}/activitytype`,
+	const response = await axiosInstance.post<ActivityTypeDto>(
+		'/activitytype',
 		activityType,
 	);
 	return response.data;
@@ -46,13 +44,13 @@ export const updateActivityType = async (
 	id: number,
 	activityType: ActivityTypeDto,
 ): Promise<ActivityTypeDto> => {
-	const response = await axios.put<ActivityTypeDto>(
-		`${baseUrl}/activitytype/${id}`,
+	const response = await axiosInstance.put<ActivityTypeDto>(
+		`/activitytype/${id}`,
 		activityType,
 	);
 	return response.data;
 };
 
 export const deleteActivityType = async (id: number): Promise<void> => {
-	await axios.delete(`${baseUrl}/activitytype/${id}`);
+	await axiosInstance.delete(`/activitytype/${id}`);
 };

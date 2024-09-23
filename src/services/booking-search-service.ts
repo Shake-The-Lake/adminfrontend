@@ -1,9 +1,7 @@
-import axios from 'axios';
 import {type BookingSearchParams, type BookingSearchDto} from '../models/api/booking-search.model';
 import {sortBy} from 'lodash-es';
 import {cleanEmptyParams} from '../components/data-table/cleanEmptyParams';
-
-const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
+import axiosInstance from './axiosInstance';
 
 export const getDefaultSortedBoookings = (bookings?: BookingSearchDto[]) =>
 	bookings ? sortBy(bookings, ['timeSlot.fromTime', 'boat.name', 'person.lastName', 'person.firstName']) : [];
@@ -11,8 +9,8 @@ export const getDefaultSortedBoookings = (bookings?: BookingSearchDto[]) =>
 export const getBookingsByEventId = async (
 	eventId: number,
 ): Promise<BookingSearchDto[]> => {
-	const response = await axios.get<BookingSearchDto[]>(
-		`${baseUrl}/search/${eventId}`,
+	const response = await axiosInstance.get<BookingSearchDto[]>(
+		`/search/${eventId}`,
 	);
 	const result = response.data;
 	
@@ -24,8 +22,8 @@ export const searchBookings = async (
 	searchParams: BookingSearchParams,
 ): Promise<BookingSearchDto[]> => {
 	const params = cleanEmptyParams(searchParams);
-	const response = await axios.get<BookingSearchDto[]>(
-		`${baseUrl}/search/${eventId}`, {params},
+	const response = await axiosInstance.get<BookingSearchDto[]>(
+		`/search/${eventId}`, {params},
 	);
 	const result = response.data;
 	
