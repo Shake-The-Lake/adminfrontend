@@ -2,7 +2,8 @@ import {type ColumnDef} from '@tanstack/react-table';
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import React from 'react';
 import {Checkbox} from '../../../components/ui/checkbox';
-import {localeToLocalizedStringProperty} from '../../../lib/utils';
+import {getTranslation} from '../../../lib/utils';
+import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 
 export const timeSlotColumns = (
 	locale: string,
@@ -26,22 +27,45 @@ export const timeSlotColumns = (
 		enableHiding: false,
 	},
 	{
-		id: 'from',
-		accessorKey: 'fromTime',
+		accessorKey: 'timeSlot.fromTime',
 		header: 'From',
+		cell: ({row}) => getDisplayTimeFromBackend(row.original.fromTime),
 	},
 	{
-		id: 'to',
-		accessorKey: 'untilTime',
-		header: 'To',
+		accessorKey: 'timeSlot.untilTime',
+		header: 'Until',
+		cell: ({row}) => getDisplayTimeFromBackend(row.original.untilTime),
 	},
 	{
 		accessorKey: 'boat.name',
 		header: 'Boat',
 	},
 	{
-		id: 'name',
-		accessorKey: 'activityType.name.' + localeToLocalizedStringProperty(locale),
+		id: 'activityType',
 		header: 'Activity Type',
+		cell: ({row}) => {
+			const activityType = row.original.activityType;
+
+			if (activityType && activityType.name) {
+				return getTranslation(locale, activityType.name) ?? 'Unknown Activity';
+			}
+
+			return 'No Activity';
+		},
+	},
+
+	{
+		accessorKey: 'Viewer Seats',
+		header: 'Viewer Seats',
+		cell: ({row}) => {
+			return `${row.original.availableViewerSeats ?? 0}/${row.original.seatsViewer}`;
+		},
+	},
+	{
+		accessorKey: 'Rider Seats',
+		header: 'Rider Seats',
+		cell: ({row}) => {
+			return `${row.original.availableRiderSeats ?? 0}/${row.original.seatsRider}`;
+		},
 	},
 ];
