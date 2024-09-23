@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigate} from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 import {useAuth} from './AuthContext';
 import EventDetailLayout from './components/event-detail-layout';
 
@@ -8,9 +8,11 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({redirectPath = '/login'}) => {
-	const {isAuthenticated} = useAuth();
+	const {isAuthenticated, logout} = useAuth();
 
 	if (!isAuthenticated) {
+		localStorage.setItem('redirectAfterLogin', window.location.pathname);
+		logout(); // Clear any existing credentials
 		return <Navigate to={redirectPath} replace />;
 	}
 

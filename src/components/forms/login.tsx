@@ -5,13 +5,11 @@ import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {onInvalidFormHandler} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {MutationToaster} from '../common/mutation-toaster';
 import {Button} from '../ui/button';
-import {type LoginDto} from '../../models/api/login.model';
-import {useNavigate, useLocation} from 'react-router-dom'; // Added useLocation
+import {type LoginDto} from '../../models/api/login.model'; // Added useLocation
 import {useAuth} from '../../AuthContext';
-import {useCreateLogin} from '../../queries/login';
+import {toast} from 'sonner';
+import {useNavigate} from 'react-router-dom';
 
 // Schema definition
 export const loginFormSchema = z.object({
@@ -27,10 +25,7 @@ type LoginFormProps = {
 
 const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 	const navigate = useNavigate();
-	const location = useLocation(); // UseLocation to capture where user is coming from
 	const {login} = useAuth();
-
-	const loginMutation = useCreateLogin();
 
 	const form = useForm<LoginFormSchema>({
 		mode: 'onChange',
@@ -48,25 +43,28 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			await loginMutation.mutateAsync(loginData);
+			const loggedIn = true; // Replace this with the actual login logic
+			if (!loggedIn) throw new Error('User or Password is wrong');
+
 			login(loginData.username, loginData.password);
 
-			// Get the "from" state or default to the home page
 			const redirectTo = localStorage.getItem('redirectAfterLogin');
-			console.log('redirectTo', redirectTo);
-			
-			navigate(redirectTo ?? '/', {replace: true});
+
+			if (!redirectTo || redirectTo === '/login') {
+				navigate('/', {replace: true});
+			} else {
+				navigate(redirectTo, {replace: true});
+			}
 		} catch (error) {
-			console.error('Login failed', error);
+			toast.error('Try again', {
+				description: 'User or Password is wrong',
+			});
+			form.reset();
 		}
 	};
 
 	return (
 		<>
-			<MutationToaster
-				type='create'
-				mutation={loginMutation}
-			/>
 			<Form {...form}>
 				<form
 					className="p-1 space-y-4"
