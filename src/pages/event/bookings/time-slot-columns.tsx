@@ -53,8 +53,19 @@ export const timeSlotColumns = (
 			return 'No Activity';
 		},
 	},
+
 	{
-		accessorKey: 'availableSeats',
-		header: 'Available Seats',
+		accessorKey: 'Viewer Seats',
+		header: 'Viewer Seats',
+		cell: ({row}) => {
+			return `${row.original.availableViewerSeats}/${row.original.seatsViewer}`;
+		},
+	},
+	{
+		accessorKey: 'Rider Seats',
+		header: 'Rider Seats',
+		cell: ({row}) => {
+			return `${row.original.availableRiderSeats}/${row.original.seatsRider}`;
+		},
 	},
 ];
