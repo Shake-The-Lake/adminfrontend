@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DefaultLayout from './components/default-layout';
-import EventDetailLayout, {
+import {
 	loader as sideNavigationLoader,
 } from './components/event-detail-layout';
 import {eventDetailRoutes} from './constants';
@@ -30,8 +30,10 @@ import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
 import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
 import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
+import LoginPage from './pages/login-page';
+import {AuthProvider} from './AuthContext';
+import ProtectedRoute from './ProtectedRoute';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
-import AddBookingPage from './pages/event/bookings/add-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -55,8 +57,12 @@ const router = createBrowserRouter([
 		),
 	},
 	{
+		path: '/login',
+		element: <LoginPage />,
+	},
+	{
 		path: `/event/${eventDetailRoutes.id}`,
-		element: <EventDetailLayout />,
+		element: <ProtectedRoute />,
 		loader: sideNavigationLoader(queryClient),
 		children: [
 			{
@@ -117,14 +123,16 @@ function App() {
 	const {t} = useTranslation();
 
 	return (
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider
-				router={router}
-				fallbackElement={<div>{t('loading')}</div>}
-			/>
-			<ReactQueryDevtools initialIsOpen={false} />
-			<Toaster position="top-center" closeButton />
-		</QueryClientProvider>
+		<AuthProvider>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider
+					router={router}
+					fallbackElement={<div>{t('loading')}</div>}
+				/>
+				<ReactQueryDevtools initialIsOpen={false} />
+				<Toaster position="top-center" closeButton />
+			</QueryClientProvider>
+		</AuthProvider>
 	);
 }
 

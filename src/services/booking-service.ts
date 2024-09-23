@@ -1,12 +1,11 @@
 import axios from 'axios';
 import {type BookingDto} from '../models/api/booking.model';
-
-const baseUrl = import.meta.env.VITE_APP_BASE_URL as string;
+import axiosInstance from './axiosInstance';
 
 export const createBooking = async (
 	booking: BookingDto,
 ): Promise<BookingDto> => {
-	const response = await axios.post<BookingDto>(`${baseUrl}/booking`, booking);
+	const response = await axiosInstance.post<BookingDto>('/booking', booking);
 	return response.data;
 };
 
