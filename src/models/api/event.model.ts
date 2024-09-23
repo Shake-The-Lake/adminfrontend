@@ -7,8 +7,8 @@ export type EventDto = {
 	description: string;
 	// Location: Location; not part of MVP
 	date: Date;
-	// CustomerCode: string; not part of MVP
-	// employeeCode: string; not part of MVP
+	customerBarcode: string;
+	employeeBarcode: string;
 	isStarted?: boolean;
 	activityTypeIds?: number[];
 	boatIds?: number[];
@@ -21,6 +21,8 @@ export const defaultEventDto: EventDto = {
 	title: '',
 	description: '',
 	date: new Date(),
+	customerBarcode: '',
+	employeeBarcode: '',
 	isStarted: false,
 	activityTypeIds: [],
 	boatIds: [],
