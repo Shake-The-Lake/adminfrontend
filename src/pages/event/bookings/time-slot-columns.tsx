@@ -2,7 +2,7 @@ import {type ColumnDef} from '@tanstack/react-table';
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import React from 'react';
 import {Checkbox} from '../../../components/ui/checkbox';
-import {localeToLocalizedStringProperty} from '../../../lib/utils';
+import {getTranslation} from '../../../lib/utils';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 
 export const timeSlotColumns = (
@@ -45,10 +45,9 @@ export const timeSlotColumns = (
 		header: 'Activity Type',
 		cell: ({row}) => {
 			const activityType = row.original.activityType;
-			const localizedStringKey = localeToLocalizedStringProperty(locale);
 
 			if (activityType && activityType.name) {
-				return activityType.name[localizedStringKey] || 'Unknown Activity';
+				return getTranslation(locale, activityType.name) ?? 'Unknown Activity';
 			}
 
 			return 'No Activity';
