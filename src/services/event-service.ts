@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {type EventDto} from '../models/api/event.model';
 import sortBy from 'lodash-es/sortBy';
 import {getSortedActivityTypes} from './activity-type-service';

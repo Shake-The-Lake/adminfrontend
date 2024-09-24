@@ -60,6 +60,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const closeCreateDialog = () => {
 		setIsCreateDialogOpen(false);
 	};
+
 	return (
 		<div>
 			<LoadingSpinner

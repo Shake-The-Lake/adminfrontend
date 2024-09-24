@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
 type LoadingSpinnerProps = {
 	isLoading: boolean;
 };
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ isLoading }) => {
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({isLoading}) => {
 
-useEffect(() => {
+	useEffect(() => {
 		if (isLoading) {
 			// Disable scroll by setting overflow to hidden
 			document.body.style.overflow = 'hidden';
@@ -27,6 +27,7 @@ useEffect(() => {
 	if (!isLoading) {
 		return null;
 	}
+
 	return (
 		<div className="fixed inset-0 flex items-center justify-center z-50">
 			<div className="absolute inset-0 backdrop-blur-sm z-40"></div>

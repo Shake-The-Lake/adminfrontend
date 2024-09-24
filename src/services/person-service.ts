@@ -7,6 +7,6 @@ export const createPerson = async (person: PersonDto): Promise<PersonDto> => {
 };
 
 export const getPersonById = async (id: number): Promise<PersonDto> => {
-	const response = await axios.get<PersonDto>(`${baseUrl}/person/${id}`);
+	const response = await axiosInstance.get<PersonDto>(`/person/${id}`);
 	return response.data;
 };

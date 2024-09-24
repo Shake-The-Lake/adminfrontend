@@ -17,9 +17,9 @@ export const loader =
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 			// Const navigate = useNavigate();
-			throw new Error('No event ID provided');
+				throw new Error('No event ID provided');
 			// Navigate('/'); // todo! see which makes more sense
-		}
+			}
 
 			await queryClient.ensureQueryData(
 				eventDetailOptions(routeIds.eventId, false),
@@ -31,7 +31,7 @@ export const loader =
 const EventOverview: React.FC = () => {
 	const queryClient = useQueryClient();
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event, isPending} = useEventDetail(queryClient, eventId, false);
 

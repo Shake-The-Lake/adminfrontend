@@ -2,7 +2,6 @@ import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import React from 'react';
 import {
 	useLoaderData,
-	useParams,
 	type LoaderFunctionArgs,
 } from 'react-router-dom';
 import {
@@ -23,26 +22,26 @@ import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 import LoadingSpinner from '../../../components/animations/loading';
 import {extractTypedInfoFromRouteParams, getTranslation} from '../../../lib/utils';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.timeSlotId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.timeSlotId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			timeslotDetailOptions(Number(params.timeSlotId)),
-		);
+			await queryClient.ensureQueryData(
+				timeslotDetailOptions(Number(params.timeSlotId)),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const ScheduleItemPage: React.FC = () => {
 	const {timeSlotId, eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
 	const {i18n} = useTranslation();

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Book, PencilIcon, Trash} from 'lucide-react';
+import {PencilIcon, Trash} from 'lucide-react';
 import {TableCell} from '../ui/table';
 import {Button} from '../ui/button';
 import {type UseMutationResult} from '@tanstack/react-query';

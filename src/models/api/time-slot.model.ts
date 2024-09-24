@@ -1,7 +1,7 @@
-import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
-import { type ActivityTypeDto } from './activity-type.model';
-import { type BoatDto } from './boat.model';
-import { type BookingDto } from './booking.model';
+import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
+import {type ActivityTypeDto} from './activity-type.model';
+import {type BoatDto} from './boat.model';
+import {type BookingDto} from './booking.model';
 
 export type TimeSlotDto = {
 	id: number;

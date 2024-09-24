@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {type BookingDto} from '../models/api/booking.model';
 import axiosInstance from './axiosInstance';
 
@@ -12,6 +11,6 @@ export const createBooking = async (
 export const updateBooking = async (
 	booking: BookingDto,
 ): Promise<BookingDto> => {
-	const response = await axios.put<BookingDto>(`${baseUrl}/booking/${booking.id}`, booking);
+	const response = await axiosInstance.put<BookingDto>(`/booking/${booking.id}`, booking);
 	return response.data;
 };

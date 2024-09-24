@@ -1,7 +1,7 @@
-import { type TimeSlotDto } from '../models/api/time-slot.model';
+import {type TimeSlotDto} from '../models/api/time-slot.model';
 import sortBy from 'lodash-es/sortBy';
 import axiosInstance from './axiosInstance';
-import { getPersonById } from './person-service';
+import {getPersonById} from './person-service';
 
 
 const timeSlotUrl = '/timeslot';
@@ -17,8 +17,8 @@ export const getAllTimeSlotsFromEvent = async (
 	eventId: number,
 ): Promise<TimeSlotDto[]> => {
 	const expand = 'boat,activitytype';
-	const params = { expand, eventId };
-	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, { params });
+	const params = {expand, eventId};
+	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, {params});
 	const result = response.data;
 
 	return sortBy(result, timeSlotSortBy);
@@ -26,12 +26,12 @@ export const getAllTimeSlotsFromEvent = async (
 
 // Todo! refactor usage to use expanded event instead
 export const getAllTimeSlotsFromBoat = async (
-	boatId: number,
+	eventId: number, boatId: number,
 ): Promise<TimeSlotDto[]> => {
-	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl);
-	const result = response.data.filter((timeSlot) => timeSlot.boatId === boatId);
+	const response = await getAllTimeSlotsFromEvent(eventId);
+	const result = response.filter((timeSlot) => timeSlot.boatId === boatId);
 
-	return sortBy(result, timeSlotSortBy);
+	return result;
 };
 
 export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
@@ -40,7 +40,7 @@ export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
 	if (response?.data?.bookings) {
 		timeSlot.bookings = await Promise.all(response.data.bookings.map(async (booking) => {
 			const person = await getPersonById(booking.personId);
-			return { ...booking, person };
+			return {...booking, person};
 		}));
 	}
 
