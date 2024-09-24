@@ -49,9 +49,14 @@ const ScheduleItemPage: React.FC = () => {
 	const {data: timeSlot, isPending} = useTimeSlotDetail(queryClient,
 		timeSlotId, eventId,
 	);
+	const signedUpViewers = timeSlot?.bookings.filter(
+		(booking) => !booking.isRider,
+	).length;
+	const signedUpRiders = timeSlot?.bookings.filter(
+		(booking) => booking.isRider,
+	).length;
 
 	const deleteMutation = useDeleteBooking(eventId);
-
 	return (
 		<>
 			<div className="mt-10">
@@ -69,11 +74,11 @@ const ScheduleItemPage: React.FC = () => {
 					</span>
 					<span className="flex gap-2">
 						<EyeIcon />
-						{timeSlot?.availableViewerSeats} / {timeSlot?.seatsViewer}
+						{signedUpViewers} / {timeSlot?.seatsViewer}
 					</span>
 					<span className="flex gap-2">
 						<UsersIcon />
-						{timeSlot?.availableRiderSeats} / {timeSlot?.seatsRider}
+						{signedUpRiders} / {timeSlot?.seatsRider}
 					</span>
 					<span className="flex gap-2">
 						<TagIcon />
