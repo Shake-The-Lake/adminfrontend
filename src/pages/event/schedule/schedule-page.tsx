@@ -122,7 +122,6 @@ const SchedulePage: React.FC = () => {
 	});
 
 	return (
-		<div>
 			<div className='max-w-[75vw]'>
 				<Epg {...getEpgProps()} >
 					<Layout
@@ -138,7 +137,6 @@ const SchedulePage: React.FC = () => {
 					/>
 				</Epg>
 			</div>
-		</div>
 	);
 };
 
