@@ -48,7 +48,6 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(eventId, boatId);
-
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const createMutation = useCreateTimeSlot(boatId, eventId);
@@ -61,7 +60,6 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const closeCreateDialog = () => {
 		setIsCreateDialogOpen(false);
 	};
-
 	return (
 		<div>
 			<LoadingSpinner

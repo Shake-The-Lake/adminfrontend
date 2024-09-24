@@ -1,4 +1,4 @@
-import {type QueryClient} from '@tanstack/react-query';
+import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import React from 'react';
 import {
 	useLoaderData,
@@ -22,7 +22,8 @@ import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 import LoadingSpinner from '../../../components/animations/loading';
-import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {extractTypedInfoFromRouteParams, getTranslation} from '../../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -40,24 +41,15 @@ export const loader =
 	};
 
 const ScheduleItemPage: React.FC = () => {
-	const routeIds = useLoaderData() as Awaited<
+	const {timeSlotId, eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-
-	const {data: timeSlot, isPending} = useTimeSlotDetail(
-		routeIds.timeSlotId,
-		routeIds.eventId,
+	const queryClient = useQueryClient();
+	const {i18n} = useTranslation();
+	
+	const {data: timeSlot, isPending} = useTimeSlotDetail(queryClient,
+		timeSlotId, eventId,
 	);
-
-	const signedUpViewers = timeSlot?.bookings.filter(
-		(booking) => !booking.isRider,
-	).length;
-	const signedUpRiders = timeSlot?.bookings.filter(
-		(booking) => booking.isRider,
-	).length;
-
-	const {id} = useParams<{id: string}>();
-	const eventId = Number(id);
 
 	const deleteMutation = useDeleteBooking(eventId);
 
@@ -78,15 +70,15 @@ const ScheduleItemPage: React.FC = () => {
 					</span>
 					<span className="flex gap-2">
 						<EyeIcon />
-						{signedUpViewers} / {timeSlot?.boat?.seatsViewer}
+						{timeSlot?.availableViewerSeats} / {timeSlot?.seatsViewer}
 					</span>
 					<span className="flex gap-2">
 						<UsersIcon />
-						{signedUpRiders} / {timeSlot?.boat?.seatsRider}
+						{timeSlot?.availableRiderSeats} / {timeSlot?.seatsRider}
 					</span>
 					<span className="flex gap-2">
 						<TagIcon />
-						{timeSlot?.activityType?.name?.de}
+						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
 				</div>
 				<h2 className="text-2xl mt-10">Current Booking</h2>

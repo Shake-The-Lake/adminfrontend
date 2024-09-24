@@ -1,12 +1,12 @@
-import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
-import {type ActivityTypeDto} from './activity-type.model';
-import {type BoatDto} from './boat.model';
-import {type BookingDto} from './booking.model';
+import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
+import { type ActivityTypeDto } from './activity-type.model';
+import { type BoatDto } from './boat.model';
+import { type BookingDto } from './booking.model';
 
 export type TimeSlotDto = {
 	id: number;
-	fromTime?: string; // Assuming ISO string format for LocalDateTime
-	untilTime?: string; // Assuming ISO string format for LocalDateTime
+	fromTime?: string;
+	untilTime?: string;
 	boatId?: number;
 	boat?: BoatDto;
 	activityTypeId?: number;

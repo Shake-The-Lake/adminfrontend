@@ -35,6 +35,7 @@ import {AuthProvider} from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
 import AddBookingPage from './pages/event/bookings/add-booking-page';
+import LoadingSpinner from './components/animations/loading';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -111,11 +112,6 @@ const router = createBrowserRouter([
 				element: <AddBookingPage />,
 				loader: bookingsLoader(queryClient),
 			},
-			{
-				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}/${eventDetailRoutes.bookingId}`,
-				element: <AddBookingPage />,
-				loader: bookingsLoader(queryClient),
-			},
 		],
 	},
 ]);
@@ -128,7 +124,7 @@ function App() {
 			<QueryClientProvider client={queryClient}>
 				<RouterProvider
 					router={router}
-					fallbackElement={<div>{t('loading')}</div>}
+					fallbackElement={<LoadingSpinner isLoading />}
 				/>
 				<ReactQueryDevtools initialIsOpen={false} />
 				<Toaster position="top-center" closeButton />
