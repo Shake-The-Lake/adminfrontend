@@ -63,5 +63,10 @@ export function useCreateBooking(eventId: number) {
 		onError(error) {
 			console.error('Error creating booking:', error);
 		},
+		onSettled: async (_, error) => {
+			await queryClient.invalidateQueries({
+				queryKey: ['bookings'],
+			});
+		},
 	});
 }
