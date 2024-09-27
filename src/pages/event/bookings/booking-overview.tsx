@@ -22,6 +22,7 @@ import StlFilter, {
 import {defaultFilterParams} from '../../../models/api/search.model';
 import {eventDetailRoutes} from '../../../constants';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -47,7 +48,7 @@ const BookingOverview: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
-
+	const {t} = useTranslation();
 	const {data: bookings, isPending, error} = useSearchBookings(eventId, filter);
 
 	const searchParams = defaultFilterParams;
@@ -76,11 +77,11 @@ const BookingOverview: React.FC = () => {
 		<div className="flex flex-col items-center">
 			<LoadingSpinner isLoading={isPending} />
 			<div className="w-full mb-8 flex justify-between items-center">
-				<h1>Bookings</h1>
+				<h1>{t('booking.title')}</h1>
 
 				<Button>
 					<Link to={`${eventDetailRoutes.addBooking}`} relative="path">
-						Add Booking
+						{t('booking.create')}
 					</Link>
 				</Button>
 			</div>
@@ -93,7 +94,7 @@ const BookingOverview: React.FC = () => {
 						<DataTable columns={bookingColumns} data={bookings ?? []} />
 					</>
 				) : (
-					<p>Failed to load bookings!</p>
+					<p>{t('booking.errorLoadingBooking')}</p>
 				)}
 			</div>
 		</div>

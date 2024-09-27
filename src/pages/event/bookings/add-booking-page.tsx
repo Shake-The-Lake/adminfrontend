@@ -192,7 +192,7 @@ const AddBookingPage: React.FC = () => {
 
 			<div className="w-full p-4 flex justify-center">
 				<div className="flex flex-col w-full">
-					<h3>{t('timeslot.title')}</h3>
+					<h3>{t('timeSlot.title')}</h3>
 					<div className="w-full">
 						{error === null ? (
 							<>
@@ -243,7 +243,7 @@ const AddBookingPage: React.FC = () => {
 				<div className="p-4">
 					<h3>{t('booking.person')}</h3>
 					<p className="text-primary-dark-stroke mb-2 mt-2">
- 			{t('booking.enterContact')}							</p>
+ 			{t('booking.enterContact')}</p>
 					<Form {...form}>
 						<form
 							id="personForm"
@@ -257,7 +257,7 @@ const AddBookingPage: React.FC = () => {
 										<FormLabel>{t('firstName')}</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="First Name"
+												placeholder={t('firstName')}
 												{...field}
 												className="input"
 											/>
@@ -367,7 +367,7 @@ const AddBookingPage: React.FC = () => {
 							/>
 
 							<FormItem>
-								<FormLabel>Pager Number</FormLabel>
+								<FormLabel>{t('pagerNumber')}</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="0"

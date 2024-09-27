@@ -65,7 +65,7 @@ const EventOverview: React.FC = () => {
 								{event?.employeeBarcode ? (
 									<img
 										src={`data:image/png;base64,${event?.employeeBarcode}`}
-										alt="Employee QR Code"
+										alt={t('eventOverview.employeeQrCode')}
 									/>
 								) : (
 									<p className="italic">{t('eventOverview.errorLoading')}</p>
@@ -77,7 +77,7 @@ const EventOverview: React.FC = () => {
 								{event?.customerBarcode ? (
 									<img
 										src={`data:image/png;base64,${event.customerBarcode}`}
-										alt="Customer QR Code"
+										alt={t('eventOverview.customerQrCode')}
 									/>
 								) : (
 									<p className="italic">{t('eventOverview.errorLoading')}</p>

@@ -85,6 +85,8 @@ const resources: Resource = {
 			cancel: 'Cancel',
 			save: 'Save',
 			firstName: 'First Name',
+			lastName: 'Last Name',
+			name: 'Name',
 			email: 'Email',
 			phone: 'Phone Number',
 			personType: 'Person Type',
@@ -92,6 +94,7 @@ const resources: Resource = {
 			customer: 'Customer',
 			boatDriver: 'Boat Driver',
 			rider: 'Rider',
+			pagerNumber: 'Pager Number',
 		},
 	},
 	de: {

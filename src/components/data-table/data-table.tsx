@@ -41,7 +41,7 @@ export function DataTable<TyData, TyValue>({
 	});
 
 	return (
-		<div className="p-1 w-full h-full overflow-auto">
+		<div className="p-1 mt-5 w-full h-full overflow-auto">
 			<div className="rounded-md border overflow-x-auto">
 				<Table>
 					<TableHeader>
