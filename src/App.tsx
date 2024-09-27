@@ -60,10 +60,20 @@ const router = createBrowserRouter([
 	{
 		path: '/login',
 		element: <LoginPage />,
+		errorElement: (
+			<DefaultLayout>
+				<ErrorPage />
+			</DefaultLayout>
+		),
 	},
 	{
 		path: `/event/${eventDetailRoutes.id}`,
 		element: <ProtectedRoute />,
+		errorElement: (
+			<DefaultLayout>
+				<ErrorPage />
+			</DefaultLayout>
+		),
 		loader: sideNavigationLoader(queryClient),
 		children: [
 			{
