@@ -43,7 +43,7 @@ const BoatPage: React.FC = () => {
 	return (
 		<>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending || updateMutation.isPending} />
+				<LoadingSpinner isLoading={isPending} />
 
 				<h2 className="w-full mb-6">
 					{t('boat')} - {boat?.name}
