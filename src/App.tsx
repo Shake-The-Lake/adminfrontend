@@ -136,7 +136,7 @@ function App() {
 					fallbackElement={<LoadingSpinner isLoading />}
 				/>
 				<ReactQueryDevtools initialIsOpen={false} />
-				<Toaster position="top-center" closeButton />
+				<Toaster position="top-right" duration={5000} />
 				<MutationLoader />
 			</QueryClientProvider>
 		</AuthProvider>

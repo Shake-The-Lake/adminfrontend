@@ -2,7 +2,6 @@ import React, {type ReactNode} from 'react';
 import Footer from './footer/footer';
 import {Outlet} from 'react-router-dom';
 import HeaderDefault from './header/header-default';
-import {Toaster} from './ui/toaster';
 
 type Props = {
 	children?: ReactNode;
@@ -15,7 +14,6 @@ const DefaultLayout = ({children}: Props) => (
 			<main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-auto">
 				{children ?? <Outlet />}
 			</main>
-			<Toaster />
 			<Footer />
 		</div>
 	</div>
