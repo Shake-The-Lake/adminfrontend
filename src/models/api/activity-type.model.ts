@@ -1,4 +1,4 @@
-import {type LocalizedStringDto} from './localized-string';
+import { type LocalizedStringDto } from './localized-string';
 
 export type ActivityTypeDto = {
 	id: number;
@@ -11,9 +11,21 @@ export type ActivityTypeDto = {
 
 export const defaultActivityTypeDto: ActivityTypeDto = {
 	id: 0,
-	name: undefined,
-	description: undefined,
-	checklist: undefined,
-	icon: undefined,
-	eventId: undefined,
+	name: {
+		en: '',
+		de: '',
+		swissGerman: '',
+	},
+	description: {
+		en: '',
+		de: '',
+		swissGerman: '',
+	},
+	checklist: {
+		en: '',
+		de: '',
+		swissGerman: '',
+	},
+	icon: '',
+	eventId: 0,
 };

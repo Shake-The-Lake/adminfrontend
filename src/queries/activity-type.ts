@@ -1,5 +1,5 @@
-import {type EventDto} from '../models/api/event.model';
-import {type ActivityTypeDto} from '../models/api/activity-type.model';
+import { type EventDto } from '../models/api/event.model';
+import { type ActivityTypeDto } from '../models/api/activity-type.model';
 import {
 	type QueryClient,
 	queryOptions,
@@ -8,8 +8,8 @@ import {
 	useQueryClient,
 	type QueryKey,
 } from '@tanstack/react-query';
-import {createActivityType, deleteActivityType, getActivityTypeById, getAllActivityTypesFromEvent, updateActivityType} from '../services/activity-type-service';
-import {eventKeys} from './event';
+import { createActivityType, deleteActivityType, getActivityTypeById, getAllActivityTypesFromEvent, updateActivityType } from '../services/activity-type-service';
+import { eventKeys } from './event';
 
 export const activityTypeKeys = {
 	all: (eventId: number) => ['activity-types', eventId] as QueryKey,
@@ -59,9 +59,10 @@ export function useCreateActivityType(eventId: number) {
 			if (data) {
 				queryClient.setQueryData(activityTypeKeys.detail(data.id ?? 0), data);
 			}
-
-			await queryClient.invalidateQueries({queryKey: activityTypeKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			console.log('Invalidating queries for activity types and event details...');
+			await queryClient.invalidateQueries({ queryKey: activityTypeKeys.all(eventId), exact: true });
+			await queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId, true), exact: true });
+			console.log('Queries invalidated.');
 		},
 	});
 }
@@ -73,8 +74,8 @@ export function useUpdateActivityType(id: number) {
 		async onSuccess(data) {
 			queryClient.setQueryData(activityTypeKeys.detail(data?.id ?? 0), data);
 
-			await queryClient.invalidateQueries({queryKey: activityTypeKeys.all(data?.eventId ?? 0), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(data?.eventId ?? 0, true), exact: true});
+			await queryClient.invalidateQueries({ queryKey: activityTypeKeys.all(data?.eventId ?? 0), exact: true });
+			await queryClient.invalidateQueries({ queryKey: eventKeys.detail(data?.eventId ?? 0, true), exact: true });
 		},
 	});
 }
@@ -84,8 +85,8 @@ export function useDeleteActivityType(eventId: number) {
 	return useMutation({
 		mutationFn: deleteActivityType,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: activityTypeKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queryClient.invalidateQueries({ queryKey: activityTypeKeys.all(eventId), exact: true });
+			await queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId, true), exact: true });
 		},
 	});
 }

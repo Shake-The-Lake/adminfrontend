@@ -80,7 +80,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		const activityType: ActivityTypeDto = {
 			...values,
 			id: values.id ?? 0,
-			eventId: model.eventId ?? eventId,
+			eventId: model.eventId === 0 ? eventId : model.eventId,
 			// Avoid null values on localized strings
 			name: {...defaultLocalizedStringDto, ...values.name},
 			description: {...defaultLocalizedStringDto, ...values.description},
