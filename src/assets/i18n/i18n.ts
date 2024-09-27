@@ -1,8 +1,6 @@
 import i18n, { type Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { en, languages } from '../../constants';
-import { error } from 'console';
-import { create } from 'domain';
 
 const resources: Resource = {
 	en: {
