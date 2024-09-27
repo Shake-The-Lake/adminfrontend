@@ -41,7 +41,7 @@ const EventDetailLayout: React.FC = () => {
 				<SideNavigation />
 				<div className="flex flex-col">
 					<HeaderEvent />
-					<main className="flex flex-1 flex-col gap-4 py-4 px-8 lg:gap-6 lg:py-6 lg:px-10 overflow-auto">
+					<main className="flex flex-1 max-w-[100vw] flex-col gap-4 px-4 lg:gap-6 lg:py-6 lg:px-10 overflow-auto">
 						<h1 className="heading-m-upper text-primary">{event?.title}</h1>
 						<Outlet />
 					</main>

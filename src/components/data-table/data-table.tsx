@@ -42,7 +42,7 @@ export function DataTable<TyData, TyValue>({
 
 	return (
 		<div className="p-1 w-full h-full overflow-auto">
-			<div className="rounded-md border">
+			<div className="rounded-md border overflow-x-auto"> {/* Added overflow-x-auto */}
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
