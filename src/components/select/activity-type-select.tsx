@@ -6,7 +6,7 @@ import {type ControllerRenderProps} from 'react-hook-form';
 import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
 import {useGetSearchParameters} from '../../queries/search';
 import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import StlSelect from './stl-select';
+import StlSelect, {StlSelectDefaultLabel} from './stl-select';
 
 export type ActivityTypeSelectProps = {
 	field: ControllerRenderProps<any, 'activityTypeId'>;
@@ -23,7 +23,7 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 
 	const getKey = (a?: ActivityTypeDto | undefined) => a?.id?.toString();
 	const getLabel = (a?: ActivityTypeDto | undefined) =>
-		getTranslation(i18n.language, a?.name) ?? '';
+		getTranslation(i18n.language, a?.name) ?? StlSelectDefaultLabel;
 
 	return (
 		<FormItem className={className}>
@@ -33,7 +33,8 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 					value={field.value?.toString() ?? ''}
 					onValueChange={(value?: string) => {
-						field.onChange(value === undefined ? undefined : Number(value));
+						// react-hook-form does not support undefined as a value, therefore need to "hack" this
+						field.onChange(value === '' ? '' : Number(value));
 					}}
 					list={searchParams?.activityTypes ?? []}
 					getKey={getKey}
