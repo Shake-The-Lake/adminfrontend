@@ -70,11 +70,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 	return (
 		<div>
-			<LoadingSpinner
-				isLoading={
-					isPending || deleteMutation.isPending || createMutation.isPending
-				}
-			/>
+			<LoadingSpinner isLoading={isPending} />
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="flex justify-between">

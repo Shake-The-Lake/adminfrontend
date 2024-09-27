@@ -29,7 +29,7 @@ const EventList = () => {
 
 	return (
 		<div className="flex justify-center w-full max-w-lg">
-			<LoadingSpinner isLoading={isPending || deleteMutation.isPending} />
+			<LoadingSpinner isLoading={isPending} />
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="w-full max-w-6xl p-4">

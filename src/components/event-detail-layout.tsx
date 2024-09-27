@@ -18,9 +18,7 @@ export const loader =
 		async ({params}: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
-			// Const navigate = useNavigate();
 				throw new Error('No event ID provided');
-			// Navigate('/'); // todo! see which makes more sense
 			}
 
 			await queryClient.ensureQueryData(
