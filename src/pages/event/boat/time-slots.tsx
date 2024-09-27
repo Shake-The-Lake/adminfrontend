@@ -52,7 +52,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 
 	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -75,11 +75,11 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 			<div className="flex justify-between">
 				<>
-					<h1>Time Slots</h1>
+					<h1>{t('timeSlot.title')}</h1>
 					<StlDialog
-						title="Add Time Slot"
-						description="Add time slots to the boat"
-						triggerLabel="Add time slot"
+						title={t('timeSlot.create')}
+						description={t('timeSlot.description')}
+						triggerLabel={t('timeSlot.triggerLabel')}
 						isOpen={isCreateDialogOpen}
 						onClose={closeCreateDialog}
 						onOpen={openCreateDialog}
@@ -98,10 +98,10 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 			<Table className="mt-5">
 				<TableHeader>
 					<TableRow>
-						<TableHead>From</TableHead>
-						<TableHead>To</TableHead>
-						<TableHead>Type</TableHead>
-						<TableHead>Activity Type</TableHead>
+						<TableHead>{t('from')}</TableHead>
+						<TableHead>{t('to')}</TableHead>
+						<TableHead>{t('type')}</TableHead>
+						<TableHead>{t('activityType.title')}</TableHead>
 						<TableHead></TableHead>
 					</TableRow>
 				</TableHeader>

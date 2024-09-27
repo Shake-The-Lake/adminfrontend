@@ -10,6 +10,7 @@ import {
 import {type QueryClient, useQueryClient} from '@tanstack/react-query';
 import {defaultEventDto} from '../../../models/api/event.model';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -30,6 +31,7 @@ export const loader =
 
 const EventOverview: React.FC = () => {
 	const queryClient = useQueryClient();
+	const {t} = useTranslation();
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
@@ -43,9 +45,9 @@ const EventOverview: React.FC = () => {
 
 			<div className="w-full flex flex-col lg:flex-row">
 				<div className="w-full my-2">
-					<h1>Basic Data</h1>
+					<h1>{t('eventOverview.basicData')}</h1>
 					<p className="mt-2 mb-8 text-gray-600">
-						Enter the basic data for the event
+						{t('eventOverview.enter')}
 					</p>
 					<EventForm
 						mutation={updateMutation}
@@ -53,33 +55,32 @@ const EventOverview: React.FC = () => {
 						isCreate={false}
 					/>
 					<div className="mt-8">
-						<h1>QR Codes</h1>
+						<h1>{t('eventOverview.qrCodes')}</h1>
 						<p className="mt-2 mb-8 text-gray-600">
-							Use these QR Codes to enable customers and employees to enter the
-							event
+							{t('eventOverview.useQrCodes')}
 						</p>
 						<div className="flex flex-row mt-2">
 							<div className="flex flex-col items-center mx-4">
-								<p>Employee QR Code</p>
+								<p>{t('eventOverview.employeeQrCode')}</p>
 								{event?.employeeBarcode ? (
 									<img
 										src={`data:image/png;base64,${event?.employeeBarcode}`}
 										alt="Employee QR Code"
 									/>
 								) : (
-									<p className="italic">error while loading QR-Code...</p>
+									<p className="italic">{t('eventOverview.errorLoading')}</p>
 								)}
 							</div>
 
 							<div className="flex flex-col items-center mx-4">
-								<p>Customer QR Code</p>
+								<p>{t('eventOverview.customerQrCode')}</p>
 								{event?.customerBarcode ? (
 									<img
 										src={`data:image/png;base64,${event.customerBarcode}`}
 										alt="Customer QR Code"
 									/>
 								) : (
-									<p className="italic">error while loading QR-Code...</p>
+									<p className="italic">{t('eventOverview.errorLoading')}</p>
 								)}
 							</div>
 						</div>

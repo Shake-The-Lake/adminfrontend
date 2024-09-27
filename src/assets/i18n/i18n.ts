@@ -1,10 +1,52 @@
-import i18n, {type Resource} from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {en, languages} from '../../constants';
+import i18n, { type Resource } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { en, languages } from '../../constants';
+import { error } from 'console';
+import { create } from 'domain';
 
 const resources: Resource = {
 	en: {
 		translation: {
+			eventOverview: {
+				basicData: 'Basic Data',
+				enter: 'Enter the basic data for the event',
+				qrCodes: 'QR Codes',
+				useQrCodes: 'Use these QR Codes to enable customers and employees to enter the event',
+				employeeQrCode: 'Employee QR Code',
+				errorLoadingQrCode: 'Error while loading QR-Code...',
+				customerQrCode: 'Customer QR Code',
+			},
+			activityType: {
+				errorLoadingActivityType: 'Error while loading activity type...',
+				title: 'Activity Type',
+				noActivityTypes: 'No activity types found',
+				failedToLoadActivityTypes: 'Failed to load activity types',
+				createActivityType: 'Create Activity Type',
+				description: 'Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language.',
+				triggerLabel: 'Add new Activity Type',
+			},
+			boat: {
+				errorLoadingBoat: 'Error while loading boat...',
+				title: 'Boat',
+				noBoatsYet: 'No boats yet',
+				create: 'Create Boat',
+				description: 'Add a new boat by entering the necessary data.',
+				triggerLabel: 'Add new boat',
+			},
+			timeSlot: {
+				errorLoadingTimeSlot: 'Error while loading time slot...',
+				title: 'Time Slot',
+				noTimeSlotsYet: 'No time slots yet',
+				create: 'Create Time Slot',
+				description: 'Add a new time slot by entering the necessary data.',
+				triggerLabel: 'Add new time slot',
+				edit: 'Edit Time Slot',
+				descriptionEdit: 'Edit time slots for the boat',
+				triggerLabelEdit: 'Edit time slot',
+			},
+			from: 'From',
+			to: 'To',
+			type: 'Type',
 			// Messages
 			welcomeMessage: 'Welcome to ti&m event planning.',
 			loading: 'Loading...',
@@ -25,10 +67,6 @@ const resources: Resource = {
 			activityTypes: 'Activity Types',
 			schedule: 'Schedule',
 			bookings: 'Bookings',
-			// Activity Type Texts
-			activityType: 'Activity Type',
-			// Boat Texts
-			boat: 'Boat',
 		},
 	},
 	de: {

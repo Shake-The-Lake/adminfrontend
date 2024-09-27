@@ -57,7 +57,7 @@ const ActivityTypePage: React.FC = () => {
 					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
 
-				{error && <p>Error fetching Activity Type.</p>}
+				{error && <p>{t('activityType.errorLoadingActivityType')}</p>}
 				{activityType && (
 					<ActivityTypeForm
 						key={activityType.id}
