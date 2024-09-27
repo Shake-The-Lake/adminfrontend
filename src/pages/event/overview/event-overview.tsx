@@ -10,7 +10,7 @@ import {
 import {type QueryClient, useQueryClient} from '@tanstack/react-query';
 import {defaultEventDto} from '../../../models/api/event.model';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>

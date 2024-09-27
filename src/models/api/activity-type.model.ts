@@ -1,4 +1,4 @@
-import { type LocalizedStringDto } from './localized-string';
+import {type LocalizedStringDto} from './localized-string';
 
 export type ActivityTypeDto = {
 	id: number;

@@ -8,7 +8,7 @@ import {type BoatDto} from '../../models/api/boat.model';
 import {Button} from '../ui/button';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useUpdateTimeSlot} from '../../queries/time-slot';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
