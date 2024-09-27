@@ -63,11 +63,7 @@ const BoatsOverview: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center">
-			<LoadingSpinner
-				isLoading={
-					isPending || deleteMutation.isPending || createMutation.isPending
-				}
-			/>
+			<LoadingSpinner isLoading={isPending} />
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="w-full mb-8 flex flex-col justify-start">
