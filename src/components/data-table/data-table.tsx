@@ -15,6 +15,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '../ui/table';
+import { useTranslation } from 'react-i18next';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
@@ -28,6 +29,8 @@ export function DataTable<TyData, TyValue>({
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[],
 	);
+
+	const {t} = useTranslation();
 
 	const table = useReactTable({
 		data,
@@ -81,7 +84,7 @@ export function DataTable<TyData, TyValue>({
 								<TableCell
 									colSpan={columns.length}
 									className="h-24 text-center">
-									No results.
+									{t('booking.noData')}
 								</TableCell>
 							</TableRow>
 						)}

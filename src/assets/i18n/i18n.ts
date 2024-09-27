@@ -1,7 +1,9 @@
 import i18n, { type Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { en, languages } from '../../constants';
+import { de, en, languages } from '../../constants';
 import { first } from 'lodash-es';
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
+import { title } from 'process';
 
 const resources: Resource = {
 	en: {
@@ -42,6 +44,7 @@ const resources: Resource = {
 				edit: 'Edit Time Slot',
 				descriptionEdit: 'Edit time slots for the boat',
 				triggerLabelEdit: 'Edit time slot',
+				timeFormat: 'Time in the format HH:mm',
 			},
 			booking: {
 				errorLoadingBooking: 'Error while loading booking...',
@@ -57,13 +60,34 @@ const resources: Resource = {
 				triggerLabelEdit: 'Edit booking',
 				noTimeSlotSelected: 'Error while loading time slot...',
 				success: 'Booking was successful',
-				fail: 'Failed to submit booking: '
+				fail: 'Failed to submit booking: ',
+				noData: 'No data found',
+			},
+			login: {
+				username: 'Username',
+				password: 'Password',
+				login: 'Login',
+				error: 'User or Password is wrong',
+			},
+			schedule: {
+				title: 'Schedule',
+				addBoat: 'Add a boat to view the schedule for its time slots.'
+			},
+			event: {
+				create: 'Create Event',
+				description: 'Add a new event by entering the basic meta data needed.',
+				triggerLabel: 'Add new event',
+				placeholder: "Sommer Event 2024",
+				date: 'Event Date',
 			},
 			from: 'From',
 			to: 'To',
 			type: 'Type',
+			tryAgain: 'Try again',
 			// Messages
 			welcomeMessage: 'Welcome to ti&m event planning.',
+			description: 'Description',
+			title: 'Title',
 			loading: 'Loading...',
 			pageErrorOops: 'Oops! Something went wrong.',
 			pageErrorNotFound: 'This page could not be found.',
@@ -80,7 +104,6 @@ const resources: Resource = {
 			boats: 'Boats',
 			overview: 'Overview',
 			activityTypes: 'Activity Types',
-			schedule: 'Schedule',
 			bookings: 'Bookings',
 			cancel: 'Cancel',
 			save: 'Save',

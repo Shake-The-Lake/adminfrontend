@@ -4,10 +4,12 @@ import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm from '../../components/forms/event';
 import {useCreateEvent} from '../../queries/event';
 import {useNavigate} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
 	const createMutation = useCreateEvent();
+	const {t} = useTranslation();
 
 	useEffect(() => {
 		if (
@@ -21,9 +23,9 @@ const CreateEventDialog: React.FC = () => {
 
 	return (
 		<StlDialog
-			title="Create Event"
-			description="Add a new event by entering the basic meta data needed."
-			triggerLabel="Add new event"
+			title={t('event.create')}
+			description={t('event.description')}
+			triggerLabel={t('event.triggerLabel')}
 			formId="event"
 		>
 			<EventForm
