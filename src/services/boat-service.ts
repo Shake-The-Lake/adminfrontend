@@ -22,7 +22,7 @@ export const getAllBoatsFromEvent = async (eventId: number): Promise<BoatDto[]> 
 };
 
 export const getBoatById = async (id: number): Promise<BoatDto> => {
-	const response = await axiosInstance.get<BoatDto>(`/boat/${id}?expand=timeSlots`);
+	const response = await axiosInstance.get<BoatDto>(`/boat/${id}`);
 	return response.data;
 };
 

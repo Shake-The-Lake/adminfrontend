@@ -1,15 +1,17 @@
 import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
 import {type ActivityTypeDto} from './activity-type.model';
 import {type BoatDto} from './boat.model';
+import {type BookingDto} from './booking.model';
 
 export type TimeSlotDto = {
 	id: number;
-	fromTime?: string; // Assuming ISO string format for LocalDateTime
-	untilTime?: string; // Assuming ISO string format for LocalDateTime
+	fromTime?: string;
+	untilTime?: string;
 	boatId?: number;
 	boat?: BoatDto;
 	activityTypeId?: number;
 	activityType?: ActivityTypeDto;
+	bookings: BookingDto[];
 	bookingIds?: Set<number>;
 	availableSeats: number;
 	seatsRider: number;
@@ -24,6 +26,7 @@ export const defaultTimeSlot: TimeSlotDto = {
 	fromTime: toSwissLocaleTimeString(new Date()),
 	untilTime: toSwissLocaleTimeString(new Date()),
 	boatId: 0,
+	bookings: [],
 	status: 'AVAILABLE', // Todo! remove this status after backend is updated
 	bookingIds: undefined,
 	availableSeats: 0,

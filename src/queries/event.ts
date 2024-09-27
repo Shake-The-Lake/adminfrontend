@@ -31,7 +31,7 @@ export function useGetEvents() {
 
 export const eventDetailOptions = (id: number, expanded = false) => queryOptions({
 	queryKey: eventKeys.detail(id, expanded),
-	queryFn: async () => getEventById(id, expanded ? 'boats,activityTypes' : undefined),
+	queryFn: async () => getEventById(id, expanded ? 'boats,boats.timeSlots,activityTypes' : undefined),
 });
 
 export function useEventDetail(

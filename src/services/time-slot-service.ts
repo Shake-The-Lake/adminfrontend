@@ -1,8 +1,9 @@
 import {type TimeSlotDto} from '../models/api/time-slot.model';
 import sortBy from 'lodash-es/sortBy';
 import axiosInstance from './axiosInstance';
+import {getPersonById} from './person-service';
 
- 
+
 const timeSlotUrl = '/timeslot';
 
 const timeSlotSortBy = ['fromTime', 'activityType.name.en'];
@@ -12,34 +13,38 @@ export const getSortedTimeSlots = (timeSlot: Set<TimeSlotDto> | undefined) =>
 		? new Set(sortBy(Array.from(timeSlot), timeSlotSortBy))
 		: new Set<TimeSlotDto>();
 
-// Todo! actually make filterable by event once implemented in backend
 export const getAllTimeSlotsFromEvent = async (
-	eventId?: number,
+	eventId: number,
 ): Promise<TimeSlotDto[]> => {
 	const expand = 'boat,activityType';
-	const params = {expand};
+	const params = {expand, eventId};
 	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, {params});
-	const result = response.data.filter(
-		(timeSlot) =>
-			timeSlot.activityType?.eventId === eventId ||
-			timeSlot.boat?.eventId === eventId,
-	);
+	const result = response.data;
 
 	return sortBy(result, timeSlotSortBy);
 };
 
 // Todo! refactor usage to use expanded event instead
 export const getAllTimeSlotsFromBoat = async (
-	boatId: number,
+	eventId: number, boatId: number,
 ): Promise<TimeSlotDto[]> => {
-	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl);
-	const result = response.data.filter((timeSlot) => timeSlot.boatId === boatId);
+	const response = await getAllTimeSlotsFromEvent(eventId);
+	const result = response.filter((timeSlot) => timeSlot.boatId === boatId);
 
-	return sortBy(result, timeSlotSortBy);
+	return result;
 };
 
 export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
-	const response = await axiosInstance.get<TimeSlotDto>(`${timeSlotUrl}/${id}`);
+	const response = await axiosInstance.get<TimeSlotDto>(`${timeSlotUrl}/${id}?expand=activityType,boat,bookings`);
+	const timeSlot = response.data;
+	if (response?.data?.bookings) {
+		// We don't expect more than 10 bookings per time slot, therefore these calls are acceptable
+		timeSlot.bookings = await Promise.all(response.data.bookings.map(async (booking) => {
+			const person = await getPersonById(booking.personId);
+			return {...booking, person};
+		}));
+	}
+
 	return response.data;
 };
 
@@ -64,3 +69,4 @@ export const updateTimeSlot = async (
 export const deleteTimeSlot = async (id: number): Promise<void> => {
 	await axiosInstance.delete(`${timeSlotUrl}/${id}`);
 };
+

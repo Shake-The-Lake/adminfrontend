@@ -23,30 +23,42 @@ import {
 import LoadingSpinner from '../../../components/animations/loading';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
+import {
+	extractTypedInfoFromRouteParams,
+	getTranslation,
+} from '../../../lib/utils';
+import {useTranslation} from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.boatId) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
+
+			if (!routeIds.boatId) {
 				throw new Error('No boat ID provided');
 			}
 
 			await queryClient.ensureQueryData(
-				timeslotsForBoatOptions(Number(params.boatId), queryClient),
+				timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId),
 			);
-			return {boatId: Number(params.boatId)};
+			return routeIds;
 		};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
-	const {boatId} = useLoaderData() as Awaited<
+	const {eventId, boatId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(boatId);
 
+	const {i18n} = useTranslation();
+
+	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const createMutation = useCreateTimeSlot(boatId);
-	const deleteMutation = useDeleteTimeSlot(boatId);
+	const createMutation = useCreateTimeSlot(boatId, eventId);
+	const deleteMutation = useDeleteTimeSlot(boatId, eventId);
 
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
@@ -93,6 +105,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						<TableHead>From</TableHead>
 						<TableHead>To</TableHead>
 						<TableHead>Type</TableHead>
+						<TableHead>Activity Type</TableHead>
 						<TableHead></TableHead>
 					</TableRow>
 				</TableHeader>
@@ -106,9 +119,13 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 							<TableCell>
 								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
 							</TableCell>
+							<TableCell>
+								{getTranslation(i18n.language, slot.activityType?.name)}
+							</TableCell>
 							<EditTimeSlotTableCell
 								boat={boat}
 								timeSlot={slot}
+								eventId={eventId}
 								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
 						</TableRow>
 					))}

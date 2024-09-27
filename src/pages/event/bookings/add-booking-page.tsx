@@ -55,7 +55,7 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-		number | undefined
+	number | undefined
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
