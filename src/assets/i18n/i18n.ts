@@ -1,6 +1,7 @@
-import i18n, {type Resource} from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {en, languages} from '../../constants';
+import i18n, { type Resource } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { en, languages } from '../../constants';
+import { first } from 'lodash-es';
 
 const resources: Resource = {
 	en: {
@@ -42,6 +43,22 @@ const resources: Resource = {
 				descriptionEdit: 'Edit time slots for the boat',
 				triggerLabelEdit: 'Edit time slot',
 			},
+			booking: {
+				errorLoadingBooking: 'Error while loading booking...',
+				title: 'Booking',
+				noBookingsYet: 'No bookings yet',
+				create: 'Create Booking',
+				description: 'Add a new booking by entering the necessary data.',
+				triggerLabel: 'Add new booking',
+				person: 'Person Data',
+				enterContact: 'Enter the contact data of the person wanting to do the booking.',
+				edit: 'Edit Booking',
+				descriptionEdit: 'Edit bookings for the boat',
+				triggerLabelEdit: 'Edit booking',
+				noTimeSlotSelected: 'Error while loading time slot...',
+				success: 'Booking was successful',
+				fail: 'Failed to submit booking: '
+			},
 			from: 'From',
 			to: 'To',
 			type: 'Type',
@@ -65,6 +82,16 @@ const resources: Resource = {
 			activityTypes: 'Activity Types',
 			schedule: 'Schedule',
 			bookings: 'Bookings',
+			cancel: 'Cancel',
+			save: 'Save',
+			firstName: 'First Name',
+			email: 'Email',
+			phone: 'Phone Number',
+			personType: 'Person Type',
+			employee: 'Employee',
+			customer: 'Customer',
+			boatDriver: 'Boat Driver',
+			rider: 'Rider',
 		},
 	},
 	de: {

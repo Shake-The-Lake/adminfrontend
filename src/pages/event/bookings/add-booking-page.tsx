@@ -27,6 +27,7 @@ import StlFilter, {
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import StlSelect from '../../../components/select/stl-select';
 import {toast} from 'sonner';
+import { t } from 'i18next';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -151,7 +152,7 @@ const AddBookingPage: React.FC = () => {
 
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
-			toast.error('Please select a time slot.');
+			toast.error(t('booking.noTimeSlotSelected'));
 			return;
 		}
 
@@ -175,23 +176,23 @@ const AddBookingPage: React.FC = () => {
 			};
 
 			await createBookingMutation.mutateAsync(bookingData);
-			toast.success('Booking created successfully!');
+			toast.success(t('booking.success'));
 
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
-			toast.error('Failed to submit booking: ');
+			toast.error(t('booking.fail'));
 		}
 	};
 
 	return (
 		<div className="flex flex-col items-center h-full">
 			<div className="w-full mb-8 flex justify-between items-center">
-				<h1>Add Booking</h1>
+				<h1>{t('booking.create')}</h1>
 			</div>
 
 			<div className="w-full p-4 flex justify-center">
 				<div className="flex flex-col w-full">
-					<h3>Timeslots</h3>
+					<h3>{t('timeslot.title')}</h3>
 					<div className="w-full">
 						{error === null ? (
 							<>
@@ -209,10 +210,8 @@ const AddBookingPage: React.FC = () => {
 											}));
 										},
 										onBoatChange(boatId?: number) {
-											console.log('Boat ID changed:', boatId);
 											setFilter((prevFilter) => {
 												const newFilter = {...prevFilter, boatId};
-												console.log('Updated filter:', newFilter);
 												return newFilter;
 											});
 										},
@@ -234,7 +233,7 @@ const AddBookingPage: React.FC = () => {
 								/>
 							</>
 						) : (
-							<p>Failed to load timeslots!</p>
+							<p>{t('booking.errorLoadingBooking')}</p>
 						)}
 					</div>
 				</div>
@@ -242,10 +241,9 @@ const AddBookingPage: React.FC = () => {
 
 			<div className="w-full flex mt-10">
 				<div className="p-4">
-					<h3>Person Data</h3>
+					<h3>{t('booking.person')}</h3>
 					<p className="text-primary-dark-stroke mb-2 mt-2">
-						Enter the contact data of the person wanting to do the booking.
-					</p>
+ 			{t('booking.enterContact')}							</p>
 					<Form {...form}>
 						<form
 							id="personForm"
@@ -256,7 +254,7 @@ const AddBookingPage: React.FC = () => {
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
-										<FormLabel>First Name</FormLabel>
+										<FormLabel>{t('firstName')}</FormLabel>
 										<FormControl>
 											<Input
 												placeholder="First Name"
@@ -273,10 +271,10 @@ const AddBookingPage: React.FC = () => {
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
-										<FormLabel>Last Name</FormLabel>
+										<FormLabel>{t('lastName')}</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Last Name"
+												placeholder={t('lastName')}
 												{...field}
 												className="input"
 											/>
@@ -290,10 +288,10 @@ const AddBookingPage: React.FC = () => {
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
-										<FormLabel>Email</FormLabel>
+										<FormLabel>{t('email')}</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Email"
+												placeholder={t('email')}
 												{...field}
 												className="input"
 												type="email"
@@ -308,10 +306,10 @@ const AddBookingPage: React.FC = () => {
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
-										<FormLabel>Phone Number</FormLabel>
+										<FormLabel>{t('phone')}</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Phone Number"
+												placeholder={t('phone')}
 												{...field}
 												className="input"
 												type="tel"
@@ -326,15 +324,15 @@ const AddBookingPage: React.FC = () => {
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
-										<FormLabel>Person Type</FormLabel>
+										<FormLabel>{t('personType')}</FormLabel>
 										<FormControl>
 											<StlSelect
 												value={field.value}
 												onValueChange={field.onChange}
 												list={[
-													{key: 'EMPLOYEE', label: 'Employee'},
-													{key: 'BOAT_DRIVER', label: 'Boat Driver'},
-													{key: 'CUSTOMER', label: 'Customer'},
+													{key: 'EMPLOYEE', label: t('employee')},
+													{key: 'BOAT_DRIVER', label: t('boatDriver')},
+													{key: 'CUSTOMER', label: t('customer')},
 												]}
 												getKey={(item) => item?.key}
 												getLabel={(item) => item?.label ?? ''}
@@ -350,7 +348,7 @@ const AddBookingPage: React.FC = () => {
 								control={form.control}
 								render={({field}) => (
 									<FormItem>
-										<FormLabel>Rider</FormLabel>
+										<FormLabel>{t('rider')}</FormLabel>
 										<FormControl>
 											<StlSelect
 												value={field.value}
@@ -390,10 +388,10 @@ const AddBookingPage: React.FC = () => {
 
 			<div className="flex w-full justify-end mt-auto p-4">
 				<Button type="button" variant="secondary" onClick={handleCancel}>
-					Cancel
+					{t('cancel')}
 				</Button>
 				<Button type="submit" form="personForm" className="ml-4">
-					Save
+					{t('save')}
 				</Button>
 			</div>
 		</div>
