@@ -1,9 +1,6 @@
 import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {
-	useLoaderData,
-	type LoaderFunctionArgs,
-} from 'react-router-dom';
+import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {
 	timeslotDetailOptions,
 	useTimeSlotDetail,
@@ -21,7 +18,10 @@ import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 import LoadingSpinner from '../../../components/animations/loading';
-import {extractTypedInfoFromRouteParams, getTranslation} from '../../../lib/utils';
+import {
+	extractTypedInfoFromRouteParams,
+	getTranslation,
+} from '../../../lib/utils';
 import {useTranslation} from 'react-i18next';
 
 export const loader =
@@ -45,16 +45,16 @@ const ScheduleItemPage: React.FC = () => {
 	>;
 	const queryClient = useQueryClient();
 	const {i18n} = useTranslation();
-	
-	const {data: timeSlot, isPending} = useTimeSlotDetail(queryClient,
-		timeSlotId, eventId,
+
+	const {data: timeSlot, isPending} = useTimeSlotDetail(
+		queryClient,
+		timeSlotId,
+		eventId,
 	);
-	const signedUpViewers = timeSlot?.bookings.filter(
-		(booking) => !booking.isRider,
-	).length;
-	const signedUpRiders = timeSlot?.bookings.filter(
-		(booking) => booking.isRider,
-	).length;
+	const signedUpRiders =
+		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
+	const signedUpViewers =
+		(timeSlot?.seatsViewer ?? 0) - (timeSlot?.availableViewerSeats ?? 0);
 
 	const deleteMutation = useDeleteBooking(eventId);
 	return (
@@ -74,11 +74,11 @@ const ScheduleItemPage: React.FC = () => {
 					</span>
 					<span className="flex gap-2">
 						<EyeIcon />
-						{signedUpViewers} / {timeSlot?.seatsViewer}
+						{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
 					</span>
 					<span className="flex gap-2">
 						<UsersIcon />
-						{signedUpRiders} / {timeSlot?.seatsRider}
+						{signedUpRiders} / {timeSlot?.seatsRider ?? 0}
 					</span>
 					<span className="flex gap-2">
 						<TagIcon />

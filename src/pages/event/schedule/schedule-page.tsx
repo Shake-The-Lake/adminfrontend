@@ -122,21 +122,21 @@ const SchedulePage: React.FC = () => {
 	});
 
 	return (
-			<div className='max-w-[75vw]'>
-				<Epg {...getEpgProps()} >
-					<Layout
+		<div className='max-w-[75vw]'>
+			<Epg {...getEpgProps()} >
+				<Layout
 					  {...getLayoutProps()}
-						renderProgram={({program}) => (
-							<ProgramItem key={program.data.id} program={program}/>
-						)}
-						renderChannel={({channel}) => (
-							<div className='w-full h-full font-semibold p-3' key={channel.uuid}>
-								{channel.name}
-							</div>
-						)}
-					/>
-				</Epg>
-			</div>
+					renderProgram={({program}) => (
+						<ProgramItem key={program.data.id} program={program}/>
+					)}
+					renderChannel={({channel}) => (
+						<div className='w-full h-full font-semibold p-3' key={channel.uuid}>
+							{channel.name}
+						</div>
+					)}
+				/>
+			</Epg>
+		</div>
 	);
 };
 

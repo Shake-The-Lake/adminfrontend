@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import React from 'react';
 import {
 	ProgramBox,
 	ProgramContent,
@@ -10,12 +13,7 @@ import {
 import {Link} from 'react-router-dom';
 
 export const ProgramItem = ({program, ...rest}) => {
-	const {
-		styles,
-		formatTime,
-		set12HoursTimeFormat,
-		isLive,
-	} = useProgram({
+	const {styles, formatTime, set12HoursTimeFormat, isLive} = useProgram({
 		program,
 		...rest,
 	});
@@ -27,14 +25,19 @@ export const ProgramItem = ({program, ...rest}) => {
 	const tillTime = formatTime(till, set12HoursTimeFormat()).toLowerCase();
 
 	return (
-		<ProgramBox width={styles.width} style={styles.position} className='relative'>
-			<ProgramContent width={styles.width} isLive={isLive} style={{background: color}}>
+		<ProgramBox
+			width={styles.width}
+			style={styles.position}
+			className="relative">
+			<ProgramContent
+				width={styles.width}
+				isLive={isLive}
+				style={{background: color}}>
 				<ProgramFlex>
 					<ProgramStack>
 						<Link
 							to={`${data.id}`}
-							className='after:absolute after:inset-0'>
-						</Link>
+							className="after:absolute after:inset-0"></Link>
 						<ProgramTitle>{title}</ProgramTitle>
 						<ProgramText>
 							{sinceTime} - {tillTime}

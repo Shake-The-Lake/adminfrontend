@@ -12,17 +12,19 @@ import {useUpdateTimeSlot} from '../../queries/time-slot';
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
 	boat: BoatDto;
+	eventId: number;
 	deleteMutation: UseMutationResult<any, Error, number>; // First any is return type, second is input
 };
 
 const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 	timeSlot,
 	boat,
+	eventId,
 	deleteMutation,
 }) => {
 	const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
-	const updateMutation = useUpdateTimeSlot(timeSlot?.id);
+	const updateMutation = useUpdateTimeSlot(timeSlot?.id, eventId);
 	const handleDelete = async () => deleteMutation.mutateAsync(timeSlot?.id);
 
 	const openUpdateDialog = () => {

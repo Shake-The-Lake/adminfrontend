@@ -23,7 +23,11 @@ import {
 import LoadingSpinner from '../../../components/animations/loading';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {
+	extractTypedInfoFromRouteParams,
+	getTranslation,
+} from '../../../lib/utils';
+import {useTranslation} from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -38,7 +42,7 @@ export const loader =
 			}
 
 			await queryClient.ensureQueryData(
-				timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId, queryClient),
+				timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId),
 			);
 			return routeIds;
 		};
@@ -47,6 +51,9 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const {eventId, boatId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
+
+	const {i18n} = useTranslation();
+
 	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
@@ -98,6 +105,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						<TableHead>From</TableHead>
 						<TableHead>To</TableHead>
 						<TableHead>Type</TableHead>
+						<TableHead>Activity Type</TableHead>
 						<TableHead></TableHead>
 					</TableRow>
 				</TableHeader>
@@ -111,9 +119,13 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 							<TableCell>
 								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
 							</TableCell>
+							<TableCell>
+								{getTranslation(i18n.language, slot.activityType?.name)}
+							</TableCell>
 							<EditTimeSlotTableCell
 								boat={boat}
 								timeSlot={slot}
+								eventId={eventId}
 								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
 						</TableRow>
 					))}

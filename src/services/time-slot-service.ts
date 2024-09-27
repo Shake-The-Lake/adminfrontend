@@ -16,7 +16,7 @@ export const getSortedTimeSlots = (timeSlot: Set<TimeSlotDto> | undefined) =>
 export const getAllTimeSlotsFromEvent = async (
 	eventId: number,
 ): Promise<TimeSlotDto[]> => {
-	const expand = 'boat,activitytype';
+	const expand = 'boat,activityType';
 	const params = {expand, eventId};
 	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, {params});
 	const result = response.data;
@@ -38,6 +38,7 @@ export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
 	const response = await axiosInstance.get<TimeSlotDto>(`${timeSlotUrl}/${id}?expand=activityType,boat,bookings`);
 	const timeSlot = response.data;
 	if (response?.data?.bookings) {
+		// We don't expect more than 10 bookings per time slot, therefore these calls are acceptable
 		timeSlot.bookings = await Promise.all(response.data.bookings.map(async (booking) => {
 			const person = await getPersonById(booking.personId);
 			return {...booking, person};

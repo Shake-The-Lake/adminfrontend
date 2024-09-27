@@ -12,6 +12,7 @@ import {
 	useUpdateBoat,
 } from '../../../queries/boat';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {defaultBoatDto} from '../../../models/api/boat.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -59,7 +60,7 @@ const BoatPage: React.FC = () => {
 				)}
 			</div>
 			<Separator className="w-full my-10" />
-			<TimeSlots {...boat}></TimeSlots>
+			<TimeSlots {...{...defaultBoatDto, ...boat}}></TimeSlots>
 		</>
 	);
 };
