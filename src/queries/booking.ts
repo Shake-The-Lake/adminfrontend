@@ -59,14 +59,12 @@ export function useCreateBooking(eventId: number) {
 				(oldData: BookingDto[] | undefined) =>
 					oldData ? [...oldData, data] : [data],
 			);
+			queryClient.invalidateQueries({
+				queryKey: ['bookings'],
+			});
 		},
 		onError(error) {
 			console.error('Error creating booking:', error);
-		},
-		onSettled: async (_, error) => {
-			await queryClient.invalidateQueries({
-				queryKey: ['bookings'],
-			});
 		},
 	});
 }
