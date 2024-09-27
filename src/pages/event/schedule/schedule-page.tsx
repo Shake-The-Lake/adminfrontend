@@ -48,7 +48,10 @@ const SchedulePage: React.FC = () => {
 		}
 	};
 
-	if (boats === undefined) return <div>Add a boat</div>;
+	if (boats === undefined) {
+		return <div>Add a boat to view the schedule for its time slots.</div>;
+	}
+
 	const program: Program[] = boats.flatMap((boat) => Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
 		id: timeSlot.id.toString(),
 		color: mapColor(timeSlot?.activityTypeId ?? 0),
@@ -66,7 +69,7 @@ const SchedulePage: React.FC = () => {
 	  id: boat.id,
 	  name: boat.name,
 	  logo: 'https://via.placeholder.com/150',
-	  uuid: boat?.id?.toString(),
+	  uuid: boat?.id?.toString() ?? '',
 	  position: {top: 0, height: 0},
 	}));
 	const {
@@ -122,15 +125,17 @@ const SchedulePage: React.FC = () => {
 	});
 
 	return (
-		<div className='max-w-[75vw]'>
-			<Epg {...getEpgProps()} >
+		<div className="max-w-[75vw]">
+			<Epg {...getEpgProps()}>
 				<Layout
-					  {...getLayoutProps()}
+					{...getLayoutProps()}
 					renderProgram={({program}) => (
-						<ProgramItem key={program.data.id} program={program}/>
+						<ProgramItem key={program.data.id} program={program} />
 					)}
 					renderChannel={({channel}) => (
-						<div className='w-full h-full font-semibold p-3' key={channel.uuid}>
+						<div
+							key={channel.uuid}
+							className="w-full h-full font-semibold py-4 px-3">
 							{channel.name}
 						</div>
 					)}
