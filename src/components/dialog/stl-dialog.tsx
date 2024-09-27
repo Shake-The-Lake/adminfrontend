@@ -75,7 +75,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 			<DialogTrigger asChild>
 				{isCard ? (
 					<Button
-						className="h-40 w-full flex items-center justify-center"
+						className="h-40  mb-5 w-full flex items-center justify-center"
 						title={triggerLabel}>
 						<Plus className="size-24" />
 					</Button>

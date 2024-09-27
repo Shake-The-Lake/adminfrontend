@@ -100,7 +100,7 @@ const ActivityTypesPage = () => {
 				<StlDialog
 					title={t('activityType.createActivityType')}
 					description={t('activityType.description')}
-					triggerLabel={t('activityType.triggerLabel')}
+					triggerLabel={t('activityType.create')}
 					isOpen={isCreateDialogOpen}
 					onClose={closeCreateDialog}
 					onOpen={openCreateDialog}

@@ -83,8 +83,6 @@ i18n
 	.use(initReactI18next)
 	.init({
 		resources,
-		// Lng: 'de',
-		keySeparator: false,
 		interpolation: {
 			escapeValue: false,
 		},

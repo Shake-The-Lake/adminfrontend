@@ -95,38 +95,42 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 					</StlDialog>
 				</>
 			</div>
-			<Table className="mt-5">
-				<TableHeader>
-					<TableRow>
-						<TableHead>{t('from')}</TableHead>
-						<TableHead>{t('to')}</TableHead>
-						<TableHead>{t('type')}</TableHead>
-						<TableHead>{t('activityType.title')}</TableHead>
-						<TableHead></TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{timeSlots?.map((slot, index) => (
-						<TableRow key={index} className="w-full justify-between">
-							<TableCell>{getDisplayTimeFromBackend(slot?.fromTime)}</TableCell>
-							<TableCell>
-								{getDisplayTimeFromBackend(slot?.untilTime)}
-							</TableCell>
-							<TableCell>
-								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
-							</TableCell>
-							<TableCell>
-								{getTranslation(i18n.language, slot.activityType?.name)}
-							</TableCell>
-							<EditTimeSlotTableCell
-								boat={boat}
-								timeSlot={slot}
-								eventId={eventId}
-								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+
+			{/* Wrapper div to enable overflow */}
+			<div className="overflow-x-auto max-w-full">
+				<Table className="mt-5 min-w-max">
+					<TableHeader>
+						<TableRow>
+							<TableHead>{t('from')}</TableHead>
+							<TableHead>{t('to')}</TableHead>
+							<TableHead>{t('type')}</TableHead>
+							<TableHead>{t('activityType.title')}</TableHead>
+							<TableHead></TableHead>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+					</TableHeader>
+					<TableBody>
+						{timeSlots?.map((slot, index) => (
+							<TableRow key={index} className="w-full justify-between">
+								<TableCell>{getDisplayTimeFromBackend(slot?.fromTime)}</TableCell>
+								<TableCell>
+									{getDisplayTimeFromBackend(slot?.untilTime)}
+								</TableCell>
+								<TableCell>
+									{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
+								</TableCell>
+								<TableCell>
+									{getTranslation(i18n.language, slot.activityType?.name)}
+								</TableCell>
+								<EditTimeSlotTableCell
+									boat={boat}
+									timeSlot={slot}
+									eventId={eventId}
+									deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
 		</div>
 	);
 };
