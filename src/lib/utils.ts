@@ -5,6 +5,7 @@ import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
 import {toast} from 'sonner';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useEffect} from 'react';
+import {type Params} from 'react-router-dom';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -85,4 +86,13 @@ export function useEmitSuccessIfSucceeded(
 			onSuccessfullySubmitted();
 		}
 	}, [mutation?.isSuccess, mutation?.data?.id]);
+}
+
+export function extractTypedInfoFromRouteParams(params: Params) {
+	return {
+		eventId: params.id ? Number(params.id) : 0,
+		activityTypeId: params.activityTypeId ? Number(params.activityTypeId) : 0,
+		boatId: params.boatId ? Number(params.boatId) : 0,
+		timeSlotId: params.timeSlotId ? Number(params.timeSlotId) : 0,
+	};
 }

@@ -18,25 +18,28 @@ import {
 	useGetBoats,
 } from '../../../queries/boat';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
 			}
 
 			await queryClient.ensureQueryData(
-				boatsOptions(Number(params.id), queryClient),
+				boatsOptions(routeIds.eventId, queryClient),
 			);
-			return {eventId: Number(params.id)};
+
+			return routeIds;
 		};
 
 const BoatsOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: boats, isPending, error} = useGetBoats(eventId);
+	const {data: boats, isPending} = useGetBoats(eventId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 

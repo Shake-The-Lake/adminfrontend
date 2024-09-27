@@ -59,6 +59,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 
 	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		const timeSlot: TimeSlotDto = {
+			...model,
 			...values,
 			fromTime: values.fromTime,
 			untilTime: values.untilTime,

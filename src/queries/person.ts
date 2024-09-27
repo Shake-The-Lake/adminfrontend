@@ -1,14 +1,22 @@
 import {
 	type QueryKey,
 	useMutation,
+	useQuery,
 	useQueryClient,
 } from '@tanstack/react-query';
-import {createPerson} from '../services/person-service';
+import {createPerson, getPersonById} from '../services/person-service';
 
 export const personKeys = {
 	all: () => ['persons'] as QueryKey,
 	detail: (id: number) => ['persons', 'detail', id] as QueryKey,
 };
+
+export function useGetPerson(id: number) {
+	return useQuery({
+		queryKey: personKeys.detail(id),
+		queryFn: async () => getPersonById(id),
+	});
+}
 
 export function useCreatePerson() {
 	const queryClient = useQueryClient();
