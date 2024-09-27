@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import {type ControllerRenderProps} from 'react-hook-form';
 import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
 import {useGetSearchParameters} from '../../queries/search';
-import StlSelect from './stl-select';
+import StlSelect, {StlSelectDefaultLabel} from './stl-select';
 import {type BoatDto} from '../../models/api/boat.model';
 
 export type BoatSelectProps = {
@@ -18,7 +18,8 @@ const BoatSelect: React.FC<BoatSelectProps> = ({field, className}) => {
 	const {data: searchParams} = useGetSearchParameters(eventId);
 
 	const getKey = (b?: BoatDto | undefined) => b?.id?.toString();
-	const getLabel = (b?: BoatDto | undefined) => b?.name ?? '';
+	const getLabel = (b?: BoatDto | undefined) =>
+		b?.name ?? StlSelectDefaultLabel;
 
 	return (
 		<FormItem className={className}>
@@ -28,7 +29,8 @@ const BoatSelect: React.FC<BoatSelectProps> = ({field, className}) => {
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 					value={field.value?.toString() ?? ''}
 					onValueChange={(value?: string) => {
-						field.onChange(value === undefined ? undefined : Number(value));
+						// react-hook-form does not support undefined as a value, therefore need to "hack" this
+						field.onChange(value === '' ? '' : Number(value));
 					}}
 					list={searchParams?.boats ?? []}
 					getKey={getKey}

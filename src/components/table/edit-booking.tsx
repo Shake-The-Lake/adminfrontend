@@ -16,13 +16,16 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 	booking,
 	deleteMutation,
 }) => {
-
-	const handleDelete = async () => deleteMutation.mutateAsync(booking?.id);
+	const handleDelete = async () => deleteMutation.mutateAsync(booking?.id ?? 0);
 
 	return (
 		<TableCell className="text-right">
-			<Link to={`${eventDetailRoutes.addBooking}`} relative='route'>
-				<Button type='button' title='Edit Booking' variant='ghost' disabled={true}>
+			<Link to={`${eventDetailRoutes.addBooking}`} relative="route">
+				<Button
+					type="button"
+					title="Edit Booking"
+					variant="ghost"
+					disabled={true}>
 					<PencilIcon></PencilIcon>
 				</Button>
 			</Link>

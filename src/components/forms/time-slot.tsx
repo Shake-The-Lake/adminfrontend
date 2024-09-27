@@ -21,10 +21,13 @@ import {validateTime} from '../../lib/date-time.utils';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
-	boatId: z.number().min(0).optional(),
+	boatId: z.number().min(1).optional(),
 	fromTime: z.string().refine((value) => validateTime(value), 'Invalid time'),
 	untilTime: z.string().refine((value) => validateTime(value), 'Invalid time'),
-	activityTypeId: z.number().min(0).optional(),
+	activityTypeId: z
+		.number()
+		.min(1)
+		.or(z.string().min(1, {message: 'Required'})),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
@@ -64,6 +67,10 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			fromTime: values.fromTime,
 			untilTime: values.untilTime,
 			boatId: boat?.id ?? 0,
+			activityTypeId:
+				typeof values.activityTypeId === 'string'
+					? undefined
+					: values.activityTypeId,
 			id: model.id,
 			status: 'AVAILABLE',
 		};

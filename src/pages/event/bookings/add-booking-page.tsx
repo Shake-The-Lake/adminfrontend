@@ -337,7 +337,7 @@ const AddBookingPage: React.FC = () => {
 													{key: 'CUSTOMER', label: 'Customer'},
 												]}
 												getKey={(item) => item?.key}
-												getLabel={(item) => item?.label!}
+												getLabel={(item) => item?.label ?? ''}
 											/>
 										</FormControl>
 										<FormMessage />
