@@ -2,10 +2,11 @@ import React from 'react';
 import CreateEventDialog from './create-event-dialog';
 import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
-import {useNavigate} from 'react-router-dom';
-import {type QueryClient} from '@tanstack/react-query';
-import {eventsOptions, useDeleteEvent, useGetEvents} from '../../queries/event';
-import {MutationToaster} from '../../components/common/mutation-toaster';
+import { useNavigate } from 'react-router-dom';
+import { type QueryClient } from '@tanstack/react-query';
+import { eventsOptions, useDeleteEvent, useGetEvents } from '../../queries/event';
+import { MutationToaster } from '../../components/common/mutation-toaster';
+import PageTransition from '../../PageTransition';
 
 export const loader = (queryClient: QueryClient) => async () =>
 	queryClient.ensureQueryData(eventsOptions());
@@ -17,7 +18,7 @@ const EventList = () => {
 
 	// todo! error, when navigating back by browser button.. need replace suspense?
 	// console.js:273 React Router caught the following error during render Error: A component suspended while responding to synchronous input. This will cause the UI to be replaced with a loading indicator. To fix, updates that suspend should be wrapped with startTransition.
-	const {data: events, isPending, error} = useGetEvents();
+	const { data: events, isPending, error } = useGetEvents();
 	const deleteMutation = useDeleteEvent();
 
 	// Todo! add "real" error handling. maybe use the mutation.error to handle this? make an error component that takes that as an input and displays the sonner. important! not per default on card, because then it would get triggered for each
@@ -38,7 +39,7 @@ const EventList = () => {
 								<li key={event.id} className="mb-4 flex justify-center">
 									<StlCard
 										{...event}
-										link={'/event/'+event.id.toString()}
+										link={'/event/' + event.id.toString()}
 										deleteMutation={deleteMutation}
 									/>
 								</li>

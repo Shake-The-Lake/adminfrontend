@@ -1,22 +1,23 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import BoatForm from '../../../components/forms/boat';
 import TimeSlots from './time-slots';
-import {Separator} from '../../../components/ui/separator';
-import {type QueryClient} from '@tanstack/react-query';
+import { Separator } from '../../../components/ui/separator';
+import { type QueryClient } from '@tanstack/react-query';
 import {
 	boatDetailOptions,
 	useBoatDetail,
 	useUpdateBoat,
 } from '../../../queries/boat';
-import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
-import {defaultBoatDto} from '../../../models/api/boat.model';
+import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
+import { defaultBoatDto } from '../../../models/api/boat.model';
+import PageTransition from '../../../PageTransition';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
@@ -31,17 +32,17 @@ export const loader =
 		};
 
 const BoatPage: React.FC = () => {
-	const {eventId, boatId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+	const { eventId, boatId } = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: boat, isPending, error} = useBoatDetail(boatId, eventId);
+	const { data: boat, isPending, error } = useBoatDetail(boatId, eventId);
 
 	const updateMutation = useUpdateBoat(boatId);
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	return (
-		<>
+		<PageTransition>
 			<div className="flex flex-col items-center">
 				<LoadingSpinner isLoading={isPending} />
 
@@ -60,8 +61,8 @@ const BoatPage: React.FC = () => {
 				)}
 			</div>
 			<Separator className="w-full my-10" />
-			<TimeSlots {...{...defaultBoatDto, ...boat}}></TimeSlots>
-		</>
+			<TimeSlots {...{ ...defaultBoatDto, ...boat }}></TimeSlots>
+		</PageTransition>
 	);
 };
 

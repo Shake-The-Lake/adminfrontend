@@ -1,10 +1,10 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {isRouteErrorResponse, Link, useRouteError} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 import ShakeTheLakeIcon from '../components/icons/shake-the-lake-icon';
 
 const ErrorPage: React.FC = () => {
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 	const error = useRouteError();
 
 	const errorStatus = isRouteErrorResponse(error) ? error.status : 0;

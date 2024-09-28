@@ -35,6 +35,7 @@ import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item
 import AddBookingPage from './pages/event/bookings/add-booking-page';
 import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
+import { AnimatePresence } from 'framer-motion';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -131,10 +132,12 @@ function App() {
 	return (
 		<AuthProvider>
 			<QueryClientProvider client={queryClient}>
-				<RouterProvider
-					router={router}
-					fallbackElement={<LoadingSpinner isLoading />}
-				/>
+				<AnimatePresence>
+					<RouterProvider
+						router={router}
+						fallbackElement={<LoadingSpinner isLoading />}
+					/>
+				</AnimatePresence>
 				<ReactQueryDevtools initialIsOpen={false} />
 				<Toaster position="top-right" duration={5000} />
 				<MutationLoader />

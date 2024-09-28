@@ -1,15 +1,15 @@
-import React, {useEffect} from 'react';
-import {defaultEventDto} from '../../models/api/event.model';
+import React, { useEffect } from 'react';
+import { defaultEventDto } from '../../models/api/event.model';
 import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm from '../../components/forms/event';
-import {useCreateEvent} from '../../queries/event';
-import {useNavigate} from 'react-router-dom';
+import { useCreateEvent } from '../../queries/event';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();
 	const createMutation = useCreateEvent();
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (
