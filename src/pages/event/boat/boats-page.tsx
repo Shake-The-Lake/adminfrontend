@@ -67,7 +67,7 @@ const BoatsOverview: React.FC = () => {
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="w-full mb-8 flex flex-col justify-start">
-				<h1>Boats</h1>
+				<h1>{t('boat.title')}</h1>
 			</div>
 			{boats?.length === 0 && (
 				<div className="w-full py-5">
@@ -90,9 +90,9 @@ const BoatsOverview: React.FC = () => {
 					))}
 
 				<StlDialog
-					title="Create Boat"
-					description="Add a new boat by entering the necessary data."
-					triggerLabel="Add new boat"
+					title={t('boat.create')}
+					description={t('boat.description')}
+					triggerLabel={t('boat.triggerLabel')}
 					isOpen={isCreateDialogOpen}
 					formId="boat"
 					onClose={closeCreateDialog}

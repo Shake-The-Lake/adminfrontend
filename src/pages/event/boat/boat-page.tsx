@@ -46,10 +46,10 @@ const BoatPage: React.FC = () => {
 				<LoadingSpinner isLoading={isPending} />
 
 				<h2 className="w-full mb-6">
-					{t('boat')} - {boat?.name}
+					{t('boat.title')} - {boat?.name}
 				</h2>
 
-				{error && <p>Error fetching Boat.</p>}
+				{error && <p>{t('boat.errorLoadingBoat')}</p>}
 				{boat && (
 					<BoatForm
 						key={boat.id}

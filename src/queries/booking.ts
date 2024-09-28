@@ -1,4 +1,4 @@
-import {type BookingSearchParams} from '../models/api/booking-search.model';
+import { type BookingSearchParams } from '../models/api/booking-search.model';
 import {
 	type QueryClient,
 	type QueryKey,
@@ -12,8 +12,8 @@ import {
 	getBookingsByEventId,
 	searchBookings,
 } from '../services/booking-search-service';
-import {createBooking, updateBooking} from '../services/booking-service';
-import {type BookingDto} from '../models/api/booking.model';
+import { createBooking, updateBooking } from '../services/booking-service';
+import { type BookingDto } from '../models/api/booking.model';
 
 export const bookingKeys = {
 	all: (eventId: number) => ['bookings', eventId] as QueryKey,
@@ -55,7 +55,7 @@ export function useDeleteBooking(eventId: number) {
 	return useMutation({
 		mutationFn: deleteBooking,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId), exact: true});
+			await queryClient.invalidateQueries({ queryKey: bookingKeys.all(eventId), exact: true });
 		},
 	});
 }
@@ -74,12 +74,17 @@ export function useCreateBooking(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: createBooking,
-		onSuccess(data) {
-			queryClient.setQueryData(
-				bookingKeys.all(eventId),
-				(oldData: BookingDto[] | undefined) =>
-					oldData ? [...oldData, data] : [data],
-			);
+		async onSuccess(data) {
+			if (data) {
+				queryClient.setQueryData(
+					bookingKeys.all(eventId),
+					(oldData: BookingDto[] | undefined) =>
+						oldData ? [...oldData, data] : [data],
+				);
+			}
+			await queryClient.invalidateQueries({ queryKey: bookingKeys.all(eventId), exact: true });
+			await queryClient.invalidateQueries({ queryKey: bookingKeys.detail(eventId, true), exact: true });
+			await queryClient.invalidateQueries({ queryKey: bookingKeys.search(eventId, {}), exact: true });
 		},
 		onError(error) {
 			console.error('Error creating booking:', error);

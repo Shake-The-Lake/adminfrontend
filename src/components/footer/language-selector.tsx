@@ -7,14 +7,12 @@ import {useTranslation} from 'react-i18next';
 const LanguageSelector: React.FC = () => {
 	const [language, setLanguage] = useState(en);
 
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 
-	const handleLanguageChange = (lang: string) => {
+	const handleLanguageChange = async (lang: string) => {
 		setLanguage(lang);
-		i18n
+		await i18n
 			.changeLanguage(lang)
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
 	};
 
 	return (
@@ -24,15 +22,15 @@ const LanguageSelector: React.FC = () => {
 			onValueChange={handleLanguageChange}
 			size={'sm'}
 			className="text-white flex items-center space-x-1 text-sm">
-			<ToggleGroupItem value={de} aria-label="Toggle german">
+			<ToggleGroupItem value={de} aria-label={t('langSwitcher.toggleGerman')}>
 				<div className="uppercase">de</div>
 			</ToggleGroupItem>
 			<Separator orientation="vertical" className="h-5" />
-			<ToggleGroupItem value={en} aria-label="Toggle english">
+			<ToggleGroupItem value={en} aria-label={t('langSwitcher.toggleEnglish')}>
 				<div className="uppercase">en</div>
 			</ToggleGroupItem>
 			<Separator orientation="vertical" className="h-5" />
-			<ToggleGroupItem value={ch} aria-label="Toggle swiss german">
+			<ToggleGroupItem value={ch} aria-label={t('langSwitcher.toggleSwissGerman')}>
 				<div className="uppercase">ch</div>
 			</ToggleGroupItem>
 		</ToggleGroup>

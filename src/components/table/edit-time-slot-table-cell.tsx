@@ -8,6 +8,7 @@ import {type BoatDto} from '../../models/api/boat.model';
 import {Button} from '../ui/button';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useUpdateTimeSlot} from '../../queries/time-slot';
+import {useTranslation} from 'react-i18next';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
@@ -23,7 +24,7 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 	deleteMutation,
 }) => {
 	const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
-
+	const {t} = useTranslation();
 	const updateMutation = useUpdateTimeSlot(timeSlot?.id, eventId);
 	const handleDelete = async () => deleteMutation.mutateAsync(timeSlot?.id);
 
@@ -38,9 +39,9 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 	return (
 		<TableCell className="text-right">
 			<StlDialog
-				title="Edit Time Slot"
-				description="Edit time slots for the boat"
-				triggerLabel="Edit time slot"
+				title={t('timeSlot.edit')}
+				description={t('timeSlot.editDescription')}
+				triggerLabel={t('timeSlot.edit')}
 				isOpen={isUpdateDialogOpen}
 				onClose={closeUpdateDialog}
 				onOpen={openUpdateDialog}

@@ -1,9 +1,10 @@
-import {type TimeSlotDto} from './time-slot.model';
-import {type ColumnDef} from '@tanstack/react-table';
-import {type PersonDto} from './person.model';
-import {type BoatDto} from './boat.model';
-import {type ActivityTypeDto} from './activity-type.model';
-import {getDisplayTimeFromBackend} from '../../lib/date-time.utils';
+import { type TimeSlotDto } from './time-slot.model';
+import { type ColumnDef } from '@tanstack/react-table';
+import { type PersonDto } from './person.model';
+import { type BoatDto } from './boat.model';
+import { type ActivityTypeDto } from './activity-type.model';
+import { getDisplayTimeFromBackend } from '../../lib/date-time.utils';
+import { t } from 'i18next';
 
 export type BookingSearchDto = {
 	person: PersonDto;
@@ -25,42 +26,42 @@ export const defaultBookingSearchParams: BookingSearchParams = {
 	activityId: undefined,
 	boatId: undefined,
 	from: undefined,
-	to: undefined,	
+	to: undefined,
 };
 
 export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 	{
 		accessorKey: 'person.firstName',
-		header: 'First Name',
+		header: t('firstName'),
 	},
 	{
 		accessorKey: 'person.lastName',
-		header: 'Last Name',
+		header: t('lastName'),
 	},
 	{
 		accessorKey: 'timeSlot.fromTime',
-		header: 'From',
-		cell: ({row}) => getDisplayTimeFromBackend(row.original.timeSlot.fromTime),
+		header: t('from'),
+		cell: ({ row }) => getDisplayTimeFromBackend(row.original.timeSlot.fromTime),
 	},
 	{
 		accessorKey: 'timeSlot.untilTime',
-		header: 'Until',
-		cell: ({row}) => getDisplayTimeFromBackend(row.original.timeSlot.untilTime),
+		header: t('to'),
+		cell: ({ row }) => getDisplayTimeFromBackend(row.original.timeSlot.untilTime),
 	},
 	{
 		accessorKey: 'activityType.name.en',
-		header: 'Activity',
+		header: t('activity'),
 	},
 	{
 		accessorKey: 'boat.name',
-		header: 'Boat',
+		header: t('boat.title'),
 	},
 	{
 		accessorKey: 'person.emailAddress',
-		header: 'Email',
+		header: t('email'),
 	},
 	{
 		accessorKey: 'person.phoneNumber',
-		header: 'Phone',
+		header: t('phone'),
 	},
 ];

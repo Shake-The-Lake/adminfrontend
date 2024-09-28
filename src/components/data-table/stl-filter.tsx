@@ -17,6 +17,7 @@ import {
 import {Input} from '../ui/input';
 import {type StlFilterParams} from '../../models/api/search.model';
 import {validateTime} from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
 
 export enum StlFilterOptions {
 	SearchTerm = 1 << 0, // 0001 -- the bitshift is unnecessary, but done for consistency
@@ -52,6 +53,8 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 		resolver: zodResolver(filterSchema),
 	});
 
+	const {t} = useTranslation();
+
 	useEffect(() => {
 		const subscription = form.watch((value, {name, type}) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
@@ -83,9 +86,9 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						control={form.control}
 						render={({field}) => (
 							<FormItem className="min-w-[200px] flex-grow">
-								<FormLabel>Search</FormLabel>
+								<FormLabel>{t('search')}</FormLabel>
 								<FormControl>
-									<Input placeholder="Search..." {...field} className="input" />
+									<Input placeholder={t('searchPlaceholder')} {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -125,10 +128,10 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 							control={form.control}
 							render={({field}) => (
 								<FormItem>
-									<FormLabel>From</FormLabel>
+									<FormLabel>{t('from')}</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="Time in HH:MM format"
+											placeholder={t('timeSlot.timeFormat')}
 											{...field}
 											className="input"
 											type="time"
@@ -146,7 +149,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 									<FormLabel>To</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="Time in HH:MM format"
+											placeholder={t('timeSlot.timeFormat')}
 											{...field}
 											className="input"
 											type="time"

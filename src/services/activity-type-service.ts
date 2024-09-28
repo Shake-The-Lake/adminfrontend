@@ -1,19 +1,25 @@
 import {type ActivityTypeDto} from '../models/api/activity-type.model';
 import sortBy from 'lodash-es/sortBy';
 import axiosInstance from './axiosInstance';
+import {getI18n} from 'react-i18next';
+import {getTranslation} from '../lib/utils';
 
-export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) =>
-	activityTypes
-		? sortBy(activityTypes, 'name.en')
+export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) => {
+	const i18n = getI18n();
+
+	return activityTypes
+		? sortBy(activityTypes, [
+				(a) => getTranslation(i18n.language, a.name).toLowerCase(),
+				(a) => getTranslation(i18n.language, a.description).toLowerCase(),
+			])
 		: [];
+};
 
 // Todo! refactor usage to use expanded event instead
 export const getAllActivityTypesFromEvent = async (
 	eventId: number,
 ): Promise<ActivityTypeDto[]> => {
-	const response = await axiosInstance.get<ActivityTypeDto[]>(
-		'/activitytype',
-	);
+	const response = await axiosInstance.get<ActivityTypeDto[]>('/activitytype');
 	const result = response.data.filter(
 		(activityType) => activityType.eventId === eventId,
 	);

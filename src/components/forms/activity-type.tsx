@@ -66,7 +66,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		resolver: zodResolver(activityTypeSchema),
 	});
 
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 
@@ -80,7 +80,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		const activityType: ActivityTypeDto = {
 			...values,
 			id: values.id ?? 0,
-			eventId: model.eventId ?? eventId,
+			eventId: model.eventId === 0 ? eventId : model.eventId,
 			// Avoid null values on localized strings
 			name: {...defaultLocalizedStringDto, ...values.name},
 			description: {...defaultLocalizedStringDto, ...values.description},
@@ -129,27 +129,27 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								className={
 									tabWithErrors.includes('en') ? 'text-destructive' : ''
 								}>
-								English
+								{t('langSwitcher.english')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="de"
 								className={
 									tabWithErrors.includes('de') ? 'text-destructive' : ''
 								}>
-								German
+								
+								{t('langSwitcher.german')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="gsw"
 								className={
 									tabWithErrors.includes('gsw') ? 'text-destructive' : ''
 								}>
-								Swiss German
+								{t('langSwitcher.swissGerman')}
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="en">
 							<p className="text-primary-dark-stroke mb-2 mt-2">
-								Enter English content and content that does not belong to a
-								specific language here.
+								{t('activityType.infoText')}
 							</p>
 							<div className="space-y-4">
 								<FormField
@@ -157,10 +157,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Name</FormLabel>
+											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Name in English"
+													placeholder={t('activityType.nameEnglish')}
 													{...field}
 													className="input"
 												/>
@@ -173,10 +173,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Description</FormLabel>
+											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Description in English"
+													placeholder={t('activityType.descEnglish')}
 													{...field}
 													className="input"
 												/>
@@ -189,10 +189,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Icon</FormLabel>
+											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Icon"
+													placeholder={t('icon')}
 													{...field}
 													className="input"
 												/>
@@ -205,10 +205,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Checklist</FormLabel>
+											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Checklist in English"
+													placeholder={t('activityType.checklistEnglish')}
 													{...field}
 													className="input"
 												/>
@@ -220,8 +220,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 						</TabsContent>
 						<TabsContent value="de">
 							<p className="text-primary-dark-stroke mb-2 mt-2">
-								Enter German content and content that does not belong to a
-								specific language here.
+								{t('activityType.descriptionGerman')}
 							</p>
 							<div className="space-y-4">
 								<FormField
@@ -229,10 +228,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Name</FormLabel>
+											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Name in German"
+													placeholder={t('activityType.nameGerman')}
 													{...field}
 													className="input"
 												/>
@@ -245,10 +244,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Description</FormLabel>
+											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Description in German"
+													placeholder={t('activityType.descGerman')}
 													{...field}
 													className="input"
 												/>
@@ -261,10 +260,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Icon</FormLabel>
+											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Icon"
+													placeholder={t('icon')}
 													{...field}
 													className="input"
 												/>
@@ -277,10 +276,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Checklist</FormLabel>
+											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Checklist in German"
+													placeholder={t('activityType.checklistGerman')}
 													{...field}
 													className="input"
 												/>
@@ -292,8 +291,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 						</TabsContent>
 						<TabsContent value="gsw">
 							<p className="text-primary-dark-stroke mb-2 mt-2">
-								Enter Swiss German content and content that does not belong to a
-								specific language here.
+								{t('activityType.descriptionSwissGerman')}
 							</p>
 							<div className="space-y-4">
 								<FormField
@@ -301,10 +299,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Name</FormLabel>
+											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Name in Swiss German"
+													placeholder={t('activityType.nameSwissGerman')}
 													{...field}
 													className="input"
 												/>
@@ -317,10 +315,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Description</FormLabel>
+											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Description in Swiss German"
+													placeholder={t('activityType.descSwissGerman')}
 													{...field}
 													className="input"
 												/>
@@ -333,10 +331,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Icon</FormLabel>
+											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Icon"
+													placeholder={t('icon')}
 													{...field}
 													className="input"
 												/>
@@ -349,10 +347,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Checklist</FormLabel>
+											<FormLabel>{t('activityType.checklistSwissGerman')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Checklist in Swiss German"
+													placeholder={t('activityType.checklistSwissGerman')}
 													{...field}
 													className="input"
 												/>
@@ -366,7 +364,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					<div
 						className="mt-16 flex justify-end w-full"
 						style={isCreate ? {display: 'none'} : {}}>
-						<Button type="submit">Save Changes</Button>
+						<Button type="submit">{t('save')}</Button>
 					</div>
 				</form>
 			</Form>

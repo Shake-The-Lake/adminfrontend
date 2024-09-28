@@ -8,6 +8,7 @@ import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
 import {fromTimeToDateTime} from '../../../lib/date-time.utils';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -29,7 +30,7 @@ const SchedulePage: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: boats} = useGetBoats(eventId);
-
+	const {t} = useTranslation();
 	const queryClient = useQueryClient();
 	const {data: event} = useEventDetail(queryClient, eventId, false);
 	
@@ -49,7 +50,7 @@ const SchedulePage: React.FC = () => {
 	};
 
 	if (boats === undefined) {
-		return <div>Add a boat to view the schedule for its time slots.</div>;
+		return <div>{t('schedule.addBoat')}</div>;
 	}
 
 	const program: Program[] = boats.flatMap((boat) => Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
@@ -125,7 +126,7 @@ const SchedulePage: React.FC = () => {
 	});
 
 	return (
-		<div className="max-w-[75vw]">
+		<div className="max-w-full md:max-w-[75vw]">
 			<Epg {...getEpgProps()}>
 				<Layout
 					{...getLayoutProps()}
