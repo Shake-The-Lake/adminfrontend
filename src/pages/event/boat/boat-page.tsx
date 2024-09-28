@@ -11,23 +11,23 @@ import {
 	useBoatDetail,
 	useUpdateBoat,
 } from '../../../queries/boat';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {defaultBoatDto} from '../../../models/api/boat.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
 			}
 
-			if (!params.boatId) {
+			if (!routeIds.boatId) {
 				throw new Error('No boat ID provided');
 			}
 
-			await queryClient.ensureQueryData(boatDetailOptions(Number(params.boatId)));
-			return {
-				eventId: Number(params.id),
-				boatId: Number(params.boatId),
-			};
+			await queryClient.ensureQueryData(boatDetailOptions(routeIds.boatId));
+			return routeIds;
 		};
 
 const BoatPage: React.FC = () => {
@@ -43,7 +43,7 @@ const BoatPage: React.FC = () => {
 	return (
 		<>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending || updateMutation.isPending} />
+				<LoadingSpinner isLoading={isPending} />
 
 				<h2 className="w-full mb-6">
 					{t('boat')} - {boat?.name}
@@ -60,7 +60,7 @@ const BoatPage: React.FC = () => {
 				)}
 			</div>
 			<Separator className="w-full my-10" />
-			<TimeSlots {...boat} ></TimeSlots>
+			<TimeSlots {...{...defaultBoatDto, ...boat}}></TimeSlots>
 		</>
 	);
 };

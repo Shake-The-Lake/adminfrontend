@@ -3,9 +3,7 @@ import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DefaultLayout from './components/default-layout';
-import {
-	loader as sideNavigationLoader,
-} from './components/event-detail-layout';
+import {loader as sideNavigationLoader} from './components/event-detail-layout';
 import {eventDetailRoutes} from './constants';
 import {
 	ActivityTypePage,
@@ -27,13 +25,16 @@ import {loader as activityTypesLoader} from './pages/event/activity-type/activit
 import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
 import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
-import AddBookingPage from './pages/event/bookings/add-booking-page';
 import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
 import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
 import LoginPage from './pages/login-page';
 import {AuthProvider} from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
+import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
+import AddBookingPage from './pages/event/bookings/add-booking-page';
+import LoadingSpinner from './components/animations/loading';
+import MutationLoader from './components/common/mutation-loader';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -59,10 +60,20 @@ const router = createBrowserRouter([
 	{
 		path: '/login',
 		element: <LoginPage />,
+		errorElement: (
+			<DefaultLayout>
+				<ErrorPage />
+			</DefaultLayout>
+		),
 	},
 	{
 		path: `/event/${eventDetailRoutes.id}`,
 		element: <ProtectedRoute />,
+		errorElement: (
+			<DefaultLayout>
+				<ErrorPage />
+			</DefaultLayout>
+		),
 		loader: sideNavigationLoader(queryClient),
 		children: [
 			{
@@ -96,8 +107,8 @@ const router = createBrowserRouter([
 				element: <SchedulePage />,
 			},
 			{
-				path:`${eventDetailRoutes.schedule}/${eventDetailRoutes.scheduleId}`,
-				loader: scheduleLoader(queryClient),
+				path: `${eventDetailRoutes.schedule}/${eventDetailRoutes.timeSlotId}`,
+				loader: scheduleLoaderItem(queryClient),
 				element: <ScheduleItemPage />,
 			},
 			{
@@ -122,10 +133,11 @@ function App() {
 			<QueryClientProvider client={queryClient}>
 				<RouterProvider
 					router={router}
-					fallbackElement={<div>{t('loading')}</div>}
+					fallbackElement={<LoadingSpinner isLoading />}
 				/>
 				<ReactQueryDevtools initialIsOpen={false} />
 				<Toaster position="top-center" closeButton />
+				<MutationLoader />
 			</QueryClientProvider>
 		</AuthProvider>
 	);

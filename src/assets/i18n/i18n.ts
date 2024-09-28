@@ -8,8 +8,11 @@ const resources: Resource = {
 			// Messages
 			welcomeMessage: 'Welcome to ti&m event planning.',
 			loading: 'Loading...',
-			page404Oops: 'Oops! Looks like you\'re lost.',
-			pageNotFound: 'This page could not be found.',
+			pageErrorOops: 'Oops! Something went wrong.',
+			pageErrorNotFound: 'This page could not be found.',
+			pageErrorNotAuthorized: 'You aren\'t authorized to see this.',
+			pageErrorApiDown: 'Looks like our API is down.',
+			pageErrorTeapot: 'Surfen macht durstig 🍵.',
 			page404NavigateHome: 'Let\'s get you back',
 			// Meta Data
 			appName: 'Shake The Lake Admin App',

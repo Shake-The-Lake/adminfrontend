@@ -9,7 +9,6 @@ import {
 	Link,
 	type LoaderFunctionArgs,
 	useLoaderData,
-	useNavigate,
 } from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {
@@ -22,28 +21,30 @@ import StlFilter, {
 } from '../../../components/data-table/stl-filter';
 import {defaultFilterParams} from '../../../models/api/search.model';
 import {eventDetailRoutes} from '../../../constants';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		if (!params.id) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			bookingsSearchOptions(
-				Number(params.id),
-				defaultBookingSearchParams,
-				queryClient,
-			),
-		);
-		return {eventId: Number(params.id)};
-	};
+			await queryClient.ensureQueryData(
+				bookingsSearchOptions(
+					routeIds.eventId,
+					defaultBookingSearchParams,
+					queryClient,
+				),
+			);
+
+			return routeIds;
+		};
 
 const BookingOverview: React.FC = () => {
-	const navigate = useNavigate();
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 

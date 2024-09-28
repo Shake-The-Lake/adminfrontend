@@ -14,30 +14,34 @@ type StlSelectProps<T> = {
 	value: string | undefined;
 	onValueChange: (value?: string) => void;
 	list: T[] | undefined;
+	defaultLabel?: string;
 	getKey: (e?: T) => string | undefined;
 	getLabel: (e?: T) => string;
 };
+
+export const StlSelectDefaultLabel = 'Select';
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
 const StlSelect = <T,>({
 	value,
 	onValueChange,
 	list,
+	defaultLabel,
 	getKey,
 	getLabel,
 }: StlSelectProps<T>) => {
 	const resetValue = () => {
-		onValueChange(undefined);
+		onValueChange('');
 	};
 
 	return (
 		<Select value={value} onValueChange={onValueChange}>
 			<SelectTrigger>
 				<div className="flex justify-between items-center gap-1 w-full">
-					<SelectValue placeholder="Select">
+					<SelectValue placeholder={defaultLabel ?? StlSelectDefaultLabel}>
 						{value
 							? getLabel(list?.find((i) => getKey(i) === value))
-							: 'Select'}
+							: defaultLabel ?? StlSelectDefaultLabel}
 					</SelectValue>
 				</div>
 			</SelectTrigger>

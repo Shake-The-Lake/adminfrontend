@@ -1,9 +1,12 @@
+import {type PersonDto} from './person.model';
+
 export type BookingDto = {
 	id?: number;
 	isRider: boolean;
 	isManual: boolean;
 	pagerNumber?: number;
 	personId: number;
+	person?: PersonDto;
 	timeSlotId: number;
 };
 

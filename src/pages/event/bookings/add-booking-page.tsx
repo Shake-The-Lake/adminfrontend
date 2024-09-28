@@ -55,7 +55,7 @@ const AddBookingPage: React.FC = () => {
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-		number | undefined
+	number | undefined
 	>(undefined);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
 	const [filter, setFilter] = useState<{
@@ -337,7 +337,7 @@ const AddBookingPage: React.FC = () => {
 													{key: 'CUSTOMER', label: 'Customer'},
 												]}
 												getKey={(item) => item?.key}
-												getLabel={(item) => item?.label!}
+												getLabel={(item) => item?.label ?? ''}
 											/>
 										</FormControl>
 										<FormMessage />

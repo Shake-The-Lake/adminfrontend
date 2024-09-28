@@ -3,7 +3,10 @@ import {useTranslation} from 'react-i18next';
 import ActivityTypeForm from '../../../components/forms/activity-type';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
-import {getTranslation} from '../../../lib/utils';
+import {
+	extractTypedInfoFromRouteParams,
+	getTranslation,
+} from '../../../lib/utils';
 import {
 	activityTypeDetailOptions,
 	useActivityTypeDetail,
@@ -14,21 +17,20 @@ import {type QueryClient} from '@tanstack/react-query';
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
-			if (!params.id) {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
 			}
 
-			if (!params.activityTypeId) {
+			if (!routeIds.activityTypeId) {
 				throw new Error('No activity type ID provided');
 			}
 
 			await queryClient.ensureQueryData(
-				activityTypeDetailOptions(Number(params.activityTypeId)),
+				activityTypeDetailOptions(routeIds.activityTypeId),
 			);
-			return {
-				eventId: Number(params.id),
-				activityTypeId: Number(params.activityTypeId),
-			};
+
+			return routeIds;
 		};
 
 const ActivityTypePage: React.FC = () => {
@@ -48,7 +50,7 @@ const ActivityTypePage: React.FC = () => {
 	return (
 		<>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending || updateMutation.isPending} />
+				<LoadingSpinner isLoading={isPending} />
 
 				<h2 className="w-full mb-6">
 					{t('activityType')} -{' '}

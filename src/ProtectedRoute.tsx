@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigate, useNavigate} from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 import {useAuth} from './AuthContext';
 import EventDetailLayout from './components/event-detail-layout';
 

@@ -31,12 +31,10 @@ export function useGetEvents() {
 	return useQuery(eventsOptions());
 }
 
-export const eventDetailOptions = (id: number, expanded = false) =>
-	queryOptions({
-		queryKey: eventKeys.detail(id, expanded),
-		queryFn: async () =>
-			getEventById(id, expanded ? 'boats,activityTypes' : undefined),
-	});
+export const eventDetailOptions = (id: number, expanded = false) => queryOptions({
+	queryKey: eventKeys.detail(id, expanded),
+	queryFn: async () => getEventById(id, expanded ? 'boats,boats.timeSlots,activityTypes' : undefined),
+});
 
 export function useEventDetail(
 	queryClient: QueryClient,
