@@ -1,9 +1,7 @@
 import i18n, { type Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { de, en, languages } from '../../constants';
-import { first } from 'lodash-es';
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
-import { title } from 'process';
+import { max } from 'date-fns';
 
 const resources: Resource = {
 	en: {
@@ -17,7 +15,16 @@ const resources: Resource = {
 				errorLoadingQrCode: 'Error while loading QR-Code...',
 				customerQrCode: 'Customer QR Code',
 			},
+			langSwitcher: {
+				toggleEnglish: 'Switch to English',
+				english: 'English',
+				german: 'German',
+				swissGerman: 'Swiss German',
+				toggleGerman: 'Switch to German',
+				toggleSwissGerman: 'Switch to Swiss German',
+			},
 			activityType: {
+				infoText: 'Enter English content and content that does not belong to a specific language here.',
 				errorLoadingActivityType: 'Error while loading activity type...',
 				title: 'Activity Type',
 				noActivityTypes: 'No activity types found',
@@ -25,6 +32,18 @@ const resources: Resource = {
 				createActivityType: 'Create Activity Type',
 				description: 'Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language.',
 				triggerLabel: 'Add new Activity Type',
+				nameEnglish: 'Name in English',
+				nameGerman: 'Name in German',
+				descEnglish: 'Description in English',
+				descGerman: 'Description in German',
+				descSwissGerman: 'Description in Swiss German',
+				checklistGerman: 'Checklist in German',
+				checklistEnglish: 'Checklist in English',
+				checklistSwissGerman: 'Checklist in Swiss German',
+				nameSwissGerman: 'Name in Swiss German',
+				descriptionGerman: 'Enter German content and content that does not belong to a specific language here.',
+				descriptionSwissGerman: 'Enter Swiss German content and content that does not belong to a specific language here.',
+
 			},
 			boat: {
 				errorLoadingBoat: 'Error while loading boat...',
@@ -33,6 +52,12 @@ const resources: Resource = {
 				create: 'Create Boat',
 				description: 'Add a new boat by entering the necessary data.',
 				triggerLabel: 'Add new boat',
+				name: 'Boat Name',
+				type: 'Boat Typ',
+				maxSeats: 'Max available seats for riders',
+				maxSeatsViewers: 'Max available seats for viewers',
+				availableFrom: 'Boat available from',
+				availableUntil: 'Boat available until',
 			},
 			timeSlot: {
 				errorLoadingTimeSlot: 'Error while loading time slot...',
@@ -44,7 +69,7 @@ const resources: Resource = {
 				edit: 'Edit Time Slot',
 				descriptionEdit: 'Edit time slots for the boat',
 				triggerLabelEdit: 'Edit time slot',
-				timeFormat: 'Time in the format HH:mm',
+				timeFormat: 'Time in the format HH:MM',
 			},
 			booking: {
 				errorLoadingBooking: 'Error while loading booking...',
@@ -83,8 +108,11 @@ const resources: Resource = {
 			from: 'From',
 			to: 'To',
 			type: 'Type',
+			icon: 'Icon',
+			search: 'Search',
+			searchPlaceholder: 'Search...',
+			checklist: 'Checklist',
 			tryAgain: 'Try again',
-			// Messages
 			welcomeMessage: 'Welcome to ti&m event planning.',
 			description: 'Description',
 			title: 'Title',

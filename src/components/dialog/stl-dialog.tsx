@@ -85,7 +85,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 					</Button>
 				) : (
 					<Button type="button" title={triggerLabel}>
-						Add
+						{triggerLabel}
 					</Button>
 				)}
 			</DialogTrigger>
