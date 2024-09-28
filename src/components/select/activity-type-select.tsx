@@ -33,7 +33,7 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 					value={field.value?.toString() ?? ''}
 					onValueChange={(value?: string) => {
-						// react-hook-form does not support undefined as a value, therefore need to "hack" this
+						// React-hook-form does not support undefined as a value, therefore need to "hack" this
 						field.onChange(value === '' ? '' : Number(value));
 					}}
 					list={searchParams?.activityTypes ?? []}

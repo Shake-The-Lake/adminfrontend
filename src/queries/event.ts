@@ -60,6 +60,7 @@ export function useCreateEvent() {
 			if (data) {
 				queryClient.setQueryData(eventKeys.detail(data.id ?? 0, false), data);
 			}
+
 			await queryClient.invalidateQueries({
 				queryKey: eventKeys.all(),
 				exact: true,
