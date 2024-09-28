@@ -48,12 +48,6 @@ const ActivityTypesPage = () => {
 	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
 
-	const handleEdit = (id?: number) => {
-		if (id) {
-			navigate(String(id));
-		}
-	};
-
 	const createMutation = useCreateActivityType(eventId);
 	const deleteMutation = useDeleteActivityType(eventId);
 
@@ -91,7 +85,7 @@ const ActivityTypesPage = () => {
 									i18n.language,
 									activityType.description,
 								)}
-								onArrowClick={handleEdit}
+								link={activityType.id.toString()}
 								deleteMutation={deleteMutation}
 							/>
 						</div>

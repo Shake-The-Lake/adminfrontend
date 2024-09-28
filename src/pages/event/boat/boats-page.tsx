@@ -44,11 +44,6 @@ const BoatsOverview: React.FC = () => {
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const {t} = useTranslation();
-	const navigate = useNavigate();
-
-	const handleEdit = async (id?: number) => {
-		navigate(`${id}`);
-	};
 
 	const createMutation = useCreateBoat(eventId);
 	const deleteMutation = useDeleteBoat(eventId);
@@ -83,7 +78,7 @@ const BoatsOverview: React.FC = () => {
 								id={boat.id}
 								title={boat.name}
 								description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
-								onArrowClick={handleEdit}
+								link={boat.id.toString()}
 								deleteMutation={deleteMutation}
 							/>
 						</div>

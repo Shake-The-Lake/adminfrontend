@@ -1,5 +1,7 @@
 import React from 'react';
 import {ArrowRight, Trash} from 'lucide-react';
+
+import {Link, LinkProps} from 'react-router-dom';
 import {
 	Card,
 	CardContent,
@@ -14,14 +16,11 @@ export type StlCardProps = {
 	id?: number;
 	title?: string;
 	description?: string;
-	onArrowClick: (id?: number) => Promise<void> | void;
+	link: string;
 	deleteMutation: UseMutationResult<any, Error, number>; // First any is return type, second is input
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
-	const handleEdit = async () => {
-		await props.onArrowClick(props.id);
-	};
 
 	const handleDelete = async () => {
 		props.deleteMutation.mutate(props.id ?? 0);
@@ -35,7 +34,7 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 					size="icon"
 					className="items-center"
 					onClick={handleDelete}>
-					<Trash className="cursor-pointer hover:text-red-600" />
+					<Trash className="cursor-pointer hover:text-red-600 z-20 hover:bg-transparent" />
 				</Button>
 			</div>
 			<CardHeader className="flex justify-start items-start">
@@ -44,13 +43,10 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 			<CardContent className="relative">
 				<CardDescription>{props.description}</CardDescription>
 			</CardContent>
-			<Button
-				variant="ghost"
-				className="absolute bottom-0 right-0 mb-2 mr-2"
-				size="icon"
-				onClick={handleEdit}>
-				<ArrowRight />
-			</Button>
+			<Link to={props.link}
+				className="after:absolute after:inset-0 after:hover:cursor-pointer">
+				<ArrowRight className='bottom-4 right-4 absolute' />
+			</Link>
 		</Card>
 	);
 };
