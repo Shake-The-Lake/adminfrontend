@@ -123,26 +123,22 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					id="activityType"
 					onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
 					<Tabs defaultValue={i18n.language}>
-						<TabsList className="w-full justify-start">
+						<TabsList className="w-full justify-start gap-1">
 							<TabsTrigger
 								value="en"
-								className={
-									tabWithErrors.includes('en') ? 'text-destructive' : ''
-								}>
+								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('en') ? 'text-destructive' : ''}`}>
 								{t('langSwitcher.english')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="de"
-								className={
-									tabWithErrors.includes('de') ? 'text-destructive' : ''
-								}>
+								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('de') ? 'text-destructive' : ''}`}>
 								
 								{t('langSwitcher.german')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="gsw"
 								className={
-									tabWithErrors.includes('gsw') ? 'text-destructive' : ''
+									`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('gsw') ? 'text-destructive' : ''}`
 								}>
 								{t('langSwitcher.swissGerman')}
 							</TabsTrigger>
