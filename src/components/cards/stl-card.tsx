@@ -44,7 +44,7 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 				<CardDescription>{props.description}</CardDescription>
 			</CardContent>
 			<Link to={props.link}
-				className="after:absolute after:inset-0 after:hover:cursor-pointer">
+				className="after:absolute after:inset-0 after:hover:cursor-pointer after:focus:outline after:focus:outline-2">
 				<ArrowRight className='bottom-4 right-4 absolute' />
 			</Link>
 		</Card>
