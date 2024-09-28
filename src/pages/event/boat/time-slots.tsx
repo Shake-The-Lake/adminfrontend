@@ -73,7 +73,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 			<LoadingSpinner isLoading={isPending} />
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
-			<div className="flex justify-between">
+			<div className="flex flex-wrap justify-between gap-5">
 				<>
 					<h1>{t('timeSlot.title')}</h1>
 					<StlDialog

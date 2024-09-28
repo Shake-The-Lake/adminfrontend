@@ -297,7 +297,8 @@ const resources: Resource = {
 			rider: 'Fahrer',
 			pagerNumber: 'Pager-Nummer',
 		},
-	}, swissGerman: {
+	},
+	gsw: {
 		translation: {
 			eventOverview: {
 				basicData: 'Grunddate',
