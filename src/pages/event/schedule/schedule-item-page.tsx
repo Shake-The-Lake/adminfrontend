@@ -44,7 +44,7 @@ const ScheduleItemPage: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 
 	const {data: timeSlot, isPending} = useTimeSlotDetail(
 		queryClient,
@@ -89,8 +89,8 @@ const ScheduleItemPage: React.FC = () => {
 				<Table className="mt-5">
 					<TableHeader>
 						<TableRow>
-							<TableHead>Name</TableHead>
-							<TableHead>Phone</TableHead>
+							<TableHead>{t('name')}</TableHead>
+							<TableHead>{t('phone')}</TableHead>
 							<TableHead>Type</TableHead>
 							<TableHead>Manual</TableHead>
 						</TableRow>

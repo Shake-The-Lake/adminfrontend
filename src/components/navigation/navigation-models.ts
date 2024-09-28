@@ -5,11 +5,11 @@ import {
 	FolderCog,
 	Sailboat,
 } from 'lucide-react';
-import {eventBaseRoute, eventDetailRoutes} from '../../constants';
-import {type MenuItemProperties} from './navigation-menu-item';
-import {type EventDto} from '../../models/api/event.model';
-import {getTranslation} from '../../lib/utils';
-import {createContext} from 'react';
+import { eventBaseRoute, eventDetailRoutes } from '../../constants';
+import { type MenuItemProperties } from './navigation-menu-item';
+import { type EventDto } from '../../models/api/event.model';
+import { getTranslation } from '../../lib/utils';
+import { createContext } from 'react';
 import './navigation.css';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -59,7 +59,7 @@ export function getNavigationItemsForEvent(
 		},
 		{
 			link: `${eventBasePath}/${eventDetailRoutes.schedule}`,
-			labelKey: 'schedule',
+			labelKey: 'schedule.title',
 			icon: CalendarRange,
 			needsFullMatch: false,
 		},

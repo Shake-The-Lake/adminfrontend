@@ -18,6 +18,7 @@ import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
 import {validateTime} from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -57,6 +58,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
+	const {t} = useTranslation();
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
@@ -94,10 +96,10 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>From</FormLabel>
+								<FormLabel>{t('from')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Time in HH:MM format"
+										placeholder={t('timeSlot.timeFormat')}
 										{...field}
 										className="input"
 										type="time"
@@ -111,10 +113,10 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>To</FormLabel>
+								<FormLabel>{t('to')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Time in HH:MM format"
+										placeholder={t('timeSlot.timeFormat')}
 										{...field}
 										className="input"
 										type="time"

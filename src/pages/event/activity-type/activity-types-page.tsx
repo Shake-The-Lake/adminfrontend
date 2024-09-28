@@ -45,7 +45,7 @@ const ActivityTypesPage = () => {
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
 
 	const handleEdit = (id?: number) => {
@@ -71,14 +71,14 @@ const ActivityTypesPage = () => {
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="w-full mb-8 flex flex-col justify-start">
-				<h1>Activity Types</h1>
+				<h1>{t('activityType.title')}</h1>
 			</div>
 			{activityTypes?.length === 0 && (
 				<div className="w-full py-5">
-					<p className="text-lg">No activity types yet.</p>
+					<p className="text-lg">{t('activityType.title')}</p>
 				</div>
 			)}
-			{error && <p>Failed to load ActivityTypes!</p>}
+			{error && <p>{t('activityType.failedToLoadActivityTypes')}</p>}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 				{activityTypes &&
 					activityTypes.length > 0 &&
@@ -98,9 +98,9 @@ const ActivityTypesPage = () => {
 					))}
 
 				<StlDialog
-					title="Create Activity Type"
-					description="Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language."
-					triggerLabel="Add new Activity Type"
+					title={t('activityType.createActivityType')}
+					description={t('activityType.description')}
+					triggerLabel={t('activityType.create')}
 					isOpen={isCreateDialogOpen}
 					onClose={closeCreateDialog}
 					onOpen={openCreateDialog}

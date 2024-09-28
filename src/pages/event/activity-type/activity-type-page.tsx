@@ -53,11 +53,11 @@ const ActivityTypePage: React.FC = () => {
 				<LoadingSpinner isLoading={isPending} />
 
 				<h2 className="w-full mb-6">
-					{t('activityType')} -{' '}
+					{t('activityType.title')} -{' '}
 					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
 
-				{error && <p>Error fetching Activity Type.</p>}
+				{error && <p>{t('activityType.errorLoadingActivityType')}</p>}
 				{activityType && (
 					<ActivityTypeForm
 						key={activityType.id}
