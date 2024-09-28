@@ -97,8 +97,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 			</div>
 
 			{/* Wrapper div to enable overflow */}
-			<div className="overflow-x-auto max-w-full">
-				<Table className="mt-5 min-w-max">
+			<div className="overflow-x-auto my-5 max-w-full">
+				<Table className=" min-w-max">
 					<TableHeader>
 						<TableRow>
 							<TableHead>{t('from')}</TableHead>

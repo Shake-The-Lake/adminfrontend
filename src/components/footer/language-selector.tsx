@@ -5,14 +5,17 @@ import {ToggleGroup, ToggleGroupItem} from '../ui/toggle-group';
 import {useTranslation} from 'react-i18next';
 
 const LanguageSelector: React.FC = () => {
-	const [language, setLanguage] = useState(en);
+	const [language, setLanguage] = useState(() => {
+		const savedLanguage = localStorage.getItem('selectedLanguage');
+		return savedLanguage || en;
+	});
 
 	const {i18n, t} = useTranslation();
 
 	const handleLanguageChange = async (lang: string) => {
 		setLanguage(lang);
-		await i18n
-			.changeLanguage(lang)
+		localStorage.setItem('selectedLanguage', lang);
+		await i18n.changeLanguage(lang);
 	};
 
 	return (
