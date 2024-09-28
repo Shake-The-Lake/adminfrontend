@@ -160,7 +160,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
 												<Input
-													placeholder={t('nameEnglish')}
+													placeholder={t('activityType.nameEnglish')}
 													{...field}
 													className="input"
 												/>
@@ -176,7 +176,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder={t('descriptionEnglish')}
+													placeholder={t('activityType.descEnglish')}
 													{...field}
 													className="input"
 												/>
@@ -205,10 +205,10 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									control={form.control}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>t('checklist')</FormLabel>
+											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder={t('checklistEnglish')}
+													placeholder={t('activityType.checklistEnglish')}
 													{...field}
 													className="input"
 												/>
