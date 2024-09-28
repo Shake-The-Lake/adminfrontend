@@ -88,6 +88,7 @@ const resources: Resource = {
 				success: 'Booking was successful',
 				fail: 'Failed to submit booking: ',
 				noData: 'No data found',
+				currentBooking: 'Current Booking',
 			},
 			login: {
 				username: 'Username',
@@ -149,6 +150,7 @@ const resources: Resource = {
 			boatDriver: 'Boat Driver',
 			rider: 'Rider',
 			pagerNumber: 'Pager Number',
+			manual: 'Manual',
 		},
 	},
 	de: {
@@ -296,6 +298,7 @@ const resources: Resource = {
 			boatDriver: 'Bootsfahrer',
 			rider: 'Fahrer',
 			pagerNumber: 'Pager-Nummer',
+			manual: 'Manuell',
 		},
 	},
 	gsw: {
@@ -382,6 +385,7 @@ const resources: Resource = {
 				success: 'D Buechig isch erfolgrych gsii',
 				fail: 'Buechig gönd nöd: ',
 				noData: 'Kei Date gfunde',
+				currentBooking: 'Derzeitige Buchungen',
 			},
 			login: {
 				username: 'Benutzername',
@@ -443,6 +447,8 @@ const resources: Resource = {
 			boatDriver: 'Bootsfahrer',
 			rider: 'Fahrer',
 			pagerNumber: 'Pager-Nummer',
+			manual: 'Manuell',
+			currentBooking: 'Buechige',
 		},
 	}
 

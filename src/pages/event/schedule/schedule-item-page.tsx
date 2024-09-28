@@ -68,7 +68,7 @@ const ScheduleItemPage: React.FC = () => {
 						{getDisplayTimeFromBackend(timeSlot?.untilTime)}
 					</h2>
 				</div>
-				<div className="flex gap-5">
+				<div className="flex flex-wrap gap-5">
 					<span className="flex gap-2">
 						<SailboatIcon /> {timeSlot?.boat?.operator}
 					</span>
@@ -85,14 +85,14 @@ const ScheduleItemPage: React.FC = () => {
 						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
 				</div>
-				<h2 className="text-2xl mt-10">Current Booking</h2>
+				<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
 				<Table className="mt-5">
 					<TableHeader>
 						<TableRow>
 							<TableHead>{t('name')}</TableHead>
 							<TableHead>{t('phone')}</TableHead>
-							<TableHead>Type</TableHead>
-							<TableHead>Manual</TableHead>
+							<TableHead>{t('type')}</TableHead>
+							<TableHead>{t('manual')}</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
