@@ -9,10 +9,13 @@ import {
 } from '@tanstack/react-query';
 import {
 	deleteBooking,
-	getBookingsByEventId,
 	searchBookings,
 } from '../services/booking-search-service';
-import {createBooking} from '../services/booking-service';
+import {
+	createBooking,
+	getBookingById,
+	updateBooking,
+} from '../services/booking-service';
 import {type BookingDto} from '../models/api/booking.model';
 
 export const bookingKeys = {
@@ -22,12 +25,6 @@ export const bookingKeys = {
 	detail: (id: number, expanded: boolean) =>
 		['bookings', 'detail', id, expanded] as QueryKey,
 };
-
-export const bookingsOptions = (eventId: number) =>
-	queryOptions({
-		queryKey: bookingKeys.all(eventId),
-		queryFn: async () => getBookingsByEventId(eventId),
-	});
 
 export const bookingsSearchOptions = (
 	eventId: number,
@@ -48,6 +45,40 @@ export function useSearchBookings(
 ) {
 	const queryClient = useQueryClient();
 	return useQuery(bookingsSearchOptions(eventId, params, queryClient));
+}
+
+export function useGetBookingDetails(id: number) {
+	return useQuery({
+		queryKey: bookingKeys.detail(id, true),
+		queryFn: async () => getBookingById(id),
+	});
+}
+
+export function useUpdateBooking(bookingId: number) {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async (updatedBooking: BookingDto) =>
+			updateBooking(bookingId, updatedBooking),
+
+		async onSuccess(data) {
+			const oldBooking: BookingDto | undefined = queryClient.getQueryData(
+				bookingKeys.detail(bookingId, true),
+			);
+			const newBooking: BookingDto = {
+				...data,
+				person: oldBooking?.person,
+				timeSlotId: data.timeSlotId || oldBooking?.timeSlotId,
+			};
+
+			queryClient.setQueryData(bookingKeys.detail(bookingId, true), newBooking);
+
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.all(bookingId),
+				exact: true,
+			});
+		},
+	});
 }
 
 export function useDeleteBooking(eventId: number) {

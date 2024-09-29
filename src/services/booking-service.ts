@@ -8,9 +8,18 @@ export const createBooking = async (
 	return response.data;
 };
 
+export const getBookingById = async (id: number): Promise<BookingDto> => {
+	const response = await axiosInstance.get<BookingDto>(`/booking/${id}`);
+	return response.data;
+};
+
 export const updateBooking = async (
-	booking: BookingDto,
+	bookingId: number,
+	updatedBooking: BookingDto,
 ): Promise<BookingDto> => {
-	const response = await axiosInstance.put<BookingDto>(`/booking/${booking.id}`, booking);
+	const response = await axiosInstance.put<BookingDto>(
+		`/booking/${bookingId}`,
+		updatedBooking,
+	);
 	return response.data;
 };

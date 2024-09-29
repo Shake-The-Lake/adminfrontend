@@ -7,7 +7,7 @@ export type BookingDto = {
 	pagerNumber?: number;
 	personId?: number;
 	person?: PersonDto;
-	timeSlotId: number;
+	timeSlotId?: number;
 };
 
 export const defaultBooking: BookingDto = {
