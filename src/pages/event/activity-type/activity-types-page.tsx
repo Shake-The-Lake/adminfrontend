@@ -22,6 +22,7 @@ import {
 	useGetActivityTypes,
 } from '../../../queries/activity-type';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -48,12 +49,6 @@ const ActivityTypesPage = () => {
 	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
 
-	const handleEdit = (id?: number) => {
-		if (id) {
-			navigate(String(id));
-		}
-	};
-
 	const createMutation = useCreateActivityType(eventId);
 	const deleteMutation = useDeleteActivityType(eventId);
 
@@ -66,54 +61,56 @@ const ActivityTypesPage = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
-			<LoadingSpinner isLoading={isPending} />
-			<MutationToaster type="delete" mutation={deleteMutation} />
+		<PageTransitionFadeIn>
+			<div className="flex flex-col items-center">
+				<LoadingSpinner isLoading={isPending} />
+				<MutationToaster type="delete" mutation={deleteMutation} />
 
-			<div className="w-full mb-8 flex flex-col justify-start">
-				<h1>{t('activityType.title')}</h1>
-			</div>
-			{activityTypes?.length === 0 && (
-				<div className="w-full py-5">
-					<p className="text-lg">{t('activityType.title')}</p>
+				<div className="w-full mb-8 flex flex-col justify-start">
+					<h1>{t('activityType.title')}</h1>
 				</div>
-			)}
-			{error && <p>{t('activityType.failedToLoadActivityTypes')}</p>}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-				{activityTypes &&
-					activityTypes.length > 0 &&
-					activityTypes.map((activityType) => (
-						<div key={activityType.id} className="flex justify-center">
-							<StlCard
-								id={activityType.id}
-								title={getTranslation(i18n.language, activityType.name)}
-								description={getTranslation(
-									i18n.language,
-									activityType.description,
-								)}
-								onArrowClick={handleEdit}
-								deleteMutation={deleteMutation}
-							/>
-						</div>
-					))}
+				{activityTypes?.length === 0 && (
+					<div className="w-full py-5">
+						<p className="text-lg">{t('activityType.title')}</p>
+					</div>
+				)}
+				{error && <p>{t('activityType.failedToLoadActivityTypes')}</p>}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+					{activityTypes &&
+						activityTypes.length > 0 &&
+						activityTypes.map((activityType) => (
+							<div key={activityType.id} className="flex justify-center">
+								<StlCard
+									id={activityType.id}
+									title={getTranslation(i18n.language, activityType.name)}
+									description={getTranslation(
+										i18n.language,
+										activityType.description,
+									)}
+									link={activityType.id.toString()}
+									deleteMutation={deleteMutation}
+								/>
+							</div>
+						))}
 
-				<StlDialog
-					title={t('activityType.createActivityType')}
-					description={t('activityType.description')}
-					triggerLabel={t('activityType.create')}
-					isOpen={isCreateDialogOpen}
-					onClose={closeCreateDialog}
-					onOpen={openCreateDialog}
-					formId="activityType">
-					<ActivityTypeForm
-						mutation={createMutation}
-						onSuccessfullySubmitted={closeCreateDialog}
-						model={defaultActivityTypeDto}
-						isCreate={true}
-					/>
-				</StlDialog>
+					<StlDialog
+						title={t('activityType.createActivityType')}
+						description={t('activityType.description')}
+						triggerLabel={t('activityType.create')}
+						isOpen={isCreateDialogOpen}
+						onClose={closeCreateDialog}
+						onOpen={openCreateDialog}
+						formId="activityType">
+						<ActivityTypeForm
+							mutation={createMutation}
+							onSuccessfullySubmitted={closeCreateDialog}
+							model={defaultActivityTypeDto}
+							isCreate={true}
+						/>
+					</StlDialog>
+				</div>
 			</div>
-		</div>
+		</PageTransitionFadeIn>
 	);
 };
 

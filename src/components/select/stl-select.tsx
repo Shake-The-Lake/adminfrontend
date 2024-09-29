@@ -9,7 +9,7 @@ import {
 } from '../ui/select';
 import {Button} from '../ui/button';
 import {X} from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 type StlSelectProps<T> = {
 	value: string | undefined;
@@ -34,6 +34,7 @@ const StlSelect = <T,>({
 	const resetValue = () => {
 		onValueChange('');
 	};
+
 	const {t} = useTranslation();
 	return (
 		<Select value={value} onValueChange={onValueChange}>

@@ -9,9 +9,9 @@ export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) => {
 
 	return activityTypes
 		? sortBy(activityTypes, [
-				(a) => getTranslation(i18n.language, a.name).toLowerCase(),
-				(a) => getTranslation(i18n.language, a.description).toLowerCase(),
-			])
+			(a) => getTranslation(i18n.language, a.name).toLowerCase(),
+			(a) => getTranslation(i18n.language, a.description).toLowerCase(),
+		])
 		: [];
 };
 

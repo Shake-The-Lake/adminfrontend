@@ -18,7 +18,7 @@ import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {validateTime} from '../../lib/date-time.utils';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),

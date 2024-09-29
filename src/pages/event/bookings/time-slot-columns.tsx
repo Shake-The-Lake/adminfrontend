@@ -4,7 +4,7 @@ import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import {Checkbox} from '../../../components/ui/checkbox';
 import {getTranslation} from '../../../lib/utils';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import { t } from 'i18next';
+import {t} from 'i18next';
 
 export const timeSlotColumns = (
 	locale: string,

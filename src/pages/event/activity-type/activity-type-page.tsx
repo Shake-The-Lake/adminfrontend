@@ -13,6 +13,7 @@ import {
 	useUpdateActivityType,
 } from '../../../queries/activity-type';
 import {type QueryClient} from '@tanstack/react-query';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -48,7 +49,7 @@ const ActivityTypePage: React.FC = () => {
 	const {t, i18n} = useTranslation();
 
 	return (
-		<>
+		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
 				<LoadingSpinner isLoading={isPending} />
 
@@ -67,7 +68,7 @@ const ActivityTypePage: React.FC = () => {
 					/>
 				)}
 			</div>
-		</>
+		</PageTransitionFadeIn>
 	);
 };
 

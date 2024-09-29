@@ -17,7 +17,7 @@ import {
 import {Input} from '../ui/input';
 import {type StlFilterParams} from '../../models/api/search.model';
 import {validateTime} from '../../lib/date-time.utils';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 export enum StlFilterOptions {
 	SearchTerm = 1 << 0, // 0001 -- the bitshift is unnecessary, but done for consistency

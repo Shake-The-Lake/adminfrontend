@@ -1,6 +1,6 @@
-import i18n, { type Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { de, en, languages } from '../../constants';
+import i18n, {type Resource} from 'i18next';
+import {initReactI18next} from 'react-i18next';
+import {en, languages} from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -13,6 +13,7 @@ const resources: Resource = {
 				employeeQrCode: 'Employee QR Code',
 				errorLoadingQrCode: 'Error while loading QR-Code...',
 				customerQrCode: 'Customer QR Code',
+				noEventsYet: 'No events yet',
 			},
 			langSwitcher: {
 				toggleEnglish: 'Switch to English',
@@ -87,7 +88,7 @@ const resources: Resource = {
 				noTimeSlotSelected: 'Error while loading time slot...',
 				success: 'Booking was successful',
 				fail: 'Failed to submit booking: ',
-				noData: 'No data found',
+				currentBooking: 'Current Booking',
 			},
 			login: {
 				username: 'Username',
@@ -97,13 +98,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Schedule',
-				addBoat: 'Add a boat to view the schedule for its time slots.'
+				addBoat: 'Add a boat to view the schedule for its time slots.',
 			},
 			event: {
 				create: 'Create Event',
 				description: 'Add a new event by entering the basic meta data needed.',
 				triggerLabel: 'Add new event',
-				placeholder: "Sommer Event 2024",
+				placeholder: 'Sommer Event 2024',
 				date: 'Event Date',
 			},
 			from: 'From',
@@ -112,6 +113,7 @@ const resources: Resource = {
 			icon: 'Icon',
 			search: 'Search',
 			searchPlaceholder: 'Search...',
+			noData: 'No data found',
 			checklist: 'Checklist',
 			tryAgain: 'Try again',
 			clearValue: 'Clear Selected Value',
@@ -149,6 +151,7 @@ const resources: Resource = {
 			boatDriver: 'Boat Driver',
 			rider: 'Rider',
 			pagerNumber: 'Pager Number',
+			manual: 'Manual',
 		},
 	},
 	de: {
@@ -161,6 +164,7 @@ const resources: Resource = {
 				employeeQrCode: 'Mitarbeiter-QR-Code',
 				errorLoadingQrCode: 'Fehler beim Laden des QR-Codes...',
 				customerQrCode: 'Kunden-QR-Code',
+				noEventsYet: 'Noch keine Veranstaltungen',
 			},
 			langSwitcher: {
 				toggleEnglish: 'Zu Englisch wechseln',
@@ -234,7 +238,6 @@ const resources: Resource = {
 				noTimeSlotSelected: 'Fehler beim Laden des Zeitfensters...',
 				success: 'Die Buchung war erfolgreich',
 				fail: 'Fehler beim Absenden der Buchung: ',
-				noData: 'Keine Daten gefunden',
 			},
 			login: {
 				username: 'Benutzername',
@@ -244,13 +247,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Zeitplan',
-				addBoat: 'Fügen Sie ein Boot hinzu, um den Zeitplan für seine Zeitfenster anzuzeigen.'
+				addBoat: 'Fügen Sie ein Boot hinzu, um den Zeitplan für seine Zeitfenster anzuzeigen.',
 			},
 			event: {
 				create: 'Veranstaltung erstellen',
 				description: 'Fügen Sie eine neue Veranstaltung hinzu, indem Sie die erforderlichen Metadaten eingeben.',
 				triggerLabel: 'Neue Veranstaltung hinzufügen',
-				placeholder: "Sommer-Event 2024",
+				placeholder: 'Sommer-Event 2024',
 				date: 'Veranstaltungsdatum',
 			},
 			from: 'Von',
@@ -260,6 +263,7 @@ const resources: Resource = {
 			icon: 'Symbol',
 			search: 'Suche',
 			searchPlaceholder: 'Suchen...',
+			noData: 'Keine Daten gefunden',
 			checklist: 'Checkliste',
 			tryAgain: 'Erneut versuchen',
 			welcomeMessage: 'Willkommen bei ti&m Veranstaltungsplanung.',
@@ -296,6 +300,7 @@ const resources: Resource = {
 			boatDriver: 'Bootsfahrer',
 			rider: 'Fahrer',
 			pagerNumber: 'Pager-Nummer',
+			manual: 'Manuell',
 		},
 	},
 	gsw: {
@@ -308,6 +313,7 @@ const resources: Resource = {
 				employeeQrCode: 'Mitarbeiter-QR-Code',
 				errorLoadingQrCode: 'Fähler bim Lade vom QR-Code...',
 				customerQrCode: 'Chunde-QR-Code',
+				noEventsYet: 'No ke Veranstaltige',
 			},
 			langSwitcher: {
 				toggleEnglish: 'Uf Englisch wächsle',
@@ -381,7 +387,7 @@ const resources: Resource = {
 				noTimeSlotSelected: 'Fähler bim Lade vom Ziitfenster...',
 				success: 'D Buechig isch erfolgrych gsii',
 				fail: 'Buechig gönd nöd: ',
-				noData: 'Kei Date gfunde',
+				currentBooking: 'Derzeitige Buchungen',
 			},
 			login: {
 				username: 'Benutzername',
@@ -391,13 +397,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Ziitplan',
-				addBoat: 'Füeg es Boot hinzu, zum dr Ziitplan für d Ziitfenster aazzeige.'
+				addBoat: 'Füeg es Boot hinzu, zum dr Ziitplan für d Ziitfenster aazzeige.',
 			},
 			event: {
 				create: 'Veranstaltig erstelle',
 				description: 'Füeg e neui Veranstaltig hinzu, indem d nöötige Metadate iigähsch.',
 				triggerLabel: 'Neui Veranstaltig hinzfüege',
-				placeholder: "Summer Event 2024",
+				placeholder: 'Summer Event 2024',
 				date: 'Veranstaltigsdatum',
 			},
 			from: 'Vo',
@@ -406,6 +412,7 @@ const resources: Resource = {
 			icon: 'Icon',
 			search: 'Sueche',
 			searchPlaceholder: 'Sueche...',
+			noData: 'Kei Date gfunde',
 			checklist: 'Checklist',
 			tryAgain: 'No einisch versueche',
 			welcomeMessage: 'Willkomme bi ti&m Veranstaltigsplanig.',
@@ -415,7 +422,7 @@ const resources: Resource = {
 			pageErrorOops: 'Ohje! Öppis isch schiefglaufe.',
 			pageErrorNotFound: 'Die Seite händ mir nöd gfunde.',
 			pageErrorNotAuthorized: 'Dir sind nöd berechtigt, die Seite z aaluege.',
-			pageErrorApiDown: 'Süsch wäge, üsi API isch im Momänt nöd verfiegbar.',
+			pageErrorApiDown: 'Süsch wäge, üsi API isch im Momänt nöd verfüegbar.',
 			pageErrorTeapot: 'Surfe macht durstig 🍵.',
 			page404NavigateHome: 'Mir gönd zrugg uf d Startsite',
 			// Meta-Daten
@@ -435,16 +442,18 @@ const resources: Resource = {
 			activity: 'Aktivität',
 			name: 'Name',
 			email: 'E-Mail',
-			clearValue: 'Lösch d Aswau',
+			clearValue: 'Lösch d Uswau',
 			phone: 'Telefonnummer',
-			personType: 'Persoonetyp',
+			personType: 'Personetyp',
 			employee: 'Mitarbeiter',
 			customer: 'Chund',
 			boatDriver: 'Bootsfahrer',
 			rider: 'Fahrer',
 			pagerNumber: 'Pager-Nummer',
+			manual: 'Manuell',
+			currentBooking: 'aktuelli Buechig',
 		},
-	}
+	},
 
 };
 

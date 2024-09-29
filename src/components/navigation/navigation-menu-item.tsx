@@ -90,7 +90,7 @@ const NavigationMenuItem = (props: MenuItemProperties) => {
 						isPending ? 'pending' : '',
 						isActive
 							? 'active bg-muted text-primary hover:bg-slate-200' + subNavClass
-							: 'text-muted-foreground',
+							: 'text-muted-foreground hover:bg-slate-200 hover:cursor-pointer',
 						isTransitioning ? 'transitioning' : '',
 					].join(' ') + linkClass
 				}>
