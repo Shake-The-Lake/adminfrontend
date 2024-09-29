@@ -41,7 +41,7 @@ const AddBookingPage: React.FC = () => {
 			const newPerson = await createPersonMutation.mutateAsync(personData);
 
 			const bookingData = {
-				isRider: data.isRider === 'RIDER',
+				isRider: data.isRider,
 				isManual: true,
 				pagerNumber: data.pagerNumber || 0,
 				personId: newPerson.id,
@@ -49,8 +49,6 @@ const AddBookingPage: React.FC = () => {
 			};
 
 			await createBookingMutation.mutateAsync(bookingData);
-
-			alert('Booking created successfully');
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
 			alert('Error creating booking');

@@ -106,14 +106,14 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						control={control}
 						render={({field}) => (
 							<StlSelect
-								value={field.value}
-								onValueChange={field.onChange}
+								value={field.value ? 'true' : 'false'}
+								onValueChange={(value) => field.onChange(value === 'true')}
 								list={[
-									{key: 'RIDER', label: 'Yes'},
-									{key: 'VIEWER', label: 'No'},
+									{key: 'true', label: 'Yes'},
+									{key: 'false', label: 'No'},
 								]}
-								getKey={(item) => item?.key}
-								getLabel={(item) => item?.label ?? ''}
+								getKey={(item) => item!.key}
+								getLabel={(item) => item!.label}
 							/>
 						)}
 					/>

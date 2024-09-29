@@ -20,15 +20,12 @@ export const defaultBooking: BookingDto = {
 };
 
 export type CombinedBookingFormDto = {
-	//person fields
 	firstName: string;
 	lastName: string;
 	emailAddress: string;
 	phoneNumber: string;
 	personType: 'EMPLOYEE' | 'BOAT_DRIVER' | 'CUSTOMER';
 	isRider: boolean;
-
-	//booking fields
 	isManual: boolean;
 	pagerNumber?: number;
 	timeSlotId: number | undefined;

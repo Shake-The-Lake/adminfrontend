@@ -61,7 +61,7 @@ export function useUpdateBooking(eventId: number, bookingId: number) {
 		mutationFn: async (updatedBooking: BookingDto) =>
 			updateBooking(bookingId, updatedBooking),
 
-		async onSuccess(data) {
+		onSuccess: async function (data) {
 			if (data) {
 				queryClient.setQueryData(
 					bookingKeys.all(eventId),

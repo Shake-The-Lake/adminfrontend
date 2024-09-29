@@ -13,7 +13,6 @@ import {useUpdatePerson} from '../../../queries/person';
 import {QueryClient} from '@tanstack/react-query';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {getBookingById} from '../../../services/booking-service';
-import {getPersonById} from '../../../services/person-service';
 import {useUpdateBooking} from '../../../queries/booking';
 
 export const editBookingLoader =
@@ -27,11 +26,7 @@ export const editBookingLoader =
 		}
 		const bookingDetails = await queryClient.ensureQueryData({
 			queryKey: ['bookingDetails', bookingId],
-			queryFn: async () => getBookingById(Number(bookingId)),
-		});
-		const personDetails = await queryClient.ensureQueryData({
-			queryKey: ['personDetails', bookingId],
-			queryFn: async () => getPersonById(bookingDetails.personId!),
+			queryFn: async () => getBookingById(Number(bookingId), 'person'),
 		});
 
 		if (!routeIds.bookingId) {
@@ -41,12 +36,11 @@ export const editBookingLoader =
 		return {
 			eventId,
 			bookingDetails,
-			personDetails,
 		};
 	};
 
 const EditBookingPage = () => {
-	const {eventId, bookingDetails, personDetails} = useLoaderData() as Awaited<
+	const {eventId, bookingDetails} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof editBookingLoader>>
 	>;
 
@@ -59,31 +53,34 @@ const EditBookingPage = () => {
 		number | undefined
 	>(undefined);
 
-	useEffect(() => {
-		if (bookingDetails) {
-			setSelectedTimeSlotId(bookingDetails.timeSlotId);
-		}
-	}, [bookingDetails]);
-
 	const updateBooking = useUpdateBooking(eventId, bookingDetails.id!);
 	const updatePerson = useUpdatePerson();
+
 	const methods = useForm({
-		defaultValues: {
-			...defaultCombinedBooking,
-			...bookingDetails,
-			pagerNumber: bookingDetails.pagerNumber,
-			firstName: personDetails.firstName,
-			lastName: personDetails.lastName,
-			emailAddress: personDetails.emailAddress,
-			personType: personDetails.personType,
-			isRider: bookingDetails?.isRider,
-		},
+		defaultValues: defaultCombinedBooking,
 	});
-	const {isDirty} = methods.formState;
+	const {reset, formState} = methods;
+	const {isDirty} = formState;
+
+	useEffect(() => {
+		if (bookingDetails) {
+			reset({
+				...defaultCombinedBooking,
+				...bookingDetails,
+				firstName: bookingDetails.person?.firstName ?? '',
+				lastName: bookingDetails.person?.lastName ?? '',
+				emailAddress: bookingDetails.person?.emailAddress ?? '',
+				phoneNumber: bookingDetails.person?.phoneNumber ?? '',
+				personType: bookingDetails.person?.personType ?? 'CUSTOMER',
+				isRider: bookingDetails.isRider,
+			});
+			setSelectedTimeSlotId(bookingDetails.timeSlotId);
+		}
+	}, [bookingDetails, reset]);
 
 	const onSubmit = async (data: CombinedBookingFormDto) => {
 		const personUpdateData = {
-			id: personDetails.id,
+			id: bookingDetails.person?.id,
 			firstName: data.firstName,
 			lastName: data.lastName,
 			emailAddress: data.emailAddress,
@@ -96,13 +93,12 @@ const EditBookingPage = () => {
 			isRider: data.isRider,
 			isManual: data.isManual,
 			pagerNumber: data.pagerNumber,
-			personId: personDetails.id,
+			personId: bookingDetails.person?.id,
 			timeSlotId: data.timeSlotId,
 		};
 
 		try {
 			await updatePerson.mutateAsync(personUpdateData);
-
 			await updateBooking.mutateAsync(bookingUpdateData);
 
 			navigate(`/event/${eventId}/bookings`);

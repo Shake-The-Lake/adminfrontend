@@ -50,7 +50,6 @@ export function useUpdatePerson() {
 		async onSuccess(data: PersonDto) {
 			if (data) {
 				queryClient.setQueryData(personKeys.detail(data.id!), data);
-
 				await queryClient.invalidateQueries({
 					queryKey: personKeys.all(),
 					exact: true,
