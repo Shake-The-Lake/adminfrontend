@@ -1,7 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Controller} from 'react-hook-form';
-import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
-import {Input} from '../ui/input';
 import StlFilter, {StlFilterOptions} from '../data-table/stl-filter';
 import {DataTable} from '../data-table/data-table';
 import {useTranslation} from 'react-i18next';
@@ -112,7 +109,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 		<>
 			<div className="w-full mt-4 mb-4 flex justify-center">
 				<div className="flex flex-col w-full">
-					<div className="w-full">
+					<div>
 						<StlFilter
 							options={
 								StlFilterOptions.ActivityType |
@@ -148,27 +145,6 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					</div>
 				</div>
 			</div>
-
-			<FormItem>
-				<FormLabel>Pager Number</FormLabel>
-				<FormControl>
-					<Controller
-						name="pagerNumber"
-						control={control}
-						render={({field}) => (
-							<Input
-								{...field}
-								placeholder="Pager Number"
-								type="number"
-								min={0}
-							/>
-						)}
-					/>
-				</FormControl>
-				{errors.pagerNumber && (
-					<FormMessage>{errors.pagerNumber.message}</FormMessage>
-				)}
-			</FormItem>
 		</>
 	);
 };

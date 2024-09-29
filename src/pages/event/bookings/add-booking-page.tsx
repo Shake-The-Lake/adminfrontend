@@ -70,7 +70,7 @@ const AddBookingPage: React.FC = () => {
 							setSelectedTimeSlotId={setSelectedTimeSlotId}
 						/>
 					</div>
-					<div>
+					<div className="mt-20">
 						<PersonForm
 							control={methods.control}
 							errors={methods.formState.errors}

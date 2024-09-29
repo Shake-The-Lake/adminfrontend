@@ -120,6 +120,27 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 				</FormControl>
 				{errors.isRider && <FormMessage>{errors.isRider.message}</FormMessage>}
 			</FormItem>
+
+			<FormItem>
+				<FormLabel>Pager Number</FormLabel>
+				<FormControl>
+					<Controller
+						name="pagerNumber"
+						control={control}
+						render={({field}) => (
+							<Input
+								{...field}
+								placeholder="Pager Number"
+								type="number"
+								min={0}
+							/>
+						)}
+					/>
+				</FormControl>
+				{errors.pagerNumber && (
+					<FormMessage>{errors.pagerNumber.message}</FormMessage>
+				)}
+			</FormItem>
 		</>
 	);
 };
