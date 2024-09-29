@@ -4,11 +4,13 @@ import {ch, de, en} from '../../constants';
 import {ToggleGroup, ToggleGroupItem} from '../ui/toggle-group';
 import {useTranslation} from 'react-i18next';
 
+const SelectedLanguageStorageKey = 'selectedLanguage';
+
 const LanguageSelector: React.FC = () => {
 	const {i18n, t} = useTranslation();
 
 	const [language, setLanguage] = useState(
-		() => localStorage.getItem('selectedLanguage') ?? en,
+		() => localStorage.getItem(SelectedLanguageStorageKey) ?? en,
 	);
 
 	useEffect(() => {
@@ -18,7 +20,7 @@ const LanguageSelector: React.FC = () => {
 
 	const handleLanguageChange = async (lang: string) => {
 		setLanguage(lang);
-		localStorage.setItem('selectedLanguage', lang);
+		localStorage.setItem(SelectedLanguageStorageKey, lang);
 		await i18n.changeLanguage(lang);
 	};
 
