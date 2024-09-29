@@ -1,6 +1,6 @@
-import i18n, { type Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { de, en, languages } from '../../constants';
+import i18n, {type Resource} from 'i18next';
+import {initReactI18next} from 'react-i18next';
+import {en, languages} from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -9,7 +9,8 @@ const resources: Resource = {
 				basicData: 'Basic Data',
 				enter: 'Enter the basic data for the event',
 				qrCodes: 'QR Codes',
-				useQrCodes: 'Use these QR Codes to enable customers and employees to enter the event',
+				useQrCodes:
+					'Use these QR Codes to enable customers and employees to enter the event',
 				employeeQrCode: 'Employee QR Code',
 				errorLoadingQrCode: 'Error while loading QR-Code...',
 				customerQrCode: 'Customer QR Code',
@@ -23,13 +24,15 @@ const resources: Resource = {
 				toggleSwissGerman: 'Switch to Swiss German',
 			},
 			activityType: {
-				infoText: 'Enter English content and content that does not belong to a specific language here.',
+				infoText:
+					'Enter English content and content that does not belong to a specific language here.',
 				errorLoadingActivityType: 'Error while loading activity type...',
 				title: 'Activity Type',
 				noActivityTypes: 'No activity types found',
 				failedToLoadActivityTypes: 'Failed to load activity types',
 				createActivityType: 'Create Activity Type',
-				description: 'Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language.',
+				description:
+					'Parts of this entity will eventually be displayed to the end user, therefore certain fields need to be filled out in multiple languages. Simply change the tab to edit another language.',
 				triggerLabel: 'Add new Activity Type',
 				nameGerman: 'Name in German',
 				nameEnglish: 'Name in English',
@@ -40,9 +43,10 @@ const resources: Resource = {
 				checklistEnglish: 'Checklist in English',
 				checklistSwissGerman: 'Checklist in Swiss German',
 				nameSwissGerman: 'Name in Swiss German',
-				descriptionGerman: 'Enter German content and content that does not belong to a specific language here.',
-				descriptionSwissGerman: 'Enter Swiss German content and content that does not belong to a specific language here.',
-
+				descriptionGerman:
+					'Enter German content and content that does not belong to a specific language here.',
+				descriptionSwissGerman:
+					'Enter Swiss German content and content that does not belong to a specific language here.',
 			},
 			boat: {
 				errorLoadingBoat: 'Error while loading boat...',
@@ -80,7 +84,8 @@ const resources: Resource = {
 				description: 'Add a new booking by entering the necessary data.',
 				triggerLabel: 'Add new booking',
 				person: 'Person Data',
-				enterContact: 'Enter the contact data of the person wanting to do the booking.',
+				enterContact:
+					'Enter the contact data of the person wanting to do the booking.',
 				edit: 'Edit Booking',
 				descriptionEdit: 'Edit bookings for the boat',
 				triggerLabelEdit: 'Edit booking',
@@ -88,6 +93,7 @@ const resources: Resource = {
 				success: 'Booking was successful',
 				fail: 'Failed to submit booking: ',
 				noData: 'No data found',
+				updateFailed: 'Error while trying to update your booking',
 			},
 			login: {
 				username: 'Username',
@@ -97,13 +103,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Schedule',
-				addBoat: 'Add a boat to view the schedule for its time slots.'
+				addBoat: 'Add a boat to view the schedule for its time slots.',
 			},
 			event: {
 				create: 'Create Event',
 				description: 'Add a new event by entering the basic meta data needed.',
 				triggerLabel: 'Add new event',
-				placeholder: "Sommer Event 2024",
+				placeholder: 'Sommer Event 2024',
 				date: 'Event Date',
 			},
 			from: 'From',
@@ -121,10 +127,10 @@ const resources: Resource = {
 			loading: 'Loading...',
 			pageErrorOops: 'Oops! Something went wrong.',
 			pageErrorNotFound: 'This page could not be found.',
-			pageErrorNotAuthorized: 'You aren\'t authorized to see this.',
+			pageErrorNotAuthorized: "You aren't authorized to see this.",
 			pageErrorApiDown: 'Looks like our API is down.',
 			pageErrorTeapot: 'Surfen macht durstig 🍵.',
-			page404NavigateHome: 'Let\'s get you back',
+			page404NavigateHome: "Let's get you back",
 			// Meta Data
 			appName: 'Shake The Lake Admin App',
 			shakeTheLake: 'Shake The Lake',
@@ -157,7 +163,8 @@ const resources: Resource = {
 				basicData: 'Grunddaten',
 				enter: 'Geben Sie die Grunddaten für die Veranstaltung ein',
 				qrCodes: 'QR-Codes',
-				useQrCodes: 'Verwenden Sie diese QR-Codes, um Kunden und Mitarbeitern den Zutritt zur Veranstaltung zu ermöglichen',
+				useQrCodes:
+					'Verwenden Sie diese QR-Codes, um Kunden und Mitarbeitern den Zutritt zur Veranstaltung zu ermöglichen',
 				employeeQrCode: 'Mitarbeiter-QR-Code',
 				errorLoadingQrCode: 'Fehler beim Laden des QR-Codes...',
 				customerQrCode: 'Kunden-QR-Code',
@@ -171,13 +178,15 @@ const resources: Resource = {
 				toggleSwissGerman: 'Zu Schweizerdeutsch wechseln',
 			},
 			activityType: {
-				infoText: 'Geben Sie hier englische Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
+				infoText:
+					'Geben Sie hier englische Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
 				errorLoadingActivityType: 'Fehler beim Laden des Aktivitätstyps...',
 				title: 'Aktivitätstyp',
 				noActivityTypes: 'Keine Aktivitätstypen gefunden',
 				failedToLoadActivityTypes: 'Fehler beim Laden der Aktivitätstypen',
 				createActivityType: 'Aktivitätstyp erstellen',
-				description: 'Teile dieses Elements werden dem Endbenutzer angezeigt, daher müssen bestimmte Felder in mehreren Sprachen ausgefüllt werden. Wechseln Sie einfach den Tab, um eine andere Sprache zu bearbeiten.',
+				description:
+					'Teile dieses Elements werden dem Endbenutzer angezeigt, daher müssen bestimmte Felder in mehreren Sprachen ausgefüllt werden. Wechseln Sie einfach den Tab, um eine andere Sprache zu bearbeiten.',
 				triggerLabel: 'Neuen Aktivitätstyp hinzufügen',
 				nameEnglish: 'Name auf Englisch',
 				nameGerman: 'Name auf Deutsch',
@@ -188,15 +197,18 @@ const resources: Resource = {
 				checklistEnglish: 'Checkliste auf Englisch',
 				checklistSwissGerman: 'Checkliste auf Schweizerdeutsch',
 				nameSwissGerman: 'Name auf Schweizerdeutsch',
-				descriptionGerman: 'Geben Sie hier deutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
-				descriptionSwissGerman: 'Geben Sie hier schweizerdeutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
+				descriptionGerman:
+					'Geben Sie hier deutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
+				descriptionSwissGerman:
+					'Geben Sie hier schweizerdeutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
 			},
 			boat: {
 				errorLoadingBoat: 'Fehler beim Laden des Boots...',
 				title: 'Boot',
 				noBoatsYet: 'Noch keine Boote',
 				create: 'Boot erstellen',
-				description: 'Fügen Sie ein neues Boot hinzu, indem Sie die erforderlichen Daten eingeben.',
+				description:
+					'Fügen Sie ein neues Boot hinzu, indem Sie die erforderlichen Daten eingeben.',
 				triggerLabel: 'Neues Boot hinzufügen',
 				name: 'Bootsname',
 				type: 'Bootstyp',
@@ -210,7 +222,8 @@ const resources: Resource = {
 				title: 'Zeitfenster',
 				noTimeSlotsYet: 'Noch keine Zeitfenster',
 				create: 'Zeitfenster erstellen',
-				description: 'Fügen Sie ein neues Zeitfenster hinzu, indem Sie die erforderlichen Daten eingeben.',
+				description:
+					'Fügen Sie ein neues Zeitfenster hinzu, indem Sie die erforderlichen Daten eingeben.',
 				triggerLabel: 'Neues Zeitfenster hinzufügen',
 				edit: 'Zeitfenster bearbeiten',
 				descriptionEdit: 'Bearbeiten Sie Zeitfenster für das Boot',
@@ -224,10 +237,12 @@ const resources: Resource = {
 				create: 'Buchung erstellen',
 				viewerSeats: 'Sitzplätze für Zuschauer',
 				riderSeats: 'Sitzplätze für Fahrer',
-				description: 'Fügen Sie eine neue Buchung hinzu, indem Sie die erforderlichen Daten eingeben.',
+				description:
+					'Fügen Sie eine neue Buchung hinzu, indem Sie die erforderlichen Daten eingeben.',
 				triggerLabel: 'Neue Buchung hinzufügen',
 				person: 'Personendaten',
-				enterContact: 'Geben Sie die Kontaktdaten der Person ein, die die Buchung durchführen möchte.',
+				enterContact:
+					'Geben Sie die Kontaktdaten der Person ein, die die Buchung durchführen möchte.',
 				edit: 'Buchung bearbeiten',
 				descriptionEdit: 'Buchungen für das Boot bearbeiten',
 				triggerLabelEdit: 'Buchung bearbeiten',
@@ -235,6 +250,7 @@ const resources: Resource = {
 				success: 'Die Buchung war erfolgreich',
 				fail: 'Fehler beim Absenden der Buchung: ',
 				noData: 'Keine Daten gefunden',
+				updateFailed: 'Fehler beim aktualisieren deiner Buchung',
 			},
 			login: {
 				username: 'Benutzername',
@@ -244,13 +260,15 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Zeitplan',
-				addBoat: 'Fügen Sie ein Boot hinzu, um den Zeitplan für seine Zeitfenster anzuzeigen.'
+				addBoat:
+					'Fügen Sie ein Boot hinzu, um den Zeitplan für seine Zeitfenster anzuzeigen.',
 			},
 			event: {
 				create: 'Veranstaltung erstellen',
-				description: 'Fügen Sie eine neue Veranstaltung hinzu, indem Sie die erforderlichen Metadaten eingeben.',
+				description:
+					'Fügen Sie eine neue Veranstaltung hinzu, indem Sie die erforderlichen Metadaten eingeben.',
 				triggerLabel: 'Neue Veranstaltung hinzufügen',
-				placeholder: "Sommer-Event 2024",
+				placeholder: 'Sommer-Event 2024',
 				date: 'Veranstaltungsdatum',
 			},
 			from: 'Von',
@@ -269,7 +287,8 @@ const resources: Resource = {
 			pageErrorOops: 'Ups! Da ist etwas schiefgelaufen.',
 			pageErrorNotFound: 'Diese Seite konnte nicht gefunden werden.',
 			pageErrorNotAuthorized: 'Sie sind nicht berechtigt, dies zu sehen.',
-			pageErrorApiDown: 'Es sieht so aus, als wäre unsere API nicht erreichbar.',
+			pageErrorApiDown:
+				'Es sieht so aus, als wäre unsere API nicht erreichbar.',
 			pageErrorTeapot: 'Surfen macht durstig 🍵.',
 			page404NavigateHome: 'Lassen Sie uns zurückgehen',
 			// Meta-Daten
@@ -304,7 +323,8 @@ const resources: Resource = {
 				basicData: 'Grunddate',
 				enter: 'Gib d Grunddate für d Veranstaltig ii',
 				qrCodes: 'QR-Codes',
-				useQrCodes: 'Verwänd die QR-Codes, zum d Chunde und Mitarbeite de Zutritt zur Veranstaltig z ermöglichä',
+				useQrCodes:
+					'Verwänd die QR-Codes, zum d Chunde und Mitarbeite de Zutritt zur Veranstaltig z ermöglichä',
 				employeeQrCode: 'Mitarbeiter-QR-Code',
 				errorLoadingQrCode: 'Fähler bim Lade vom QR-Code...',
 				customerQrCode: 'Chunde-QR-Code',
@@ -318,13 +338,15 @@ const resources: Resource = {
 				toggleSwissGerman: 'Uf Schwiizerdütsch wächsle',
 			},
 			activityType: {
-				infoText: 'Gib do Englischi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
+				infoText:
+					'Gib do Englischi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
 				errorLoadingActivityType: 'Fähler bim Lade vom Aktivitätstyp...',
 				title: 'Aktivitätstyp',
 				noActivityTypes: 'Kei Aktivitätstyp gfunde',
 				failedToLoadActivityTypes: 'Aktivitätstyp chönd nöd glade werde',
 				createActivityType: 'Aktivitätstyp erstelle',
-				description: 'Teili vo däm Element wärde am Enduser aazeigt, drum muesse gewüssi Fälder in mehri Sproche uusgfällt werde. Wechsle d Tab, zum en anderi Sproch z bearbeite.',
+				description:
+					'Teili vo däm Element wärde am Enduser aazeigt, drum muesse gewüssi Fälder in mehri Sproche uusgfällt werde. Wechsle d Tab, zum en anderi Sproch z bearbeite.',
 				triggerLabel: 'Neui Aktivitätstyp hinzfüege',
 				nameEnglish: 'Name uf Englisch',
 				nameGerman: 'Name uf Dütsch',
@@ -335,8 +357,10 @@ const resources: Resource = {
 				checklistEnglish: 'Checklist uf Englisch',
 				checklistSwissGerman: 'Checklist uf Schwiizerdütsch',
 				nameSwissGerman: 'Name uf Schwiizerdütsch',
-				descriptionGerman: 'Gib do dütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
-				descriptionSwissGerman: 'Gib do schwiizerdütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
+				descriptionGerman:
+					'Gib do dütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
+				descriptionSwissGerman:
+					'Gib do schwiizerdütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
 			},
 			boat: {
 				errorLoadingBoat: 'Fähler bim Lade vom Boot...',
@@ -357,7 +381,8 @@ const resources: Resource = {
 				title: 'Ziitfenster',
 				noTimeSlotsYet: 'No kei Ziitfenster',
 				create: 'Ziitfenster erstelle',
-				description: 'Füeg es neus Ziitfenster hinzu, indem d nöötige Date iigähsch.',
+				description:
+					'Füeg es neus Ziitfenster hinzu, indem d nöötige Date iigähsch.',
 				triggerLabel: 'Neus Ziitfenster hinzfüege',
 				edit: 'Ziitfenster bearbeite',
 				descriptionEdit: 'Bearbeite d Ziitfenster für s Boot',
@@ -371,10 +396,12 @@ const resources: Resource = {
 				create: 'Buechig erstelle',
 				viewerSeats: 'Sitzplätz für Zuächer',
 				riderSeats: 'Sitzplätz für Fahrer',
-				description: 'Füeg e neui Buechig hinzu, indem d nöötige Date iigähsch.',
+				description:
+					'Füeg e neui Buechig hinzu, indem d nöötige Date iigähsch.',
 				triggerLabel: 'Neui Buechig hinzfüege',
 				person: 'Persöndliche Date',
-				enterContact: 'Gib d Kontaktdate vo de Persoon ii, wo d Buechig mache will.',
+				enterContact:
+					'Gib d Kontaktdate vo de Persoon ii, wo d Buechig mache will.',
 				edit: 'Buechig bearbeite',
 				descriptionEdit: 'Bearbeite d Buechige für s Boot',
 				triggerLabelEdit: 'Buechig bearbeite',
@@ -382,6 +409,7 @@ const resources: Resource = {
 				success: 'D Buechig isch erfolgrych gsii',
 				fail: 'Buechig gönd nöd: ',
 				noData: 'Kei Date gfunde',
+				updateFailed: 'Fähler bim aktualisierä vo dirä buächig',
 			},
 			login: {
 				username: 'Benutzername',
@@ -391,13 +419,15 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Ziitplan',
-				addBoat: 'Füeg es Boot hinzu, zum dr Ziitplan für d Ziitfenster aazzeige.'
+				addBoat:
+					'Füeg es Boot hinzu, zum dr Ziitplan für d Ziitfenster aazzeige.',
 			},
 			event: {
 				create: 'Veranstaltig erstelle',
-				description: 'Füeg e neui Veranstaltig hinzu, indem d nöötige Metadate iigähsch.',
+				description:
+					'Füeg e neui Veranstaltig hinzu, indem d nöötige Metadate iigähsch.',
 				triggerLabel: 'Neui Veranstaltig hinzfüege',
-				placeholder: "Summer Event 2024",
+				placeholder: 'Summer Event 2024',
 				date: 'Veranstaltigsdatum',
 			},
 			from: 'Vo',
@@ -444,8 +474,7 @@ const resources: Resource = {
 			rider: 'Fahrer',
 			pagerNumber: 'Pager-Nummer',
 		},
-	}
-
+	},
 };
 
 i18n

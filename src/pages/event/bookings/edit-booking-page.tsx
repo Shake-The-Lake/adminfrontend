@@ -14,6 +14,7 @@ import {QueryClient} from '@tanstack/react-query';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {getBookingById} from '../../../services/booking-service';
 import {useUpdateBooking} from '../../../queries/booking';
+import {toast} from 'sonner';
 
 export const editBookingLoader =
 	(queryClient: QueryClient) =>
@@ -71,6 +72,7 @@ const EditBookingPage = () => {
 				phoneNumber: bookingDetails.person?.phoneNumber ?? '',
 				personType: bookingDetails.person?.personType ?? 'CUSTOMER',
 				isRider: bookingDetails.isRider,
+				timeSlotId: bookingDetails.timeSlotId,
 			});
 			setSelectedTimeSlotId(bookingDetails.timeSlotId);
 		}
@@ -99,6 +101,9 @@ const EditBookingPage = () => {
 			await updateBooking.mutateAsync(bookingUpdateData);
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
+			toast.error(t('booking.updateFailed'), {
+				description: t('booking.updateFailed'),
+			});
 			console.error('Error updating booking or person:', error);
 		}
 	};
@@ -128,7 +133,7 @@ const EditBookingPage = () => {
 						<Button type="button" variant="secondary" onClick={handleCancel}>
 							{t('cancel')}
 						</Button>
-						<Button type="submit" className="ml-4" disabled={!isDirty}>
+						<Button type="submit" className="ml-4" /*disabled={!isDirty}*/>
 							{t('update')}
 						</Button>
 					</div>
