@@ -2,7 +2,7 @@ import {type ActivityTypeDto} from './activity-type.model';
 import {type BoatDto} from './boat.model';
 
 export type EventDto = {
-	id?: number;
+	id: number;
 	title: string;
 	description: string;
 	// Location: Location; not part of MVP

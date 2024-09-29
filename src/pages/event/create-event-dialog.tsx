@@ -4,7 +4,7 @@ import StlDialog from '../../components/dialog/stl-dialog';
 import EventForm from '../../components/forms/event';
 import {useCreateEvent} from '../../queries/event';
 import {useNavigate} from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const CreateEventDialog: React.FC = () => {
 	const navigate = useNavigate();

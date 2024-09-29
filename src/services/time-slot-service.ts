@@ -14,19 +14,17 @@ export const getSortedTimeSlotsFromArray = (
 
 	return timeSlot
 		? sortBy(timeSlot, [
-				'fromTime',
-				'untilTime',
-				(t) =>
-					getTranslation(i18n.language, t.activityType?.name).toLowerCase(),
-			])
+			'fromTime',
+			'untilTime',
+			(t) =>
+				getTranslation(i18n.language, t.activityType?.name).toLowerCase(),
+		])
 		: [];
 };
 
-export const getSortedTimeSlots = (timeSlot: Set<TimeSlotDto> | undefined) => {
-	return timeSlot
-		? new Set<TimeSlotDto>(getSortedTimeSlotsFromArray(Array.from(timeSlot)))
-		: new Set<TimeSlotDto>();
-};
+export const getSortedTimeSlots = (timeSlot: Set<TimeSlotDto> | undefined) => timeSlot
+	? new Set<TimeSlotDto>(getSortedTimeSlotsFromArray(Array.from(timeSlot)))
+	: new Set<TimeSlotDto>();
 
 export const getAllTimeSlotsFromEvent = async (
 	eventId: number,

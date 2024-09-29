@@ -9,11 +9,11 @@ import axiosInstance from './axiosInstance';
 export const getDefaultSortedBoookings = (bookings?: BookingSearchDto[]) =>
 	bookings
 		? sortBy(bookings, [
-				'timeSlot.fromTime',
-				(b) => b.boat.name.toLowerCase(),
-				(b) => b.person.lastName.toLowerCase(),
-				(b) => b.person.firstName.toLowerCase(),
-			])
+			'timeSlot.fromTime',
+			(b) => b.boat.name.toLowerCase(),
+			(b) => b.person.lastName.toLowerCase(),
+			(b) => b.person.firstName.toLowerCase(),
+		])
 		: [];
 
 export const getBookingsByEventId = async (

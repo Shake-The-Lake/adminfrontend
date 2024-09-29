@@ -97,8 +97,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 			</div>
 
 			{/* Wrapper div to enable overflow */}
-			<div className="overflow-x-auto max-w-full">
-				<Table className="mt-5 min-w-max">
+			<div className="overflow-x-auto my-5 max-w-full">
+				<Table className=" min-w-max">
 					<TableHeader>
 						<TableRow>
 							<TableHead>{t('from')}</TableHead>
@@ -109,25 +109,35 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{timeSlots?.map((slot, index) => (
-							<TableRow key={index} className="w-full justify-between">
-								<TableCell>{getDisplayTimeFromBackend(slot?.fromTime)}</TableCell>
-								<TableCell>
-									{getDisplayTimeFromBackend(slot?.untilTime)}
+						{timeSlots?.length ? (
+							timeSlots?.map((slot, index) => (
+								<TableRow key={index} className="w-full justify-between">
+									<TableCell>
+										{getDisplayTimeFromBackend(slot?.fromTime)}
+									</TableCell>
+									<TableCell>
+										{getDisplayTimeFromBackend(slot?.untilTime)}
+									</TableCell>
+									<TableCell>
+										{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
+									</TableCell>
+									<TableCell>
+										{getTranslation(i18n.language, slot.activityType?.name)}
+									</TableCell>
+									<EditTimeSlotTableCell
+										boat={boat}
+										timeSlot={slot}
+										eventId={eventId}
+										deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={5} className="h-24 text-center">
+									{t('timeSlot.noTimeSlotsYet')}
 								</TableCell>
-								<TableCell>
-									{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
-								</TableCell>
-								<TableCell>
-									{getTranslation(i18n.language, slot.activityType?.name)}
-								</TableCell>
-								<EditTimeSlotTableCell
-									boat={boat}
-									timeSlot={slot}
-									eventId={eventId}
-									deleteMutation={deleteMutation}></EditTimeSlotTableCell>
 							</TableRow>
-						))}
+						)}
 					</TableBody>
 				</Table>
 			</div>
