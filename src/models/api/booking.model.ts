@@ -26,7 +26,7 @@ export type CombinedBookingFormDto = {
 	emailAddress: string;
 	phoneNumber: string;
 	personType: 'EMPLOYEE' | 'BOAT_DRIVER' | 'CUSTOMER';
-	isRider: 'RIDER' | 'VIEWER';
+	isRider: boolean;
 
 	//booking fields
 	isManual: boolean;
@@ -40,7 +40,7 @@ export const defaultCombinedBooking: CombinedBookingFormDto = {
 	emailAddress: '',
 	phoneNumber: '',
 	personType: 'CUSTOMER',
-	isRider: 'VIEWER',
+	isRider: true,
 	isManual: true,
 	pagerNumber: undefined,
 	timeSlotId: undefined,

@@ -14,6 +14,7 @@ import {QueryClient} from '@tanstack/react-query';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {getBookingById} from '../../../services/booking-service';
 import {getPersonById} from '../../../services/person-service';
+import {useUpdateBooking} from '../../../queries/booking';
 
 export const editBookingLoader =
 	(queryClient: QueryClient) =>
@@ -64,7 +65,7 @@ const EditBookingPage = () => {
 		}
 	}, [bookingDetails]);
 
-	//const updateBooking = useUpdateBooking();
+	const updateBooking = useUpdateBooking(bookingDetails.id!);
 	const updatePerson = useUpdatePerson();
 	const methods = useForm({
 		defaultValues: {
@@ -75,19 +76,45 @@ const EditBookingPage = () => {
 			lastName: personDetails.lastName,
 			emailAddress: personDetails.emailAddress,
 			personType: personDetails.personType,
-			isRider: bookingDetails?.isRider ? 'RIDER' : 'VIEWER',
+			isRider: bookingDetails?.isRider,
 		},
 	});
 
 	const onSubmit = async (data: CombinedBookingFormDto) => {
-		return null;
+		const personUpdateData = {
+			id: personDetails.id,
+			firstName: data.firstName,
+			lastName: data.lastName,
+			emailAddress: data.emailAddress,
+			phoneNumber: data.phoneNumber,
+			personType: data.personType,
+		};
+
+		const bookingUpdateData = {
+			id: bookingDetails.id,
+			isRider: data.isRider,
+			isManual: data.isManual,
+			pagerNumber: data.pagerNumber,
+			personId: personDetails.id,
+			timeSlotId: data.timeSlotId,
+		};
+
+		try {
+			await updatePerson.mutateAsync(personUpdateData);
+
+			await updateBooking.mutateAsync(bookingUpdateData);
+
+			navigate(`/event/${eventId}/bookings`);
+		} catch (error) {
+			console.error('Error updating booking or person:', error);
+		}
 	};
 
 	return (
 		<div>
 			<h1>Edit Booking</h1>
 			<FormProvider {...methods}>
-				<form /*onSubmit={methods.handleSubmit(onSubmit)}*/>
+				<form onSubmit={methods.handleSubmit(onSubmit)}>
 					<div className="mt-6">
 						<h3>{t('timeSlot.title')}</h3>
 						<BookingForm
