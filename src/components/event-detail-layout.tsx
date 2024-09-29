@@ -14,22 +14,22 @@ import {extractTypedInfoFromRouteParams} from '../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			eventDetailOptions(routeIds.eventId, true),
-		);
+			await queryClient.ensureQueryData(
+				eventDetailOptions(routeIds.eventId, true),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const EventDetailLayout: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event} = useQuery(eventDetailOptions(Number(eventId), true));
 	const {i18n} = useTranslation();

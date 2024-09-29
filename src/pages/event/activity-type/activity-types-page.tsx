@@ -26,21 +26,21 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			activityTypesOptions(routeIds.eventId, queryClient),
-		);
-		return routeIds;
-	};
+			await queryClient.ensureQueryData(
+				activityTypesOptions(routeIds.eventId, queryClient),
+			);
+			return routeIds;
+		};
 
 const ActivityTypesPage = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: activityTypes, isPending, error} = useGetActivityTypes(eventId);
 

@@ -1,5 +1,5 @@
-import { type ActivityTypeDto } from './activity-type.model';
-import { type BoatDto } from './boat.model';
+import {type ActivityTypeDto} from './activity-type.model';
+import {type BoatDto} from './boat.model';
 
 export type EventDto = {
 	id: number;

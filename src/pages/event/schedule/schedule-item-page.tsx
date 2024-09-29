@@ -27,22 +27,22 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.timeSlotId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.timeSlotId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			timeslotDetailOptions(Number(params.timeSlotId)),
-		);
+			await queryClient.ensureQueryData(
+				timeslotDetailOptions(Number(params.timeSlotId)),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const ScheduleItemPage: React.FC = () => {
 	const {timeSlotId, eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();

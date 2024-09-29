@@ -1,6 +1,6 @@
-import i18n, { type Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { de, en, languages } from '../../constants';
+import i18n, {type Resource} from 'i18next';
+import {initReactI18next} from 'react-i18next';
+import {en, languages} from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -98,13 +98,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Schedule',
-				addBoat: 'Add a boat to view the schedule for its time slots.'
+				addBoat: 'Add a boat to view the schedule for its time slots.',
 			},
 			event: {
 				create: 'Create Event',
 				description: 'Add a new event by entering the basic meta data needed.',
 				triggerLabel: 'Add new event',
-				placeholder: "Sommer Event 2024",
+				placeholder: 'Sommer Event 2024',
 				date: 'Event Date',
 			},
 			from: 'From',
@@ -246,13 +246,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Zeitplan',
-				addBoat: 'Fügen Sie ein Boot hinzu, um den Zeitplan für seine Zeitfenster anzuzeigen.'
+				addBoat: 'Fügen Sie ein Boot hinzu, um den Zeitplan für seine Zeitfenster anzuzeigen.',
 			},
 			event: {
 				create: 'Veranstaltung erstellen',
 				description: 'Fügen Sie eine neue Veranstaltung hinzu, indem Sie die erforderlichen Metadaten eingeben.',
 				triggerLabel: 'Neue Veranstaltung hinzufügen',
-				placeholder: "Sommer-Event 2024",
+				placeholder: 'Sommer-Event 2024',
 				date: 'Veranstaltungsdatum',
 			},
 			from: 'Von',
@@ -395,13 +395,13 @@ const resources: Resource = {
 			},
 			schedule: {
 				title: 'Ziitplan',
-				addBoat: 'Füeg es Boot hinzu, zum dr Ziitplan für d Ziitfenster aazzeige.'
+				addBoat: 'Füeg es Boot hinzu, zum dr Ziitplan für d Ziitfenster aazzeige.',
 			},
 			event: {
 				create: 'Veranstaltig erstelle',
 				description: 'Füeg e neui Veranstaltig hinzu, indem d nöötige Metadate iigähsch.',
 				triggerLabel: 'Neui Veranstaltig hinzfüege',
-				placeholder: "Summer Event 2024",
+				placeholder: 'Summer Event 2024',
 				date: 'Veranstaltigsdatum',
 			},
 			from: 'Vo',
@@ -450,7 +450,7 @@ const resources: Resource = {
 			manual: 'Manuell',
 			currentBooking: 'Buechige',
 		},
-	}
+	},
 
 };
 

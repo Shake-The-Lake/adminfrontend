@@ -23,26 +23,26 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			bookingsSearchOptions(
-				routeIds.eventId,
-				defaultBookingSearchParams,
-				queryClient,
-			),
-		);
+			await queryClient.ensureQueryData(
+				bookingsSearchOptions(
+					routeIds.eventId,
+					defaultBookingSearchParams,
+					queryClient,
+				),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const BookingOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 	const {t} = useTranslation();

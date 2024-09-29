@@ -15,7 +15,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '../ui/table';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;

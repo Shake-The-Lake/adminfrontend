@@ -3,7 +3,6 @@ import {useTranslation} from 'react-i18next';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
-	useNavigate,
 } from 'react-router-dom';
 import {defaultBoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
@@ -23,22 +22,22 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			boatsOptions(routeIds.eventId, queryClient),
-		);
+			await queryClient.ensureQueryData(
+				boatsOptions(routeIds.eventId, queryClient),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const BoatsOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: boats, isPending} = useGetBoats(eventId);
 
@@ -68,7 +67,7 @@ const BoatsOverview: React.FC = () => {
 				</div>
 				{boats?.length === 0 && (
 					<div className="w-full py-5">
-						<p className="text-lg">{t('No boats yet.')}</p>
+						<p className="text-lg">{t('noBoatsYet')}</p>
 					</div>
 				)}
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">

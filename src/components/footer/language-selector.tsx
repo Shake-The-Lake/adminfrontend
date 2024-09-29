@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Separator } from '../ui/separator';
-import { ch, de, en } from '../../constants';
-import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {Separator} from '../ui/separator';
+import {ch, de, en} from '../../constants';
+import {ToggleGroup, ToggleGroupItem} from '../ui/toggle-group';
+import {useTranslation} from 'react-i18next';
 
 const LanguageSelector: React.FC = () => {
-  const { i18n, t } = useTranslation();
-  
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('selectedLanguage') || en;
-  });
+	const {i18n, t} = useTranslation();
 
-  useEffect(() => {
-    i18n.changeLanguage(language);
-  }, [language, i18n]);
+	const [language, setLanguage] = useState(
+		() => localStorage.getItem('selectedLanguage') ?? en,
+	);
 
-  const handleLanguageChange = async (lang: string) => {
-    setLanguage(lang);
-    localStorage.setItem('selectedLanguage', lang);
-    await i18n.changeLanguage(lang);
-  };
+	useEffect(() => {
+		const changeLanguage = async () => i18n.changeLanguage(language);
+		changeLanguage().catch(console.error);
+	}, [language, i18n]);
 
-  return (
-		<><ToggleGroup
+	const handleLanguageChange = async (lang: string) => {
+		setLanguage(lang);
+		localStorage.setItem('selectedLanguage', lang);
+		await i18n.changeLanguage(lang);
+	};
+
+	return (
+		<ToggleGroup
 			type="single"
 			value={language}
 			onValueChange={handleLanguageChange}
@@ -36,12 +37,13 @@ const LanguageSelector: React.FC = () => {
 				<div className="uppercase">en</div>
 			</ToggleGroupItem>
 			<Separator orientation="vertical" className="h-5" />
-			<ToggleGroupItem value={ch} aria-label={t('langSwitcher.toggleSwissGerman')}>
+			<ToggleGroupItem
+				value={ch}
+				aria-label={t('langSwitcher.toggleSwissGerman')}>
 				<div className="uppercase">ch</div>
 			</ToggleGroupItem>
 		</ToggleGroup>
-		</>
-  );
+	);
 };
 
 export default LanguageSelector;

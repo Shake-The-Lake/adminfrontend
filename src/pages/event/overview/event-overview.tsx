@@ -15,26 +15,26 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
 			// Const navigate = useNavigate();
-			throw new Error('No event ID provided');
+				throw new Error('No event ID provided');
 			// Navigate('/'); // todo! see which makes more sense
-		}
+			}
 
-		await queryClient.ensureQueryData(
-			eventDetailOptions(routeIds.eventId, false),
-		);
+			await queryClient.ensureQueryData(
+				eventDetailOptions(routeIds.eventId, false),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const EventOverview: React.FC = () => {
 	const queryClient = useQueryClient();
 	const {t} = useTranslation();
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event, isPending} = useEventDetail(queryClient, eventId, false);
 

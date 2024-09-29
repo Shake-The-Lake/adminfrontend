@@ -1,7 +1,7 @@
 import React from 'react';
 import {ArrowRight, Trash} from 'lucide-react';
 
-import {Link, LinkProps} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {
 	Card,
 	CardContent,

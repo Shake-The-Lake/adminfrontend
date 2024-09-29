@@ -13,22 +13,22 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			boatsOptions(routeIds.eventId, queryClient),
-		);
+			await queryClient.ensureQueryData(
+				boatsOptions(routeIds.eventId, queryClient),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const SchedulePage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: boats} = useGetBoats(eventId);
 	const {t} = useTranslation();
