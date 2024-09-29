@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import {defaultBoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
@@ -67,7 +64,7 @@ const BoatsOverview: React.FC = () => {
 				</div>
 				{boats?.length === 0 && (
 					<div className="w-full py-5">
-						<p className="text-lg">{t('noBoatsYet')}</p>
+						<p className="text-lg">{t('boat.noBoatsYet')}</p>
 					</div>
 				)}
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">

@@ -97,19 +97,27 @@ const ScheduleItemPage: React.FC = () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{timeSlot?.bookings.map((slot, index) => (
-							<TableRow key={index} className="w-full justify-between">
-								<TableCell>
-									{slot.person?.firstName} {slot.person?.lastName}
+						{timeSlot?.bookings.length ? (
+							timeSlot?.bookings.map((slot, index) => (
+								<TableRow key={index} className="w-full justify-between">
+									<TableCell>
+										{slot.person?.firstName} {slot.person?.lastName}
+									</TableCell>
+									<TableCell>{slot.person?.phoneNumber}</TableCell>
+									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
+									<TableCell>{slot.pagerNumber}</TableCell>
+									<EditBookingTableCell
+										booking={slot}
+										deleteMutation={deleteMutation}></EditBookingTableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={5} className="h-24 text-center">
+									{t('booking.noBookingsYet')}
 								</TableCell>
-								<TableCell>{slot.person?.phoneNumber}</TableCell>
-								<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-								<TableCell>{slot.pagerNumber}</TableCell>
-								<EditBookingTableCell
-									booking={slot}
-									deleteMutation={deleteMutation}></EditBookingTableCell>
 							</TableRow>
-						))}
+						)}
 					</TableBody>
 				</Table>
 			</div>
