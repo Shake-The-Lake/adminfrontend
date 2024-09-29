@@ -139,7 +139,7 @@ function App() {
 					/>
 				</AnimatePresence>
 				<ReactQueryDevtools initialIsOpen={false} />
-				<Toaster position="top-right" duration={5000} />
+				<Toaster position="top-right" duration={5000} closeButton />
 				<MutationLoader />
 			</QueryClientProvider>
 		</AuthProvider>

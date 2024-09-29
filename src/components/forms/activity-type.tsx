@@ -127,17 +127,17 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 						<TabsList className="w-full justify-start gap-1">
 							<TabsTrigger
 								value="en"
-								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('en') ? 'text-destructive' : ''}`}>
+								className={tabWithErrors.includes('en') ? 'text-destructive' : ''}>
 								{t('langSwitcher.english')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="de"
-								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('de') ? 'text-destructive' : ''}`}>
+								className={tabWithErrors.includes('de') ? 'text-destructive' : ''}>
 								{t('langSwitcher.german')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="gsw"
-								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('gsw') ? 'text-destructive' : ''}`}>
+								className={tabWithErrors.includes('gsw') ? 'text-destructive' : ''}>
 								{t('langSwitcher.swissGerman')}
 							</TabsTrigger>
 						</TabsList>
