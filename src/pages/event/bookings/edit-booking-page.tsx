@@ -122,7 +122,7 @@ const EditBookingPage = () => {
 							setSelectedTimeSlotId={setSelectedTimeSlotId}
 						/>
 					</div>
-					<div>
+					<div className="mt-20 w-1/3">
 						<PersonForm
 							control={methods.control}
 							errors={methods.formState.errors}
