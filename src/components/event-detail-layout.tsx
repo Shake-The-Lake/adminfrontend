@@ -14,22 +14,22 @@ import {extractTypedInfoFromRouteParams} from '../lib/utils';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				eventDetailOptions(routeIds.eventId, true),
-			);
+		await queryClient.ensureQueryData(
+			eventDetailOptions(routeIds.eventId, true),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const EventDetailLayout: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: event} = useQuery(eventDetailOptions(Number(eventId), true));
 	const {i18n} = useTranslation();
@@ -42,7 +42,9 @@ const EventDetailLayout: React.FC = () => {
 				<div className="flex flex-col">
 					<HeaderEvent />
 					<main className="flex flex-1 max-w-[100vw] flex-col gap-4 px-4 lg:gap-6 lg:py-6 lg:px-10 overflow-auto">
-						<h1 className="mt-5 heading-m-upper text-primary">{event?.title}</h1>
+						<h1 className="mt-5 heading-m-upper text-primary">
+							{event?.title}
+						</h1>
 						<Outlet />
 					</main>
 					<Footer />

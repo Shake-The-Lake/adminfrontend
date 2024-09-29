@@ -1,48 +1,47 @@
 import React from 'react';
 import EventForm from '../../../components/forms/event';
-import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {
 	eventDetailOptions,
 	useEventDetail,
 	useUpdateEvent,
 } from '../../../queries/event';
-import { type QueryClient, useQueryClient } from '@tanstack/react-query';
-import { defaultEventDto } from '../../../models/api/event.model';
-import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
-import { useTranslation } from 'react-i18next';
-import PageTransition from '../../../PageTransition';
+import {type QueryClient, useQueryClient} from '@tanstack/react-query';
+import {defaultEventDto} from '../../../models/api/event.model';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {useTranslation} from 'react-i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({ params }: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				// Const navigate = useNavigate();
-				throw new Error('No event ID provided');
-				// Navigate('/'); // todo! see which makes more sense
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			// Const navigate = useNavigate();
+			throw new Error('No event ID provided');
+			// Navigate('/'); // todo! see which makes more sense
+		}
 
-			await queryClient.ensureQueryData(
-				eventDetailOptions(routeIds.eventId, false),
-			);
+		await queryClient.ensureQueryData(
+			eventDetailOptions(routeIds.eventId, false),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const EventOverview: React.FC = () => {
 	const queryClient = useQueryClient();
-	const { t } = useTranslation();
-	const { eventId } = useLoaderData() as Awaited<
+	const {t} = useTranslation();
+	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const { data: event, isPending } = useEventDetail(queryClient, eventId, false);
+	const {data: event, isPending} = useEventDetail(queryClient, eventId, false);
 
 	const updateMutation = useUpdateEvent(eventId);
 
 	return (
-
-		<PageTransition>
+		<PageTransitionFadeIn>
 			<div className="flex flex-col items-start justify-between max-h-fit w-full">
 				<LoadingSpinner isLoading={isPending} />
 
@@ -91,7 +90,7 @@ const EventOverview: React.FC = () => {
 					</div>
 				</div>
 			</div>
-		</PageTransition>
+		</PageTransitionFadeIn>
 	);
 };
 

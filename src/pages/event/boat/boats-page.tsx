@@ -1,50 +1,50 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
 	useNavigate,
 } from 'react-router-dom';
-import { defaultBoatDto } from '../../../models/api/boat.model';
+import {defaultBoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import BoatForm from '../../../components/forms/boat';
 import LoadingSpinner from '../../../components/animations/loading';
-import { type QueryClient } from '@tanstack/react-query';
+import {type QueryClient} from '@tanstack/react-query';
 import {
 	boatsOptions,
 	useCreateBoat,
 	useDeleteBoat,
 	useGetBoats,
 } from '../../../queries/boat';
-import { MutationToaster } from '../../../components/common/mutation-toaster';
-import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
-import PageTransition from '../../../PageTransition';
+import {MutationToaster} from '../../../components/common/mutation-toaster';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({ params }: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				boatsOptions(routeIds.eventId, queryClient),
-			);
+		await queryClient.ensureQueryData(
+			boatsOptions(routeIds.eventId, queryClient),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const BoatsOverview: React.FC = () => {
-	const { eventId } = useLoaderData() as Awaited<
+	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const { data: boats, isPending } = useGetBoats(eventId);
+	const {data: boats, isPending} = useGetBoats(eventId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const { t } = useTranslation();
+	const {t} = useTranslation();
 
 	const createMutation = useCreateBoat(eventId);
 	const deleteMutation = useDeleteBoat(eventId);
@@ -58,7 +58,7 @@ const BoatsOverview: React.FC = () => {
 	};
 
 	return (
-		<PageTransition>
+		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
 				<LoadingSpinner isLoading={isPending} />
 				<MutationToaster type="delete" mutation={deleteMutation} />
@@ -103,7 +103,7 @@ const BoatsOverview: React.FC = () => {
 					</StlDialog>
 				</div>
 			</div>
-		</PageTransition>
+		</PageTransitionFadeIn>
 	);
 };
 

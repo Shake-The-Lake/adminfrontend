@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
-import { type SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useCreatePerson } from '../../../queries/person';
-import { useCreateBooking } from '../../../queries/booking';
-import { useGetTimeSlotsForEvent } from '../../../queries/time-slot';
-import { Button } from '../../../components/ui/button';
-import { DataTable } from '../../../components/data-table/data-table';
-import { useTranslation } from 'react-i18next';
-import { timeSlotColumns } from './time-slot-columns';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData, useNavigate} from 'react-router-dom';
+import {z} from 'zod';
+import {type SubmitHandler, useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {useCreatePerson} from '../../../queries/person';
+import {useCreateBooking} from '../../../queries/booking';
+import {useGetTimeSlotsForEvent} from '../../../queries/time-slot';
+import {Button} from '../../../components/ui/button';
+import {DataTable} from '../../../components/data-table/data-table';
+import {useTranslation} from 'react-i18next';
+import {timeSlotColumns} from './time-slot-columns';
 import {
 	Form,
 	FormControl,
@@ -18,17 +18,17 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../../../components/ui/form';
-import { Input } from '../../../components/ui/input';
-import { type BookingDto } from '../../../models/api/booking.model';
-import { defaultPerson, type PersonDto } from '../../../models/api/person.model';
+import {Input} from '../../../components/ui/input';
+import {type BookingDto} from '../../../models/api/booking.model';
+import {defaultPerson, type PersonDto} from '../../../models/api/person.model';
 import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
-import { type TimeSlotDto } from '../../../models/api/time-slot.model';
+import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import StlSelect from '../../../components/select/stl-select';
-import { toast } from 'sonner';
-import { t } from 'i18next';
-import PageTransition from '../../../PageTransition';
+import {toast} from 'sonner';
+import {t} from 'i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -43,15 +43,15 @@ const PersonSchema = z.object({
 type PersonFormSchema = z.infer<typeof PersonSchema>;
 
 const AddBookingPage: React.FC = () => {
-	const { eventId } = useLoaderData() as { eventId: number };
+	const {eventId} = useLoaderData() as {eventId: number};
 	const form = useForm<PersonFormSchema>({
 		mode: 'onChange',
 		defaultValues: defaultPerson,
 		resolver: zodResolver(PersonSchema),
 	});
 
-	const { data: timeSlots, error } = useGetTimeSlotsForEvent(eventId);
-	const { i18n } = useTranslation();
+	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
+	const {i18n} = useTranslation();
 	const navigate = useNavigate();
 	const createPersonMutation = useCreatePerson();
 	const createBookingMutation = useCreateBooking(eventId);
@@ -186,7 +186,7 @@ const AddBookingPage: React.FC = () => {
 	};
 
 	return (
-		<PageTransition>
+		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center h-full">
 				<div className="w-full mb-8 flex justify-between items-center">
 					<h1>{t('booking.create')}</h1>
@@ -213,15 +213,15 @@ const AddBookingPage: React.FC = () => {
 											},
 											onBoatChange(boatId?: number) {
 												setFilter((prevFilter) => {
-													const newFilter = { ...prevFilter, boatId };
+													const newFilter = {...prevFilter, boatId};
 													return newFilter;
 												});
 											},
 											onFromChange(from?: string) {
-												setFilter((prevFilter) => ({ ...prevFilter, from }));
+												setFilter((prevFilter) => ({...prevFilter, from}));
 											},
 											onToChange(to?: string) {
-												setFilter((prevFilter) => ({ ...prevFilter, to }));
+												setFilter((prevFilter) => ({...prevFilter, to}));
 											},
 										}}
 									/>
@@ -245,7 +245,8 @@ const AddBookingPage: React.FC = () => {
 					<div className="p-4">
 						<h3>{t('booking.person')}</h3>
 						<p className="text-primary-dark-stroke mb-2 mt-2">
-							{t('booking.enterContact')}</p>
+							{t('booking.enterContact')}
+						</p>
 						<Form {...form}>
 							<form
 								id="personForm"
@@ -254,7 +255,7 @@ const AddBookingPage: React.FC = () => {
 								<FormField
 									name="firstName"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('firstName')}</FormLabel>
 											<FormControl>
@@ -271,7 +272,7 @@ const AddBookingPage: React.FC = () => {
 								<FormField
 									name="lastName"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('lastName')}</FormLabel>
 											<FormControl>
@@ -288,7 +289,7 @@ const AddBookingPage: React.FC = () => {
 								<FormField
 									name="emailAddress"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('email')}</FormLabel>
 											<FormControl>
@@ -306,7 +307,7 @@ const AddBookingPage: React.FC = () => {
 								<FormField
 									name="phoneNumber"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('phone')}</FormLabel>
 											<FormControl>
@@ -324,7 +325,7 @@ const AddBookingPage: React.FC = () => {
 								<FormField
 									name="personType"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('personType')}</FormLabel>
 											<FormControl>
@@ -332,9 +333,9 @@ const AddBookingPage: React.FC = () => {
 													value={field.value}
 													onValueChange={field.onChange}
 													list={[
-														{ key: 'EMPLOYEE', label: t('employee') },
-														{ key: 'BOAT_DRIVER', label: t('boatDriver') },
-														{ key: 'CUSTOMER', label: t('customer') },
+														{key: 'EMPLOYEE', label: t('employee')},
+														{key: 'BOAT_DRIVER', label: t('boatDriver')},
+														{key: 'CUSTOMER', label: t('customer')},
 													]}
 													getKey={(item) => item?.key}
 													getLabel={(item) => item?.label ?? ''}
@@ -348,7 +349,7 @@ const AddBookingPage: React.FC = () => {
 								<FormField
 									name="isRider"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('rider')}</FormLabel>
 											<FormControl>
@@ -356,8 +357,8 @@ const AddBookingPage: React.FC = () => {
 													value={field.value}
 													onValueChange={field.onChange}
 													list={[
-														{ key: 'RIDER', label: 'Yes' },
-														{ key: 'VIEWER', label: 'No' },
+														{key: 'RIDER', label: 'Yes'},
+														{key: 'VIEWER', label: 'No'},
 													]}
 													getKey={(item) => item?.key}
 													getLabel={(item) => item?.label ?? ''}
@@ -397,7 +398,7 @@ const AddBookingPage: React.FC = () => {
 					</Button>
 				</div>
 			</div>
-		</PageTransition>
+		</PageTransitionFadeIn>
 	);
 };
 

@@ -1,6 +1,6 @@
-import { useQueryClient, type QueryClient } from '@tanstack/react-query';
+import {useQueryClient, type QueryClient} from '@tanstack/react-query';
 import React from 'react';
-import { useLoaderData, type LoaderFunctionArgs } from 'react-router-dom';
+import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
 import {
 	timeslotDetailOptions,
 	useTimeSlotDetail,
@@ -13,41 +13,41 @@ import {
 	TableCell,
 	Table,
 } from '../../../components/ui/table';
-import { EyeIcon, SailboatIcon, TagIcon, UsersIcon } from 'lucide-react';
-import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
-import { useDeleteBooking } from '../../../queries/booking';
+import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
+import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
+import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 import LoadingSpinner from '../../../components/animations/loading';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
 } from '../../../lib/utils';
-import { useTranslation } from 'react-i18next';
-import PageTransition from '../../../PageTransition';
+import {useTranslation} from 'react-i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({ params }: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.timeSlotId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.timeSlotId) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				timeslotDetailOptions(Number(params.timeSlotId)),
-			);
+		await queryClient.ensureQueryData(
+			timeslotDetailOptions(Number(params.timeSlotId)),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const ScheduleItemPage: React.FC = () => {
-	const { timeSlotId, eventId } = useLoaderData() as Awaited<
+	const {timeSlotId, eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
-	const { i18n, t } = useTranslation();
+	const {i18n, t} = useTranslation();
 
-	const { data: timeSlot, isPending } = useTimeSlotDetail(
+	const {data: timeSlot, isPending} = useTimeSlotDetail(
 		queryClient,
 		timeSlotId,
 		eventId,
@@ -59,7 +59,7 @@ const ScheduleItemPage: React.FC = () => {
 
 	const deleteMutation = useDeleteBooking(eventId);
 	return (
-		<PageTransition>
+		<PageTransitionFadeIn>
 			<div className="mt-10">
 				<LoadingSpinner isLoading={isPending} />
 				<div className="flex justify-between">
@@ -113,7 +113,7 @@ const ScheduleItemPage: React.FC = () => {
 					</TableBody>
 				</Table>
 			</div>
-		</PageTransition>
+		</PageTransitionFadeIn>
 	);
 };
 

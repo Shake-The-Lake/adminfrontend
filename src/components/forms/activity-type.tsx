@@ -25,6 +25,7 @@ import {Textarea} from '../ui/textarea';
 import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
+import PageTransitionFadeIn from '../animations/page-transition-fade-in';
 
 const localizedStringSchema = z.object({
 	en: z.string(),
@@ -132,229 +133,234 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 							<TabsTrigger
 								value="de"
 								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('de') ? 'text-destructive' : ''}`}>
-								
 								{t('langSwitcher.german')}
 							</TabsTrigger>
 							<TabsTrigger
 								value="gsw"
-								className={
-									`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('gsw') ? 'text-destructive' : ''}`
-								}>
+								className={`hover:bg-white hover:cursor-pointer ${tabWithErrors.includes('gsw') ? 'text-destructive' : ''}`}>
 								{t('langSwitcher.swissGerman')}
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="en">
-							<p className="text-primary-dark-stroke mb-2 mt-2">
-								{t('activityType.infoText')}
-							</p>
-							<div className="space-y-4">
-								<FormField
-									name="name.en"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('name')}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t('activityType.nameEnglish')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="description.en"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('description')}</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder={t('activityType.descEnglish')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="icon"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('icon')}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t('icon')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="checklist.en"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('checklist')}</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder={t('activityType.checklistEnglish')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-							</div>
+							<PageTransitionFadeIn>
+								<p className="text-primary-dark-stroke mb-2 mt-2">
+									{t('activityType.infoText')}
+								</p>
+								<div className="space-y-4">
+									<FormField
+										name="name.en"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('name')}</FormLabel>
+												<FormControl>
+													<Input
+														placeholder={t('activityType.nameEnglish')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="description.en"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('description')}</FormLabel>
+												<FormControl>
+													<Textarea
+														placeholder={t('activityType.descEnglish')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="icon"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('icon')}</FormLabel>
+												<FormControl>
+													<Input
+														placeholder={t('icon')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="checklist.en"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('checklist')}</FormLabel>
+												<FormControl>
+													<Textarea
+														placeholder={t('activityType.checklistEnglish')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+								</div>
+							</PageTransitionFadeIn>
 						</TabsContent>
 						<TabsContent value="de">
-							<p className="text-primary-dark-stroke mb-2 mt-2">
-								{t('activityType.descriptionGerman')}
-							</p>
-							<div className="space-y-4">
-								<FormField
-									name="name.de"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('name')}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t('activityType.nameGerman')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="description.de"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('description')}</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder={t('activityType.descGerman')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="icon"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('icon')}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t('icon')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="checklist.de"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('checklist')}</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder={t('activityType.checklistGerman')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-							</div>
+							<PageTransitionFadeIn>
+								<p className="text-primary-dark-stroke mb-2 mt-2">
+									{t('activityType.descriptionGerman')}
+								</p>
+								<div className="space-y-4">
+									<FormField
+										name="name.de"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('name')}</FormLabel>
+												<FormControl>
+													<Input
+														placeholder={t('activityType.nameGerman')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="description.de"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('description')}</FormLabel>
+												<FormControl>
+													<Textarea
+														placeholder={t('activityType.descGerman')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="icon"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('icon')}</FormLabel>
+												<FormControl>
+													<Input
+														placeholder={t('icon')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="checklist.de"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('checklist')}</FormLabel>
+												<FormControl>
+													<Textarea
+														placeholder={t('activityType.checklistGerman')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+								</div>
+							</PageTransitionFadeIn>
 						</TabsContent>
 						<TabsContent value="gsw">
-							<p className="text-primary-dark-stroke mb-2 mt-2">
-								{t('activityType.descriptionSwissGerman')}
-							</p>
-							<div className="space-y-4">
-								<FormField
-									name="name.swissGerman"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('name')}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t('activityType.nameSwissGerman')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="description.swissGerman"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('description')}</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder={t('activityType.descSwissGerman')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="icon"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('icon')}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t('icon')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-								<FormField
-									name="checklist.swissGerman"
-									control={form.control}
-									render={({field}) => (
-										<FormItem>
-											<FormLabel>{t('activityType.checklistSwissGerman')}</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder={t('activityType.checklistSwissGerman')}
-													{...field}
-													className="input"
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}></FormField>
-							</div>
+							<PageTransitionFadeIn>
+								<p className="text-primary-dark-stroke mb-2 mt-2">
+									{t('activityType.descriptionSwissGerman')}
+								</p>
+								<div className="space-y-4">
+									<FormField
+										name="name.swissGerman"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('name')}</FormLabel>
+												<FormControl>
+													<Input
+														placeholder={t('activityType.nameSwissGerman')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="description.swissGerman"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('description')}</FormLabel>
+												<FormControl>
+													<Textarea
+														placeholder={t('activityType.descSwissGerman')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="icon"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>{t('icon')}</FormLabel>
+												<FormControl>
+													<Input
+														placeholder={t('icon')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+									<FormField
+										name="checklist.swissGerman"
+										control={form.control}
+										render={({field}) => (
+											<FormItem>
+												<FormLabel>
+													{t('activityType.checklistSwissGerman')}
+												</FormLabel>
+												<FormControl>
+													<Textarea
+														placeholder={t('activityType.checklistSwissGerman')}
+														{...field}
+														className="input"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}></FormField>
+								</div>
+							</PageTransitionFadeIn>
 						</TabsContent>
 					</Tabs>
 					<div

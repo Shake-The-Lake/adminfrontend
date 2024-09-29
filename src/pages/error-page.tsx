@@ -1,17 +1,18 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {isRouteErrorResponse, Link, useRouteError} from 'react-router-dom';
 import ShakeTheLakeIcon from '../components/icons/shake-the-lake-icon';
+import PageTransitionFadeIn from '../components/animations/page-transition-fade-in';
 
 const ErrorPage: React.FC = () => {
-	const { t } = useTranslation();
+	const {t} = useTranslation();
 	const error = useRouteError();
 
 	const errorStatus = isRouteErrorResponse(error) ? error.status : 0;
 	const customErrorLabel = getErrorTranslationLabelFromStatus(errorStatus);
 
 	return (
-		<>
+		<PageTransitionFadeIn>
 			<div className="h-full flex flex-col justify-center items-center gap-4 text-center">
 				<h1 className="mb-4 text-6xl font-semibold text-primary-blue">
 					{errorStatus === 0 ? '???' : errorStatus}
@@ -37,7 +38,7 @@ const ErrorPage: React.FC = () => {
 					</p>
 				)}
 			</div>
-		</>
+		</PageTransitionFadeIn>
 	);
 };
 

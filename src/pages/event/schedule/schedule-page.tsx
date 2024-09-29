@@ -1,39 +1,39 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
-import { useEpg, Epg, Layout, type Program, type Channel } from 'planby';
-import { useQueryClient, type QueryClient } from '@tanstack/react-query';
-import { useLoaderData, type LoaderFunctionArgs } from 'react-router-dom';
-import { boatsOptions, useGetBoats } from '../../../queries/boat';
-import { useEventDetail } from '../../../queries/event';
-import { ProgramItem } from '../../../components/planby/programm-item';
-import { fromTimeToDateTime } from '../../../lib/date-time.utils';
-import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
-import { useTranslation } from 'react-i18next';
-import PageTransition from '../../../PageTransition';
+import {useEpg, Epg, Layout, type Program, type Channel} from 'planby';
+import {useQueryClient, type QueryClient} from '@tanstack/react-query';
+import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
+import {boatsOptions, useGetBoats} from '../../../queries/boat';
+import {useEventDetail} from '../../../queries/event';
+import {ProgramItem} from '../../../components/planby/programm-item';
+import {fromTimeToDateTime} from '../../../lib/date-time.utils';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {useTranslation} from 'react-i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({ params }: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				boatsOptions(routeIds.eventId, queryClient),
-			);
+		await queryClient.ensureQueryData(
+			boatsOptions(routeIds.eventId, queryClient),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const SchedulePage: React.FC = () => {
-	const { eventId } = useLoaderData() as Awaited<
+	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const { data: boats } = useGetBoats(eventId);
-	const { t } = useTranslation();
+	const {data: boats} = useGetBoats(eventId);
+	const {t} = useTranslation();
 	const queryClient = useQueryClient();
-	const { data: event } = useEventDetail(queryClient, eventId, false);
+	const {data: event} = useEventDetail(queryClient, eventId, false);
 
 	const mapColor = (type: number) => {
 		switch (type) {
@@ -54,17 +54,24 @@ const SchedulePage: React.FC = () => {
 		return <div>{t('schedule.addBoat')}</div>;
 	}
 
-	const program: Program[] = boats.flatMap((boat) => Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
-		id: timeSlot.id.toString(),
-		color: mapColor(timeSlot?.activityTypeId ?? 0),
-		title: boat.name,
-		channelId: boat.id,
-		channelUuid: boat?.id?.toString() ?? '',
-		description: '',
-		since: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.fromTime ?? ''),
-		till: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.untilTime ?? ''),
-		image: '',
-	})),
+	const program: Program[] = boats.flatMap((boat) =>
+		Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
+			id: timeSlot.id.toString(),
+			color: mapColor(timeSlot?.activityTypeId ?? 0),
+			title: boat.name,
+			channelId: boat.id,
+			channelUuid: boat?.id?.toString() ?? '',
+			description: '',
+			since: fromTimeToDateTime(
+				event?.date ?? new Date(),
+				timeSlot.fromTime ?? '',
+			),
+			till: fromTimeToDateTime(
+				event?.date ?? new Date(),
+				timeSlot.untilTime ?? '',
+			),
+			image: '',
+		})),
 	);
 
 	const channels: Channel[] = boats.map((boat) => ({
@@ -72,12 +79,9 @@ const SchedulePage: React.FC = () => {
 		name: boat.name,
 		logo: 'https://via.placeholder.com/150',
 		uuid: boat?.id?.toString() ?? '',
-		position: { top: 0, height: 0 },
+		position: {top: 0, height: 0},
 	}));
-	const {
-		getEpgProps,
-		getLayoutProps,
-	} = useEpg({
+	const {getEpgProps, getLayoutProps} = useEpg({
 		epg: program,
 		channels,
 		startDate: event?.date,
@@ -127,15 +131,15 @@ const SchedulePage: React.FC = () => {
 	});
 
 	return (
-		<PageTransition>
+		<PageTransitionFadeIn>
 			<div className="max-w-full md:max-w-[75vw]">
 				<Epg {...getEpgProps()}>
 					<Layout
 						{...getLayoutProps()}
-						renderProgram={({ program }) => (
+						renderProgram={({program}) => (
 							<ProgramItem key={program.data.id} program={program} />
 						)}
-						renderChannel={({ channel }) => (
+						renderChannel={({channel}) => (
 							<div
 								key={channel.uuid}
 								className="w-full h-full font-semibold py-4 px-3">
@@ -145,7 +149,7 @@ const SchedulePage: React.FC = () => {
 					/>
 				</Epg>
 			</div>
-		</PageTransition>
+		</PageTransitionFadeIn>
 	);
 };
 

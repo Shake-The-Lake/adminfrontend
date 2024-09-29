@@ -8,12 +8,15 @@ import {eventDetailRoutes} from './constants';
 import {
 	ActivityTypePage,
 	ActivityTypesPage,
+	AddBookingPage,
 	BoatPage,
 	BoatsOverview,
 	BookingOverview,
 	ErrorPage,
 	EventOverview,
 	HomePage,
+	LoginPage,
+	ScheduleItemPage,
 	SchedulePage,
 } from './pages';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
@@ -26,16 +29,13 @@ import {loader as activityTypeDetailLoader} from './pages/event/activity-type/ac
 import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
 import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
-import ScheduleItemPage from './pages/event/schedule/schedule-item-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
-import LoginPage from './pages/login-page';
 import {AuthProvider} from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
-import AddBookingPage from './pages/event/bookings/add-booking-page';
 import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
-import { AnimatePresence } from 'framer-motion';
+import {AnimatePresence} from 'framer-motion';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
