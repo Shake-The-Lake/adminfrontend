@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
 import {FormProvider, useForm} from 'react-hook-form';
 import BookingForm from '../../../components/forms/booking';
@@ -58,6 +58,12 @@ const EditBookingPage = () => {
 		number | undefined
 	>(undefined);
 
+	useEffect(() => {
+		if (bookingDetails) {
+			setSelectedTimeSlotId(bookingDetails.timeSlotId);
+		}
+	}, [bookingDetails]);
+
 	//const updateBooking = useUpdateBooking();
 	const updatePerson = useUpdatePerson();
 	const methods = useForm({
@@ -103,7 +109,7 @@ const EditBookingPage = () => {
 							{t('cancel')}
 						</Button>
 						<Button type="submit" className="ml-4">
-							{t('save')}
+							{t('update')}
 						</Button>
 					</div>
 				</form>
