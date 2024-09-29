@@ -69,7 +69,9 @@ const BookingOverview: React.FC = () => {
 		setFilter({...filter, to});
 	};
 	const handleRowClick = (row: BookingSearchDto) => {
-		navigate(`/event/${eventId}/bookings/edit`);
+		navigate(`/event/${eventId}/bookings/edit`, {
+			state: {bookingId: row.timeSlot.id},
+		});
 	};
 	return (
 		<div className="flex flex-col items-center">

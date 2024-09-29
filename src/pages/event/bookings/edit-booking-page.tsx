@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useLoaderData, useNavigate, useParams} from 'react-router-dom';
+import {useLoaderData, useLocation, useNavigate} from 'react-router-dom';
 import {loader} from './booking-overview';
 import {FormProvider, useForm} from 'react-hook-form';
 import BookingForm from '../../../components/forms/booking';
@@ -17,7 +17,8 @@ const EditBookingPage = () => {
 	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const {bookingId} = useParams<{bookingId: string}>();
+	const location = useLocation();
+	const {bookingId} = location.state as {bookingId: number};
 	const navigate = useNavigate();
 	const handleCancel = () => {
 		navigate(`/event/${eventId}/bookings`);
@@ -37,7 +38,7 @@ const EditBookingPage = () => {
 		defaultValues: defaultCombinedBooking,
 	});
 
-	const onSubmit = async (dat: CombinedBookingFormDto) => {};
+	const onSubmit = async (data: CombinedBookingFormDto) => {};
 
 	useEffect(() => {
 		if (currentBooking && currentPerson) {
@@ -53,10 +54,6 @@ const EditBookingPage = () => {
 			setSelectedTimeSlotId(currentBooking.timeSlotId);
 		}
 	}, [currentBooking, currentPerson, methods]);
-
-	if (bookingLoading || personLoading) {
-		return <p>Loading...</p>;
-	}
 
 	return (
 		<div>
