@@ -43,25 +43,23 @@ const EditBookingPage = () => {
 	const {eventId, bookingDetails} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof editBookingLoader>>
 	>;
-
-	const navigate = useNavigate();
-	const handleCancel = () => {
-		navigate(`/event/${eventId}/bookings`);
-	};
-	const {t} = useTranslation();
-	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-		number | undefined
-	>(undefined);
-
-	const updateBooking = useUpdateBooking(eventId, bookingDetails.id!);
-	const updatePerson = useUpdatePerson();
-
 	const methods = useForm({
 		defaultValues: defaultCombinedBooking,
 	});
+	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
+		number | undefined
+	>(bookingDetails?.timeSlotId);
+
+	const navigate = useNavigate();
+	const {t} = useTranslation();
+	const updateBooking = useUpdateBooking(eventId, bookingDetails.id!);
+	const updatePerson = useUpdatePerson();
 	const {reset, formState} = methods;
 	const {isDirty} = formState;
 
+	const handleCancel = () => {
+		navigate(`/event/${eventId}/bookings`);
+	};
 	useEffect(() => {
 		if (bookingDetails) {
 			reset({
@@ -87,20 +85,18 @@ const EditBookingPage = () => {
 			phoneNumber: data.phoneNumber,
 			personType: data.personType,
 		};
-
 		const bookingUpdateData = {
 			id: bookingDetails.id,
 			isRider: data.isRider,
 			isManual: data.isManual,
 			pagerNumber: data.pagerNumber,
 			personId: bookingDetails.person?.id,
-			timeSlotId: data.timeSlotId,
+			timeSlotId: selectedTimeSlotId,
 		};
 
 		try {
 			await updatePerson.mutateAsync(personUpdateData);
 			await updateBooking.mutateAsync(bookingUpdateData);
-
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
 			console.error('Error updating booking or person:', error);

@@ -36,7 +36,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 			updateFilteredTimeSlots();
 		}
 	}, [timeSlots, filter]);
-
+	
 	const updateFilteredTimeSlots = () => {
 		const timeslotsWithAvailableSeats = timeSlots?.filter(
 			(slot) => slot.availableSeats > 0,

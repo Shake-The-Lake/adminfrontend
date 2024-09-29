@@ -4,11 +4,11 @@ import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import {Checkbox} from '../../../components/ui/checkbox';
 import {getTranslation} from '../../../lib/utils';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import { t } from 'i18next';
+import {t} from 'i18next';
 
 export const timeSlotColumns = (
 	locale: string,
-	setSelectedTimeSlotId: (id: number) => void,
+	setSelectedTimeSlotId: (id: number | undefined) => void,
 	selectedTimeSlotId: number | undefined,
 ): Array<ColumnDef<TimeSlotDto>> => [
 	{
@@ -19,6 +19,8 @@ export const timeSlotColumns = (
 				onCheckedChange={(value) => {
 					if (value) {
 						setSelectedTimeSlotId(row.original.id);
+					} else {
+						setSelectedTimeSlotId(undefined);
 					}
 				}}
 				aria-label="Select row"
@@ -46,11 +48,9 @@ export const timeSlotColumns = (
 		header: t('activity'),
 		cell({row}) {
 			const {activityType} = row.original;
-
 			if (activityType?.name) {
 				return getTranslation(locale, activityType.name) ?? 'Unknown Activity';
 			}
-
 			return 'No Activity';
 		},
 	},
