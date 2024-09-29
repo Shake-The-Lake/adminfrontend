@@ -3,9 +3,9 @@ import {type PersonDto} from './person.model';
 export type BookingDto = {
 	id?: number;
 	isRider: boolean;
-	isManual: boolean;
+	isManual?: boolean;
 	pagerNumber?: number;
-	personId: number;
+	personId?: number;
 	person?: PersonDto;
 	timeSlotId: number;
 };
@@ -17,4 +17,31 @@ export const defaultBooking: BookingDto = {
 	pagerNumber: undefined,
 	personId: 0,
 	timeSlotId: 0,
+};
+
+export type CombinedBookingFormDto = {
+	//person fields
+	firstName: string;
+	lastName: string;
+	emailAddress: string;
+	phoneNumber: string;
+	personType: 'EMPLOYEE' | 'BOAT_DRIVER' | 'CUSTOMER';
+	isRider: 'RIDER' | 'VIEWER';
+
+	//booking fields
+	isManual: boolean;
+	pagerNumber?: number;
+	timeSlotId: number | undefined;
+};
+
+export const defaultCombinedBooking: CombinedBookingFormDto = {
+	firstName: '',
+	lastName: '',
+	emailAddress: '',
+	phoneNumber: '',
+	personType: 'CUSTOMER',
+	isRider: 'VIEWER',
+	isManual: true,
+	pagerNumber: undefined,
+	timeSlotId: undefined,
 };
