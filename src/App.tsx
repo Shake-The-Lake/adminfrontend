@@ -36,7 +36,9 @@ import ProtectedRoute from './ProtectedRoute';
 import AddBookingPage from './pages/event/bookings/add-booking-page';
 import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
-import EditBookingPage from './pages/event/bookings/edit-booking-page';
+import EditBookingPage, {
+	editBookingLoader,
+} from './pages/event/bookings/edit-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -126,7 +128,7 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.editBooking}`,
 				element: <EditBookingPage />,
-				loader: bookingsLoader(queryClient),
+				loader: editBookingLoader(queryClient),
 			},
 		],
 	},

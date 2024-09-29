@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useLoaderData, useLocation, useNavigate} from 'react-router-dom';
-import {loader} from './booking-overview';
+import React, {useState} from 'react';
+import {LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
 import {FormProvider, useForm} from 'react-hook-form';
 import BookingForm from '../../../components/forms/booking';
 import PersonForm from '../../../components/forms/person';
@@ -10,15 +9,46 @@ import {
 	CombinedBookingFormDto,
 	defaultCombinedBooking,
 } from '../../../models/api/booking.model';
-import {useGetBookingDetails, useUpdateBooking} from '../../../queries/booking';
-import {useGetPersonDetails, useUpdatePerson} from '../../../queries/person';
+import {useUpdatePerson} from '../../../queries/person';
+import {QueryClient} from '@tanstack/react-query';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {getBookingById} from '../../../services/booking-service';
+import {getPersonById} from '../../../services/person-service';
+
+export const editBookingLoader =
+	(queryClient: QueryClient) =>
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		const {eventId, bookingId} = routeIds;
+
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
+		const bookingDetails = await queryClient.ensureQueryData({
+			queryKey: ['bookingDetails', bookingId],
+			queryFn: async () => getBookingById(Number(bookingId)),
+		});
+		const personDetails = await queryClient.ensureQueryData({
+			queryKey: ['personDetails', bookingId],
+			queryFn: async () => getPersonById(bookingDetails.personId!),
+		});
+
+		if (!routeIds.bookingId) {
+			throw new Error('No Booking ID provided');
+		}
+
+		return {
+			eventId,
+			bookingDetails,
+			personDetails,
+		};
+	};
 
 const EditBookingPage = () => {
-	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	const {eventId, bookingDetails, personDetails} = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof editBookingLoader>>
 	>;
-	const location = useLocation();
-	const {bookingId} = location.state as {bookingId: number};
+
 	const navigate = useNavigate();
 	const handleCancel = () => {
 		navigate(`/event/${eventId}/bookings`);
@@ -27,39 +57,31 @@ const EditBookingPage = () => {
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
 		number | undefined
 	>(undefined);
-	const {data: currentBooking, isLoading: bookingLoading} =
-		useGetBookingDetails(Number(bookingId));
-	const {data: currentPerson, isLoading: personLoading} = useGetPersonDetails(
-		currentBooking?.personId ?? 0,
-	);
-	const updateBooking = useUpdateBooking(Number(bookingId));
+
+	//const updateBooking = useUpdateBooking();
 	const updatePerson = useUpdatePerson();
 	const methods = useForm({
-		defaultValues: defaultCombinedBooking,
+		defaultValues: {
+			...defaultCombinedBooking,
+			...bookingDetails,
+			pagerNumber: bookingDetails.pagerNumber,
+			firstName: personDetails.firstName,
+			lastName: personDetails.lastName,
+			emailAddress: personDetails.emailAddress,
+			personType: personDetails.personType,
+			isRider: bookingDetails?.isRider ? 'RIDER' : 'VIEWER',
+		},
 	});
 
-	const onSubmit = async (data: CombinedBookingFormDto) => {};
-
-	useEffect(() => {
-		if (currentBooking && currentPerson) {
-			methods.reset({
-				...currentBooking,
-				firstName: currentPerson.firstName,
-				lastName: currentPerson.lastName,
-				emailAddress: currentPerson.emailAddress,
-				phoneNumber: currentPerson.phoneNumber,
-				personType: currentPerson.personType,
-				isRider: currentBooking.isRider ? 'RIDER' : 'VIEWER',
-			});
-			setSelectedTimeSlotId(currentBooking.timeSlotId);
-		}
-	}, [currentBooking, currentPerson, methods]);
+	const onSubmit = async (data: CombinedBookingFormDto) => {
+		return null;
+	};
 
 	return (
 		<div>
 			<h1>Edit Booking</h1>
 			<FormProvider {...methods}>
-				<form onSubmit={methods.handleSubmit(onSubmit)}>
+				<form /*onSubmit={methods.handleSubmit(onSubmit)}*/>
 					<div className="mt-6">
 						<h3>{t('timeSlot.title')}</h3>
 						<BookingForm

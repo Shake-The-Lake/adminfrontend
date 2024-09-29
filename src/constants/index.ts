@@ -20,7 +20,7 @@ export const eventDetailRoutes = {
 	timeSlotId: ':timeSlotId',
 	bookings: 'bookings',
 	addBooking: 'new',
-	editBooking: 'edit',
+	editBooking: 'edit/:bookingId',
 	bookingId: ':bookingId',
 };
 

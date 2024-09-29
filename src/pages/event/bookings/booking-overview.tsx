@@ -68,11 +68,18 @@ const BookingOverview: React.FC = () => {
 	searchParams.onToChange = (to?: string) => {
 		setFilter({...filter, to});
 	};
+
+	// just a quick fix because the bookings from searchBookingDto don't have unique identifiers
+	// TODO send them with ids
+	const bookingsWithUniqueIds = bookings?.map((booking, index) => ({
+		...booking,
+		id: `${booking.timeSlot.id}-${booking.boat.id}-${index}`,
+	}));
+
 	const handleRowClick = (row: BookingSearchDto) => {
-		navigate(`/event/${eventId}/bookings/edit`, {
-			state: {bookingId: row.timeSlot.id},
-		});
+		navigate(`/event/${eventId}/bookings/edit/${row.booking.id}`);
 	};
+
 	return (
 		<div className="flex flex-col items-center">
 			<LoadingSpinner isLoading={isPending} />
@@ -93,7 +100,7 @@ const BookingOverview: React.FC = () => {
 							params={searchParams}></StlFilter>
 						<DataTable
 							columns={bookingColumns}
-							data={bookings ?? []}
+							data={bookingsWithUniqueIds ?? []}
 							onRowClick={handleRowClick}
 						/>
 					</>
