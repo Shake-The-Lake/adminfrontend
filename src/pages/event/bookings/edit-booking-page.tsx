@@ -65,7 +65,7 @@ const EditBookingPage = () => {
 		}
 	}, [bookingDetails]);
 
-	const updateBooking = useUpdateBooking(bookingDetails.id!);
+	const updateBooking = useUpdateBooking(eventId, bookingDetails.id!);
 	const updatePerson = useUpdatePerson();
 	const methods = useForm({
 		defaultValues: {
@@ -79,6 +79,7 @@ const EditBookingPage = () => {
 			isRider: bookingDetails?.isRider,
 		},
 	});
+	const {isDirty} = methods.formState;
 
 	const onSubmit = async (data: CombinedBookingFormDto) => {
 		const personUpdateData = {
@@ -135,7 +136,7 @@ const EditBookingPage = () => {
 						<Button type="button" variant="secondary" onClick={handleCancel}>
 							{t('cancel')}
 						</Button>
-						<Button type="submit" className="ml-4">
+						<Button type="submit" className="ml-4" disabled={!isDirty}>
 							{t('update')}
 						</Button>
 					</div>

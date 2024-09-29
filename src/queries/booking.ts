@@ -54,7 +54,7 @@ export function useGetBookingDetails(id: number) {
 	});
 }
 
-export function useUpdateBooking(bookingId: number) {
+export function useUpdateBooking(eventId: number, bookingId: number) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -62,19 +62,23 @@ export function useUpdateBooking(bookingId: number) {
 			updateBooking(bookingId, updatedBooking),
 
 		async onSuccess(data) {
-			const oldBooking: BookingDto | undefined = queryClient.getQueryData(
-				bookingKeys.detail(bookingId, true),
-			);
-			const newBooking: BookingDto = {
-				...data,
-				person: oldBooking?.person,
-				timeSlotId: data.timeSlotId || oldBooking?.timeSlotId,
-			};
-
-			queryClient.setQueryData(bookingKeys.detail(bookingId, true), newBooking);
-
+			if (data) {
+				queryClient.setQueryData(
+					bookingKeys.all(eventId),
+					(oldData: BookingDto[] | undefined) =>
+						oldData ? [...oldData, data] : [data],
+				);
+			}
 			await queryClient.invalidateQueries({
-				queryKey: bookingKeys.all(bookingId),
+				queryKey: bookingKeys.all(eventId),
+				exact: true,
+			});
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.detail(eventId, true),
+				exact: true,
+			});
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.search(eventId, {}),
 				exact: true,
 			});
 		},
