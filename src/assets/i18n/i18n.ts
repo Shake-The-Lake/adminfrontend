@@ -95,6 +95,7 @@ const resources: Resource = {
 				fail: 'Failed to submit booking: ',
 				currentBooking: 'Current Booking',
 				updateFailed: 'Error while trying to update your booking',
+				update: 'Update Booking',
 			},
 			login: {
 				username: 'Username',
@@ -258,6 +259,7 @@ const resources: Resource = {
 				fail: 'Fehler beim Absenden der Buchung: ',
 				noData: 'Keine Daten gefunden',
 				updateFailed: 'Fehler beim aktualisieren deiner Buchung',
+				update: 'Buchung anpassen',
 			},
 			login: {
 				username: 'Benutzername',
@@ -423,6 +425,7 @@ const resources: Resource = {
 				fail: 'Buechig gönd nöd: ',
 				currentBooking: 'Derzeitige Buchungen',
 				updateFailed: 'Fähler bim aktualisierä vo dirä buächig',
+				update: 'Buächig apasse',
 			},
 			login: {
 				username: 'Benutzername',

@@ -14,6 +14,7 @@ import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {useGetBookingDetails, useUpdateBooking} from '../../../queries/booking';
 import {toast} from 'sonner';
 import LoadingSpinner from '../../../components/animations/loading';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const editBookingLoader =
 	() =>
@@ -103,8 +104,8 @@ const EditBookingPage = () => {
 	};
 
 	return (
-		<div>
-			<h1>Edit Booking</h1>
+		<PageTransitionFadeIn>
+			<h1>{t('booking.update')}</h1>
 			<LoadingSpinner isLoading={isLoading} />
 			<FormProvider {...methods}>
 				<form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -134,7 +135,7 @@ const EditBookingPage = () => {
 					</div>
 				</form>
 			</FormProvider>
-		</div>
+		</PageTransitionFadeIn>
 	);
 };
 
