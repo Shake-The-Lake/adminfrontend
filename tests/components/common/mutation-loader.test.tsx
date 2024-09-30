@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { useIsMutating } from '@tanstack/react-query';
 import MutationLoader from '../../../src/components/common/mutation-loader';
 import { describe, it, vi } from 'vitest';
