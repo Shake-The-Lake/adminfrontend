@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 type LoadingSpinnerProps = {
 	isLoading: boolean;
 };
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({isLoading}) => {
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ isLoading }) => {
 
 	useEffect(() => {
 		if (isLoading) {
@@ -16,20 +16,20 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({isLoading}) => {
 			document.body.style.overflow = '';
 			document.body.style.height = '';
 		}
-		
+
 		// Cleanup function to revert changes when component unmounts
 		return () => {
 			document.body.style.overflow = '';
 			document.body.style.height = '';
 		};
 	}, [isLoading]);
-	
+
 	if (!isLoading) {
 		return null;
 	}
 
 	return (
-		<div className="fixed inset-0 flex items-center justify-center z-50">
+		<div className="fixed inset-0 flex items-center justify-center z-50" data-testid="loading-spinner">
 			<div className="absolute inset-0 backdrop-blur-sm z-40"></div>
 
 			<div className="z-50 animate-spin rounded-full h-16 w-16 border-t-4 border-primary"></div>
