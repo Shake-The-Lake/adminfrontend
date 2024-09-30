@@ -10,7 +10,7 @@ import {type LoginDto} from '../../models/api/login.model'; // Added useLocation
 import {useAuth} from '../../AuthContext';
 import {toast} from 'sonner';
 import {useNavigate} from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 // Schema definition
 export const loginFormSchema = z.object({

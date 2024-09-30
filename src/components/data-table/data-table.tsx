@@ -87,7 +87,7 @@ export function DataTable<TyData, TyValue>({
 								<TableCell
 									colSpan={columns.length}
 									className="h-24 text-center">
-									{t('booking.noData')}
+									{t('noData')}
 								</TableCell>
 							</TableRow>
 						)}

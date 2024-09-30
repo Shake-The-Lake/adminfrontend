@@ -9,6 +9,8 @@ import {useCreateBooking} from '../../../queries/booking';
 import {loader} from './booking-overview';
 import {useTranslation} from 'react-i18next';
 import {defaultCombinedBooking} from '../../../models/api/booking.model';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
+import {toast} from 'sonner';
 
 const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
@@ -47,14 +49,16 @@ const AddBookingPage: React.FC = () => {
 				timeSlotId: selectedTimeSlotId!,
 			};
 			await createBookingMutation.mutateAsync(bookingData);
+			toast.success(t('booking.success'));
+
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
-			alert('Error creating booking');
+			toast.error(t('booking.fail'));
 		}
 	};
 
 	return (
-		<div>
+		<PageTransitionFadeIn>
 			<h1> {t('booking.create')}</h1>
 			<FormProvider {...methods}>
 				<form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -84,7 +88,7 @@ const AddBookingPage: React.FC = () => {
 					</div>
 				</form>
 			</FormProvider>
-		</div>
+		</PageTransitionFadeIn>
 	);
 };
 

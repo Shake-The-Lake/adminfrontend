@@ -1,18 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Separator} from '../ui/separator';
 import {ch, de, en} from '../../constants';
 import {ToggleGroup, ToggleGroupItem} from '../ui/toggle-group';
 import {useTranslation} from 'react-i18next';
 
-const LanguageSelector: React.FC = () => {
-	const [language, setLanguage] = useState(en);
+const SelectedLanguageStorageKey = 'selectedLanguage';
 
+const LanguageSelector: React.FC = () => {
 	const {i18n, t} = useTranslation();
+
+	const [language, setLanguage] = useState(
+		() => localStorage.getItem(SelectedLanguageStorageKey) ?? en,
+	);
+
+	useEffect(() => {
+		const changeLanguage = async () => i18n.changeLanguage(language);
+		changeLanguage().catch(console.error);
+	}, [language, i18n]);
 
 	const handleLanguageChange = async (lang: string) => {
 		setLanguage(lang);
-		await i18n
-			.changeLanguage(lang)
+		localStorage.setItem(SelectedLanguageStorageKey, lang);
+		await i18n.changeLanguage(lang);
 	};
 
 	return (
@@ -30,7 +39,9 @@ const LanguageSelector: React.FC = () => {
 				<div className="uppercase">en</div>
 			</ToggleGroupItem>
 			<Separator orientation="vertical" className="h-5" />
-			<ToggleGroupItem value={ch} aria-label={t('langSwitcher.toggleSwissGerman')}>
+			<ToggleGroupItem
+				value={ch}
+				aria-label={t('langSwitcher.toggleSwissGerman')}>
 				<div className="uppercase">ch</div>
 			</ToggleGroupItem>
 		</ToggleGroup>

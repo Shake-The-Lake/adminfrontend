@@ -2,17 +2,16 @@ import React from 'react';
 import CreateEventDialog from './create-event-dialog';
 import StlCard from '../../components/cards/stl-card';
 import LoadingSpinner from '../../components/animations/loading';
-import {useNavigate} from 'react-router-dom';
 import {type QueryClient} from '@tanstack/react-query';
 import {eventsOptions, useDeleteEvent, useGetEvents} from '../../queries/event';
 import {MutationToaster} from '../../components/common/mutation-toaster';
+import {useTranslation} from 'react-i18next';
 
 export const loader = (queryClient: QueryClient) => async () =>
 	queryClient.ensureQueryData(eventsOptions());
 
 const EventList = () => {
-	const navigate = useNavigate();
-
+	const {t} = useTranslation();
 	// Todo! throws warning sometimes:
 	// Warning: A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://reactjs.org/link/controlled-components
 
@@ -22,10 +21,6 @@ const EventList = () => {
 	const deleteMutation = useDeleteEvent();
 
 	// Todo! add "real" error handling. maybe use the mutation.error to handle this? make an error component that takes that as an input and displays the sonner. important! not per default on card, because then it would get triggered for each
-
-	const handleEdit = async (id?: number) => {
-		navigate(`event/${id}`);
-	};
 
 	return (
 		<div className="flex justify-center w-full max-w-lg">
@@ -43,13 +38,13 @@ const EventList = () => {
 								<li key={event.id} className="mb-4 flex justify-center">
 									<StlCard
 										{...event}
-										onArrowClick={handleEdit}
+										link={'/event/' + event.id.toString()}
 										deleteMutation={deleteMutation}
 									/>
 								</li>
 							))
 						) : (
-							<p className="text-center">No events yet.</p>
+							<p className="text-center">{t('eventOverview.noEventsYet')}</p>
 						)}
 					</ul>
 				) : (

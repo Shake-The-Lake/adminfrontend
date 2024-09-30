@@ -10,7 +10,7 @@ import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {Button} from '../ui/button';
 import {validateDate} from '../../lib/date-time.utils';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 // Schema definition
 export const eventFormSchema = z.object({
