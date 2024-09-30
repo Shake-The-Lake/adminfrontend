@@ -50,7 +50,7 @@ export function useSearchBookings(
 export function useGetBookingDetails(id: number) {
 	return useQuery({
 		queryKey: bookingKeys.detail(id, true),
-		queryFn: async () => getBookingById(id),
+		queryFn: async () => getBookingById(id, 'person'),
 	});
 }
 
@@ -62,23 +62,18 @@ export function useUpdateBooking(eventId: number, bookingId: number) {
 			updateBooking(bookingId, updatedBooking),
 
 		onSuccess: async function (data) {
-			if (data) {
-				queryClient.setQueryData(
-					bookingKeys.all(eventId),
-					(oldData: BookingDto[] | undefined) =>
-						oldData ? [...oldData, data] : [data],
-				);
-			}
-			await queryClient.invalidateQueries({
-				queryKey: bookingKeys.all(eventId),
-				exact: true,
-			});
-			await queryClient.invalidateQueries({
-				queryKey: bookingKeys.detail(eventId, true),
-				exact: true,
-			});
+			queryClient.setQueryData(
+				bookingKeys.detail(data?.id ?? bookingId, true),
+				data,
+			);
+
 			await queryClient.invalidateQueries({
 				queryKey: bookingKeys.search(eventId, {}),
+				exact: true,
+			});
+
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.detail(bookingId, true),
 				exact: true,
 			});
 		},

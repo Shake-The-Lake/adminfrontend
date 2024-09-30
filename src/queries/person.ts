@@ -29,13 +29,12 @@ export function useCreatePerson() {
 		mutationFn: (personData: PersonDto) => createPerson(personData),
 		async onSuccess(data) {
 			if (data) {
-				queryClient.setQueryData(personKeys.detail(data.id ?? 0), data);
+				queryClient.setQueryData(personKeys.detail(data.id!), data);
+				await queryClient.invalidateQueries({
+					queryKey: personKeys.all(),
+					exact: true,
+				});
 			}
-
-			await queryClient.invalidateQueries({
-				queryKey: personKeys.all(),
-				exact: true,
-			});
 		},
 	});
 }
@@ -48,13 +47,12 @@ export function useUpdatePerson() {
 			updatePerson(updatedPerson.id!, updatedPerson),
 
 		async onSuccess(data: PersonDto) {
-			if (data) {
-				queryClient.setQueryData(personKeys.detail(data.id!), data);
-				await queryClient.invalidateQueries({
-					queryKey: personKeys.all(),
-					exact: true,
-				});
-			}
+			queryClient.setQueryData(personKeys.detail(data?.id ?? 0), data);
+
+			await queryClient.invalidateQueries({
+				queryKey: personKeys.all(),
+				exact: true,
+			});
 		},
 		onError(error) {
 			console.error('Error updating person:', error);
