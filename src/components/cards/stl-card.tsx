@@ -28,7 +28,9 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 	};
 
 	return (
-		<Card className="relative w-full max-w-full h-40 hover:bg-slate-50">
+		<Card
+			className="relative w-full max-w-full h-40 hover:bg-slate-50"
+			onClick={handleEdit}>
 			<div className="absolute top-2 right-2 flex space-x-2">
 				<Button
 					variant="ghost"
@@ -47,8 +49,7 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 			<Button
 				variant="ghost"
 				className="absolute bottom-0 right-0 mb-2 mr-2"
-				size="icon"
-				onClick={handleEdit}>
+				size="icon">
 				<ArrowRight />
 			</Button>
 		</Card>
