@@ -1,7 +1,7 @@
 import React from 'react';
-import {render} from '@testing-library/react';
-import App from './App';
-import {describe, expect, it} from 'vitest';
+import { render } from '@testing-library/react';
+import App from '../src/App';
+import { describe, expect, it } from 'vitest';
 
 describe('A truthy statement', () => {
 	it('should be equal to 2', () => {
@@ -9,7 +9,5 @@ describe('A truthy statement', () => {
 	});
 	it('renders the App component', () => {
 		render(<App />);
-
-		// Screen.debug(); // Prints out the jsx in the App component unto the command line
 	});
 });

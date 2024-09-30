@@ -56,15 +56,6 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.17.3
         version: 8.20.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@testing-library/jest-dom':
-        specifier: 5.17.0
-        version: 5.17.0
-      '@testing-library/react':
-        specifier: 13.4.0
-        version: 13.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@testing-library/user-event':
-        specifier: 13.5.0
-        version: 13.5.0(@testing-library/dom@10.1.0)
       '@types/jest':
         specifier: 27.5.2
         version: 27.5.2
@@ -171,6 +162,15 @@ importers:
       '@tanstack/eslint-plugin-query':
         specifier: ^5.51.15
         version: 5.51.15(eslint@8.57.0)(typescript@5.4.5)
+      '@testing-library/jest-dom':
+        specifier: 5.17.0
+        version: 5.17.0
+      '@testing-library/react':
+        specifier: 13.4.0
+        version: 13.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@testing-library/user-event':
+        specifier: 13.5.0
+        version: 13.5.0(@testing-library/dom@10.1.0)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -220,7 +220,7 @@ importers:
         specifier: 9.0.11
         version: 9.0.11
       jsdom:
-        specifier: 24.0.0
+        specifier: ^24.0.0
         version: 24.0.0
       postcss:
         specifier: ^8.4.38
