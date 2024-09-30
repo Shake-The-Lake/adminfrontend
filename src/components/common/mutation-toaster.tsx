@@ -1,8 +1,8 @@
 import React from 'react';
-import {useEffect} from 'react';
-import {toast} from 'sonner';
-import {tryGetErrorMessage} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
+import { tryGetErrorMessage } from '../../lib/utils';
+import { type UseMutationResult } from '@tanstack/react-query';
 
 type MutationToasterProps = {
 	type: 'create' | 'update' | 'delete';
@@ -69,7 +69,7 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 	return <></>;
 };
 
-export {MutationToaster};
+export { MutationToaster };
 
 function getSuccessMessageDependingOnType(
 	type: 'create' | 'update' | 'delete',
