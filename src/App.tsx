@@ -128,7 +128,7 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.editBooking}`,
 				element: <EditBookingPage />,
-				loader: editBookingLoader(queryClient),
+				loader: editBookingLoader(),
 			},
 		],
 	},

@@ -3,6 +3,7 @@ import {Controller} from 'react-hook-form';
 import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
 import {Input} from '../ui/input';
 import StlSelect from '../select/stl-select';
+import {useTranslation} from 'react-i18next';
 
 type PersonFormProps = {
 	control: any;
@@ -10,10 +11,12 @@ type PersonFormProps = {
 };
 
 const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
+	const {t} = useTranslation();
+
 	return (
 		<>
 			<FormItem>
-				<FormLabel>First Name</FormLabel>
+				<FormLabel> {t('firstName')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="firstName"
@@ -27,7 +30,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Last Name</FormLabel>
+				<FormLabel>{t('lastName')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="lastName"
@@ -41,7 +44,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Email</FormLabel>
+				<FormLabel>{t('email')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="emailAddress"
@@ -57,7 +60,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Phone Number</FormLabel>
+				<FormLabel>{t('phone')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="phoneNumber"
@@ -73,7 +76,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Person Type</FormLabel>
+				<FormLabel>{t('personType')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="personType"
@@ -99,7 +102,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Is Rider?</FormLabel>
+				<FormLabel>{t('rider')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="isRider"
@@ -122,7 +125,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Pager Number</FormLabel>
+				<FormLabel>{t('pagerNumber')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="pagerNumber"

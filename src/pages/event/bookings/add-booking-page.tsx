@@ -37,7 +37,6 @@ const AddBookingPage: React.FC = () => {
 				phoneNumber: data.phoneNumber,
 				personType: data.personType,
 			};
-
 			const newPerson = await createPersonMutation.mutateAsync(personData);
 
 			const bookingData = {
@@ -47,7 +46,6 @@ const AddBookingPage: React.FC = () => {
 				personId: newPerson.id,
 				timeSlotId: selectedTimeSlotId!,
 			};
-
 			await createBookingMutation.mutateAsync(bookingData);
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
@@ -57,7 +55,7 @@ const AddBookingPage: React.FC = () => {
 
 	return (
 		<div>
-			<h1>Create New Booking</h1>
+			<h1> {t('booking.create')}</h1>
 			<FormProvider {...methods}>
 				<form onSubmit={methods.handleSubmit(onSubmit)}>
 					<div className="mt-6">

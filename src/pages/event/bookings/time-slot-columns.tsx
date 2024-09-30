@@ -57,14 +57,14 @@ export const timeSlotColumns = (
 
 	{
 		accessorKey: 'Viewer Seats',
-		header: t('Viewer Seats'),
+		header: t('viewerSeats'),
 		cell({row}) {
 			return `${row.original.availableViewerSeats ?? 0}/${row.original.seatsViewer}`;
 		},
 	},
 	{
 		accessorKey: 'Rider Seats',
-		header: t('Rider Seats'),
+		header: t('riderSeats'),
 		cell({row}) {
 			return `${row.original.availableRiderSeats ?? 0}/${row.original.seatsRider}`;
 		},
