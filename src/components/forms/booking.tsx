@@ -5,45 +5,42 @@ import {useTranslation} from 'react-i18next';
 import {timeSlotColumns} from '../../pages/event/bookings/time-slot-columns';
 import {useGetTimeSlotsForEvent} from '../../queries/time-slot';
 import {TimeSlotDto} from '../../models/api/time-slot.model';
+import {
+	defaultFilterParams,
+	StlFilterParams,
+} from '../../models/api/search.model';
 
 type BookingFormProps = {
-	control: any;
-	errors: any;
 	eventId: number;
 	selectedTimeSlotId?: number;
 	setSelectedTimeSlotId: (id: number | undefined) => void;
 };
 
 const BookingForm: React.FC<BookingFormProps> = ({
-	control,
-	errors,
 	eventId,
 	selectedTimeSlotId,
 	setSelectedTimeSlotId,
 }) => {
 	const {t, i18n} = useTranslation();
 	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
-	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>([]);
-	const [filter, setFilter] = useState<{
-		activityId?: number;
-		boatId?: number;
-		from?: string;
-		to?: string;
-	}>({});
+	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>(
+		() => timeSlots ?? [],
+	);
+	const [filter, setFilter] = useState<StlFilterParams>(defaultFilterParams);
 
 	useEffect(() => {
 		if (timeSlots) {
 			updateFilteredTimeSlots();
 		}
 	}, [timeSlots, filter]);
-	
+
 	const updateFilteredTimeSlots = () => {
 		const timeslotsWithAvailableSeats = timeSlots?.filter(
 			(slot) => slot.availableSeats > 0,
 		);
 		const filtered = filterTimeSlots(
 			timeslotsWithAvailableSeats ?? [],
-			filter.activityId,
+			filter.activityTypeId,
 			filter.boatId,
 			filter.from,
 			filter.to,
@@ -72,30 +69,16 @@ const BookingForm: React.FC<BookingFormProps> = ({
 			);
 		}
 
-		const parseTime = (timeString: string) => {
-			if (!timeString) return null;
-			const [hours, minutes, seconds] = timeString.split(':');
-			return (
-				Number(hours) * 3600 + Number(minutes) * 60 + (Number(seconds) || 0)
-			);
-		};
-
 		if (from) {
-			const fromTimeValue = parseTime(from);
-			if (fromTimeValue !== null) {
-				filtered = filtered.filter(
-					(slot) => slot.fromTime && parseTime(slot.fromTime)! >= fromTimeValue,
-				);
-			}
+			filtered = filtered.filter(
+				(slot) => slot.fromTime && slot.fromTime! >= from,
+			);
 		}
 
 		if (to) {
-			const toTimeValue = parseTime(to);
-			if (toTimeValue !== null) {
-				filtered = filtered.filter(
-					(slot) => slot.untilTime && parseTime(slot.untilTime)! <= toTimeValue,
-				);
-			}
+			filtered = filtered.filter(
+				(slot) => slot.untilTime && slot.untilTime! <= to,
+			);
 		}
 
 		return filtered;

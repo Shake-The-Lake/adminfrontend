@@ -5,10 +5,7 @@ import BookingForm from '../../../components/forms/booking';
 import PersonForm from '../../../components/forms/person';
 import {Button} from '../../../components/ui/button';
 import {useTranslation} from 'react-i18next';
-import {
-	CombinedBookingFormDto,
-	defaultCombinedBooking,
-} from '../../../models/api/booking.model';
+import {defaultCombinedBooking} from '../../../models/api/booking.model';
 import {useUpdatePerson} from '../../../queries/person';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {useGetBookingDetails, useUpdateBooking} from '../../../queries/booking';
@@ -47,10 +44,12 @@ const EditBookingPage = () => {
 	const {t} = useTranslation();
 	const updateBooking = useUpdateBooking(eventId, bookingId!);
 	const updatePerson = useUpdatePerson();
-	const methods = useForm({
-		defaultValues: defaultCombinedBooking,
+	const form = useForm({
+		defaultValues: {
+			...defaultCombinedBooking,
+		},
 	});
-	const {reset, formState} = methods;
+	const {reset, formState} = form;
 	const {isDirty} = formState;
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
 		number | undefined
@@ -71,7 +70,8 @@ const EditBookingPage = () => {
 		}
 	}, [bookingDetails, reset]);
 
-	const onSubmit = async (data: CombinedBookingFormDto) => {
+	const onSubmit = async (data: any) => {
+		console.log(data);
 		const personUpdateData = {
 			id: bookingDetails?.person?.id,
 			firstName: data.firstName,
@@ -107,23 +107,18 @@ const EditBookingPage = () => {
 		<PageTransitionFadeIn>
 			<h1>{t('booking.update')}</h1>
 			<LoadingSpinner isLoading={isLoading} />
-			<FormProvider {...methods}>
-				<form onSubmit={methods.handleSubmit(onSubmit)}>
+			<FormProvider {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<div className="mt-6">
 						<h3>{t('timeSlot.title')}</h3>
 						<BookingForm
-							control={methods.control}
-							errors={methods.formState.errors}
 							eventId={eventId}
 							selectedTimeSlotId={selectedTimeSlotId}
 							setSelectedTimeSlotId={setSelectedTimeSlotId}
 						/>
 					</div>
 					<div className="mt-10 w-1/3">
-						<PersonForm
-							control={methods.control}
-							errors={methods.formState.errors}
-						/>
+						<PersonForm />
 					</div>
 					<div className="flex w-full justify-end mt-auto pt-4">
 						<Button type="button" variant="secondary" onClick={handleCancel}>

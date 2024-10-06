@@ -9,7 +9,7 @@ import {
 	getPersonById,
 	updatePerson,
 } from '../services/person-service';
-import {PersonDto} from '../models/api/person.model';
+import {type PersonDto} from '../models/api/person.model';
 
 export const personKeys = {
 	all: () => ['persons'] as QueryKey,
@@ -26,7 +26,7 @@ export function useGetPersonDetails(id: number) {
 export function useCreatePerson() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (personData: PersonDto) => createPerson(personData),
+		mutationFn: async (personData: PersonDto) => createPerson(personData),
 		async onSuccess(data) {
 			if (data) {
 				queryClient.setQueryData(personKeys.detail(data.id!), data);

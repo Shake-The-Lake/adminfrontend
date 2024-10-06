@@ -39,6 +39,6 @@ export const defaultCombinedBooking: CombinedBookingFormDto = {
 	personType: 'CUSTOMER',
 	isRider: true,
 	isManual: true,
-	pagerNumber: undefined,
+	pagerNumber: 0,
 	timeSlotId: undefined,
 };

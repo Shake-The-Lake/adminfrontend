@@ -1,22 +1,25 @@
 import React from 'react';
-import {Controller} from 'react-hook-form';
+import {Controller, useFormContext} from 'react-hook-form';
 import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
 import {Input} from '../ui/input';
 import StlSelect from '../select/stl-select';
 import {useTranslation} from 'react-i18next';
 
-type PersonFormProps = {
-	control: any;
-	errors: any;
-};
-
-const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
+const PersonForm: React.FC = () => {
+	const {
+		control,
+		formState: {errors},
+	} = useFormContext();
 	const {t} = useTranslation();
+
+	const getErrorMessage = (error: any) => {
+		return typeof error?.message === 'string' ? error.message : '';
+	};
 
 	return (
 		<>
 			<FormItem>
-				<FormLabel> {t('firstName')}</FormLabel>
+				<FormLabel>{t('firstName')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="firstName"
@@ -24,9 +27,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						render={({field}) => <Input {...field} placeholder="First Name" />}
 					/>
 				</FormControl>
-				{errors.firstName && (
-					<FormMessage>{errors.firstName.message}</FormMessage>
-				)}
+				<FormMessage>{getErrorMessage(errors.firstName)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
@@ -38,9 +39,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						render={({field}) => <Input {...field} placeholder="Last Name" />}
 					/>
 				</FormControl>
-				{errors.lastName && (
-					<FormMessage>{errors.lastName.message}</FormMessage>
-				)}
+				<FormMessage>{getErrorMessage(errors.lastName)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
@@ -54,9 +53,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						)}
 					/>
 				</FormControl>
-				{errors.emailAddress && (
-					<FormMessage>{errors.emailAddress.message}</FormMessage>
-				)}
+				<FormMessage>{getErrorMessage(errors.emailAddress)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
@@ -70,9 +67,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						)}
 					/>
 				</FormControl>
-				{errors.phoneNumber && (
-					<FormMessage>{errors.phoneNumber.message}</FormMessage>
-				)}
+				<FormMessage>{getErrorMessage(errors.phoneNumber)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
@@ -86,9 +81,9 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 								value={field.value}
 								onValueChange={field.onChange}
 								list={[
-									{key: 'EMPLOYEE', label: 'Employee'},
-									{key: 'BOAT_DRIVER', label: 'Boat Driver'},
-									{key: 'CUSTOMER', label: 'Customer'},
+									{key: 'EMPLOYEE', label: t('employee')},
+									{key: 'BOAT_DRIVER', label: t('boatDriver')},
+									{key: 'CUSTOMER', label: t('customer')},
 								]}
 								getKey={(item) => item?.key}
 								getLabel={(item) => item?.label ?? ''}
@@ -96,9 +91,7 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						)}
 					/>
 				</FormControl>
-				{errors.personType && (
-					<FormMessage>{errors.personType.message}</FormMessage>
-				)}
+				<FormMessage>{getErrorMessage(errors.personType)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
@@ -111,17 +104,18 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 							<StlSelect
 								value={field.value ? 'true' : 'false'}
 								onValueChange={(value) => field.onChange(value === 'true')}
+								defaultValue="false"
 								list={[
 									{key: 'true', label: 'Yes'},
 									{key: 'false', label: 'No'},
 								]}
-								getKey={(item) => item!.key}
+								getKey={(item) => item?.key}
 								getLabel={(item) => item!.label}
 							/>
 						)}
 					/>
 				</FormControl>
-				{errors.isRider && <FormMessage>{errors.isRider.message}</FormMessage>}
+				<FormMessage>{getErrorMessage(errors.isRider)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
@@ -131,18 +125,11 @@ const PersonForm: React.FC<PersonFormProps> = ({control, errors}) => {
 						name="pagerNumber"
 						control={control}
 						render={({field}) => (
-							<Input
-								{...field}
-								placeholder="Pager Number"
-								type="number"
-								min={0}
-							/>
+							<Input {...field} placeholder="Pager Number" type="number" />
 						)}
 					/>
 				</FormControl>
-				{errors.pagerNumber && (
-					<FormMessage>{errors.pagerNumber.message}</FormMessage>
-				)}
+				<FormMessage>{getErrorMessage(errors.pagerNumber)}</FormMessage>
 			</FormItem>
 		</>
 	);

@@ -61,7 +61,7 @@ export function useUpdateBooking(eventId: number, bookingId: number) {
 		mutationFn: async (updatedBooking: BookingDto) =>
 			updateBooking(bookingId, updatedBooking),
 
-		onSuccess: async function (data) {
+		async onSuccess(data) {
 			queryClient.setQueryData(
 				bookingKeys.detail(data?.id ?? bookingId, true),
 				data,
@@ -96,7 +96,7 @@ export function useDeleteBooking(eventId: number) {
 export function useCreateBooking(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (bookingData: BookingDto) => createBooking(bookingData),
+		mutationFn: async (bookingData: BookingDto) => createBooking(bookingData),
 		async onSuccess(data) {
 			if (data) {
 				queryClient.setQueryData(
@@ -105,6 +105,7 @@ export function useCreateBooking(eventId: number) {
 						oldData ? [...oldData, data] : [data],
 				);
 			}
+
 			await queryClient.invalidateQueries({
 				queryKey: bookingKeys.all(eventId),
 				exact: true,

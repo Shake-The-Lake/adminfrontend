@@ -8,7 +8,10 @@ import {useCreatePerson} from '../../../queries/person';
 import {useCreateBooking} from '../../../queries/booking';
 import {loader} from './booking-overview';
 import {useTranslation} from 'react-i18next';
-import {defaultCombinedBooking} from '../../../models/api/booking.model';
+import {
+	CombinedBookingFormDto,
+	defaultCombinedBooking,
+} from '../../../models/api/booking.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import {toast} from 'sonner';
 
@@ -26,11 +29,12 @@ const AddBookingPage: React.FC = () => {
 	const handleCancel = () => {
 		navigate(`/event/${eventId}/bookings`);
 	};
-	const methods = useForm({
+	const form = useForm({
 		defaultValues: defaultCombinedBooking,
+		mode: 'onChange',
 	});
 
-	const onSubmit = async (data: any) => {
+	const onSubmit = async (data: CombinedBookingFormDto) => {
 		try {
 			const personData = {
 				firstName: data.firstName,
@@ -44,7 +48,7 @@ const AddBookingPage: React.FC = () => {
 			const bookingData = {
 				isRider: data.isRider,
 				isManual: true,
-				pagerNumber: data.pagerNumber || 0,
+				pagerNumber: data.pagerNumber,
 				personId: newPerson.id,
 				timeSlotId: selectedTimeSlotId!,
 			};
@@ -60,23 +64,18 @@ const AddBookingPage: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<h1> {t('booking.create')}</h1>
-			<FormProvider {...methods}>
-				<form onSubmit={methods.handleSubmit(onSubmit)}>
+			<FormProvider {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<div className="mt-6">
 						<h3>{t('timeSlot.title')}</h3>
 						<BookingForm
-							control={methods.control}
-							errors={methods.formState.errors}
 							eventId={eventId}
 							selectedTimeSlotId={selectedTimeSlotId}
 							setSelectedTimeSlotId={setSelectedTimeSlotId}
 						/>
 					</div>
 					<div className="mt-10 w-1/3">
-						<PersonForm
-							control={methods.control}
-							errors={methods.formState.errors}
-						/>
+						<PersonForm />
 					</div>
 					<div className="flex w-full justify-end mt-auto pt-4">
 						<Button type="button" variant="secondary" onClick={handleCancel}>
