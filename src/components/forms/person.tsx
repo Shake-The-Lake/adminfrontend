@@ -95,7 +95,7 @@ const PersonForm: React.FC = () => {
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>{t('rider')}</FormLabel>
+				<FormLabel>{t('driverOrViewer')}</FormLabel>
 				<FormControl>
 					<Controller
 						name="isRider"
@@ -106,8 +106,8 @@ const PersonForm: React.FC = () => {
 								onValueChange={(value) => field.onChange(value === 'true')}
 								defaultValue="false"
 								list={[
-									{key: 'true', label: 'Yes'},
-									{key: 'false', label: 'No'},
+									{key: 'true', label: t('rider')},
+									{key: 'false', label: t('viewer')},
 								]}
 								getKey={(item) => item?.key}
 								getLabel={(item) => item!.label}
