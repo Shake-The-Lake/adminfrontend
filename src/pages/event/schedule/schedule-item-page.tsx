@@ -30,7 +30,7 @@ export const loader =
 	async ({params}: LoaderFunctionArgs) => {
 		const routeIds = extractTypedInfoFromRouteParams(params);
 		if (!routeIds.timeSlotId) {
-			throw new Error('No event ID provided');
+			throw new Error('No Timeslot ID provided');
 		}
 
 		await queryClient.ensureQueryData(
@@ -101,15 +101,15 @@ const ScheduleItemPage: React.FC = () => {
 							timeSlot?.bookings.map((slot, index) => (
 								<TableRow key={index} className="w-full justify-between">
 									<Link
-									to={`/event/${eventId}/bookings/edit/${slot.id}`}
-									className="contents">
-									<TableCell>
-										{slot.person?.firstName} {slot.person?.lastName}
-									</TableCell>
-									<TableCell>{slot.person?.phoneNumber}</TableCell>
-									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-									<TableCell>{slot.pagerNumber}</TableCell>
-								</Link>
+										to={`/event/${eventId}/bookings/edit/${slot.id}`}
+										className="contents">
+										<TableCell>
+											{slot.person?.firstName} {slot.person?.lastName}
+										</TableCell>
+										<TableCell>{slot.person?.phoneNumber}</TableCell>
+										<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
+										<TableCell>{slot.pagerNumber}</TableCell>
+									</Link>
 									<EditBookingTableCell
 										booking={slot}
 										deleteMutation={deleteMutation}></EditBookingTableCell>

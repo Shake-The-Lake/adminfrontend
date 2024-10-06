@@ -5,20 +5,14 @@ import {type BoatDto} from './boat.model';
 import {type ActivityTypeDto} from './activity-type.model';
 import {getDisplayTimeFromBackend} from '../../lib/date-time.utils';
 import {t} from 'i18next';
+import {BookingDto} from './booking.model';
 
 export type BookingSearchDto = {
 	person: PersonDto;
 	boat: BoatDto;
 	timeSlot: TimeSlotDto;
 	activityType: ActivityTypeDto;
-	booking: {
-		id: number;
-		isRider: boolean;
-		isManual: boolean;
-		pagerNumber: number | null;
-		personId: number;
-		timeSlotId: number;
-	};
+	booking: BookingDto;
 };
 
 export type BookingSearchParams = {
