@@ -94,6 +94,7 @@ const ScheduleItemPage: React.FC = () => {
 							<TableHead>{t('phone')}</TableHead>
 							<TableHead>{t('type')}</TableHead>
 							<TableHead>{t('manual')}</TableHead>
+							<TableHead></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
