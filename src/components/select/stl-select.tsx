@@ -7,9 +7,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select';
-import {Button} from '../ui/button';
-import {X} from 'lucide-react';
-import {useTranslation} from 'react-i18next';
+import { Button } from '../ui/button';
+import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type StlSelectProps<T> = {
 	value: string | undefined;
@@ -35,7 +35,7 @@ const StlSelect = <T,>({
 		onValueChange('');
 	};
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 	return (
 		<Select value={value} onValueChange={onValueChange}>
 			<SelectTrigger>
