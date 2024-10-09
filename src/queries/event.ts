@@ -1,18 +1,18 @@
 import {type EventDto} from '../models/api/event.model';
 import {
 	type QueryClient,
+	type QueryKey,
 	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
-	type QueryKey,
 } from '@tanstack/react-query';
 import {
+	createEvent,
+	deleteEvent,
 	getAllEvents,
 	getEventById,
-	createEvent,
 	updateEvent,
-	deleteEvent,
 } from '../services/event-service';
 import { mutationKeyGenerator } from '../lib/utils';
 
