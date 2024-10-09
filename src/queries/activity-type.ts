@@ -8,43 +8,62 @@ import {
 	useQueryClient,
 	type QueryKey,
 } from '@tanstack/react-query';
-import {createActivityType, deleteActivityType, getActivityTypeById, getAllActivityTypesFromEvent, updateActivityType} from '../services/activity-type-service';
+import {
+	createActivityType,
+	deleteActivityType,
+	getActivityTypeById,
+	getAllActivityTypesFromEvent,
+	updateActivityType,
+} from '../services/activity-type-service';
 import {eventKeys} from './event';
+import { mutationKeyGenerator } from '../lib/utils';
 
-export const activityTypeKeys = {
-	all: (eventId: number) => ['activity-types', eventId] as QueryKey,
-	detail: (id: number) => ['activity-types', 'detail', id] as QueryKey,
+const identifier = 'activity-types';
+
+const baseQueryKey = (eventId: number) =>
+	[identifier, eventId] as QueryKey;
+
+export const activityTypeQueryKeys = {
+	all: baseQueryKey,
+	detail: (eventId: number, id: number) =>
+		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
-export const activityTypesOptions = (eventId: number, queryClient: QueryClient) => queryOptions({
-	queryKey: activityTypeKeys.all(eventId),
-	queryFn: async () => getAllActivityTypesFromEvent(eventId),
-	initialData() {
-		const queryData: EventDto | undefined = queryClient.getQueryData(eventKeys.detail(eventId, true));
-		return queryData?.activityTypes;
-	},
-});
+export const activityTypeMutationKeys = mutationKeyGenerator(identifier);
+
+export const activityTypesOptions = (
+	eventId: number,
+	queryClient: QueryClient,
+) =>
+	queryOptions({
+		queryKey: activityTypeQueryKeys.all(eventId),
+		queryFn: async () => getAllActivityTypesFromEvent(eventId),
+		initialData() {
+			const queryData: EventDto | undefined = queryClient.getQueryData(
+				eventKeys.detail(eventId, true),
+			);
+			return queryData?.activityTypes;
+		},
+	});
 
 export function useGetActivityTypes(eventId: number) {
 	const queryClient = useQueryClient();
 	return useQuery(activityTypesOptions(eventId, queryClient));
 }
 
-export const activityTypeDetailOptions = (id: number) => queryOptions({
-	queryKey: activityTypeKeys.detail(id),
-	queryFn: async () => getActivityTypeById(id),
-});
+export const activityTypeDetailOptions = (eventId: number, id: number) =>
+	queryOptions({
+		queryKey: activityTypeQueryKeys.detail(eventId, id),
+		queryFn: async () => getActivityTypeById(id),
+	});
 
-export function useActivityTypeDetail(
-	id: number,
-	eventId: number,
-) {
+export function useActivityTypeDetail(eventId: number, id: number) {
 	const queryClient = useQueryClient();
 	return useQuery({
-		...activityTypeDetailOptions(id),
+		...activityTypeDetailOptions(eventId, id),
 		initialData() {
 			const queryData: ActivityTypeDto[] | undefined = queryClient.getQueryData(
-				activityTypeKeys.all(eventId),
+				activityTypeQueryKeys.all(eventId),
 			);
 			return queryData?.find((d) => d.id === eventId);
 		},
@@ -54,27 +73,22 @@ export function useActivityTypeDetail(
 export function useCreateActivityType(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: activityTypeMutationKeys.create,
 		mutationFn: createActivityType,
 		async onSuccess(data) {
-			if (data) {
-				queryClient.setQueryData(activityTypeKeys.detail(data.id ?? 0), data);
-			}
-
-			await queryClient.invalidateQueries({queryKey: activityTypeKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0, data);
 		},
 	});
 }
 
-export function useUpdateActivityType(id: number) {
+export function useUpdateActivityType(eventId: number, id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (activitytype: ActivityTypeDto) => updateActivityType(id, activitytype),
+		mutationKey: activityTypeMutationKeys.update,
+		mutationFn: async (activitytype: ActivityTypeDto) =>
+			updateActivityType(id, activitytype),
 		async onSuccess(data) {
-			queryClient.setQueryData(activityTypeKeys.detail(data?.id ?? 0), data);
-
-			await queryClient.invalidateQueries({queryKey: activityTypeKeys.all(data?.eventId ?? 0), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(data?.eventId ?? 0, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId, id, data)
 		},
 	});
 }
@@ -82,10 +96,27 @@ export function useUpdateActivityType(id: number) {
 export function useDeleteActivityType(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: activityTypeMutationKeys.delete,
 		mutationFn: deleteActivityType,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: activityTypeKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId)
 		},
 	});
+}
+
+async function queriesToInvalidateOnCrud(
+	queryClient: QueryClient,
+	eventId: number,
+	activityTypeId?: number,
+	data?: any,
+) {
+	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)});
+
+	if (activityTypeId) {
+		queryClient.setQueryData(
+			activityTypeQueryKeys.detail(eventId, activityTypeId),
+			data,
+		);
+	}
+	await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true),	exact: true});
 }

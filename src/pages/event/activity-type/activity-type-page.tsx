@@ -17,34 +17,34 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			if (!routeIds.activityTypeId) {
-				throw new Error('No activity type ID provided');
-			}
+		if (!routeIds.activityTypeId) {
+			throw new Error('No activity type ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				activityTypeDetailOptions(routeIds.activityTypeId),
-			);
+		await queryClient.ensureQueryData(
+			activityTypeDetailOptions(routeIds.eventId, routeIds.activityTypeId),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const ActivityTypePage: React.FC = () => {
 	const {eventId, activityTypeId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const {
 		data: activityType,
 		isPending,
 		error,
-	} = useActivityTypeDetail(activityTypeId, eventId);
+	} = useActivityTypeDetail(eventId, activityTypeId);
 
-	const updateMutation = useUpdateActivityType(activityTypeId);
+	const updateMutation = useUpdateActivityType(eventId, activityTypeId);
 
 	const {t, i18n} = useTranslation();
 

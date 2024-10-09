@@ -96,3 +96,11 @@ export function extractTypedInfoFromRouteParams(params: Params) {
 		timeSlotId: params.timeSlotId ? Number(params.timeSlotId) : 0,
 	};
 }
+
+export function mutationKeyGenerator(identifier: string) {
+	return {
+		create: [identifier, 'create'],
+		update: [identifier, 'update'],
+		delete: [identifier, 'delete'],
+	};
+}
