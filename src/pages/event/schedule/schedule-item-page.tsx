@@ -58,6 +58,7 @@ const ScheduleItemPage: React.FC = () => {
 		(timeSlot?.seatsViewer ?? 0) - (timeSlot?.availableViewerSeats ?? 0);
 
 	const deleteMutation = useDeleteBooking(eventId);
+
 	return (
 		<PageTransitionFadeIn>
 			<div className="mt-10">
