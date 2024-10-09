@@ -23,6 +23,7 @@ import {
 	getTranslation,
 } from '../../../lib/utils';
 import {useTranslation} from 'react-i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -44,7 +45,7 @@ const ScheduleItemPage: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 
 	const {data: timeSlot, isPending} = useTimeSlotDetail(
 		queryClient,
@@ -59,7 +60,7 @@ const ScheduleItemPage: React.FC = () => {
 	const deleteMutation = useDeleteBooking(eventId);
 
 	return (
-		<>
+		<PageTransitionFadeIn>
 			<div className="mt-10">
 				<LoadingSpinner isLoading={isPending} />
 				<div className="flex justify-between">
@@ -69,7 +70,7 @@ const ScheduleItemPage: React.FC = () => {
 						{getDisplayTimeFromBackend(timeSlot?.untilTime)}
 					</h2>
 				</div>
-				<div className="flex gap-5">
+				<div className="flex flex-wrap gap-5">
 					<span className="flex gap-2">
 						<SailboatIcon /> {timeSlot?.boat?.operator}
 					</span>
@@ -86,34 +87,42 @@ const ScheduleItemPage: React.FC = () => {
 						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
 				</div>
-				<h2 className="text-2xl mt-10">Current Booking</h2>
+				<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
 				<Table className="mt-5">
 					<TableHeader>
 						<TableRow>
-							<TableHead>Name</TableHead>
-							<TableHead>Phone</TableHead>
-							<TableHead>Type</TableHead>
-							<TableHead>Manual</TableHead>
+							<TableHead>{t('name')}</TableHead>
+							<TableHead>{t('phone')}</TableHead>
+							<TableHead>{t('type')}</TableHead>
+							<TableHead>{t('manual')}</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{timeSlot?.bookings.map((slot, index) => (
-							<TableRow key={index} className="w-full justify-between">
-								<TableCell>
-									{slot.person?.firstName} {slot.person?.lastName}
+						{timeSlot?.bookings.length ? (
+							timeSlot?.bookings.map((slot, index) => (
+								<TableRow key={index} className="w-full justify-between">
+									<TableCell>
+										{slot.person?.firstName} {slot.person?.lastName}
+									</TableCell>
+									<TableCell>{slot.person?.phoneNumber}</TableCell>
+									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
+									<TableCell>{slot.pagerNumber}</TableCell>
+									<EditBookingTableCell
+										booking={slot}
+										deleteMutation={deleteMutation}></EditBookingTableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={5} className="h-24 text-center">
+									{t('booking.noBookingsYet')}
 								</TableCell>
-								<TableCell>{slot.person?.phoneNumber}</TableCell>
-								<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-								<TableCell>{slot.pagerNumber}</TableCell>
-								<EditBookingTableCell
-									booking={slot}
-									deleteMutation={deleteMutation}></EditBookingTableCell>
 							</TableRow>
-						))}
+						)}
 					</TableBody>
 				</Table>
 			</div>
-		</>
+		</PageTransitionFadeIn>
 	);
 };
 

@@ -15,6 +15,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '../ui/table';
+import {useTranslation} from 'react-i18next';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
@@ -29,6 +30,8 @@ export function DataTable<TyData, TyValue>({
 		[],
 	);
 
+	const {t} = useTranslation();
+
 	const table = useReactTable({
 		data,
 		columns,
@@ -41,8 +44,8 @@ export function DataTable<TyData, TyValue>({
 	});
 
 	return (
-		<div className="p-1 w-full h-full overflow-auto">
-			<div className="rounded-md border">
+		<div className="p-1 mt-5 w-full h-full overflow-auto">
+			<div className="rounded-md border overflow-x-auto">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -81,7 +84,7 @@ export function DataTable<TyData, TyValue>({
 								<TableCell
 									colSpan={columns.length}
 									className="h-24 text-center">
-									No results.
+									{t('noData')}
 								</TableCell>
 							</TableRow>
 						)}

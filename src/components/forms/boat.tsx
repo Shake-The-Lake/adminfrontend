@@ -18,6 +18,7 @@ import {useParams} from 'react-router-dom';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {validateTime} from '../../lib/date-time.utils';
+import {useTranslation} from 'react-i18next';
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -60,6 +61,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		},
 		resolver: zodResolver(boatFormSchema),
 	});
+	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 
@@ -95,9 +97,9 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Boat Name</FormLabel>
+								<FormLabel>{t('boat.name')}</FormLabel>
 								<FormControl>
-									<Input placeholder="Boat Name" {...field} className="input" />
+									<Input placeholder={t('boat.name')} {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -109,9 +111,9 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Boat Type</FormLabel>
+								<FormLabel>{t('boat.type')}</FormLabel>
 								<FormControl>
-									<Input placeholder="Boat Type" {...field} className="input" />
+									<Input placeholder={t('boat.type')} {...field} className="input" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -122,10 +124,10 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Boat Driver</FormLabel>
+								<FormLabel>{t('boatDriver')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Boat Driver"
+										placeholder={t('boatDriver')}
 										{...field}
 										className="input"
 									/>
@@ -140,7 +142,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Max available seats for riders</FormLabel>
+								<FormLabel>{t('boat.maxSeats')}</FormLabel>
 								<FormControl>
 									<Input
 										type="number"
@@ -159,7 +161,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Max available seats for viewers</FormLabel>
+								<FormLabel>{t('boat.maxSeatsViewers')}</FormLabel>
 								<FormControl>
 									<Input
 										type="number"
@@ -178,7 +180,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Boat Available From</FormLabel>
+								<FormLabel>{t('boat.availableFrom')}</FormLabel>
 								<FormControl>
 									<Input type="time" {...field} className="input" />
 								</FormControl>
@@ -192,7 +194,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Boat Available Until</FormLabel>
+								<FormLabel>{t('boat.availableUntil')}</FormLabel>
 								<FormControl>
 									<Input type="time" {...field} className="input" />
 								</FormControl>
@@ -204,7 +206,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 					<div
 						className="mt-16 flex justify-end w-full"
 						style={isCreate ? {display: 'none'} : {}}>
-						<Button type="submit">Save Changes</Button>
+						<Button type="submit">{t('save')}</Button>
 					</div>
 				</form>
 			</Form>

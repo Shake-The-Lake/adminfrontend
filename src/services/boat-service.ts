@@ -4,7 +4,7 @@ import {getSortedTimeSlots} from './time-slot-service';
 import axiosInstance from './axiosInstance';
 
 export const getSortedBoats = (boats?: BoatDto[]) =>
-	boats ? sortBy(boats, ['name', 'availableFrom']).map(b => getBoatWithSortedProperties(b)) : [];
+	boats ? sortBy(boats, [b => b.name.toLowerCase(), 'availableFrom']).map(b => getBoatWithSortedProperties(b)) : [];
 
 export const getBoatWithSortedProperties = (boat: BoatDto) => {
 	boat.timeSlots = getSortedTimeSlots(boat.timeSlots);

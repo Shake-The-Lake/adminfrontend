@@ -1,20 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Separator} from '../ui/separator';
 import {ch, de, en} from '../../constants';
 import {ToggleGroup, ToggleGroupItem} from '../ui/toggle-group';
 import {useTranslation} from 'react-i18next';
 
+const SelectedLanguageStorageKey = 'selectedLanguage';
+
 const LanguageSelector: React.FC = () => {
-	const [language, setLanguage] = useState(en);
+	const {i18n, t} = useTranslation();
 
-	const {i18n} = useTranslation();
+	const [language, setLanguage] = useState(
+		() => localStorage.getItem(SelectedLanguageStorageKey) ?? en,
+	);
 
-	const handleLanguageChange = (lang: string) => {
+	useEffect(() => {
+		const changeLanguage = async () => i18n.changeLanguage(language);
+		changeLanguage().catch(console.error);
+	}, [language, i18n]);
+
+	const handleLanguageChange = async (lang: string) => {
 		setLanguage(lang);
-		i18n
-			.changeLanguage(lang)
-			.then(() => 'obligatory for @typescript-eslint/no-floating-promises')
-			.catch(() => 'obligatory for @typescript-eslint/no-floating-promises');
+		localStorage.setItem(SelectedLanguageStorageKey, lang);
+		await i18n.changeLanguage(lang);
 	};
 
 	return (
@@ -24,15 +31,17 @@ const LanguageSelector: React.FC = () => {
 			onValueChange={handleLanguageChange}
 			size={'sm'}
 			className="text-white flex items-center space-x-1 text-sm">
-			<ToggleGroupItem value={de} aria-label="Toggle german">
+			<ToggleGroupItem value={de} aria-label={t('langSwitcher.toggleGerman')}>
 				<div className="uppercase">de</div>
 			</ToggleGroupItem>
 			<Separator orientation="vertical" className="h-5" />
-			<ToggleGroupItem value={en} aria-label="Toggle english">
+			<ToggleGroupItem value={en} aria-label={t('langSwitcher.toggleEnglish')}>
 				<div className="uppercase">en</div>
 			</ToggleGroupItem>
 			<Separator orientation="vertical" className="h-5" />
-			<ToggleGroupItem value={ch} aria-label="Toggle swiss german">
+			<ToggleGroupItem
+				value={ch}
+				aria-label={t('langSwitcher.toggleSwissGerman')}>
 				<div className="uppercase">ch</div>
 			</ToggleGroupItem>
 		</ToggleGroup>

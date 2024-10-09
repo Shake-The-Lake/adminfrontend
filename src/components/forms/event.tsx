@@ -10,6 +10,7 @@ import {type UseMutationResult} from '@tanstack/react-query';
 import {MutationToaster} from '../common/mutation-toaster';
 import {Button} from '../ui/button';
 import {validateDate} from '../../lib/date-time.utils';
+import {useTranslation} from 'react-i18next';
 
 // Schema definition
 export const eventFormSchema = z.object({
@@ -41,6 +42,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 		},
 		resolver: zodResolver(eventFormSchema),
 	});
+	const {t} = useTranslation();
 
 	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
@@ -68,10 +70,10 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Title</FormLabel>
+								<FormLabel>{t('title')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Sommer Event 2024"
+										placeholder={t('event.placeholder')}
 										{...field}
 										className="input"
 									/>
@@ -84,10 +86,10 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Description</FormLabel>
+								<FormLabel>{t('description')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Shake the Lake 2024"
+										placeholder={t('description')}
 										{...field}
 										className="input"
 									/>
@@ -100,7 +102,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Event Date</FormLabel>
+								<FormLabel>{t('event.date')}</FormLabel>
 								<FormControl>
 									<Input type="date" {...field} className="input" />
 								</FormControl>
@@ -111,7 +113,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 					<div
 						className="mt-16 flex justify-end w-full"
 						style={isCreate ? {display: 'none'} : {}}>
-						<Button type="submit">Save Changes</Button>
+						<Button type="submit">{t('save')}</Button>
 					</div>
 				</form>
 			</Form>

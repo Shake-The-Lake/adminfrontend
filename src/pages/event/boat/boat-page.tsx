@@ -13,6 +13,7 @@ import {
 } from '../../../queries/boat';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {defaultBoatDto} from '../../../models/api/boat.model';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -41,15 +42,15 @@ const BoatPage: React.FC = () => {
 	const {t} = useTranslation();
 
 	return (
-		<>
+		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
 				<LoadingSpinner isLoading={isPending} />
 
 				<h2 className="w-full mb-6">
-					{t('boat')} - {boat?.name}
+					{t('boat.title')} - {boat?.name}
 				</h2>
 
-				{error && <p>Error fetching Boat.</p>}
+				{error && <p>{t('boat.errorLoadingBoat')}</p>}
 				{boat && (
 					<BoatForm
 						key={boat.id}
@@ -61,7 +62,7 @@ const BoatPage: React.FC = () => {
 			</div>
 			<Separator className="w-full my-10" />
 			<TimeSlots {...{...defaultBoatDto, ...boat}}></TimeSlots>
-		</>
+		</PageTransitionFadeIn>
 	);
 };
 

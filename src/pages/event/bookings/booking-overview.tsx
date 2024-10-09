@@ -5,11 +5,7 @@ import {
 	defaultBookingSearchParams,
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
-import {
-	Link,
-	type LoaderFunctionArgs,
-	useLoaderData,
-} from 'react-router-dom';
+import {Link, type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import {
 	bookingsSearchOptions,
@@ -22,6 +18,8 @@ import StlFilter, {
 import {defaultFilterParams} from '../../../models/api/search.model';
 import {eventDetailRoutes} from '../../../constants';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {useTranslation} from 'react-i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -47,7 +45,7 @@ const BookingOverview: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
-
+	const {t} = useTranslation();
 	const {data: bookings, isPending, error} = useSearchBookings(eventId, filter);
 
 	const searchParams = defaultFilterParams;
@@ -73,30 +71,32 @@ const BookingOverview: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
-			<LoadingSpinner isLoading={isPending} />
-			<div className="w-full mb-8 flex justify-between items-center">
-				<h1>Bookings</h1>
+		<PageTransitionFadeIn>
+			<div className="flex flex-col items-center">
+				<LoadingSpinner isLoading={isPending} />
+				<div className="w-full mb-8 flex justify-between items-center">
+					<h1>{t('booking.title')}</h1>
 
-				<Button>
-					<Link to={`${eventDetailRoutes.addBooking}`} relative="path">
-						Add Booking
-					</Link>
-				</Button>
+					<Button>
+						<Link to={`${eventDetailRoutes.addBooking}`} relative="path">
+							{t('booking.create')}
+						</Link>
+					</Button>
+				</div>
+				<div className="w-full">
+					{error === null ? (
+						<>
+							<StlFilter
+								options={StlFilterOptions.All}
+								params={searchParams}></StlFilter>
+							<DataTable columns={bookingColumns} data={bookings ?? []} />
+						</>
+					) : (
+						<p>{t('booking.errorLoadingBooking')}</p>
+					)}
+				</div>
 			</div>
-			<div className="w-full">
-				{error === null ? (
-					<>
-						<StlFilter
-							options={StlFilterOptions.All}
-							params={searchParams}></StlFilter>
-						<DataTable columns={bookingColumns} data={bookings ?? []} />
-					</>
-				) : (
-					<p>Failed to load bookings!</p>
-				)}
-			</div>
-		</div>
+		</PageTransitionFadeIn>
 	);
 };
 

@@ -52,7 +52,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 
 	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -73,13 +73,13 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 			<LoadingSpinner isLoading={isPending} />
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
-			<div className="flex justify-between">
+			<div className="flex flex-wrap justify-between gap-5">
 				<>
-					<h1>Time Slots</h1>
+					<h1>{t('timeSlot.title')}</h1>
 					<StlDialog
-						title="Add Time Slot"
-						description="Add time slots to the boat"
-						triggerLabel="Add time slot"
+						title={t('timeSlot.create')}
+						description={t('timeSlot.description')}
+						triggerLabel={t('timeSlot.triggerLabel')}
 						isOpen={isCreateDialogOpen}
 						onClose={closeCreateDialog}
 						onOpen={openCreateDialog}
@@ -95,38 +95,52 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 					</StlDialog>
 				</>
 			</div>
-			<Table className="mt-5">
-				<TableHeader>
-					<TableRow>
-						<TableHead>From</TableHead>
-						<TableHead>To</TableHead>
-						<TableHead>Type</TableHead>
-						<TableHead>Activity Type</TableHead>
-						<TableHead></TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{timeSlots?.map((slot, index) => (
-						<TableRow key={index} className="w-full justify-between">
-							<TableCell>{getDisplayTimeFromBackend(slot?.fromTime)}</TableCell>
-							<TableCell>
-								{getDisplayTimeFromBackend(slot?.untilTime)}
-							</TableCell>
-							<TableCell>
-								{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
-							</TableCell>
-							<TableCell>
-								{getTranslation(i18n.language, slot.activityType?.name)}
-							</TableCell>
-							<EditTimeSlotTableCell
-								boat={boat}
-								timeSlot={slot}
-								eventId={eventId}
-								deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+
+			{/* Wrapper div to enable overflow */}
+			<div className="overflow-x-auto my-5 max-w-full">
+				<Table className=" min-w-max">
+					<TableHeader>
+						<TableRow>
+							<TableHead>{t('from')}</TableHead>
+							<TableHead>{t('to')}</TableHead>
+							<TableHead>{t('type')}</TableHead>
+							<TableHead>{t('activityType.title')}</TableHead>
+							<TableHead></TableHead>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+					</TableHeader>
+					<TableBody>
+						{timeSlots?.length ? (
+							timeSlots?.map((slot, index) => (
+								<TableRow key={index} className="w-full justify-between">
+									<TableCell>
+										{getDisplayTimeFromBackend(slot?.fromTime)}
+									</TableCell>
+									<TableCell>
+										{getDisplayTimeFromBackend(slot?.untilTime)}
+									</TableCell>
+									<TableCell>
+										{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
+									</TableCell>
+									<TableCell>
+										{getTranslation(i18n.language, slot.activityType?.name)}
+									</TableCell>
+									<EditTimeSlotTableCell
+										boat={boat}
+										timeSlot={slot}
+										eventId={eventId}
+										deleteMutation={deleteMutation}></EditTimeSlotTableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={5} className="h-24 text-center">
+									{t('timeSlot.noTimeSlotsYet')}
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
+			</div>
 		</div>
 	);
 };

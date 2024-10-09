@@ -59,7 +59,7 @@ export function getNavigationItemsForEvent(
 		},
 		{
 			link: `${eventBasePath}/${eventDetailRoutes.schedule}`,
-			labelKey: 'schedule',
+			labelKey: 'schedule.title',
 			icon: CalendarRange,
 			needsFullMatch: false,
 		},

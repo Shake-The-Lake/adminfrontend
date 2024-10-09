@@ -54,8 +54,18 @@ export function useCreateBooking(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: createBooking,
-		async onSuccess() {			
-			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId)}); // Not exact to catch search as well
+		async onSuccess(data) {		
+			if (data) {
+				queryClient.setQueryData(
+					bookingKeys.all(eventId),
+					(oldData: BookingDto[] | undefined) =>
+						oldData ? [...oldData, data] : [data],
+				);
+			}
+
+			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId), exact: true});
+			await queryClient.invalidateQueries({queryKey: bookingKeys.detail(eventId, true), exact: true});
+			await queryClient.invalidateQueries({queryKey: bookingKeys.search(eventId, {}), exact: true});
 		},
 		onError(error) {
 			console.error('Error creating booking:', error);

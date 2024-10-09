@@ -8,6 +8,8 @@ import {useEventDetail} from '../../../queries/event';
 import {ProgramItem} from '../../../components/planby/programm-item';
 import {fromTimeToDateTime} from '../../../lib/date-time.utils';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import {useTranslation} from 'react-i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -29,10 +31,10 @@ const SchedulePage: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: boats} = useGetBoats(eventId);
-
+	const {t} = useTranslation();
 	const queryClient = useQueryClient();
 	const {data: event} = useEventDetail(queryClient, eventId, false);
-	
+
 	const mapColor = (type: number) => {
 		switch (type) {
 			case 1:
@@ -49,33 +51,37 @@ const SchedulePage: React.FC = () => {
 	};
 
 	if (boats === undefined) {
-		return <div>Add a boat to view the schedule for its time slots.</div>;
+		return <div>{t('schedule.addBoat')}</div>;
 	}
 
-	const program: Program[] = boats.flatMap((boat) => Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
-		id: timeSlot.id.toString(),
-		color: mapColor(timeSlot?.activityTypeId ?? 0),
-		title: boat.name,
-		channelId: boat.id,
-		channelUuid: boat?.id?.toString() ?? '',
-		description: '',
-		since: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.fromTime ?? ''),
-		till: fromTimeToDateTime(event?.date ?? new Date(), timeSlot.untilTime ?? ''),
-		image: '',
-	})),
+	const program: Program[] = boats.flatMap((boat) =>
+		Array.from(boat.timeSlots ?? []).map((timeSlot) => ({
+			id: timeSlot.id.toString(),
+			color: mapColor(timeSlot?.activityTypeId ?? 0),
+			title: boat.name,
+			channelId: boat.id,
+			channelUuid: boat?.id?.toString() ?? '',
+			description: '',
+			since: fromTimeToDateTime(
+				event?.date ?? new Date(),
+				timeSlot.fromTime ?? '',
+			),
+			till: fromTimeToDateTime(
+				event?.date ?? new Date(),
+				timeSlot.untilTime ?? '',
+			),
+			image: '',
+		})),
 	);
 
 	const channels: Channel[] = boats.map((boat) => ({
-	  id: boat.id,
-	  name: boat.name,
-	  logo: 'https://via.placeholder.com/150',
-	  uuid: boat?.id?.toString() ?? '',
-	  position: {top: 0, height: 0},
+		id: boat.id,
+		name: boat.name,
+		logo: 'https://via.placeholder.com/150',
+		uuid: boat?.id?.toString() ?? '',
+		position: {top: 0, height: 0},
 	}));
-	const {
-		getEpgProps,
-		getLayoutProps,
-	} = useEpg({
+	const {getEpgProps, getLayoutProps} = useEpg({
 		epg: program,
 		channels,
 		startDate: event?.date,
@@ -125,23 +131,25 @@ const SchedulePage: React.FC = () => {
 	});
 
 	return (
-		<div className="max-w-[75vw]">
-			<Epg {...getEpgProps()}>
-				<Layout
-					{...getLayoutProps()}
-					renderProgram={({program}) => (
-						<ProgramItem key={program.data.id} program={program} />
-					)}
-					renderChannel={({channel}) => (
-						<div
-							key={channel.uuid}
-							className="w-full h-full font-semibold py-4 px-3">
-							{channel.name}
-						</div>
-					)}
-				/>
-			</Epg>
-		</div>
+		<PageTransitionFadeIn>
+			<div className="max-w-full md:max-w-[75vw]">
+				<Epg {...getEpgProps()}>
+					<Layout
+						{...getLayoutProps()}
+						renderProgram={({program}) => (
+							<ProgramItem key={program.data.id} program={program} />
+						)}
+						renderChannel={({channel}) => (
+							<div
+								key={channel.uuid}
+								className="w-full h-full font-semibold py-4 px-3">
+								{channel.name}
+							</div>
+						)}
+					/>
+				</Epg>
+			</div>
+		</PageTransitionFadeIn>
 	);
 };
 

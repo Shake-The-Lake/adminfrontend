@@ -27,6 +27,8 @@ import StlFilter, {
 import {type TimeSlotDto} from '../../../models/api/time-slot.model';
 import StlSelect from '../../../components/select/stl-select';
 import {toast} from 'sonner';
+import {t} from 'i18next';
+import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 const PersonSchema = z.object({
 	id: z.number().optional(),
@@ -151,7 +153,7 @@ const AddBookingPage: React.FC = () => {
 
 	const handleFormSubmit: SubmitHandler<PersonFormSchema> = async (values) => {
 		if (!selectedTimeSlotId) {
-			toast.error('Please select a time slot.');
+			toast.error(t('booking.noTimeSlotSelected'));
 			return;
 		}
 
@@ -175,228 +177,228 @@ const AddBookingPage: React.FC = () => {
 			};
 
 			await createBookingMutation.mutateAsync(bookingData);
-			toast.success('Booking created successfully!');
+			toast.success(t('booking.success'));
 
 			navigate(`/event/${eventId}/bookings`);
 		} catch (error) {
-			toast.error('Failed to submit booking: ');
+			toast.error(t('booking.fail'));
 		}
 	};
 
 	return (
-		<div className="flex flex-col items-center h-full">
-			<div className="w-full mb-8 flex justify-between items-center">
-				<h1>Add Booking</h1>
-			</div>
-
-			<div className="w-full p-4 flex justify-center">
-				<div className="flex flex-col w-full">
-					<h3>Timeslots</h3>
-					<div className="w-full">
-						{error === null ? (
-							<>
-								<StlFilter
-									options={
-										StlFilterOptions.ActivityType |
-										StlFilterOptions.Boat |
-										StlFilterOptions.TimeRange
-									}
-									params={{
-										onActivityTypeChange(activityTypeId?: number) {
-											setFilter((prevFilter) => ({
-												...prevFilter,
-												activityId: activityTypeId,
-											}));
-										},
-										onBoatChange(boatId?: number) {
-											console.log('Boat ID changed:', boatId);
-											setFilter((prevFilter) => {
-												const newFilter = {...prevFilter, boatId};
-												console.log('Updated filter:', newFilter);
-												return newFilter;
-											});
-										},
-										onFromChange(from?: string) {
-											setFilter((prevFilter) => ({...prevFilter, from}));
-										},
-										onToChange(to?: string) {
-											setFilter((prevFilter) => ({...prevFilter, to}));
-										},
-									}}
-								/>
-								<DataTable
-									columns={timeSlotColumns(
-										i18n.language,
-										setSelectedTimeSlotId,
-										selectedTimeSlotId,
-									)}
-									data={filteredTimeSlots}
-								/>
-							</>
-						) : (
-							<p>Failed to load timeslots!</p>
-						)}
-					</div>
+		<PageTransitionFadeIn>
+			<div className="flex flex-col items-center h-full">
+				<div className="w-full mb-8 flex justify-between items-center">
+					<h1>{t('booking.create')}</h1>
 				</div>
-			</div>
 
-			<div className="w-full flex mt-10">
-				<div className="p-4">
-					<h3>Person Data</h3>
-					<p className="text-primary-dark-stroke mb-2 mt-2">
-						Enter the contact data of the person wanting to do the booking.
-					</p>
-					<Form {...form}>
-						<form
-							id="personForm"
-							className="p-1 space-y-4 w-full"
-							onSubmit={form.handleSubmit(handleFormSubmit)}>
-							<FormField
-								name="firstName"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>First Name</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="First Name"
-												{...field}
-												className="input"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								name="lastName"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Last Name</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Last Name"
-												{...field}
-												className="input"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								name="emailAddress"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Email</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Email"
-												{...field}
-												className="input"
-												type="email"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								name="phoneNumber"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Phone Number</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Phone Number"
-												{...field}
-												className="input"
-												type="tel"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								name="personType"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Person Type</FormLabel>
-										<FormControl>
-											<StlSelect
-												value={field.value}
-												onValueChange={field.onChange}
-												list={[
-													{key: 'EMPLOYEE', label: 'Employee'},
-													{key: 'BOAT_DRIVER', label: 'Boat Driver'},
-													{key: 'CUSTOMER', label: 'Customer'},
-												]}
-												getKey={(item) => item?.key}
-												getLabel={(item) => item?.label ?? ''}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								name="isRider"
-								control={form.control}
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Rider</FormLabel>
-										<FormControl>
-											<StlSelect
-												value={field.value}
-												onValueChange={field.onChange}
-												list={[
-													{key: 'RIDER', label: 'Yes'},
-													{key: 'VIEWER', label: 'No'},
-												]}
-												getKey={(item) => item?.key}
-												getLabel={(item) => item?.label ?? ''}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormItem>
-								<FormLabel>Pager Number</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="0"
-										className="input"
-										type="number"
-										value={pagerNumber ?? ''}
-										onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-											setPagerNumber(Number(e.target.value));
+				<div className="w-full p-4 flex justify-center">
+					<div className="flex flex-col w-full">
+						<h3>{t('timeSlot.title')}</h3>
+						<div className="w-full">
+							{error === null ? (
+								<>
+									<StlFilter
+										options={
+											StlFilterOptions.ActivityType |
+											StlFilterOptions.Boat |
+											StlFilterOptions.TimeRange
+										}
+										params={{
+											onActivityTypeChange(activityTypeId?: number) {
+												setFilter((prevFilter) => ({
+													...prevFilter,
+													activityId: activityTypeId,
+												}));
+											},
+											onBoatChange(boatId?: number) {
+												setFilter((prevFilter) => {
+													const newFilter = {...prevFilter, boatId};
+													return newFilter;
+												});
+											},
+											onFromChange(from?: string) {
+												setFilter((prevFilter) => ({...prevFilter, from}));
+											},
+											onToChange(to?: string) {
+												setFilter((prevFilter) => ({...prevFilter, to}));
+											},
 										}}
 									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						</form>
-					</Form>
+									<DataTable
+										columns={timeSlotColumns(
+											i18n.language,
+											setSelectedTimeSlotId,
+											selectedTimeSlotId,
+										)}
+										data={filteredTimeSlots}
+									/>
+								</>
+							) : (
+								<p>{t('booking.errorLoadingBooking')}</p>
+							)}
+						</div>
+					</div>
+				</div>
+
+				<div className="w-full flex mt-10">
+					<div className="p-4">
+						<h3>{t('booking.person')}</h3>
+						<p className="text-primary-dark-stroke mb-2 mt-2">
+							{t('booking.enterContact')}
+						</p>
+						<Form {...form}>
+							<form
+								id="personForm"
+								className="p-1 space-y-4 w-full"
+								onSubmit={form.handleSubmit(handleFormSubmit)}>
+								<FormField
+									name="firstName"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>{t('firstName')}</FormLabel>
+											<FormControl>
+												<Input
+													placeholder={t('firstName')}
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									name="lastName"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>{t('lastName')}</FormLabel>
+											<FormControl>
+												<Input
+													placeholder={t('lastName')}
+													{...field}
+													className="input"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									name="emailAddress"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>{t('email')}</FormLabel>
+											<FormControl>
+												<Input
+													placeholder={t('email')}
+													{...field}
+													className="input"
+													type="email"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									name="phoneNumber"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>{t('phone')}</FormLabel>
+											<FormControl>
+												<Input
+													placeholder={t('phone')}
+													{...field}
+													className="input"
+													type="tel"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									name="personType"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>{t('personType')}</FormLabel>
+											<FormControl>
+												<StlSelect
+													value={field.value}
+													onValueChange={field.onChange}
+													list={[
+														{key: 'EMPLOYEE', label: t('employee')},
+														{key: 'BOAT_DRIVER', label: t('boatDriver')},
+														{key: 'CUSTOMER', label: t('customer')},
+													]}
+													getKey={(item) => item?.key}
+													getLabel={(item) => item?.label ?? ''}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									name="isRider"
+									control={form.control}
+									render={({field}) => (
+										<FormItem>
+											<FormLabel>{t('rider')}</FormLabel>
+											<FormControl>
+												<StlSelect
+													value={field.value}
+													onValueChange={field.onChange}
+													list={[
+														{key: 'RIDER', label: 'Yes'},
+														{key: 'VIEWER', label: 'No'},
+													]}
+													getKey={(item) => item?.key}
+													getLabel={(item) => item?.label ?? ''}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormItem>
+									<FormLabel>{t('pagerNumber')}</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="0"
+											className="input"
+											type="number"
+											value={pagerNumber ?? ''}
+											onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+												setPagerNumber(Number(e.target.value));
+											}}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							</form>
+						</Form>
+					</div>
+				</div>
+
+				<div className="flex w-full justify-end mt-auto p-4">
+					<Button type="button" variant="secondary" onClick={handleCancel}>
+						{t('cancel')}
+					</Button>
+					<Button type="submit" form="personForm" className="ml-4">
+						{t('save')}
+					</Button>
 				</div>
 			</div>
-
-			<div className="flex w-full justify-end mt-auto p-4">
-				<Button type="button" variant="secondary" onClick={handleCancel}>
-					Cancel
-				</Button>
-				<Button type="submit" form="personForm" className="ml-4">
-					Save
-				</Button>
-			</div>
-		</div>
+		</PageTransitionFadeIn>
 	);
 };
 

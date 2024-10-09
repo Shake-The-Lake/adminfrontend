@@ -10,6 +10,7 @@ import {type LoginDto} from '../../models/api/login.model'; // Added useLocation
 import {useAuth} from '../../AuthContext';
 import {toast} from 'sonner';
 import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 // Schema definition
 export const loginFormSchema = z.object({
@@ -26,6 +27,7 @@ type LoginFormProps = {
 const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 	const navigate = useNavigate();
 	const {login} = useAuth();
+	const {t} = useTranslation();
 
 	const form = useForm<LoginFormSchema>({
 		mode: 'onChange',
@@ -56,8 +58,8 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 				navigate(redirectTo, {replace: true});
 			}
 		} catch (error) {
-			toast.error('Try again', {
-				description: 'User or Password is wrong',
+			toast.error(t('tryAgain'), {
+				description: t('login.error'),
 			});
 			form.reset();
 		}
@@ -75,10 +77,10 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Username</FormLabel>
+								<FormLabel>{t('login.username')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Username"
+										placeholder={t('login.username')}
 										{...field}
 										className="input"
 									/>
@@ -91,11 +93,11 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 						control={form.control}
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Password</FormLabel>
+								<FormLabel>{t('login.password')}</FormLabel>
 								<FormControl>
 									<Input
 										type="password"
-										placeholder="Password"
+										placeholder={t('login.password')}
 										{...field}
 										className="input"
 									/>
@@ -106,7 +108,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 
 					<div
 						className="mt-16 flex justify-end w-full">
-						<Button type="submit">Login</Button>
+						<Button type="submit">{t('login.login')}</Button>
 					</div>
 				</form>
 			</Form>
