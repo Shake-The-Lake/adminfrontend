@@ -5,30 +5,44 @@ import {
 	useQueryClient,
 } from '@tanstack/react-query';
 import {createPerson, getPersonById} from '../services/person-service';
+import {eventBasedBaseQueryKey} from './event';
+import {mutationKeyGenerator} from '../lib/utils';
 
-export const personKeys = {
-	all: () => ['persons'] as QueryKey,
-	detail: (id: number) => ['persons', 'detail', id] as QueryKey,
+const identifier = 'persons';
+
+const baseQueryKey = (eventId: number) =>
+	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+
+export const personQueryKeys = {
+	all: baseQueryKey,
+	detail: (eventId: number, id: number) =>
+		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
-export function useGetPerson(id: number) {
+export const personMutationKeys = mutationKeyGenerator(identifier);
+
+export function useGetPerson(eventId: number, id: number) {
 	return useQuery({
-		queryKey: personKeys.detail(id),
+		queryKey: personQueryKeys.detail(eventId, id),
 		queryFn: async () => getPersonById(id),
 	});
 }
 
-export function useCreatePerson() {
+export function useCreatePerson(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: personMutationKeys.create,
 		mutationFn: createPerson,
 		async onSuccess(data) {
 			if (data) {
-				queryClient.setQueryData(personKeys.detail(data.id ?? 0), data);
+				queryClient.setQueryData(
+					personQueryKeys.detail(eventId, data.id ?? 0),
+					data,
+				);
 			}
 
 			await queryClient.invalidateQueries({
-				queryKey: personKeys.all(),
+				queryKey: personQueryKeys.all(eventId),
 				exact: true,
 			});
 		},

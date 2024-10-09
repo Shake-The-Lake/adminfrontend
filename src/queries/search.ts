@@ -1,11 +1,15 @@
 import {type QueryKey, type QueryClient, queryOptions, useQueryClient, useQuery} from '@tanstack/react-query';
 import {type EventDto} from '../models/api/event.model';
 import {getSearchParams} from '../services/search-service';
-import {eventQueryKeys} from './event';
+import {eventBasedBaseQueryKey, eventQueryKeys} from './event';
 
+const identifier = 'search-params';
+
+const baseQueryKey = (eventId: number) =>
+	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
 
 export const searchKeys = {
-	all: (eventId: number) => ['search-params', eventId] as QueryKey,
+	all: baseQueryKey,
 };
 
 // Gets boats and activity types by event to use in selects

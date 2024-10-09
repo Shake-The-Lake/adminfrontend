@@ -16,7 +16,7 @@ import {
 	updateActivityType,
 } from '../services/activity-type-service';
 import {eventBasedBaseQueryKey, eventQueryKeys} from './event';
-import { mutationKeyGenerator } from '../lib/utils';
+import {mutationKeyGenerator} from '../lib/utils';
 
 const identifier = 'activity-types';
 
@@ -76,7 +76,12 @@ export function useCreateActivityType(eventId: number) {
 		mutationKey: activityTypeMutationKeys.create,
 		mutationFn: createActivityType,
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0, data);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
@@ -88,7 +93,7 @@ export function useUpdateActivityType(eventId: number, id: number) {
 		mutationFn: async (activitytype: ActivityTypeDto) =>
 			updateActivityType(id, activitytype),
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, id, data)
+			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
 		},
 	});
 }
@@ -99,7 +104,7 @@ export function useDeleteActivityType(eventId: number) {
 		mutationKey: activityTypeMutationKeys.delete,
 		mutationFn: deleteActivityType,
 		async onSuccess() {
-			await queriesToInvalidateOnCrud(queryClient, eventId)
+			await queriesToInvalidateOnCrud(queryClient, eventId);
 		},
 	});
 }
@@ -118,5 +123,9 @@ async function queriesToInvalidateOnCrud(
 			data,
 		);
 	}
-	await queryClient.invalidateQueries({queryKey: eventQueryKeys.detail(eventId, true),	exact: true});
+
+	await queryClient.invalidateQueries({
+		queryKey: eventQueryKeys.detail(eventId, true),
+		exact: true,
+	});
 }

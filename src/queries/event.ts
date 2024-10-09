@@ -14,11 +14,12 @@ import {
 	getEventById,
 	updateEvent,
 } from '../services/event-service';
-import { mutationKeyGenerator } from '../lib/utils';
+import {mutationKeyGenerator} from '../lib/utils';
 
 const identifier = 'events';
 const baseQueryKey = [identifier] as QueryKey;
-export const eventBasedBaseQueryKey = (eventId: number) => [identifier, eventId] as QueryKey;
+export const eventBasedBaseQueryKey = (eventId: number) =>
+	[identifier, eventId] as QueryKey;
 
 export const eventQueryKeys = {
 	all: () => baseQueryKey,
@@ -28,19 +29,25 @@ export const eventQueryKeys = {
 
 export const eventMutationKeys = mutationKeyGenerator(identifier);
 
-export const eventsOptions = () => queryOptions({
-	queryKey: eventQueryKeys.all(),
-	queryFn: getAllEvents,
-});
+export const eventsOptions = () =>
+	queryOptions({
+		queryKey: eventQueryKeys.all(),
+		queryFn: getAllEvents,
+	});
 
 export function useGetEvents() {
 	return useQuery(eventsOptions());
 }
 
-export const eventDetailOptions = (id: number, expanded = false) => queryOptions({
-	queryKey: eventQueryKeys.detail(id, expanded),
-	queryFn: async () => getEventById(id, expanded ? 'boats,boats.timeSlots,activityTypes' : undefined),
-});
+export const eventDetailOptions = (id: number, expanded = false) =>
+	queryOptions({
+		queryKey: eventQueryKeys.detail(id, expanded),
+		queryFn: async () =>
+			getEventById(
+				id,
+				expanded ? 'boats,boats.timeSlots,activityTypes' : undefined,
+			),
+	});
 
 export function useEventDetail(
 	queryClient: QueryClient,
@@ -64,7 +71,10 @@ export function useCreateEvent() {
 		mutationKey: eventMutationKeys.create,
 		mutationFn: createEvent,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: eventQueryKeys.all(), exact: true});
+			await queryClient.invalidateQueries({
+				queryKey: eventQueryKeys.all(),
+				exact: true,
+			});
 		},
 	});
 }
@@ -75,8 +85,13 @@ export function useUpdateEvent(id: number) {
 		mutationKey: eventMutationKeys.update,
 		mutationFn: async (event: EventDto) => updateEvent(id, event),
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: eventQueryKeys.all(), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventBasedBaseQueryKey(id)});
+			await queryClient.invalidateQueries({
+				queryKey: eventQueryKeys.all(),
+				exact: true,
+			});
+			await queryClient.invalidateQueries({
+				queryKey: eventBasedBaseQueryKey(id),
+			});
 		},
 	});
 }
@@ -87,8 +102,8 @@ export function useDeleteEvent() {
 		mutationKey: eventMutationKeys.delete,
 		mutationFn: deleteEvent,
 		async onSuccess() {
-			// deleting an entire event is enough of a change to justify reloading all queries
-			await queryClient.invalidateQueries();  
+			// Deleting an entire event is enough of a change to justify reloading all queries
+			await queryClient.invalidateQueries();
 		},
 	});
 }

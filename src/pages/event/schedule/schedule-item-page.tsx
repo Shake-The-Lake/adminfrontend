@@ -34,7 +34,7 @@ export const loader =
 			}
 
 			await queryClient.ensureQueryData(
-				timeslotDetailOptions(Number(params.timeSlotId)),
+				timeslotDetailOptions(routeIds.eventId, routeIds.timeSlotId),
 			);
 
 			return routeIds;
@@ -49,8 +49,8 @@ const ScheduleItemPage: React.FC = () => {
 
 	const {data: timeSlot, isPending} = useTimeSlotDetail(
 		queryClient,
-		timeSlotId,
 		eventId,
+		timeSlotId,
 	);
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);

@@ -17,25 +17,25 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		if (!routeIds.boatId) {
-			throw new Error('No boat ID provided');
-		}
+			if (!routeIds.boatId) {
+				throw new Error('No boat ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			boatDetailOptions(routeIds.eventId, routeIds.boatId),
-		);
-		return routeIds;
-	};
+			await queryClient.ensureQueryData(
+				boatDetailOptions(routeIds.eventId, routeIds.boatId),
+			);
+			return routeIds;
+		};
 
 const BoatPage: React.FC = () => {
 	const {eventId, boatId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: boat, isPending, error} = useBoatDetail(eventId, boatId);
 

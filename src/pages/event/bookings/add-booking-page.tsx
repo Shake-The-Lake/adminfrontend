@@ -53,7 +53,7 @@ const AddBookingPage: React.FC = () => {
 	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
 	const {i18n} = useTranslation();
 	const navigate = useNavigate();
-	const createPersonMutation = useCreatePerson();
+	const createPersonMutation = useCreatePerson(eventId);
 	const createBookingMutation = useCreateBooking(eventId);
 	const [pagerNumber, setPagerNumber] = useState<number | undefined>(undefined);
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
