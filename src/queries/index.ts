@@ -1,19 +1,21 @@
-import {eventKeys} from './event';
+import {eventMutationKeys, eventQueryKeys} from './event';
 import {activityTypeMutationKeys, activityTypeQueryKeys} from './activity-type';
-import {boatKeys} from './boat';
+import {boatMutationKeys, boatQueryKeys} from './boat';
 import {timeSlotKeys} from './time-slot';
 import {bookingKeys} from './booking';
 import {searchKeys} from './search';
 
 export const queries = {
-	event: eventKeys,
+	event: eventQueryKeys,
 	activityType: activityTypeQueryKeys,
-	boat: boatKeys,
+	boat: boatQueryKeys,
 	timeSlot: timeSlotKeys,
 	booking: bookingKeys,
 	search: searchKeys,
 };
 
 export const mutations = {
-	activityType: activityTypeMutationKeys
+	activityType: activityTypeMutationKeys,
+	boat: boatMutationKeys,
+	event: eventMutationKeys,
 }

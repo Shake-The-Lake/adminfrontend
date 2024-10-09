@@ -9,18 +9,27 @@ import {
 	type QueryKey,
 } from '@tanstack/react-query';
 import {createBoat, deleteBoat, getBoatById, getAllBoatsFromEvent, updateBoat} from '../services/boat-service';
-import {eventKeys} from './event';
+import {eventBasedBaseQueryKey, eventQueryKeys} from './event';
+import { mutationKeyGenerator } from '../lib/utils';
 
-export const boatKeys = {
-	all: (eventId: number) => ['boats', eventId] as QueryKey,
-	detail: (id: number) => ['boats', 'detail', id] as QueryKey,
+const identifier = 'boats';
+
+const baseQueryKey = (eventId: number) =>
+	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+
+export const boatQueryKeys = {
+	all: baseQueryKey,
+	detail: (eventId: number, id: number) =>
+		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
+export const boatMutationKeys = mutationKeyGenerator(identifier);
+
 export const boatsOptions = (eventId: number, queryClient: QueryClient) => queryOptions({
-	queryKey: boatKeys.all(eventId),
+	queryKey: boatQueryKeys.all(eventId),
 	queryFn: async () => getAllBoatsFromEvent(eventId),
 	initialData() {
-		const queryData: EventDto | undefined = queryClient.getQueryData(eventKeys.detail(eventId, true));
+		const queryData: EventDto | undefined = queryClient.getQueryData(eventQueryKeys.detail(eventId, true));
 		return queryData?.boats;
 	},
 });
@@ -30,21 +39,21 @@ export function useGetBoats(eventId: number) {
 	return useQuery(boatsOptions(eventId, queryClient));
 }
 
-export const boatDetailOptions = (id: number) => queryOptions({
-	queryKey: boatKeys.detail(id),
+export const boatDetailOptions = (eventId: number, id: number) => queryOptions({
+	queryKey: boatQueryKeys.detail(eventId, id),
 	queryFn: async () => getBoatById(id),
 });
 
 export function useBoatDetail(
-	id: number,
 	eventId: number,
+	id: number,
 ) {
 	const queryClient = useQueryClient();
 	return useQuery({
-		...boatDetailOptions(id),
+		...boatDetailOptions(eventId, id),
 		initialData() {
 			const queryData: BoatDto[] | undefined = queryClient.getQueryData(
-				boatKeys.all(eventId),
+				boatQueryKeys.all(eventId),
 			);
 			return queryData?.find((d) => d.id === eventId);
 		},
@@ -54,27 +63,21 @@ export function useBoatDetail(
 export function useCreateBoat(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: boatMutationKeys.create,
 		mutationFn: createBoat,
 		async onSuccess(data) {
-			if (data) {
-				queryClient.setQueryData(boatKeys.detail(data.id ?? 0), data);
-			}
-
-			await queryClient.invalidateQueries({queryKey: boatKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0);
 		},
 	});
 }
 
-export function useUpdateBoat(id: number) {
+export function useUpdateBoat(eventId: number, id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (boat: BoatDto) => updateBoat(id, boat),
-		async onSuccess(data) {
-			queryClient.setQueryData(boatKeys.detail(data?.id ?? 0), data);
-
-			await queryClient.invalidateQueries({queryKey: boatKeys.all(data?.eventId ?? 0), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(data?.eventId ?? 0, true), exact: true});
+		mutationKey: boatMutationKeys.update,
+		mutationFn: async (boat: BoatDto) => await updateBoat(id, boat),
+		async onSuccess() {
+			await queriesToInvalidateOnCrud(queryClient, eventId, id);
 		},
 	});
 }
@@ -82,10 +85,17 @@ export function useUpdateBoat(id: number) {
 export function useDeleteBoat(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: boatMutationKeys.delete,
 		mutationFn: deleteBoat,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: boatKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId);
 		},
 	});
+}
+
+async function queriesToInvalidateOnCrud(queryClient: QueryClient,	eventId: number,	boatId?: number) {
+	await queryClient.invalidateQueries({ queryKey: baseQueryKey(eventId) });
+	await queryClient.invalidateQueries({ queryKey: eventQueryKeys.detail(eventId, true), exact: true });
+	// todo! timeslot query; 
+	// todo! verify what happens on boat or timeslot deletion, especially if it already has bookings?!
 }

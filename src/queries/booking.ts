@@ -92,3 +92,9 @@ export function useCreateBooking(eventId: number) {
 		},
 	});
 }
+
+async function queriesToInvalidateOnCrud(queryClient: QueryClient, eventId: number, bookingId?:) {
+	await queryClient.invalidateQueries({ queryKey: bookingKeys.all(eventId), exact: true });
+	await queryClient.invalidateQueries({ queryKey: bookingKeys.detail(eventId, true), exact: true });
+	await queryClient.invalidateQueries({ queryKey: bookingKeys.search(eventId, {}), exact: true });
+}

@@ -15,13 +15,13 @@ import {
 	getAllActivityTypesFromEvent,
 	updateActivityType,
 } from '../services/activity-type-service';
-import {eventKeys} from './event';
+import {eventBasedBaseQueryKey, eventQueryKeys} from './event';
 import { mutationKeyGenerator } from '../lib/utils';
 
 const identifier = 'activity-types';
 
 const baseQueryKey = (eventId: number) =>
-	[identifier, eventId] as QueryKey;
+	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
 
 export const activityTypeQueryKeys = {
 	all: baseQueryKey,
@@ -40,7 +40,7 @@ export const activityTypesOptions = (
 		queryFn: async () => getAllActivityTypesFromEvent(eventId),
 		initialData() {
 			const queryData: EventDto | undefined = queryClient.getQueryData(
-				eventKeys.detail(eventId, true),
+				eventQueryKeys.detail(eventId, true),
 			);
 			return queryData?.activityTypes;
 		},
@@ -108,7 +108,7 @@ async function queriesToInvalidateOnCrud(
 	queryClient: QueryClient,
 	eventId: number,
 	activityTypeId?: number,
-	data?: any,
+	data?: ActivityTypeDto,
 ) {
 	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)});
 
@@ -118,5 +118,5 @@ async function queriesToInvalidateOnCrud(
 			data,
 		);
 	}
-	await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true),	exact: true});
+	await queryClient.invalidateQueries({queryKey: eventQueryKeys.detail(eventId, true),	exact: true});
 }

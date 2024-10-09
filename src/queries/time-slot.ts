@@ -8,7 +8,7 @@ import {
 	type QueryKey,
 } from '@tanstack/react-query';
 import {createTimeSlot, deleteTimeSlot, getTimeSlotById, updateTimeSlot, getAllTimeSlotsFromEvent, getAllTimeSlotsFromBoat} from '../services/time-slot-service';
-import {boatKeys} from './boat';
+import {boatQueryKeys} from './boat';
 
 export const timeSlotKeys = {
 	forEvent: (eventId: number) => ['time-slots', eventId] as QueryKey,
@@ -60,7 +60,7 @@ export function useCreateTimeSlot(boatId: number, eventId: number) {
 		mutationFn: createTimeSlot,
 		async onSuccess() {
 			await queryClient.invalidateQueries({queryKey: timeSlotKeys.forEvent(eventId)}); // Not exact to catch forBoat as well
-			await queryClient.invalidateQueries({queryKey: boatKeys.detail(boatId), exact: true});
+			await queryClient.invalidateQueries({queryKey: boatQueryKeys.detail(eventId, boatId), exact: true});
 		},
 	});
 }
@@ -73,7 +73,7 @@ export function useUpdateTimeSlot(id: number, eventId: number) {
 		async onSuccess(data) {
 			await queryClient.invalidateQueries({queryKey: timeSlotKeys.detail(id), exact: true});
 			await queryClient.invalidateQueries({queryKey: timeSlotKeys.forEvent(eventId)}); // Not exact to catch forBoat as well
-			await queryClient.invalidateQueries({queryKey: boatKeys.detail(data?.boatId ?? 0), exact: true});
+			await queryClient.invalidateQueries({queryKey: boatQueryKeys.detail(eventId, data?.boatId ?? 0), exact: true});
 		},
 	});
 }
@@ -85,7 +85,7 @@ export function useDeleteTimeSlot(boatId: number, eventId: number) {
 		mutationFn: deleteTimeSlot,
 		async onSuccess() {
 			await queryClient.invalidateQueries({queryKey: timeSlotKeys.forEvent(eventId)}); // Not exact to catch forBoat as well
-			await queryClient.invalidateQueries({queryKey: boatKeys.detail(boatId), exact: true});
+			await queryClient.invalidateQueries({queryKey: boatQueryKeys.detail(eventId, boatId), exact: true});
 		},
 	});
 }
