@@ -46,6 +46,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 
 	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
+			...model,
 			...values,
 			title: values.title,
 			date: values.date,

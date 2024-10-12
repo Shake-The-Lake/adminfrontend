@@ -10,7 +10,6 @@ import ShakeTheLakeIcon from '../icons/shake-the-lake-icon';
 const SideNavigation: React.FC = () => {
 	const {t} = useTranslation();
 
-	// Todo! rerender when list changes from 0 to 1
 	const navigationStructure = React.useContext(NavigationStructureContext);
 	const navigationItems = navigationStructure.map((item) => (
 		<NavigationMenuItem key={item.link} {...item} isMobileView={false} />
