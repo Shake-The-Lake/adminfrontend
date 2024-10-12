@@ -105,8 +105,16 @@ const ScheduleItemPage: React.FC = () => {
 										{slot.person?.firstName} {slot.person?.lastName}
 									</TableCell>
 									<TableCell>{slot.person?.phoneNumber}</TableCell>
-									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-									<TableCell>{slot.pagerNumber}</TableCell>
+									<TableCell>
+										{slot.isRider
+											? t('booking.isRider')
+											: t('booking.isViewer')}
+									</TableCell>
+									<TableCell>
+										{slot.isManual
+											? `${t('yes')} - ${slot.pagerNumber}`
+											: t('no')}
+									</TableCell>
 									<EditBookingTableCell
 										booking={slot}
 										deleteMutation={deleteMutation}></EditBookingTableCell>

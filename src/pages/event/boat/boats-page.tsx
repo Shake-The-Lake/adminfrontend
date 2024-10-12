@@ -75,7 +75,7 @@ const BoatsOverview: React.FC = () => {
 								<StlCard
 									id={boat.id}
 									title={boat.name}
-									description={`Type: ${boat.type}, Seats (Rider): ${boat.seatsRider}, Seats (Viewer): ${boat.seatsViewer}`}
+									description={`${t('boat.type')}: ${boat.type}, ${t('boat.seatsRider')}: ${boat.seatsRider}, ${t('boat.seatsViewer')}: ${boat.seatsViewer}`}
 									link={boat.id.toString()}
 									deleteMutation={deleteMutation}
 								/>

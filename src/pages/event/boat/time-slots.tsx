@@ -119,7 +119,9 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 										{getDisplayTimeFromBackend(slot?.untilTime)}
 									</TableCell>
 									<TableCell>
-										{slot.status === 'AVAILABLE' ? 'ride' : 'break'}
+										{slot.status === 'AVAILABLE'
+											? t('timeSlot.statusAvailable')
+											: t('timeSlot.statusBreak')}
 									</TableCell>
 									<TableCell>
 										{getTranslation(i18n.language, slot.activityType?.name)}

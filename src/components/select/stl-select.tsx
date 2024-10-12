@@ -20,7 +20,7 @@ type StlSelectProps<T> = {
 	getLabel: (e?: T) => string;
 };
 
-export const StlSelectDefaultLabel = 'Select';
+export const StlSelectDefaultLabelKey = 'select';
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
 const StlSelect = <T,>({
@@ -31,19 +31,21 @@ const StlSelect = <T,>({
 	getKey,
 	getLabel,
 }: StlSelectProps<T>) => {
+	const {t} = useTranslation();
+
 	const resetValue = () => {
 		onValueChange('');
 	};
 
-	const {t} = useTranslation();
 	return (
 		<Select value={value} onValueChange={onValueChange}>
 			<SelectTrigger>
 				<div className="flex justify-between items-center gap-1 w-full">
-					<SelectValue placeholder={defaultLabel ?? StlSelectDefaultLabel}>
+					<SelectValue
+						placeholder={defaultLabel ?? t(StlSelectDefaultLabelKey)}>
 						{value
 							? getLabel(list?.find((i) => getKey(i) === value))
-							: defaultLabel ?? StlSelectDefaultLabel}
+							: defaultLabel ?? t(StlSelectDefaultLabelKey)}
 					</SelectValue>
 				</div>
 			</SelectTrigger>
@@ -52,7 +54,7 @@ const StlSelect = <T,>({
 					variant="ghost"
 					className="flex justify-between items-center h-7 mb-2 w-full opacity-50"
 					onClick={resetValue}>
-					{t('clearValue')} <X className="h-4 w-4" />
+					Clear Selected Value <X className="h-4 w-4" />
 				</Button>
 				{list?.map((item) => (
 					<SelectItem key={getKey(item)} value={getKey(item) ?? ''}>
