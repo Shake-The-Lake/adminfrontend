@@ -6,11 +6,7 @@ import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
 } from '../../../lib/utils';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-	useNavigate,
-} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import LoadingSpinner from '../../../components/animations/loading';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import ActivityTypeForm from '../../../components/forms/activity-type';
@@ -47,7 +43,6 @@ const ActivityTypesPage = () => {
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const {i18n, t} = useTranslation();
-	const navigate = useNavigate();
 
 	const createMutation = useCreateActivityType(eventId);
 	const deleteMutation = useDeleteActivityType(eventId);

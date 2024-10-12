@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import React, {useEffect, useState} from 'react';
 import {useLoaderData, useNavigate} from 'react-router-dom';
 import {z} from 'zod';
