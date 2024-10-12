@@ -20,7 +20,6 @@ import {
 	useDeleteTimeSlot,
 	useGetTimeSlotsForBoat,
 } from '../../../queries/time-slot';
-import LoadingSpinner from '../../../components/animations/loading';
 import {MutationToaster} from '../../../components/common/mutation-toaster';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {
@@ -54,7 +53,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 	const {i18n, t} = useTranslation();
 
-	const {data: timeSlots, isPending} = useGetTimeSlotsForBoat(eventId, boatId);
+	const {data: timeSlots} = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const createMutation = useCreateTimeSlot(boatId, eventId);
@@ -70,7 +69,6 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 	return (
 		<div>
-			<LoadingSpinner isLoading={isPending} />
 			<MutationToaster type="delete" mutation={deleteMutation} />
 
 			<div className="flex flex-wrap justify-between gap-5">

@@ -17,7 +17,6 @@ import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
@@ -47,11 +46,7 @@ const ScheduleItemPage: React.FC = () => {
 	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();
 
-	const {data: timeSlot, isPending} = useTimeSlotDetail(
-		queryClient,
-		timeSlotId,
-		eventId,
-	);
+	const {data: timeSlot} = useTimeSlotDetail(queryClient, timeSlotId, eventId);
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
 	const signedUpViewers =
@@ -61,7 +56,6 @@ const ScheduleItemPage: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="mt-10">
-				<LoadingSpinner isLoading={isPending} />
 				<div className="flex justify-between">
 					<h2 className="text-4xl font-bold mb-10">
 						{timeSlot?.boat?.name},{' '}

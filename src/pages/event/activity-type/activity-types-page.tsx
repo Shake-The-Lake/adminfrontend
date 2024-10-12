@@ -7,7 +7,6 @@ import {
 	getTranslation,
 } from '../../../lib/utils';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import LoadingSpinner from '../../../components/animations/loading';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import ActivityTypeForm from '../../../components/forms/activity-type';
 import {type QueryClient} from '@tanstack/react-query';
@@ -38,7 +37,7 @@ const ActivityTypesPage = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: activityTypes, isPending, error} = useGetActivityTypes(eventId);
+	const {data: activityTypes, error} = useGetActivityTypes(eventId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
@@ -58,7 +57,6 @@ const ActivityTypesPage = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending} />
 				<MutationToaster type="delete" mutation={deleteMutation} />
 
 				<div className="w-full mb-8 flex flex-col justify-start">

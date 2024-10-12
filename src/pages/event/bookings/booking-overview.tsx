@@ -6,7 +6,6 @@ import {
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
 import {Link, type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	bookingsSearchOptions,
 	useSearchBookings,
@@ -45,9 +44,9 @@ const BookingOverview: React.FC = () => {
 	ReturnType<ReturnType<typeof loader>>
 	>;
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
-	const {t} = useTranslation();
-	const {data: bookings, isPending, error} = useSearchBookings(eventId, filter);
+	const {data: bookings, error} = useSearchBookings(eventId, filter);
 
+	const {t} = useTranslation();
 	const searchParams = defaultFilterParams;
 
 	searchParams.onSearchTermChange = (searchTerm?: string) => {
@@ -73,7 +72,6 @@ const BookingOverview: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending} />
 				<div className="w-full mb-8 flex justify-between items-center">
 					<h1>{t('booking.title')}</h1>
 

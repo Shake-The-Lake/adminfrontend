@@ -5,7 +5,6 @@ import {defaultBoatDto} from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import BoatForm from '../../../components/forms/boat';
-import LoadingSpinner from '../../../components/animations/loading';
 import {type QueryClient} from '@tanstack/react-query';
 import {
 	boatsOptions,
@@ -36,7 +35,7 @@ const BoatsOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: boats, isPending} = useGetBoats(eventId);
+	const {data: boats} = useGetBoats(eventId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
@@ -56,7 +55,6 @@ const BoatsOverview: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending} />
 				<MutationToaster type="delete" mutation={deleteMutation} />
 
 				<div className="w-full mb-8 flex flex-col justify-start">

@@ -34,6 +34,7 @@ import ProtectedRoute from './ProtectedRoute';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
 import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
+import QueryLoader from './components/common/query-loader';
 import {AnimatePresence} from 'framer-motion';
 
 const queryClient = new QueryClient({
@@ -137,6 +138,7 @@ function App() {
 				</AnimatePresence>
 				<ReactQueryDevtools initialIsOpen={false} />
 				<Toaster position="top-right" duration={5000} closeButton />
+				<QueryLoader />
 				<MutationLoader />
 			</QueryClientProvider>
 		</AuthProvider>
