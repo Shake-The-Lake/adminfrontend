@@ -73,6 +73,11 @@ const BookingForm: React.FC<BookingFormProps> = ({
 		navigate(`/event/${eventId}/bookings`);
 	};
 
+	const getIsRiderOptions = (t: (key: string) => string) => [
+		{key: 'driver', label: t('rider')},
+		{key: 'viewer', label: t('viewer')},
+	];
+
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
 		const person = values.person;
 		const savedPerson = await personMutation.mutateAsync(person);
@@ -107,22 +112,19 @@ const BookingForm: React.FC<BookingFormProps> = ({
 							control={form.control}
 							render={({field}) => (
 								<FormItem>
-									<FormLabel>{t('rider')}</FormLabel>
+									<FormLabel>{t('booking.DriverOrViewer')}</FormLabel>
 									<FormControl>
 										<Controller
 											name="isRider"
 											control={form.control}
 											render={({field}) => (
 												<StlSelect
-													value={field.value ? 'true' : 'false'}
+													value={field.value ? 'driver' : 'viewer'}
 													onValueChange={(value) =>
-														field.onChange(value === 'true')
+														field.onChange(value === 'driver')
 													}
-													defaultValue="false"
-													list={[
-														{key: 'true', label: 'Yes'},
-														{key: 'false', label: 'No'},
-													]}
+													defaultValue="viewer"
+													list={getIsRiderOptions(t)}
 													getKey={(item) => item?.key}
 													getLabel={(item) => item!.label}
 												/>

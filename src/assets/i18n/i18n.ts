@@ -96,6 +96,7 @@ const resources: Resource = {
 				currentBooking: 'Current Booking',
 				updateFailed: 'Error while trying to update your booking',
 				update: 'Update Booking',
+				DriverOrViewer: 'Driver Or Viewer ?',
 			},
 			login: {
 				username: 'Username',
@@ -262,6 +263,7 @@ const resources: Resource = {
 				noData: 'Keine Daten gefunden',
 				updateFailed: 'Fehler beim aktualisieren deiner Buchung',
 				update: 'Buchung anpassen',
+				DriverOrViewer: 'Fahrer oder Zuschauer ?',
 			},
 			login: {
 				username: 'Benutzername',
@@ -430,6 +432,7 @@ const resources: Resource = {
 				currentBooking: 'Derzeitige Buchungen',
 				updateFailed: 'Fähler bim aktualisierä vo dirä buächig',
 				update: 'Buächig apasse',
+				DriverOrViewer: 'Fahrer oder Zuschauer ?',
 			},
 			login: {
 				username: 'Benutzername',
