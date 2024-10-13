@@ -71,7 +71,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 		const savedPerson = await personMutation.mutateAsync(person);
 		const booking: BookingDto = {
 			...values,
-			id: values.id ?? 0,
+			id: values.id || model.id,
 			timeSlotId: selectedTimeSlotId ?? 0,
 			personId: savedPerson.id,
 		};

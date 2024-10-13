@@ -15,7 +15,6 @@ const EditBookingPage: React.FC = () => {
 	>;
 	const {data: bookingDetails, isLoading} = useGetBookingDetails(bookingId!);
 	const {t} = useTranslation();
-
 	const updateBookingMutation = useUpdateBooking(eventId, bookingId!);
 	const updatePersonMutation = useUpdatePerson();
 

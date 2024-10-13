@@ -14,6 +14,7 @@ import StlSelect from '../select/stl-select';
 
 // Define the Zod schema for Person
 export const personSchema = z.object({
+	id: z.number().optional(),
 	firstName: z
 		.string()
 		.min(1, 'First name is required')
