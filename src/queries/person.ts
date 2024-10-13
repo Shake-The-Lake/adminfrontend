@@ -43,15 +43,16 @@ export function useUpdatePerson() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (updatedPerson: PersonDto) => {
+		async mutationFn(updatedPerson: PersonDto) {
 			return updatePerson(updatedPerson.id!, updatedPerson);
 		},
 
 		async onSuccess(data: PersonDto) {
-			if (data.id == null) {
+			if (data.id === null) {
 				console.warn('Updated person has no ID, cannot update cache.');
 				return;
 			}
+
 			queryClient.setQueryData(personKeys.detail(data.id), data);
 
 			await queryClient.invalidateQueries({
