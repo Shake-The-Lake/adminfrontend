@@ -1,16 +1,16 @@
 import React from 'react';
-import {type SubmitHandler, useForm} from 'react-hook-form';
-import {z} from 'zod';
-import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
-import {Input} from '../ui/input';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {onInvalidFormHandler} from '../../lib/utils';
-import {Button} from '../ui/button';
-import {type LoginDto} from '../../models/api/login.model'; // Added useLocation
-import {useAuth} from '../../AuthContext';
-import {toast} from 'sonner';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Input } from '../ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { onInvalidFormHandler } from '../../lib/utils';
+import { Button } from '../ui/button';
+import { type LoginDto } from '../../models/api/login.model';
+import { useAuth } from '../../AuthContext';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Schema definition
 export const loginFormSchema = z.object({
@@ -24,10 +24,10 @@ type LoginFormProps = {
 	model: LoginDto;
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({model}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ model }) => {
 	const navigate = useNavigate();
-	const {login} = useAuth();
-	const {t} = useTranslation();
+	const { login } = useAuth();
+	const { t } = useTranslation();
 
 	const form = useForm<LoginFormSchema>({
 		mode: 'onChange',
@@ -45,17 +45,14 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			const loggedIn = true; // Replace this with the actual login logic
-			if (!loggedIn) throw new Error('User or Password is wrong');
-
-			login(loginData.username, loginData.password);
+			await login(loginData.username, loginData.password); // Await the login function
 
 			const redirectTo = localStorage.getItem('redirectAfterLogin');
 
 			if (!redirectTo || redirectTo === '/login') {
-				navigate('/', {replace: true});
+				navigate('/', { replace: true });
 			} else {
-				navigate(redirectTo, {replace: true});
+				navigate(redirectTo, { replace: true });
 			}
 		} catch (error) {
 			toast.error(t('tryAgain'), {
@@ -71,11 +68,12 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 				<form
 					className="p-1 space-y-4"
 					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
-					id="event">
+					id="event"
+				>
 					<FormField
 						name="username"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('login.username')}</FormLabel>
 								<FormControl>
@@ -91,7 +89,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 					<FormField
 						name="password"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('login.password')}</FormLabel>
 								<FormControl>
@@ -106,8 +104,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 						)}
 					/>
 
-					<div
-						className="mt-16 flex justify-end w-full">
+					<div className="mt-16 flex justify-end w-full">
 						<Button type="submit">{t('login.login')}</Button>
 					</div>
 				</form>
