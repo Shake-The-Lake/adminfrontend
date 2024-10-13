@@ -3,11 +3,11 @@ import {useLoaderData} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useGetBookingDetails, useUpdateBooking} from '../../../queries/booking';
 import {useUpdatePerson} from '../../../queries/person';
-import {defaultBooking} from '../../../models/api/booking.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import LoadingSpinner from '../../../components/animations/loading';
 import BookingForm from '../../../components/forms/booking';
 import {loader} from './booking-overview';
+import {defaultBooking} from '../../../models/api/booking.model';
 
 const EditBookingPage: React.FC = () => {
 	const {eventId, bookingId} = useLoaderData() as Awaited<
@@ -18,6 +18,10 @@ const EditBookingPage: React.FC = () => {
 
 	const updateBookingMutation = useUpdateBooking(eventId, bookingId!);
 	const updatePersonMutation = useUpdatePerson();
+
+	if (isLoading) {
+		return <LoadingSpinner isLoading={true} />;
+	}
 
 	return (
 		<PageTransitionFadeIn>

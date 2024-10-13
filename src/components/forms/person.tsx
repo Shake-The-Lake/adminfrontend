@@ -1,11 +1,18 @@
 import React from 'react';
-import {Controller, useFormContext} from 'react-hook-form';
-import {z} from 'zod';
-import {FormControl, FormItem, FormLabel} from '../ui/form';
+import {useFormContext} from 'react-hook-form';
+import {z} from 'zod'; // Import zod for validation
 import {Input} from '../ui/input';
+import {
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '../ui/form';
 import {useTranslation} from 'react-i18next';
 import StlSelect from '../select/stl-select';
 
+// Define the Zod schema for Person
 export const personSchema = z.object({
 	firstName: z
 		.string()
@@ -25,77 +32,77 @@ export const personSchema = z.object({
 	}),
 });
 
+export type PersonFormSchema = z.infer<typeof personSchema>;
+
 const PersonForm: React.FC = () => {
-	const {
-		control,
-		formState: {errors},
-	} = useFormContext();
-	
 	const {t} = useTranslation();
-	const getErrorMessage = (error: any) =>
-		typeof error?.message === 'string' ? error.message : '';
+	const {control} = useFormContext();
 
 	return (
 		<>
-			<FormItem>
-				<FormLabel>{t('firstName')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="person.firstName"
-						control={control}
-						render={({field}) => (
+			<FormField
+				name="person.firstName"
+				control={control}
+				render={({field}) => (
+					<FormItem>
+						<FormLabel>{t('firstName')}</FormLabel>
+						<FormControl>
 							<Input {...field} placeholder={t('firstName')} />
-						)}
-					/>
-				</FormControl>
-			</FormItem>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
 
-			<FormItem>
-				<FormLabel>{t('lastName')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="person.lastName"
-						control={control}
-						render={({field}) => (
+			<FormField
+				name="person.lastName"
+				control={control}
+				render={({field}) => (
+					<FormItem>
+						<FormLabel>{t('lastName')}</FormLabel>
+						<FormControl>
 							<Input {...field} placeholder={t('lastName')} />
-						)}
-					/>
-				</FormControl>
-			</FormItem>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
 
-			<FormItem>
-				<FormLabel>{t('email')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="person.emailAddress"
-						control={control}
-						render={({field}) => (
+			<FormField
+				name="person.emailAddress"
+				control={control}
+				render={({field}) => (
+					<FormItem>
+						<FormLabel>{t('email')}</FormLabel>
+						<FormControl>
 							<Input {...field} placeholder={t('email')} type="email" />
-						)}
-					/>
-				</FormControl>
-			</FormItem>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
 
-			<FormItem>
-				<FormLabel>{t('phone')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="person.phoneNumber"
-						control={control}
-						render={({field}) => (
+			<FormField
+				name="person.phoneNumber"
+				control={control}
+				render={({field}) => (
+					<FormItem>
+						<FormLabel>{t('phone')}</FormLabel>
+						<FormControl>
 							<Input {...field} placeholder={t('phone')} type="tel" />
-						)}
-					/>
-				</FormControl>
-			</FormItem>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
 
-			<FormItem>
-				<FormLabel>{t('personType')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="person.personType"
-						control={control}
-						render={({field}) => (
+			<FormField
+				name="person.personType"
+				control={control}
+				render={({field}) => (
+					<FormItem>
+						<FormLabel>{t('personType')}</FormLabel>
+						<FormControl>
 							<StlSelect
 								value={field.value}
 								onValueChange={field.onChange}
@@ -107,10 +114,11 @@ const PersonForm: React.FC = () => {
 								getKey={(item) => item!.key}
 								getLabel={(item) => item!.label}
 							/>
-						)}
-					/>
-				</FormControl>
-			</FormItem>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
 		</>
 	);
 };

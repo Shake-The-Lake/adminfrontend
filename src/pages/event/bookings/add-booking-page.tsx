@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLoaderData, useNavigate} from 'react-router-dom';
+import {useLoaderData} from 'react-router-dom';
 import {useCreateBooking} from '../../../queries/booking';
 import {useCreatePerson} from '../../../queries/person';
 import {defaultBooking} from '../../../models/api/booking.model';
@@ -12,15 +12,10 @@ const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const navigate = useNavigate();
 	const {t} = useTranslation();
 
 	const createBookingMutation = useCreateBooking(eventId);
 	const createPersonMutation = useCreatePerson();
-
-	const onSuccessfullySubmitted = () => {
-		navigate(`/event/${eventId}/bookings`);
-	};
 
 	return (
 		<PageTransitionFadeIn>
@@ -30,7 +25,6 @@ const AddBookingPage: React.FC = () => {
 				bookingMutation={createBookingMutation}
 				personMutation={createPersonMutation}
 				isCreate={true}
-				onSuccessfullySubmitted={onSuccessfullySubmitted}
 				eventId={eventId}
 			/>
 		</PageTransitionFadeIn>
