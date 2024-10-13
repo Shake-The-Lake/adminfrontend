@@ -24,6 +24,8 @@ import PersonForm, {personSchema} from './person';
 import StlSelect from '../select/stl-select';
 import SelectableTimeSlotList from '../table/selectable-timeslot-list';
 import {PersonDto} from '../../models/api/person.model';
+import {useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {useNavigate} from 'react-router-dom';
 
 const bookingSchema = z.object({
 	id: z.number().optional(),
@@ -64,7 +66,12 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	});
 
 	const {t} = useTranslation();
-	const handleCancel = () => {};
+	const navigate = useNavigate();
+	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, bookingMutation);
+
+	const handleCancel = () => {
+		navigate(`/event/${eventId}/bookings`);
+	};
 
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
 		const person = values.person;
