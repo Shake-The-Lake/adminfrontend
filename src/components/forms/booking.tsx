@@ -1,133 +1,157 @@
-import React, {useEffect, useState} from 'react';
-import StlFilter, {StlFilterOptions} from '../data-table/stl-filter';
-import {DataTable} from '../data-table/data-table';
-import {useTranslation} from 'react-i18next';
-import {timeSlotColumns} from '../../pages/event/bookings/time-slot-columns';
-import {useGetTimeSlotsForEvent} from '../../queries/time-slot';
-import {TimeSlotDto} from '../../models/api/time-slot.model';
+import React, {useState} from 'react';
+import {z} from 'zod';
 import {
-	defaultFilterParams,
-	StlFilterParams,
-} from '../../models/api/search.model';
+	Controller,
+	FormProvider,
+	SubmitHandler,
+	useForm,
+} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {Button} from '../ui/button';
+import {
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '../ui/form';
+import {Input} from '../ui/input';
+import {useTranslation} from 'react-i18next';
+import {type BookingDto} from '../../models/api/booking.model';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {MutationToaster} from '../common/mutation-toaster';
+import PersonForm, {personSchema} from './person';
+import StlSelect from '../select/stl-select';
+import SelectableTimeSlotList from '../table/selectable-timeslot-list';
+import {PersonDto} from '../../models/api/person.model';
+
+const bookingSchema = z.object({
+	id: z.number().optional(),
+	isRider: z.boolean(),
+	isManual: z.boolean(),
+	pagerNumber: z.coerce.number(),
+	person: personSchema,
+	timeSlotId: z.number().optional(),
+});
+
+export type BookingFormSchema = z.infer<typeof bookingSchema>;
 
 type BookingFormProps = {
+	model: BookingDto;
+	bookingMutation: UseMutationResult<any, Error, BookingDto>;
+	personMutation: UseMutationResult<any, Error, PersonDto>;
+	isCreate: boolean;
+	onSuccessfullySubmitted?: () => void;
 	eventId: number;
-	selectedTimeSlotId?: number;
-	setSelectedTimeSlotId: (id: number | undefined) => void;
 };
 
 const BookingForm: React.FC<BookingFormProps> = ({
+	model,
+	bookingMutation,
+	personMutation,
+	isCreate,
+	onSuccessfullySubmitted,
 	eventId,
-	selectedTimeSlotId,
-	setSelectedTimeSlotId,
 }) => {
-	const {t, i18n} = useTranslation();
-	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
-	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>(
-		() => timeSlots ?? [],
-	);
-	const [filter, setFilter] = useState<StlFilterParams>(defaultFilterParams);
+	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
+		number | undefined
+	>(model.timeSlotId);
 
-	useEffect(() => {
-		if (timeSlots) {
-			updateFilteredTimeSlots();
-		}
-	}, [timeSlots, filter]);
+	const form = useForm<BookingFormSchema>({
+		mode: 'onChange',
+		defaultValues: model,
+		resolver: zodResolver(bookingSchema),
+	});
 
-	const updateFilteredTimeSlots = () => {
-		const timeslotsWithAvailableSeats = timeSlots?.filter(
-			(slot) => slot.availableSeats > 0,
-		);
-		const filtered = filterTimeSlots(
-			timeslotsWithAvailableSeats ?? [],
-			filter.activityTypeId,
-			filter.boatId,
-			filter.from,
-			filter.to,
-		);
-		setFilteredTimeSlots(filtered);
+	const {t} = useTranslation();
+	const handleCancel = () => {};
+
+	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
+		const person = values.person;
+		const savedPerson = await personMutation.mutateAsync(person);
+		const booking: BookingDto = {
+			...values,
+			id: values.id ?? 0,
+			timeSlotId: selectedTimeSlotId ?? 0,
+			personId: savedPerson.id,
+		};
+		await bookingMutation.mutateAsync(booking);
 	};
-
-	const filterTimeSlots = (
-		timeSlots: TimeSlotDto[],
-		activityTypeId?: number,
-		boatId?: number,
-		from?: string,
-		to?: string,
-	): TimeSlotDto[] => {
-		let filtered = timeSlots;
-
-		if (activityTypeId !== undefined && activityTypeId !== null) {
-			filtered = filtered.filter(
-				(slot) => Number(slot.activityTypeId) === Number(activityTypeId),
-			);
-		}
-
-		if (boatId !== undefined && boatId !== null) {
-			filtered = filtered.filter(
-				(slot) => Number(slot.boatId) === Number(boatId),
-			);
-		}
-
-		if (from) {
-			filtered = filtered.filter(
-				(slot) => slot.fromTime && slot.fromTime! >= from,
-			);
-		}
-
-		if (to) {
-			filtered = filtered.filter(
-				(slot) => slot.untilTime && slot.untilTime! <= to,
-			);
-		}
-
-		return filtered;
-	};
-
-	if (error) {
-		return <p>{t('booking.errorLoadingBooking')}</p>;
-	}
 
 	return (
 		<>
-			<div className="w-full mt-4 mb-4 flex justify-center">
-				<div className="flex flex-col w-full">
-					<div>
-						<StlFilter
-							options={
-								StlFilterOptions.ActivityType |
-								StlFilterOptions.Boat |
-								StlFilterOptions.TimeRange
-							}
-							params={{
-								onActivityTypeChange(activityTypeId?: number) {
-									setFilter((prevFilter) => ({
-										...prevFilter,
-										activityId: activityTypeId,
-									}));
-								},
-								onBoatChange(boatId?: number) {
-									setFilter((prevFilter) => ({...prevFilter, boatId}));
-								},
-								onFromChange(from?: string) {
-									setFilter((prevFilter) => ({...prevFilter, from}));
-								},
-								onToChange(to?: string) {
-									setFilter((prevFilter) => ({...prevFilter, to}));
-								},
-							}}
-						/>
-						<DataTable
-							columns={timeSlotColumns(
-								i18n.language,
-								setSelectedTimeSlotId,
-								selectedTimeSlotId,
+			<MutationToaster
+				type={isCreate ? 'create' : 'update'}
+				mutation={bookingMutation}
+			/>
+			<FormProvider {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<SelectableTimeSlotList
+						eventId={eventId}
+						selectedTimeSlotId={selectedTimeSlotId}
+						setSelectedTimeSlotId={setSelectedTimeSlotId}
+					/>
+
+					<div className="space-y-4 w-1/3 mt-20">
+						<PersonForm />
+
+						<FormField
+							name="isRider"
+							control={form.control}
+							render={({field}) => (
+								<FormItem>
+									<FormLabel>{t('rider')}</FormLabel>
+									<FormControl>
+										<Controller
+											name="isRider"
+											control={form.control}
+											render={({field}) => (
+												<StlSelect
+													value={field.value ? 'true' : 'false'}
+													onValueChange={(value) =>
+														field.onChange(value === 'true')
+													}
+													defaultValue="false"
+													list={[
+														{key: 'true', label: 'Yes'},
+														{key: 'false', label: 'No'},
+													]}
+													getKey={(item) => item?.key}
+													getLabel={(item) => item!.label}
+												/>
+											)}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
 							)}
-							data={filteredTimeSlots}
+						/>
+
+						<FormField
+							name="pagerNumber"
+							control={form.control}
+							render={({field}) => (
+								<FormItem>
+									<FormLabel>{t('pagerNumber')}</FormLabel>
+									<FormControl>
+										<Input placeholder={t('pagerNumber')} {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
 						/>
 					</div>
-				</div>
-			</div>
+
+					<div className="flex w-full justify-end mt-auto pt-4">
+						<Button type="button" variant="secondary" onClick={handleCancel}>
+							{t('cancel')}
+						</Button>
+						<Button type="submit" className="ml-4">
+							{t('save')}
+						</Button>
+					</div>
+				</form>
+			</FormProvider>
 		</>
 	);
 };

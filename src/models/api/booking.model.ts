@@ -1,4 +1,5 @@
 import {type PersonDto} from './person.model';
+import {TimeSlotDto} from './time-slot.model';
 
 export type BookingDto = {
 	id?: number;
@@ -8,6 +9,7 @@ export type BookingDto = {
 	personId?: number;
 	person?: PersonDto;
 	timeSlotId?: number;
+	timeSlot?: TimeSlotDto;
 };
 
 export const defaultBooking: BookingDto = {
@@ -17,28 +19,4 @@ export const defaultBooking: BookingDto = {
 	pagerNumber: undefined,
 	personId: 0,
 	timeSlotId: 0,
-};
-
-export type CombinedBookingFormDto = {
-	firstName: string;
-	lastName: string;
-	emailAddress: string;
-	phoneNumber: string;
-	personType: 'EMPLOYEE' | 'BOAT_DRIVER' | 'CUSTOMER';
-	isRider: boolean;
-	isManual: boolean;
-	pagerNumber?: number;
-	timeSlotId: number | undefined;
-};
-
-export const defaultCombinedBooking: CombinedBookingFormDto = {
-	firstName: '',
-	lastName: '',
-	emailAddress: '',
-	phoneNumber: '',
-	personType: 'CUSTOMER',
-	isRider: true,
-	isManual: true,
-	pagerNumber: 0,
-	timeSlotId: undefined,
 };

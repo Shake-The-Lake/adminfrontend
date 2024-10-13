@@ -1,20 +1,39 @@
 import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
-import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
+import {z} from 'zod';
+import {FormControl, FormItem, FormLabel} from '../ui/form';
 import {Input} from '../ui/input';
-import StlSelect from '../select/stl-select';
 import {useTranslation} from 'react-i18next';
+import StlSelect from '../select/stl-select';
+
+export const personSchema = z.object({
+	firstName: z
+		.string()
+		.min(1, 'First name is required')
+		.regex(/^[A-Za-z]+$/, 'First name must contain only letters'),
+	lastName: z
+		.string()
+		.min(1, 'Last name is required')
+		.regex(/^[A-Za-z]+$/, 'Last name must contain only letters'),
+	emailAddress: z.string().email('Invalid email address'),
+	phoneNumber: z
+		.string()
+		.min(1, 'Phone number is required')
+		.regex(/^[0-9()+-]*$/, 'Phone number must contain only numbers'),
+	personType: z.enum(['EMPLOYEE', 'BOAT_DRIVER', 'CUSTOMER'], {
+		required_error: 'Please select a person type',
+	}),
+});
 
 const PersonForm: React.FC = () => {
 	const {
 		control,
 		formState: {errors},
 	} = useFormContext();
+	
 	const {t} = useTranslation();
-
-	const getErrorMessage = (error: any) => {
-		return typeof error?.message === 'string' ? error.message : '';
-	};
+	const getErrorMessage = (error: any) =>
+		typeof error?.message === 'string' ? error.message : '';
 
 	return (
 		<>
@@ -22,59 +41,59 @@ const PersonForm: React.FC = () => {
 				<FormLabel>{t('firstName')}</FormLabel>
 				<FormControl>
 					<Controller
-						name="firstName"
+						name="person.firstName"
 						control={control}
-						render={({field}) => <Input {...field} placeholder="First Name" />}
+						render={({field}) => (
+							<Input {...field} placeholder={t('firstName')} />
+						)}
 					/>
 				</FormControl>
-				<FormMessage>{getErrorMessage(errors.firstName)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
 				<FormLabel>{t('lastName')}</FormLabel>
 				<FormControl>
 					<Controller
-						name="lastName"
+						name="person.lastName"
 						control={control}
-						render={({field}) => <Input {...field} placeholder="Last Name" />}
+						render={({field}) => (
+							<Input {...field} placeholder={t('lastName')} />
+						)}
 					/>
 				</FormControl>
-				<FormMessage>{getErrorMessage(errors.lastName)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
 				<FormLabel>{t('email')}</FormLabel>
 				<FormControl>
 					<Controller
-						name="emailAddress"
+						name="person.emailAddress"
 						control={control}
 						render={({field}) => (
-							<Input {...field} placeholder="Email Address" type="email" />
+							<Input {...field} placeholder={t('email')} type="email" />
 						)}
 					/>
 				</FormControl>
-				<FormMessage>{getErrorMessage(errors.emailAddress)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
 				<FormLabel>{t('phone')}</FormLabel>
 				<FormControl>
 					<Controller
-						name="phoneNumber"
+						name="person.phoneNumber"
 						control={control}
 						render={({field}) => (
-							<Input {...field} placeholder="Phone Number" type="tel" />
+							<Input {...field} placeholder={t('phone')} type="tel" />
 						)}
 					/>
 				</FormControl>
-				<FormMessage>{getErrorMessage(errors.phoneNumber)}</FormMessage>
 			</FormItem>
 
 			<FormItem>
 				<FormLabel>{t('personType')}</FormLabel>
 				<FormControl>
 					<Controller
-						name="personType"
+						name="person.personType"
 						control={control}
 						render={({field}) => (
 							<StlSelect
@@ -85,51 +104,12 @@ const PersonForm: React.FC = () => {
 									{key: 'BOAT_DRIVER', label: t('boatDriver')},
 									{key: 'CUSTOMER', label: t('customer')},
 								]}
-								getKey={(item) => item?.key}
-								getLabel={(item) => item?.label ?? ''}
-							/>
-						)}
-					/>
-				</FormControl>
-				<FormMessage>{getErrorMessage(errors.personType)}</FormMessage>
-			</FormItem>
-
-			<FormItem>
-				<FormLabel>{t('driverOrViewer')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="isRider"
-						control={control}
-						render={({field}) => (
-							<StlSelect
-								value={field.value ? 'true' : 'false'}
-								onValueChange={(value) => field.onChange(value === 'true')}
-								defaultValue="false"
-								list={[
-									{key: 'true', label: t('rider')},
-									{key: 'false', label: t('viewer')},
-								]}
-								getKey={(item) => item?.key}
+								getKey={(item) => item!.key}
 								getLabel={(item) => item!.label}
 							/>
 						)}
 					/>
 				</FormControl>
-				<FormMessage>{getErrorMessage(errors.isRider)}</FormMessage>
-			</FormItem>
-
-			<FormItem>
-				<FormLabel>{t('pagerNumber')}</FormLabel>
-				<FormControl>
-					<Controller
-						name="pagerNumber"
-						control={control}
-						render={({field}) => (
-							<Input {...field} placeholder="Pager Number" type="number" />
-						)}
-					/>
-				</FormControl>
-				<FormMessage>{getErrorMessage(errors.pagerNumber)}</FormMessage>
 			</FormItem>
 		</>
 	);
