@@ -1,17 +1,21 @@
-import {useQueryClient, type QueryClient} from '@tanstack/react-query';
+import {type QueryClient, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import {
 	timeslotDetailOptions,
 	useTimeSlotDetail,
 } from '../../../queries/time-slot';
 import {
-	TableHeader,
-	TableRow,
-	TableHead,
+	Table,
 	TableBody,
 	TableCell,
-	Table,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from '../../../components/ui/table';
 import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
@@ -27,26 +31,26 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.timeSlotId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.timeSlotId) {
+			throw new Error('No Timeslot ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				timeslotDetailOptions(Number(params.timeSlotId)),
-			);
+		await queryClient.ensureQueryData(
+			timeslotDetailOptions(Number(params.timeSlotId)),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const ScheduleItemPage: React.FC = () => {
 	const {timeSlotId, eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();
-
+	const navigate = useNavigate();
 	const {data: timeSlot, isPending} = useTimeSlotDetail(
 		queryClient,
 		timeSlotId,
@@ -100,7 +104,12 @@ const ScheduleItemPage: React.FC = () => {
 					<TableBody>
 						{timeSlot?.bookings.length ? (
 							timeSlot?.bookings.map((slot, index) => (
-								<TableRow key={index} className="w-full justify-between">
+								<TableRow
+									key={index}
+									className="w-full justify-between"
+									onClick={() =>
+										navigate(`/event/${eventId}/bookings/edit/${slot.id}`)
+									}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}
 									</TableCell>

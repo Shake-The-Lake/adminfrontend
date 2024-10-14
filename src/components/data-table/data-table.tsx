@@ -20,11 +20,13 @@ import {useTranslation} from 'react-i18next';
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
 	data: TyData[];
+	onRowClick?: (row: TyData) => void;
 };
 
 export function DataTable<TyData, TyValue>({
 	columns,
 	data,
+	onRowClick,
 }: DataTableProps<TyData, TyValue>) {
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[],
@@ -55,9 +57,9 @@ export function DataTable<TyData, TyValue>({
 										{header.isPlaceholder
 											? null
 											: flexRender(
-												header.column.columnDef.header,
-												header.getContext(),
-											)}
+													header.column.columnDef.header,
+													header.getContext(),
+												)}
 									</TableHead>
 								))}
 							</TableRow>
@@ -68,7 +70,8 @@ export function DataTable<TyData, TyValue>({
 							table.getRowModel().rows.map((row) => (
 								<TableRow
 									key={row.id}
-									data-state={row.getIsSelected() && 'selected'}>
+									data-state={row.getIsSelected() && 'selected'}
+									onClick={() => onRowClick?.(row.original)}>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
 											{flexRender(
