@@ -40,14 +40,14 @@ describe('StlDialog', () => {
   it('calls onClose when the cancel button is clicked', () => {
     renderComponent();
     fireEvent.click(screen.getByTitle('Open Dialog'));
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getByText('cancel'));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
   it('renders the save button when formId is provided', () => {
     renderComponent({ formId: 'testForm' });
     fireEvent.click(screen.getByTitle('Open Dialog'));
-    expect(screen.getByText('Save')).toBeInTheDocument();
+    expect(screen.getByText('save')).toBeInTheDocument();
   });
 
   it('does not render the save button when formId is not provided', () => {

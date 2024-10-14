@@ -20,7 +20,7 @@ describe('booking-service', () => {
 		it('should update an existing booking', async () => {
 			const booking: BookingDto = { id: 1, isRider: true, isManual: false, personId: 1, timeSlotId: 1 };
 			axiosInstance.put.mockResolvedValue({ data: booking });
-			const result = await updateBooking(booking);
+			const result = await updateBooking(booking.id ?? 1, booking);
 			expect(result).toEqual(booking);
 			expect(axiosInstance.put).toHaveBeenCalledWith(`/booking/${booking.id}`, booking);
 		});

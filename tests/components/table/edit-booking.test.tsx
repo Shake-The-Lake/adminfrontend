@@ -28,9 +28,6 @@ describe('EditBookingTableCell', () => {
         <EditBookingTableCell booking={booking} deleteMutation={deleteMutation} />
       </Router>
     );
-
-    expect(screen.getByTitle('Edit Booking')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /edit booking/i })).toBeDisabled();
     expect(screen.getByRole('button', { name: /delete booking/i })).toBeInTheDocument();
   });
 

@@ -1,11 +1,10 @@
-// Tests/mutation-toaster.test.tsx
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import { MutationToaster } from '../../../src/components/common/mutation-toaster'; // Adjust the import path as needed
 import { toast } from 'sonner';
-import { describe, it, beforeEach, afterEach, vi } from 'vitest';
-import { type UseMutationResult } from '@tanstack/react-query';
+import { MutationToaster } from '../../../src/components/common/mutation-toaster';
+import { vi } from 'vitest';
 
+// Mock the toast module
 vi.mock('sonner', () => ({
   toast: {
     success: vi.fn(),
@@ -13,52 +12,59 @@ vi.mock('sonner', () => ({
   },
 }));
 
+// Mock the useTranslation hook
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+// Mock the tryGetErrorMessage function
+vi.mock('../../../src/lib/utils', () => ({
+  tryGetErrorMessage: vi.fn((error: Error) => error.message),
+}));
+
 describe('MutationToaster', () => {
   let mutationMock;
 
   beforeEach(() => {
     mutationMock = {
-      isSuccess: false,
-      isError: false,
-      error: null,
       reset: vi.fn(),
-    } as UseMutationResult<any, Error, any>;
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
+    };
   });
 
   it('shows success message when mutation is successful', async () => {
     mutationMock.isSuccess = true;
     render(<MutationToaster type="create" mutation={mutationMock} />);
 
-    expect(toast.success).toHaveBeenCalledWith('Item was created successfully!');
-    expect(mutationMock.reset).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('messages.successCreate');
+      expect(mutationMock.reset).toHaveBeenCalled();
+    });
   });
 
-  it('shows error message when mutation fails', async () => {
+  it('shows error message when mutation has an error', async () => {
+    const error = new Error('Mutation error');
     mutationMock.isError = true;
-    mutationMock.error = 'Test error message';
+    mutationMock.error = error;
+    render(<MutationToaster type="update" mutation={mutationMock} />);
 
-    render(<MutationToaster type="create" mutation={mutationMock} />);
-
-    await waitFor(async () => Promise.resolve());
-
-    expect(toast.error).toHaveBeenCalledWith('There was an error when creating.', {
-      description: 'Test error message',
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('messages.errorUpdate', {
+        description: 'Mutation error',
+      });
+      expect(mutationMock.reset).toHaveBeenCalled();
     });
-    expect(mutationMock.reset).toHaveBeenCalled();
   });
 
   it('shows error message when error prop is passed', async () => {
-    const errorMock = new Error('Direct error prop');
-    render(<MutationToaster type="delete" error={errorMock} />);
+    const error = new Error('Direct error prop');
+    render(<MutationToaster type="delete" error={error} />);
 
-    await waitFor(async () => Promise.resolve());
-
-    expect(toast.error).toHaveBeenCalledWith('There was an error when deleting.', {
-      description: 'Direct error prop',
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('messages.errorDelete', {
+        description: 'Direct error prop',
+      });
     });
   });
 });
