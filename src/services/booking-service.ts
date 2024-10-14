@@ -20,12 +20,9 @@ export const getBookingById = async (
 };
 
 export const updateBooking = async (
-	bookingId: number,
-	updatedBooking: BookingDto,
+	id: number,
+	booking: BookingDto,
 ): Promise<BookingDto> => {
-	const response = await axiosInstance.put<BookingDto>(
-		`/booking/${bookingId}`,
-		updatedBooking,
-	);
+	const response = await axiosInstance.put<BookingDto>(`/booking/${id}`, booking);
 	return response.data;
 };
