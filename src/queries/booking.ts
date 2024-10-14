@@ -12,7 +12,11 @@ import {
 	getBookingsByEventId,
 	searchBookings,
 } from '../services/booking-search-service';
-import {createBooking, updateBooking} from '../services/booking-service';
+import {
+	createBooking,
+	getBookingById,
+	updateBooking,
+} from '../services/booking-service';
 import {type BookingDto} from '../models/api/booking.model';
 
 export const bookingKeys = {
@@ -49,6 +53,14 @@ export function useSearchBookings(
 	const queryClient = useQueryClient();
 	return useQuery(bookingsSearchOptions(eventId, params, queryClient));
 }
+
+export function useGetBookingDetails(id: number) {
+	return useQuery({
+		queryKey: bookingKeys.detail(id, true),
+		queryFn: async () => getBookingById(id, 'person'),
+	});
+}
+
 export function useCreateBooking(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -62,9 +74,18 @@ export function useCreateBooking(eventId: number) {
 				);
 			}
 
-			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: bookingKeys.detail(eventId, true), exact: true});
-			await queryClient.invalidateQueries({queryKey: bookingKeys.search(eventId, {}), exact: true});
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.all(eventId),
+				exact: true,
+			});
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.detail(eventId, true),
+				exact: true,
+			});
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.search(eventId, {}),
+				exact: true,
+			});
 		},
 		onError(error) {
 			console.error('Error creating booking:', error);
@@ -72,14 +93,27 @@ export function useCreateBooking(eventId: number) {
 	});
 }
 
-export function useUpdateBooking(id: number, eventId: number) {
+export function useUpdateBooking(eventId: number, bookingId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (booking: BookingDto) => updateBooking(id, booking),
-		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: bookingKeys.all(eventId)}); // Not exact to catch search as well
-			await queryClient.invalidateQueries({queryKey: bookingKeys.detail(id, true), exact: true});
-			await queryClient.invalidateQueries({queryKey: bookingKeys.detail(id, false), exact: true});
+		mutationFn: async (updatedBooking: BookingDto) =>
+			await updateBooking(bookingId, updatedBooking),
+
+		async onSuccess(data) {
+			queryClient.setQueryData(
+				bookingKeys.detail(data?.id ?? bookingId, true),
+				data,
+			);
+
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.search(eventId, {}),
+				exact: true,
+			});
+
+			await queryClient.invalidateQueries({
+				queryKey: bookingKeys.detail(bookingId, true),
+				exact: true,
+			});
 		},
 	});
 }
