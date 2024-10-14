@@ -37,7 +37,7 @@ const StlSelect = <T,>({
 
 	const { t } = useTranslation();
 	return (
-		<Select value={value} onValueChange={onValueChange}>
+		<Select value={value} onValueChange={onValueChange} >
 			<SelectTrigger>
 				<div className="flex justify-between items-center gap-1 w-full">
 					<SelectValue placeholder={defaultLabel ?? StlSelectDefaultLabel}>
