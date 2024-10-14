@@ -1,6 +1,10 @@
 import {type QueryClient, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {Link, type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import {
 	timeslotDetailOptions,
 	useTimeSlotDetail,
@@ -46,7 +50,7 @@ const ScheduleItemPage: React.FC = () => {
 	>;
 	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();
-
+	const navigate = useNavigate();
 	const {data: timeSlot, isPending} = useTimeSlotDetail(
 		queryClient,
 		timeSlotId,
@@ -58,6 +62,7 @@ const ScheduleItemPage: React.FC = () => {
 		(timeSlot?.seatsViewer ?? 0) - (timeSlot?.availableViewerSeats ?? 0);
 
 	const deleteMutation = useDeleteBooking(eventId);
+
 	return (
 		<PageTransitionFadeIn>
 			<div className="mt-10">
@@ -99,17 +104,18 @@ const ScheduleItemPage: React.FC = () => {
 					<TableBody>
 						{timeSlot?.bookings.length ? (
 							timeSlot?.bookings.map((slot, index) => (
-								<TableRow key={index} className="w-full justify-between">
-									<Link
-										to={`/event/${eventId}/bookings/edit/${slot.id}`}
-										className="contents">
-										<TableCell>
-											{slot.person?.firstName} {slot.person?.lastName}
-										</TableCell>
-										<TableCell>{slot.person?.phoneNumber}</TableCell>
-										<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-										<TableCell>{slot.pagerNumber}</TableCell>
-									</Link>
+								<TableRow
+									key={index}
+									className="w-full justify-between"
+									onClick={() =>
+										navigate(`/event/${eventId}/bookings/edit/${slot.id}`)
+									}>
+									<TableCell>
+										{slot.person?.firstName} {slot.person?.lastName}
+									</TableCell>
+									<TableCell>{slot.person?.phoneNumber}</TableCell>
+									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
+									<TableCell>{slot.pagerNumber}</TableCell>
 									<EditBookingTableCell
 										booking={slot}
 										deleteMutation={deleteMutation}></EditBookingTableCell>
