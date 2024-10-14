@@ -8,8 +8,6 @@ import NavigationMenuItem from '../navigation/navigation-menu-item';
 import {NavigationStructureContext} from '../navigation/navigation-models';
 import ShakeTheLakeIcon from '../icons/shake-the-lake-icon';
 
-// Todo! translate all texts
-
 const EventNavigationElements = () => {
 	const {t} = useTranslation();
 

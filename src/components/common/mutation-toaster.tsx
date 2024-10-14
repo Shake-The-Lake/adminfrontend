@@ -3,6 +3,7 @@ import {useEffect} from 'react';
 import {toast} from 'sonner';
 import {tryGetErrorMessage} from '../../lib/utils';
 import {type UseMutationResult} from '@tanstack/react-query';
+import {useTranslation} from 'react-i18next';
 
 type MutationToasterProps = {
 	type: 'create' | 'update' | 'delete';
@@ -12,11 +13,13 @@ type MutationToasterProps = {
 };
 
 const MutationToaster: React.FC<MutationToasterProps> = (props) => {
+	const {t} = useTranslation();
+
 	useEffect(() => {
 		// Todo! test a lot! is this one even necessary?
 		if (props.error) {
 			const message = tryGetErrorMessage(props.error);
-			toast.error(getErrorMessageDependingOnType(props.type), {
+			toast.error(getErrorMessageKeyDependingOnType(props.type), {
 				description: message,
 			});
 		}
@@ -51,11 +54,13 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 		);
 
 		if (props.mutation?.isSuccess === true) {
-			toast.success(getSuccessMessageDependingOnType(props.type));
+			const messageKey = getSuccessMessageKeyDependingOnType(props.type);
+			toast.success(t(messageKey));
 		} else if (props.mutation?.isError === true) {
 			const message = tryGetErrorMessage(props.mutation?.error);
+			const messageKey = getErrorMessageKeyDependingOnType(props.type);
 			toast.error(
-				getErrorMessageDependingOnType(props.type),
+				t(messageKey),
 				props.mutation?.error && {
 					description: message,
 				},
@@ -71,26 +76,28 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 
 export {MutationToaster};
 
-function getSuccessMessageDependingOnType(
+function getSuccessMessageKeyDependingOnType(
 	type: 'create' | 'update' | 'delete',
 ) {
 	switch (type) {
 		case 'create':
-			return 'Item was created successfully!';
+			return 'messages.successCreate';
 		case 'update':
-			return 'Item was saved successfully!';
+			return 'messages.successUpdate';
 		case 'delete':
-			return 'Item was deleted successfully!';
+			return 'messages.successDelete';
 	}
 }
 
-function getErrorMessageDependingOnType(type: 'create' | 'update' | 'delete') {
+function getErrorMessageKeyDependingOnType(
+	type: 'create' | 'update' | 'delete',
+) {
 	switch (type) {
 		case 'create':
-			return 'There was an error when creating.';
+			return 'messages.errorCreate';
 		case 'update':
-			return 'There was an error when saving.';
+			return 'messages.errorUpdate';
 		case 'delete':
-			return 'There was an error when deleting.';
+			return 'messages.errorDelete';
 	}
 }

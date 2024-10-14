@@ -1,5 +1,4 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import './assets/i18n/i18n';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DefaultLayout from './components/default-layout';
@@ -35,7 +34,9 @@ import ProtectedRoute from './ProtectedRoute';
 import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
 import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
+import QueryLoader from './components/common/query-loader';
 import {AnimatePresence} from 'framer-motion';
+import EditBookingPage from './pages/event/bookings/edit-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -122,13 +123,16 @@ const router = createBrowserRouter([
 				element: <AddBookingPage />,
 				loader: bookingsLoader(queryClient),
 			},
+			{
+				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.editBooking}`,
+				element: <EditBookingPage />,
+				loader: bookingsLoader(queryClient),
+			},
 		],
 	},
 ]);
 
 function App() {
-	const {t} = useTranslation();
-
 	return (
 		<AuthProvider>
 			<QueryClientProvider client={queryClient}>
@@ -140,6 +144,7 @@ function App() {
 				</AnimatePresence>
 				<ReactQueryDevtools initialIsOpen={false} />
 				<Toaster position="top-right" duration={5000} closeButton />
+				<QueryLoader />
 				<MutationLoader />
 			</QueryClientProvider>
 		</AuthProvider>
