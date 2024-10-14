@@ -5,7 +5,7 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import axiosInstance from './services/axiosInstance'; // Import the axios instance
+import axiosInstance from './services/axiosInstance';
 
 type AuthContextType = {
 	isAuthenticated: boolean;
@@ -19,7 +19,7 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
@@ -27,7 +27,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 		if (token) {
 			// Check if the token is valid
 			axiosInstance
-				.post('/auth/verify', {token})
+				.post('/auth/verify', { token })
 				.then((response) => {
 					if (response.data.valid === true) {
 						setIsAuthenticated(true);
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 				username,
 				password,
 			});
-			const {token} = response.data;
+			const { token } = response.data;
 			localStorage.setItem('authToken', token);
 			setIsAuthenticated(true);
 		} catch (error) {
@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{isAuthenticated, login, logout}}>
+		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

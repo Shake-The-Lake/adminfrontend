@@ -1,16 +1,16 @@
 import React from 'react';
-import {type SubmitHandler, useForm} from 'react-hook-form';
-import {z} from 'zod';
-import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
-import {Input} from '../ui/input';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {onInvalidFormHandler} from '../../lib/utils';
-import {Button} from '../ui/button';
-import {type LoginDto} from '../../models/api/login.model';
-import {useAuth} from '../../AuthContext';
-import {toast} from 'sonner';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Input } from '../ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { onInvalidFormHandler } from '../../lib/utils';
+import { Button } from '../ui/button';
+import { type LoginDto } from '../../models/api/login.model';
+import { useAuth } from '../../AuthContext';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Schema definition
 export const loginFormSchema = z.object({
@@ -24,10 +24,10 @@ type LoginFormProps = {
 	model: LoginDto;
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({model}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ model }) => {
 	const navigate = useNavigate();
-	const {login, isAuthenticated} = useAuth();
-	const {t} = useTranslation();
+	const { login, isAuthenticated } = useAuth();
+	const { t } = useTranslation();
 
 	const form = useForm<LoginFormSchema>({
 		mode: 'onChange',
@@ -45,7 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			login(loginData.username, loginData.password); // Await the login function
+			login(loginData.username, loginData.password);
 			if (!isAuthenticated) {
 				toast.error('Error trying to login...');
 			}
@@ -53,9 +53,9 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 
 			if (isAuthenticated) {
 				if (!redirectTo || redirectTo === '/login') {
-					navigate('/', {replace: true});
+					navigate('/', { replace: true });
 				} else {
-					navigate(redirectTo, {replace: true});
+					navigate(redirectTo, { replace: true });
 				}
 			}
 		} catch (error) {
@@ -76,7 +76,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 					<FormField
 						name="username"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('login.username')}</FormLabel>
 								<FormControl>
@@ -92,7 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 					<FormField
 						name="password"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('login.password')}</FormLabel>
 								<FormControl>
