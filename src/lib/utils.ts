@@ -39,6 +39,8 @@ export function getTranslation(
 export function tryGetErrorMessage(error: unknown) {
 	let errorMessage = 'An unknown error occurred';
 
+	if (!error) return errorMessage;
+
 	if (error && typeof error === 'object' && 'response' in error) {
 		const axiosError = error as {
 			response: {data?: string | {message?: string}; status: number};
@@ -49,7 +51,6 @@ export function tryGetErrorMessage(error: unknown) {
 				: axiosError.response.data?.message;
 		errorMessage = `Error: ${axiosError.response.status} ${axiosMessage && '- ' + axiosMessage}`;
 	} else if (error && typeof error === 'object' && 'request' in error) {
-		const axiosError = error as {request: unknown};
 		errorMessage = 'No response received from server';
 	} else if (error instanceof Error) {
 		// Handle a generic JavaScript error
