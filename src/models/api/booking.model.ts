@@ -4,7 +4,7 @@ import {TimeSlotDto} from './time-slot.model';
 export type BookingDto = {
 	id?: number;
 	isRider: boolean;
-	isManual?: boolean;
+	isManual: boolean;
 	pagerNumber?: number;
 	personId?: number;
 	person?: PersonDto;

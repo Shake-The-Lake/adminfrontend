@@ -26,6 +26,7 @@ import SelectableTimeSlotList from '../table/selectable-timeslot-list';
 import {PersonDto} from '../../models/api/person.model';
 import {useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {useNavigate} from 'react-router-dom';
+import {getIsRiderOptions} from '../../constants/constants';
 
 const bookingSchema = z.object({
 	id: z.number().optional(),
@@ -73,19 +74,19 @@ const BookingForm: React.FC<BookingFormProps> = ({
 		navigate(`/event/${eventId}/bookings`);
 	};
 
-	const getIsRiderOptions = (t: (key: string) => string) => [
-		{key: 'driver', label: t('rider')},
-		{key: 'viewer', label: t('viewer')},
-	];
-
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
 		const person = values.person;
 		const savedPerson = await personMutation.mutateAsync(person);
+
+		// when id is present it's an update mutation call and when id is not present it should be a create mutation
+		const isManual = values.id ? model.isManual : true;
+
 		const booking: BookingDto = {
 			...values,
 			id: values.id || model.id,
-			timeSlotId: selectedTimeSlotId ?? 0,
+			timeSlotId: selectedTimeSlotId || model.timeSlotId,
 			personId: savedPerson.id,
+			isManual: isManual,
 		};
 		await bookingMutation.mutateAsync(booking);
 	};
@@ -112,7 +113,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 							control={form.control}
 							render={({field}) => (
 								<FormItem>
-									<FormLabel>{t('booking.DriverOrViewer')}</FormLabel>
+									<FormLabel>{t('booking.driverOrViewer')}</FormLabel>
 									<FormControl>
 										<Controller
 											name="isRider"

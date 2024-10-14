@@ -57,13 +57,13 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 	): TimeSlotDto[] => {
 		let filtered = timeSlots;
 
-		if (activityTypeId !== undefined && activityTypeId !== null) {
+		if (activityTypeId) {
 			filtered = filtered.filter(
 				(slot) => Number(slot.activityTypeId) === Number(activityTypeId),
 			);
 		}
 
-		if (boatId !== undefined && boatId !== null) {
+		if (boatId) {
 			filtered = filtered.filter(
 				(slot) => Number(slot.boatId) === Number(boatId),
 			);

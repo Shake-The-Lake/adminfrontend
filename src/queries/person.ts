@@ -53,7 +53,7 @@ export function useUpdatePerson() {
 				return;
 			}
 
-			queryClient.setQueryData(personKeys.detail(data.id), data);
+			queryClient.setQueryData(personKeys.detail(data.id!), data);
 
 			await queryClient.invalidateQueries({
 				queryKey: personKeys.all(),
