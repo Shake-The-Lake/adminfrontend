@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { useParams } from 'react-router-dom';
-import { type ControllerRenderProps } from 'react-hook-form';
-import { FormControl, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { useGetSearchParameters } from '../../queries/search';
-import StlSelect, { StlSelectDefaultLabel } from './stl-select';
-import { type BoatDto } from '../../models/api/boat.model';
+import {useParams} from 'react-router-dom';
+import {type ControllerRenderProps} from 'react-hook-form';
+import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
+import {useGetSearchParameters} from '../../queries/search';
+import StlSelect, {StlSelectDefaultLabelKey} from './stl-select';
+import {type BoatDto} from '../../models/api/boat.model';
+import {useTranslation} from 'react-i18next';
 
 export type BoatSelectProps = {
 	field: ControllerRenderProps<any, 'boatId'>;
@@ -17,9 +18,11 @@ const BoatSelect: React.FC<BoatSelectProps> = ({ field, className }) => {
 	const eventId = Number(id);
 	const { data: searchParams } = useGetSearchParameters(eventId);
 
+	const {t} = useTranslation();
+
 	const getKey = (b?: BoatDto | undefined) => b?.id?.toString();
 	const getLabel = (b?: BoatDto | undefined) =>
-		b?.name ?? StlSelectDefaultLabel;
+		b?.name ?? t(StlSelectDefaultLabelKey);
 
 	return (
 		<FormItem className={className}>

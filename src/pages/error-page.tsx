@@ -18,7 +18,7 @@ const ErrorPage: React.FC = () => {
 					{errorStatus === 0 ? '???' : errorStatus}
 				</h1>
 				<div className="mb-4 text-lg text-gray-600">
-					<p>{t('pageErrorOops')}</p>
+					<p>{t('messages.pageErrorOops')}</p>
 					<p>{t(customErrorLabel)}</p>
 				</div>
 				<div className="animate-bounce">
@@ -28,7 +28,7 @@ const ErrorPage: React.FC = () => {
 				</div>
 				{errorStatus === 404 && (
 					<p className="mt-4 text-gray-600">
-						{t('page404NavigateHome')}{' '}
+						{t('messages.page404NavigateHome')}{' '}
 						<Link
 							to="/"
 							className="text-primary-blue underline-offset-4 hover:underline">
@@ -47,13 +47,13 @@ export default ErrorPage;
 function getErrorTranslationLabelFromStatus(errorStatus?: number) {
 	switch (errorStatus) {
 		case 404:
-			return 'pageErrorNotFound';
+			return 'messages.pageErrorNotFound';
 		case 401:
-			return 'pageErrorNotAuthorized';
+			return 'messages.pageErrorNotAuthorized';
 		case 503:
-			return 'pageErrorApiDown';
+			return 'messages.pageErrorApiDown';
 		case 418:
-			return 'pageErrorTeapot';
+			return 'messages.pageErrorTeapot';
 		default:
 			return '';
 	}

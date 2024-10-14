@@ -1,12 +1,12 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import i18n from '../../assets/i18n/i18n';
-import { getTranslation } from '../../lib/utils';
-import { type ControllerRenderProps } from 'react-hook-form';
-import { FormControl, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { useGetSearchParameters } from '../../queries/search';
-import { type ActivityTypeDto } from '../../models/api/activity-type.model';
-import StlSelect, { StlSelectDefaultLabel } from './stl-select';
+import {useParams} from 'react-router-dom';
+import {getTranslation} from '../../lib/utils';
+import {type ControllerRenderProps} from 'react-hook-form';
+import {FormControl, FormItem, FormLabel, FormMessage} from '../ui/form';
+import {useGetSearchParameters} from '../../queries/search';
+import {type ActivityTypeDto} from '../../models/api/activity-type.model';
+import StlSelect, {StlSelectDefaultLabelKey} from './stl-select';
+import {useTranslation} from 'react-i18next';
 
 export type ActivityTypeSelectProps = {
 	field: ControllerRenderProps<any, 'activityTypeId'>;
@@ -21,9 +21,11 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 	const eventId = Number(id);
 	const { data: searchParams } = useGetSearchParameters(eventId);
 
+	const {i18n, t} = useTranslation();
+
 	const getKey = (a?: ActivityTypeDto | undefined) => a?.id?.toString();
 	const getLabel = (a?: ActivityTypeDto | undefined) =>
-		getTranslation(i18n.language, a?.name) ?? StlSelectDefaultLabel;
+		getTranslation(i18n.language, a?.name) ?? t(StlSelectDefaultLabelKey);
 
 	return (
 		<FormItem className={className}>

@@ -1,23 +1,26 @@
-import {useQueryClient, type QueryClient} from '@tanstack/react-query';
+import {type QueryClient, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import {
 	timeslotDetailOptions,
 	useTimeSlotDetail,
 } from '../../../queries/time-slot';
 import {
-	TableHeader,
-	TableRow,
-	TableHead,
+	Table,
 	TableBody,
 	TableCell,
-	Table,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from '../../../components/ui/table';
 import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
@@ -30,7 +33,7 @@ export const loader =
 		async ({params}: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.timeSlotId) {
-				throw new Error('No event ID provided');
+				throw new Error('No Timeslot ID provided');
 			}
 
 			await queryClient.ensureQueryData(
@@ -46,8 +49,9 @@ const ScheduleItemPage: React.FC = () => {
 	>;
 	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();
+	const navigate = useNavigate();
 
-	const {data: timeSlot, isPending} = useTimeSlotDetail(
+	const {data: timeSlot} = useTimeSlotDetail(
 		queryClient,
 		timeSlotId,
 		eventId,
@@ -58,10 +62,10 @@ const ScheduleItemPage: React.FC = () => {
 		(timeSlot?.seatsViewer ?? 0) - (timeSlot?.availableViewerSeats ?? 0);
 
 	const deleteMutation = useDeleteBooking(eventId);
+
 	return (
 		<PageTransitionFadeIn>
 			<div className="mt-10">
-				<LoadingSpinner isLoading={isPending} />
 				<div className="flex justify-between">
 					<h2 className="text-4xl font-bold mb-10">
 						{timeSlot?.boat?.name},{' '}
@@ -94,18 +98,33 @@ const ScheduleItemPage: React.FC = () => {
 							<TableHead>{t('phone')}</TableHead>
 							<TableHead>{t('type')}</TableHead>
 							<TableHead>{t('manual')}</TableHead>
+							<TableHead></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{timeSlot?.bookings.length ? (
 							timeSlot?.bookings.map((slot, index) => (
-								<TableRow key={index} className="w-full justify-between">
+								<TableRow
+									key={index}
+									className="w-full justify-between"
+									onClick={() => {
+										navigate(`/event/${eventId}/bookings/edit/${slot.id}`); 
+									}
+									}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}
 									</TableCell>
 									<TableCell>{slot.person?.phoneNumber}</TableCell>
-									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-									<TableCell>{slot.pagerNumber}</TableCell>
+									<TableCell>
+										{slot.isRider
+											? t('booking.isRider')
+											: t('booking.isViewer')}
+									</TableCell>
+									<TableCell>
+										{slot.isManual
+											? `${t('yes')} - ${slot.pagerNumber}`
+											: t('no')}
+									</TableCell>
 									<EditBookingTableCell
 										booking={slot}
 										deleteMutation={deleteMutation}></EditBookingTableCell>

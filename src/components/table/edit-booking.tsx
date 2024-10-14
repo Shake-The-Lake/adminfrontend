@@ -1,11 +1,9 @@
 import React from 'react';
-import { PencilIcon, Trash } from 'lucide-react';
-import { TableCell } from '../ui/table';
-import { Button } from '../ui/button';
-import { type UseMutationResult } from '@tanstack/react-query';
-import { type BookingDto } from '../../models/api/booking.model';
-import { Link } from 'react-router-dom';
-import { eventDetailRoutes } from '../../constants';
+import {Trash} from 'lucide-react';
+import {TableCell} from '../ui/table';
+import {Button} from '../ui/button';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {type BookingDto} from '../../models/api/booking.model';
 
 type EditBookingTableCellProps = {
 	booking: BookingDto;
@@ -20,15 +18,6 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 
 	return (
 		<TableCell className="text-right">
-			<Link to={`${eventDetailRoutes.addBooking}`} relative="route">
-				<Button
-					type="button"
-					title="Edit Booking"
-					variant="ghost"
-					disabled={true}>
-					<PencilIcon></PencilIcon>
-				</Button>
-			</Link>
 			<Button
 				variant="ghost"
 				size="icon"

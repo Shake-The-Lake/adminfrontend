@@ -4,8 +4,7 @@ type LoadingSpinnerProps = {
 	isLoading: boolean;
 };
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ isLoading }) => {
-
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({isLoading}) => {
 	useEffect(() => {
 		if (isLoading) {
 			// Disable scroll by setting overflow to hidden

@@ -45,7 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			const loggedIn = true; // Replace this with the actual login logic
+			const loggedIn = true; // TODO: Replace this with the actual login logic
 			if (!loggedIn) throw new Error('User or Password is wrong');
 
 			login(loginData.username, loginData.password);
@@ -106,8 +106,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 						)}
 					/>
 
-					<div
-						className="mt-16 flex justify-end w-full">
+					<div className="mt-16 flex justify-end w-full">
 						<Button type="submit">{t('login.login')}</Button>
 					</div>
 				</form>
