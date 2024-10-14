@@ -2,7 +2,6 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import ActivityTypeForm from '../../../components/forms/activity-type';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
@@ -38,11 +37,10 @@ const ActivityTypePage: React.FC = () => {
 	const {eventId, activityTypeId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {
-		data: activityType,
-		isPending,
-		error,
-	} = useActivityTypeDetail(activityTypeId, eventId);
+	const {data: activityType, error} = useActivityTypeDetail(
+		activityTypeId,
+		eventId,
+	);
 
 	const updateMutation = useUpdateActivityType(activityTypeId);
 
@@ -51,8 +49,6 @@ const ActivityTypePage: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending} />
-
 				<h2 className="w-full mb-6">
 					{t('activityType.title')} -{' '}
 					{getTranslation(i18n.language, activityType?.name)}

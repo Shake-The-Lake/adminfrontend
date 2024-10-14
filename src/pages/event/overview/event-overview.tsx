@@ -1,7 +1,6 @@
 import React from 'react';
 import EventForm from '../../../components/forms/event';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	eventDetailOptions,
 	useEventDetail,
@@ -18,9 +17,7 @@ export const loader =
 		async ({params}: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
-			// Const navigate = useNavigate();
 				throw new Error('No event ID provided');
-			// Navigate('/'); // todo! see which makes more sense
 			}
 
 			await queryClient.ensureQueryData(
@@ -36,15 +33,13 @@ const EventOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: event, isPending} = useEventDetail(queryClient, eventId, false);
+	const {data: event} = useEventDetail(queryClient, eventId, false);
 
 	const updateMutation = useUpdateEvent(eventId);
 
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-start justify-between max-h-fit w-full">
-				<LoadingSpinner isLoading={isPending} />
-
 				<div className="w-full flex flex-col lg:flex-row">
 					<div className="w-full my-2">
 						<h1>{t('eventOverview.basicData')}</h1>

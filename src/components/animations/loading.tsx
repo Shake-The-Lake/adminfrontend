@@ -5,7 +5,6 @@ type LoadingSpinnerProps = {
 };
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({isLoading}) => {
-
 	useEffect(() => {
 		if (isLoading) {
 			// Disable scroll by setting overflow to hidden
@@ -16,14 +15,14 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({isLoading}) => {
 			document.body.style.overflow = '';
 			document.body.style.height = '';
 		}
-		
+
 		// Cleanup function to revert changes when component unmounts
 		return () => {
 			document.body.style.overflow = '';
 			document.body.style.height = '';
 		};
 	}, [isLoading]);
-	
+
 	if (!isLoading) {
 		return null;
 	}

@@ -27,6 +27,9 @@ export enum StlFilterOptions {
 	All = ~(~0 << 4), // 1111
 }
 
+const hasOption = (options: StlFilterOptions, flag: StlFilterOptions) =>
+	((options & flag) as StlFilterOptions) === flag;
+
 type StlFilterProps = {
 	options: StlFilterOptions;
 	params: StlFilterParams;
@@ -56,7 +59,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 	const {t} = useTranslation();
 
 	useEffect(() => {
-		const subscription = form.watch((value, {name, type}) => {
+		const subscription = form.watch((value, {name}) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
 			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {
@@ -79,8 +82,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 			<form
 				id="filter"
 				className="p-1 w-full flex flex-wrap gap-4 justify-between items-center">
-				{(options & StlFilterOptions.SearchTerm) ===
-					StlFilterOptions.SearchTerm && (
+				{hasOption(options, StlFilterOptions.SearchTerm) && (
 					<FormField
 						name="searchTerm"
 						control={form.control}
@@ -88,15 +90,19 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 							<FormItem className="min-w-[200px] flex-grow">
 								<FormLabel>{t('search')}</FormLabel>
 								<FormControl>
-									<Input placeholder={t('searchPlaceholder')} {...field} className="input" />
+									<Input
+										placeholder={t('searchPlaceholder')}
+										{...field}
+										className="input"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 				)}
-				{(options & StlFilterOptions.ActivityType) ===
-					StlFilterOptions.ActivityType && (
+
+				{hasOption(options, StlFilterOptions.ActivityType) && (
 					<Controller
 						name="activityTypeId"
 						control={form.control}
@@ -108,7 +114,8 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						)}
 					/>
 				)}
-				{(options & StlFilterOptions.Boat) === StlFilterOptions.Boat && (
+
+				{hasOption(options, StlFilterOptions.Boat) && (
 					<Controller
 						name="boatId"
 						control={form.control}
@@ -120,8 +127,8 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						)}
 					/>
 				)}
-				{(options & StlFilterOptions.TimeRange) ===
-					StlFilterOptions.TimeRange && (
+
+				{hasOption(options, StlFilterOptions.TimeRange) && (
 					<div className="flex flex-col sm:flex-row sm:items-center min-w-[180px] flex-grow sm:flex-grow-0">
 						<FormField
 							name="from"

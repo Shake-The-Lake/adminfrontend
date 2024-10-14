@@ -1,13 +1,14 @@
+/* eslint-disable no-bitwise */
 import React, {useEffect, useState} from 'react';
 import StlFilter, {StlFilterOptions} from '../data-table/stl-filter';
 import {DataTable} from '../data-table/data-table';
 import {useTranslation} from 'react-i18next';
 import {timeSlotColumns} from '../../pages/event/bookings/time-slot-columns';
 import {useGetTimeSlotsForEvent} from '../../queries/time-slot';
-import {TimeSlotDto} from '../../models/api/time-slot.model';
+import {type TimeSlotDto} from '../../models/api/time-slot.model';
 import {
 	defaultFilterParams,
-	StlFilterParams,
+	type StlFilterParams,
 } from '../../models/api/search.model';
 
 type BookingFormProps = {
@@ -71,13 +72,13 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 
 		if (from) {
 			filtered = filtered.filter(
-				(slot) => slot.fromTime && slot.fromTime! >= from,
+				(slot) => slot.fromTime && slot.fromTime >= from,
 			);
 		}
 
 		if (to) {
 			filtered = filtered.filter(
-				(slot) => slot.untilTime && slot.untilTime! <= to,
+				(slot) => slot.untilTime && slot.untilTime <= to,
 			);
 		}
 

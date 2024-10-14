@@ -21,7 +21,6 @@ import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {useDeleteBooking} from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
@@ -31,27 +30,28 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.timeSlotId) {
-			throw new Error('No Timeslot ID provided');
-		}
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.timeSlotId) {
+				throw new Error('No Timeslot ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			timeslotDetailOptions(Number(params.timeSlotId)),
-		);
+			await queryClient.ensureQueryData(
+				timeslotDetailOptions(Number(params.timeSlotId)),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const ScheduleItemPage: React.FC = () => {
 	const {timeSlotId, eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
-	const {data: timeSlot, isPending} = useTimeSlotDetail(
+
+	const {data: timeSlot} = useTimeSlotDetail(
 		queryClient,
 		timeSlotId,
 		eventId,
@@ -66,7 +66,6 @@ const ScheduleItemPage: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="mt-10">
-				<LoadingSpinner isLoading={isPending} />
 				<div className="flex justify-between">
 					<h2 className="text-4xl font-bold mb-10">
 						{timeSlot?.boat?.name},{' '}
@@ -99,6 +98,7 @@ const ScheduleItemPage: React.FC = () => {
 							<TableHead>{t('phone')}</TableHead>
 							<TableHead>{t('type')}</TableHead>
 							<TableHead>{t('manual')}</TableHead>
+							<TableHead></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -107,15 +107,24 @@ const ScheduleItemPage: React.FC = () => {
 								<TableRow
 									key={index}
 									className="w-full justify-between"
-									onClick={() =>
-										navigate(`/event/${eventId}/bookings/edit/${slot.id}`)
+									onClick={() => {
+										navigate(`/event/${eventId}/bookings/edit/${slot.id}`); 
+									}
 									}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}
 									</TableCell>
 									<TableCell>{slot.person?.phoneNumber}</TableCell>
-									<TableCell>{slot.isRider ? 'Ride' : 'View'}</TableCell>
-									<TableCell>{slot.pagerNumber}</TableCell>
+									<TableCell>
+										{slot.isRider
+											? t('booking.isRider')
+											: t('booking.isViewer')}
+									</TableCell>
+									<TableCell>
+										{slot.isManual
+											? `${t('yes')} - ${slot.pagerNumber}`
+											: t('no')}
+									</TableCell>
 									<EditBookingTableCell
 										booking={slot}
 										deleteMutation={deleteMutation}></EditBookingTableCell>

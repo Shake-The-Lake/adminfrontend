@@ -11,6 +11,7 @@ import {
 } from '../ui/dialog';
 import {Button} from '../ui/button';
 import {PencilIcon, Plus} from 'lucide-react';
+import {useTranslation} from 'react-i18next';
 
 export type StlDialogProps = {
 	title: string;
@@ -39,6 +40,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 }) => {
 	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
+	const {t} = useTranslation();
 
 	useEffect(() => {
 		if (isOpen !== undefined) {
@@ -80,7 +82,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 						<Plus className="size-24" />
 					</Button>
 				) : isIcon ? (
-					<Button type="button" title={triggerLabel} variant='ghost'>
+					<Button type="button" title={triggerLabel} variant="ghost">
 						<PencilIcon></PencilIcon>
 					</Button>
 				) : (
@@ -97,13 +99,17 @@ const StlDialog: React.FC<StlDialogProps> = ({
 				<div className="flex-grow overflow-auto p-1">{children}</div>
 				<DialogFooter className="justify-end items-end">
 					<DialogClose asChild>
-						<Button type="button" variant="secondary" className="max-sm:mt-2" onClick={handleClose}>
-							Cancel
+						<Button
+							type="button"
+							variant="secondary"
+							className="max-sm:mt-2"
+							onClick={handleClose}>
+							{t('cancel')}
 						</Button>
 					</DialogClose>
 					{formId && (
 						<Button type="submit" form={formId}>
-							Save
+							{t('save')}
 						</Button>
 					)}
 				</DialogFooter>

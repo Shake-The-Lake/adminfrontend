@@ -97,7 +97,7 @@ export function useUpdateBooking(eventId: number, bookingId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async (updatedBooking: BookingDto) =>
-			await updateBooking(bookingId, updatedBooking),
+			updateBooking(bookingId, updatedBooking),
 
 		async onSuccess(data) {
 			queryClient.setQueryData(
