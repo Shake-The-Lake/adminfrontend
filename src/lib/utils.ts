@@ -72,8 +72,6 @@ export function tryGetErrorMessage(error: unknown) {
 export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	errors: FieldErrors<any>,
 ) => {
-	console.log('form has failed to submit on error, ', errors);
-
 	toast.error('Could not be saved.', {
 		description: 'There are validation errors in the form.',
 	});

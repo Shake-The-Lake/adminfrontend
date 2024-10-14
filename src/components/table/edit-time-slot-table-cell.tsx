@@ -64,7 +64,7 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 				aria-label="Delete Time Slot">
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
-		</TableCell>
+		</TableCell >
 	);
 };
 

@@ -6,7 +6,20 @@ import EditTimeSlotTableCell from '../../../src/components/table/edit-time-slot-
 import { QueryClient, QueryClientProvider, type UseMutationResult } from '@tanstack/react-query';
 import { type TimeSlotDto } from '../../../src/models/api/time-slot.model';
 import { BoatDto } from '../../../src/models/api/boat.model';
+import { initReactI18next } from 'react-i18next';
+import i18n from 'i18next';
 
+i18n.use(initReactI18next).init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        'Invalid time': 'Invalid time',
+        'Failed to commit': 'Failed to commit',
+      },
+    },
+  },
+});
 describe('EditTimeSlotTableCell', () => {
   const mockTimeSlot: TimeSlotDto = {
     id: 1,

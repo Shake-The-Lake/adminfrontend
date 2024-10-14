@@ -88,7 +88,6 @@ describe('utils', () => {
       const errors = { field: { message: 'Required' } };
       console.log = vi.fn();
       onInvalidFormHandler(errors);
-      expect(console.log).toHaveBeenCalledWith('form has failed to submit on error, ', errors);
       expect(toast.error).toHaveBeenCalledWith('Could not be saved.', {
         description: 'There are validation errors in the form.',
       });

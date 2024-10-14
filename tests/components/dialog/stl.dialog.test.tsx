@@ -3,6 +3,25 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import StlDialog from '../../../src/components/dialog/stl-dialog';
 import { vi } from 'vitest';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+i18n.use(initReactI18next).init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        'Invalid time': 'Invalid time',
+        'Failed to commit': 'Failed to commit',
+        'delete': 'Delete',
+        'timeSlot.edit': 'Edit Time Slot',
+        'timeSlot.editDescription': 'Edit the details of the time slot',
+        'Open Dialog': 'Open Dialog',
+        'cancel': 'Cancel',
+      },
+    },
+  },
+});
 
 describe('StlDialog', () => {
   const defaultProps = {
@@ -40,7 +59,7 @@ describe('StlDialog', () => {
   it('calls onClose when the cancel button is clicked', () => {
     renderComponent();
     fireEvent.click(screen.getByTitle('Open Dialog'));
-    fireEvent.click(screen.getByText('cancel'));
+    fireEvent.click(screen.getByText('Cancel'));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 

@@ -96,6 +96,7 @@ describe('TimeSlotForm', () => {
         target: { value: '' },
       });
 
+
       fireEvent.submit(screen.getByRole('form'));
 
       await waitFor(() => {
