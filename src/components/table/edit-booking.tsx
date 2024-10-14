@@ -1,11 +1,11 @@
 import React from 'react';
-import {PencilIcon, Trash} from 'lucide-react';
-import {TableCell} from '../ui/table';
-import {Button} from '../ui/button';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {type BookingDto} from '../../models/api/booking.model';
-import {Link} from 'react-router-dom';
-import {eventDetailRoutes} from '../../constants';
+import { PencilIcon, Trash } from 'lucide-react';
+import { TableCell } from '../ui/table';
+import { Button } from '../ui/button';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { type BookingDto } from '../../models/api/booking.model';
+import { Link } from 'react-router-dom';
+import { eventDetailRoutes } from '../../constants';
 
 type EditBookingTableCellProps = {
 	booking: BookingDto;
@@ -33,7 +33,8 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 				variant="ghost"
 				size="icon"
 				className="items-center"
-				onClick={handleDelete}>
+				onClick={handleDelete}
+				aria-label="Delete Booking">
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
 		</TableCell>
