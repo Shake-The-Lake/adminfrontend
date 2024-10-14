@@ -77,9 +77,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
 		const person = values.person;
 		const savedPerson = await personMutation.mutateAsync(person);
-
-		// when id is present it's an update mutation call and when id is not present it should be a create mutation
-		const isManual = values.id ? model.isManual : true;
+		const isManual = isCreate ? true : model.isManual;
 
 		const booking: BookingDto = {
 			...values,
