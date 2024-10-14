@@ -11,6 +11,7 @@ import {MutationToaster} from '../common/mutation-toaster';
 import {Button} from '../ui/button';
 import {validateDate} from '../../lib/date-time.utils';
 import {useTranslation} from 'react-i18next';
+import {t} from 'i18next';
 
 // Schema definition
 export const eventFormSchema = z.object({
@@ -19,7 +20,7 @@ export const eventFormSchema = z.object({
 	date: z
 		.string()
 		.refine((val) => validateDate(val), {
-			message: 'Invalid date',
+			message: t('messages.validationMessageDateFormat'),
 		})
 		.transform((val) => new Date(val)),
 });
@@ -46,6 +47,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 
 	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
+			...model,
 			...values,
 			title: values.title,
 			date: values.date,

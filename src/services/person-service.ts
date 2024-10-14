@@ -13,11 +13,12 @@ export const getPersonById = async (id: number): Promise<PersonDto> => {
 
 export const updatePerson = async (
 	id: number,
-	updatedData: Partial<PersonDto>,
-) => {
+	updatedData: PersonDto,
+): Promise<PersonDto> => {
 	const response = await axiosInstance.put<PersonDto>(
 		`/person/${id}`,
 		updatedData,
 	);
+
 	return response.data;
 };

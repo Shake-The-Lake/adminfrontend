@@ -1,7 +1,6 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import LoadingSpinner from '../../../components/animations/loading';
 import BoatForm from '../../../components/forms/boat';
 import TimeSlots from './time-slots';
 import {Separator} from '../../../components/ui/separator';
@@ -35,7 +34,7 @@ const BoatPage: React.FC = () => {
 	const {eventId, boatId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: boat, isPending, error} = useBoatDetail(boatId, eventId);
+	const {data: boat, error} = useBoatDetail(boatId, eventId);
 
 	const updateMutation = useUpdateBoat(boatId);
 
@@ -44,8 +43,6 @@ const BoatPage: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending} />
-
 				<h2 className="w-full mb-6">
 					{t('boat.title')} - {boat?.name}
 				</h2>

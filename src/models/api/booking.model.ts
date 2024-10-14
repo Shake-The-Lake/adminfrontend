@@ -1,5 +1,5 @@
 import {type PersonDto} from './person.model';
-import {TimeSlotDto} from './time-slot.model';
+import {type TimeSlotDto} from './time-slot.model';
 
 export type BookingDto = {
 	id?: number;

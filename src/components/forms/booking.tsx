@@ -3,7 +3,7 @@ import {z} from 'zod';
 import {
 	Controller,
 	FormProvider,
-	SubmitHandler,
+	type SubmitHandler,
 	useForm,
 } from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -23,7 +23,7 @@ import {MutationToaster} from '../common/mutation-toaster';
 import PersonForm, {personSchema} from './person';
 import StlSelect from '../select/stl-select';
 import SelectableTimeSlotList from '../table/selectable-timeslot-list';
-import {PersonDto} from '../../models/api/person.model';
+import {type PersonDto} from '../../models/api/person.model';
 import {useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {useNavigate} from 'react-router-dom';
 import {getIsRiderOptions} from '../../constants/constants';
@@ -41,8 +41,8 @@ export type BookingFormSchema = z.infer<typeof bookingSchema>;
 
 type BookingFormProps = {
 	model: BookingDto;
-	bookingMutation: UseMutationResult<any, Error, BookingDto>;
-	personMutation: UseMutationResult<any, Error, PersonDto>;
+	bookingMutation: UseMutationResult<BookingDto, Error, BookingDto>;
+	personMutation: UseMutationResult<PersonDto, Error, PersonDto>;
 	isCreate: boolean;
 	onSuccessfullySubmitted?: () => void;
 	eventId: number;
@@ -57,7 +57,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	eventId,
 }) => {
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-		number | undefined
+	number | undefined
 	>(model.timeSlotId);
 
 	const form = useForm<BookingFormSchema>({
@@ -75,16 +75,17 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	};
 
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
-		const person = values.person;
+		const {person} = values;
 		const savedPerson = await personMutation.mutateAsync(person);
+
 		const isManual = isCreate ? true : model.isManual;
 
 		const booking: BookingDto = {
 			...values,
-			id: values.id || model.id,
-			timeSlotId: selectedTimeSlotId || model.timeSlotId,
+			id: values.id ?? model.id,
+			timeSlotId: selectedTimeSlotId ?? model.timeSlotId,
 			personId: savedPerson.id,
-			isManual: isManual,
+			isManual,
 		};
 		await bookingMutation.mutateAsync(booking);
 	};
@@ -106,34 +107,28 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					<div className="space-y-4 w-1/3 mt-20">
 						<PersonForm />
 
-						<FormField
-							name="isRider"
-							control={form.control}
-							render={({field}) => (
-								<FormItem>
-									<FormLabel>{t('booking.driverOrViewer')}</FormLabel>
-									<FormControl>
-										<Controller
-											name="isRider"
-											control={form.control}
-											render={({field}) => (
-												<StlSelect
-													value={field.value ? 'driver' : 'viewer'}
-													onValueChange={(value) =>
-														field.onChange(value === 'driver')
-													}
-													defaultValue="viewer"
-													list={getIsRiderOptions(t)}
-													getKey={(item) => item?.key}
-													getLabel={(item) => item!.label}
-												/>
-											)}
+						<FormItem>
+							<FormLabel>{t('booking.driverOrViewer')}</FormLabel>
+							<FormControl>
+								<Controller
+									name="isRider"
+									control={form.control}
+									render={({field}) => (
+										<StlSelect
+											value={field.value ? 'driver' : 'viewer'}
+											onValueChange={(value) => {
+												field.onChange(value === 'driver');
+											}}
+											defaultValue="viewer"
+											list={getIsRiderOptions(t)}
+											getKey={(item) => item?.key}
+											getLabel={(item) => item!.label}
 										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+									)}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
 
 						<FormField
 							name="pagerNumber"

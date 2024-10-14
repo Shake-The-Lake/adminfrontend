@@ -6,11 +6,11 @@ import {useCreatePerson} from '../../../queries/person';
 import {defaultBooking} from '../../../models/api/booking.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import BookingForm from '../../../components/forms/booking';
-import {loader} from './booking-overview';
+import {type loader} from './booking-overview';
 
 const AddBookingPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const {t} = useTranslation();
 

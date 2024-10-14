@@ -5,7 +5,7 @@ import {type BoatDto} from './boat.model';
 import {type ActivityTypeDto} from './activity-type.model';
 import {getDisplayTimeFromBackend} from '../../lib/date-time.utils';
 import {t} from 'i18next';
-import {BookingDto} from './booking.model';
+import {type BookingDto} from './booking.model';
 
 export type BookingSearchDto = {
 	person: PersonDto;

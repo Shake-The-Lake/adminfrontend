@@ -39,12 +39,12 @@ export function useCreatePerson() {
 	});
 }
 
-export function useUpdatePerson() {
+export function useUpdatePerson(id: number) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		async mutationFn(updatedPerson: PersonDto) {
-			return updatePerson(updatedPerson.id!, updatedPerson);
+			return updatePerson(id, updatedPerson);
 		},
 
 		async onSuccess(data: PersonDto) {
@@ -59,10 +59,6 @@ export function useUpdatePerson() {
 				queryKey: personKeys.all(),
 				exact: true,
 			});
-		},
-
-		onError(error) {
-			console.error('Error updating person:', error);
 		},
 	});
 }

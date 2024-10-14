@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import {motion} from 'framer-motion';
 
 const animations = {
@@ -7,9 +7,17 @@ const animations = {
 	exit: {y: -5, opacity: 0},
 };
 
-const PageTransitionFadeIn = ({children}) => (
+export type PageTransitionFadeInProps = {
+	children: ReactNode;
+	className?: string;
+};
+
+const PageTransitionFadeIn: React.FC<PageTransitionFadeInProps> = ({
+	children,
+	className,
+}) => (
 	<motion.div
-		className="w-full h-full"
+		className={`w-full h-full ${className}`}
 		variants={animations}
 		initial="initial"
 		animate="animate"

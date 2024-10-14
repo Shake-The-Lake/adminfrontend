@@ -2,12 +2,11 @@ import React, {useState} from 'react';
 import {DataTable} from '../../../components/data-table/data-table';
 import {
 	bookingColumns,
-	BookingSearchDto,
+	type BookingSearchDto,
 	defaultBookingSearchParams,
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
 import {Link, type LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
-import LoadingSpinner from '../../../components/animations/loading';
 import {
 	bookingsSearchOptions,
 	useSearchBookings,
@@ -24,43 +23,49 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
-		await queryClient.ensureQueryData(
-			bookingsSearchOptions(
-				routeIds.eventId,
-				defaultBookingSearchParams,
-				queryClient,
-			),
-		);
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		return routeIds;
-	};
+			await queryClient.ensureQueryData(
+				bookingsSearchOptions(
+					routeIds.eventId,
+					defaultBookingSearchParams,
+					queryClient,
+				),
+			);
+
+			return routeIds;
+		};
 
 const BookingOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
+	ReturnType<ReturnType<typeof loader>>
 	>;
 	const navigate = useNavigate();
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
+	const {data: bookings, error} = useSearchBookings(eventId, filter);
+
 	const {t} = useTranslation();
-	const {data: bookings, isPending, error} = useSearchBookings(eventId, filter);
 	const searchParams = defaultFilterParams;
 	searchParams.onSearchTermChange = (searchTerm?: string) => {
 		setFilter({...filter, personName: searchTerm});
 	};
+
 	searchParams.onActivityTypeChange = (activityTypeId?: number) => {
 		setFilter({...filter, activityId: activityTypeId});
 	};
+
 	searchParams.onBoatChange = (boatId?: number) => {
 		setFilter({...filter, boatId});
 	};
+
 	searchParams.onFromChange = (from?: string) => {
 		setFilter({...filter, from});
 	};
+
 	searchParams.onToChange = (to?: string) => {
 		setFilter({...filter, to});
 	};
@@ -72,7 +77,6 @@ const BookingOverview: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<LoadingSpinner isLoading={isPending} />
 				<div className="w-full mb-8 flex justify-between items-center">
 					<h1>{t('booking.title')}</h1>
 
@@ -89,10 +93,10 @@ const BookingOverview: React.FC = () => {
 								options={StlFilterOptions.All}
 								params={searchParams}></StlFilter>
 							<DataTable
-							columns={bookingColumns}
-							data={bookings ?? []}
-							onRowClick={handleRowClick}
-						/>
+								columns={bookingColumns}
+								data={bookings ?? []}
+								onRowClick={handleRowClick}
+							/>
 						</>
 					) : (
 						<p>{t('booking.errorLoadingBooking')}</p>

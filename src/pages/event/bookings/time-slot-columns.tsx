@@ -51,20 +51,21 @@ export const timeSlotColumns = (
 			if (activityType?.name) {
 				return getTranslation(locale, activityType.name) ?? 'Unknown Activity';
 			}
+
 			return 'No Activity';
 		},
 	},
 
 	{
 		accessorKey: 'Viewer Seats',
-		header: t('viewerSeats'),
+		header: t('booking.viewerSeats'),
 		cell({row}) {
 			return `${row.original.availableViewerSeats ?? 0}/${row.original.seatsViewer}`;
 		},
 	},
 	{
 		accessorKey: 'Rider Seats',
-		header: t('riderSeats'),
+		header: t('booking.riderSeats'),
 		cell({row}) {
 			return `${row.original.availableRiderSeats ?? 0}/${row.original.seatsRider}`;
 		},
