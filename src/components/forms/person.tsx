@@ -23,6 +23,7 @@ export const personSchema = z.object({
 		.min(1, 'Phone number is required')
 		.regex(/^[0-9()+-]*$/, 'Phone number must contain only numbers'),
 	personType: z.enum(['EMPLOYEE', 'BOAT_DRIVER', 'CUSTOMER'], {
+		// eslint-disable-next-line @typescript-eslint/naming-convention
 		required_error: 'Person type is required',
 	}),
 });
@@ -99,6 +100,7 @@ const PersonForm: React.FC = () => {
 						<FormLabel>{t('personType')}</FormLabel>
 						<FormControl>
 							<StlSelect
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 								value={field.value}
 								onValueChange={field.onChange}
 								list={personTypeOptions(t)}
