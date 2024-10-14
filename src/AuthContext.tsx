@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, {
+	createContext,
+	type ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import axiosInstance from './services/axiosInstance'; // Import the axios instance
 
 type AuthContextType = {
@@ -13,15 +19,16 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
 		const token = localStorage.getItem('authToken');
 		if (token) {
 			// Check if the token is valid
-			axiosInstance.post('/auth/verify', { token })
-				.then(response => {
+			axiosInstance
+				.post('/auth/verify', {token})
+				.then((response) => {
 					if (response.data.valid === true) {
 						setIsAuthenticated(true);
 					} else {
@@ -38,15 +45,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 	const login = async (username: string, password: string) => {
 		try {
-			console.log('Logging in...');
-			const response = await axiosInstance.post('/auth/login', { username, password });
-			console.log('Response:', response);
-			const { token } = response.data;
-			console.log('Login successful', token);
+			const response = await axiosInstance.post('/auth/login', {
+				username,
+				password,
+			});
+			const {token} = response.data;
 			localStorage.setItem('authToken', token);
 			setIsAuthenticated(true);
 		} catch (error) {
-			console.error('Login failed', error);
 			setIsAuthenticated(false);
 		}
 	};
@@ -57,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+		<AuthContext.Provider value={{isAuthenticated, login, logout}}>
 			{children}
 		</AuthContext.Provider>
 	);
