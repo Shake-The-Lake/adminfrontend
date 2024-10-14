@@ -37,7 +37,7 @@ const StlSelect = <T,>({
 
 	const { t } = useTranslation();
 	return (
-		<Select value={value} onValueChange={onValueChange} >
+		<Select value={value} onValueChange={onValueChange}>
 			<SelectTrigger>
 				<div className="flex justify-between items-center gap-1 w-full">
 					<SelectValue placeholder={defaultLabel ?? StlSelectDefaultLabel}>
@@ -51,7 +51,8 @@ const StlSelect = <T,>({
 				<Button
 					variant="ghost"
 					className="flex justify-between items-center h-7 mb-2 w-full opacity-50"
-					onClick={resetValue}>
+					onClick={resetValue}
+					data-testid="reset-button">
 					{t('clearValue')} <X className="h-4 w-4" />
 				</Button>
 				{list?.map((item) => (
