@@ -1,5 +1,11 @@
-import React, {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
-import {Buffer} from 'buffer';
+import React, {
+	createContext,
+	type ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
+import axiosInstance from './services/axiosInstance';
 
 type AuthContextType = {
 	isAuthenticated: boolean;
@@ -13,50 +19,51 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-// Session expiration duration: 1 week in milliseconds
-const sessionDuration = 7 * 24 * 60 * 60 * 1000; // 1 week
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
-		const encodedCredentials = localStorage.getItem('authCredentials');
-		const expiration = localStorage.getItem('credentialsExpiration');
-
-		if (encodedCredentials && expiration) {
-
-			const now = Date.now();
-			if (now > parseInt(expiration, 10)) {
-				const currentLocation = window.location.pathname;
-				localStorage.setItem('redirectAfterLogin', currentLocation);
-				logout();
-			} else {
-				// Credentials are valid
-				setIsAuthenticated(true);
-			}
+		const token = localStorage.getItem('authToken');
+		if (token) {
+			// Check if the token is valid
+			axiosInstance
+				.post('/auth/verify', { token })
+				.then((response) => {
+					if (response.data.valid === true) {
+						setIsAuthenticated(true);
+					} else {
+						localStorage.removeItem('authToken');
+						setIsAuthenticated(false);
+					}
+				})
+				.catch(() => {
+					localStorage.removeItem('authToken');
+					setIsAuthenticated(false);
+				});
 		}
 	}, []);
 
-	const encodeBase64 = (data: string) => Buffer.from(data).toString('base64');
-
-	const login = (username: string, password: string) => {
-		// Encode username and password in Base64
-		const encodedData = encodeBase64(`${username}:${password}`); 
-		// Store credentials in localStorage
-		localStorage.setItem('authCredentials', encodedData);
-		localStorage.setItem('credentialsExpiration', (Date.now() + sessionDuration).toString());
-		setIsAuthenticated(true); // Update the authentication status
+	const login = async (username: string, password: string) => {
+		try {
+			const response = await axiosInstance.post('/auth/login', {
+				username,
+				password,
+			});
+			const { token } = response.data;
+			localStorage.setItem('authToken', token);
+			setIsAuthenticated(true);
+		} catch (error) {
+			setIsAuthenticated(false);
+		}
 	};
 
 	const logout = () => {
-		// Remove credentials from localStorage
-		localStorage.removeItem('authCredentials');
-		localStorage.removeItem('credentialsExpiration');
+		localStorage.removeItem('authToken');
 		setIsAuthenticated(false);
 	};
 
 	return (
-		<AuthContext.Provider value={{isAuthenticated, login, logout}}>
+		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);
