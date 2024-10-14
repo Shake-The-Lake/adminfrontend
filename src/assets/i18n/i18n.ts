@@ -151,7 +151,7 @@ const resources: Resource = {
 			lastName: 'Last Name',
 			activity: 'Activity',
 			viewerSeats: 'Viewer Seats',
-			riderSeats: 'Rider Places',
+			riderSeats: 'Rider Seats',
 			name: 'Name',
 			email: 'Email',
 			phone: 'Phone Number',

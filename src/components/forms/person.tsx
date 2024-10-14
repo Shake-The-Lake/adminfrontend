@@ -15,14 +15,8 @@ import {personTypeOptions} from '../../constants/constants';
 
 export const personSchema = z.object({
 	id: z.number().optional(),
-	firstName: z
-		.string()
-		.min(1, 'First name is required')
-		.regex(/^[\p{L}]+$/u, 'First name must contain only letters'),
-	lastName: z
-		.string()
-		.min(1, 'Last name is required')
-		.regex(/^[\p{L}]+$/u, 'Last name must contain only letters'),
+	firstName: z.string().min(1, 'First name is required'),
+	lastName: z.string().min(1, 'Last name is required'),
 	emailAddress: z.string().email('Invalid email address'),
 	phoneNumber: z
 		.string()
