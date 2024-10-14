@@ -2,7 +2,7 @@
 # Shake The Lake Admin UI
 Welcome to the Admin frontend for Shake the Lake!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and is powered by modern tools like **pnpm** for package management, **ESLint** and **Prettier** for code consistency, and **Husky** for pre-commit hooks.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and is powered by modern tools like **pnpm** for package management, **ESLint** and **Prettier** for code consistency.
 
 ## Table of Contents
 - [Description](#description)
@@ -11,7 +11,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [Code Quality](#code-quality)
   - [ESLint](#eslint)
   - [Prettier](#prettier)
-  - [Pre-Commit Hooks](#pre-commit-hooks)
 - [Unit Testing](#unit-testing)
 - [Deployment](#deployment)
 - [Learn More](#learn-more)
@@ -67,13 +66,6 @@ To format the codebase manually, run:
 pnpm prettier --write .
 ```
 
-### Pre-Commit Hooks
-
-We use **Husky** for managing pre-commit hooks. Before each commit, the linter and other checks will automatically run, ensuring that only clean, formatted, and error-free code is committed.
-
-To set up Husky, follow the steps in their [getting started guide](https://typicode.github.io/husky/get-started.html).
-
----
 
 ## Unit Testing
 
