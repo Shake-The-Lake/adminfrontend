@@ -16,6 +16,7 @@ type StlSelectProps<T> = {
 	onValueChange: (value?: string) => void;
 	list: T[] | undefined;
 	defaultLabel?: string;
+	defaultValue?: string;
 	getKey: (e?: T) => string | undefined;
 	getLabel: (e?: T) => string;
 };
@@ -28,13 +29,14 @@ const StlSelect = <T,>({
 	onValueChange,
 	list,
 	defaultLabel,
+	defaultValue,
 	getKey,
 	getLabel,
 }: StlSelectProps<T>) => {
 	const {t} = useTranslation();
 
 	const resetValue = () => {
-		onValueChange('');
+		onValueChange(defaultValue ?? '');
 	};
 
 	return (

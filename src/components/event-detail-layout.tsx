@@ -11,7 +11,6 @@ import {
 import {type QueryClient, useQuery} from '@tanstack/react-query';
 import {eventDetailOptions} from '../queries/event';
 import {extractTypedInfoFromRouteParams} from '../lib/utils';
-
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {

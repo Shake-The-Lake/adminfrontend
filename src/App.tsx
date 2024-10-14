@@ -36,6 +36,7 @@ import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
 import QueryLoader from './components/common/query-loader';
 import {AnimatePresence} from 'framer-motion';
+import EditBookingPage from './pages/event/bookings/edit-booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -120,6 +121,11 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
 				element: <AddBookingPage />,
+				loader: bookingsLoader(queryClient),
+			},
+			{
+				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.editBooking}`,
+				element: <EditBookingPage />,
 				loader: bookingsLoader(queryClient),
 			},
 		],

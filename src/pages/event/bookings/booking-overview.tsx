@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import {DataTable} from '../../../components/data-table/data-table';
 import {
 	bookingColumns,
+	type BookingSearchDto,
 	defaultBookingSearchParams,
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
-import {Link, type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import {Link, type LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
 import {
 	bookingsSearchOptions,
 	useSearchBookings,
@@ -43,12 +44,12 @@ const BookingOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
+	const navigate = useNavigate();
 	const [filter, setFilter] = useState(defaultBookingSearchParams);
 	const {data: bookings, error} = useSearchBookings(eventId, filter);
 
 	const {t} = useTranslation();
 	const searchParams = defaultFilterParams;
-
 	searchParams.onSearchTermChange = (searchTerm?: string) => {
 		setFilter({...filter, personName: searchTerm});
 	};
@@ -69,6 +70,10 @@ const BookingOverview: React.FC = () => {
 		setFilter({...filter, to});
 	};
 
+	const handleRowClick = (row: BookingSearchDto) => {
+		navigate(`/event/${eventId}/bookings/edit/${row.booking.id}`);
+	};
+
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
@@ -87,7 +92,11 @@ const BookingOverview: React.FC = () => {
 							<StlFilter
 								options={StlFilterOptions.All}
 								params={searchParams}></StlFilter>
-							<DataTable columns={bookingColumns} data={bookings ?? []} />
+							<DataTable
+								columns={bookingColumns}
+								data={bookings ?? []}
+								onRowClick={handleRowClick}
+							/>
 						</>
 					) : (
 						<p>{t('booking.errorLoadingBooking')}</p>

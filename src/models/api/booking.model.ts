@@ -1,13 +1,15 @@
 import {type PersonDto} from './person.model';
+import {TimeSlotDto} from './time-slot.model';
 
 export type BookingDto = {
 	id?: number;
 	isRider: boolean;
 	isManual: boolean;
 	pagerNumber?: number;
-	personId: number;
+	personId?: number;
 	person?: PersonDto;
-	timeSlotId: number;
+	timeSlotId?: number;
+	timeSlot?: TimeSlotDto;
 };
 
 export const defaultBooking: BookingDto = {
