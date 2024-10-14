@@ -59,7 +59,7 @@ export function useUpdateBooking(eventId: number, bookingId: number) {
 
 	return useMutation({
 		mutationFn: async (updatedBooking: BookingDto) =>
-			updateBooking(bookingId, updatedBooking),
+			await updateBooking(bookingId, updatedBooking),
 
 		async onSuccess(data) {
 			queryClient.setQueryData(
