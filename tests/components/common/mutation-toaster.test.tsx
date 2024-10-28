@@ -4,7 +4,6 @@ import { toast } from 'sonner';
 import { MutationToaster } from '../../../src/components/common/mutation-toaster';
 import { vi } from 'vitest';
 
-// Mock the toast module
 vi.mock('sonner', () => ({
   toast: {
     success: vi.fn(),
@@ -12,14 +11,12 @@ vi.mock('sonner', () => ({
   },
 }));
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }));
 
-// Mock the tryGetErrorMessage function
 vi.mock('../../../src/lib/utils', () => ({
   tryGetErrorMessage: vi.fn((error: Error) => error.message),
 }));

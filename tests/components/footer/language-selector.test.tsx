@@ -5,7 +5,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LanguageSelector from '../../../src/components/footer/language-selector';
 import { useTranslation } from 'react-i18next';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   __esModule: true,
   useTranslation: () => ({

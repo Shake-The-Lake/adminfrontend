@@ -43,7 +43,7 @@ describe('date-time.utils', () => {
   describe('toSwissLocaleTimeString', () => {
     it('should return the time in Swiss locale format', () => {
       const date = new Date('2023-10-01T12:34:56Z');
-      expect(toSwissLocaleTimeString(date)).toBe('14:34'); // Adjusted for timezone
+      expect(toSwissLocaleTimeString(date)).toBe('14:34');
     });
   });
 

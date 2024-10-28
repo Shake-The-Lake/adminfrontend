@@ -26,13 +26,11 @@ i18n.use(initReactI18next).init({
   },
 });
 
-// Mock the LanguageSelector component
 vi.mock('./language-selector', () => ({
   __esModule: true,
   default: () => <div>Language Selector</div>,
 }));
 
-// Mock the iconPaths constant
 vi.mock('../../constants', () => ({
   __esModule: true,
   iconPaths: {

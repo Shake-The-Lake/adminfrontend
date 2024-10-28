@@ -5,14 +5,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import HeaderDefault from '../../../src/components/header/header-default';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }));
 
-// Mock the HeaderLogo component
 vi.mock('../../../src/components/header/header-logo', () => ({
   __esModule: true,
   default: () => <div>HeaderLogo</div>,
@@ -20,7 +18,6 @@ vi.mock('../../../src/components/header/header-logo', () => ({
 
 const mockNavigate = vi.fn();
 
-// Partially mock react-router-dom to preserve BrowserRouter
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {

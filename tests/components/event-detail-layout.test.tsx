@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import EventDetailLayout from '../../src/components/event-detail-layout';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     i18n: { language: 'en' },
@@ -13,7 +12,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-// Mock the useLoaderData hook and include BrowserRouter
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
@@ -22,7 +20,6 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-// Mock the useQuery hook
 vi.mock('@tanstack/react-query', async (importOriginal) => {
   const actual = await importOriginal();
   return {
@@ -33,19 +30,16 @@ vi.mock('@tanstack/react-query', async (importOriginal) => {
   };
 });
 
-// Mock the SideNavigation component
 vi.mock('../../src/components/navigation/side-navigation', () => ({
   __esModule: true,
   default: () => <div>SideNavigation</div>,
 }));
 
-// Mock the HeaderEvent component
 vi.mock('../../src/components/header/header-event', () => ({
   __esModule: true,
   default: () => <div>HeaderEvent</div>,
 }));
 
-// Mock the Footer component
 vi.mock('../../src/components/footer/footer', () => ({
   __esModule: true,
   default: () => <div>Footer</div>,

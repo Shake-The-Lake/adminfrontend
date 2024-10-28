@@ -7,7 +7,6 @@ import { vi } from 'vitest';
 import { useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', async (importOriginal) => {
   const actual = await importOriginal();
   return {

@@ -6,7 +6,6 @@ import { type UseMutationResult } from '@tanstack/react-query';
 import { EventDto } from '../../../src/models/api/event.model';
 import EventForm from '../../../src/components/forms/Event';
 
-// Mock dependencies
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     i18n: { language: 'en' },
@@ -32,7 +31,7 @@ describe('EventForm', () => {
     isLoading: false,
     isError: false,
     isSuccess: false,
-    reset: vi.fn(), // Add the reset method to the mock
+    reset: vi.fn(),
   } as unknown as UseMutationResult<any, Error, EventDto>;
 
   const defaultModel: EventDto = {

@@ -11,12 +11,12 @@ i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        'Invalid time': 'Invalid time',
-        'Failed to commit': 'Failed to commit',
+        'Invalid_time': 'Invalid time',
+        'Failed_to_commit': 'Failed to commit',
         'delete': 'Delete',
         'timeSlot.edit': 'Edit Time Slot',
         'timeSlot.editDescription': 'Edit the details of the time slot',
-        'Open Dialog': 'Open Dialog',
+        'Open_Dialog': 'Open Dialog',
         'cancel': 'Cancel',
       },
     },

@@ -2,10 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { describe, it, vi } from 'vitest';
-import { useTranslation } from 'react-i18next';
-import StlSelect, { StlSelectDefaultLabel } from '../../../src/components/select/stl-select';
+import StlSelect from '../../../src/components/select/stl-select';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,

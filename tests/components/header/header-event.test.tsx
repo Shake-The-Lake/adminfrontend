@@ -6,29 +6,24 @@ import { describe, it, vi, beforeEach } from 'vitest';
 import HeaderEvent from '../../../src/components/header/header-event';
 import { NavigationStructureContext } from '../../../src/components/navigation/navigation-models';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }));
 
-// Mock the ShakeTheLakeIcon component
 vi.mock('../../../src/components/icons/shake-the-lake-icon', () => ({
   __esModule: true,
   default: () => <div>ShakeTheLakeIcon</div>,
 }));
 
-// Mock the NavigationMenuItem component
 vi.mock('../../../src/components/navigation/navigation-menu-item', () => ({
   __esModule: true,
   default: ({ isMobileView }) => <div>NavigationMenuItem {isMobileView ? 'Mobile' : 'Desktop'}</div>,
 }));
 
-// Define mockNavigate outside the describe block
 const mockNavigate = vi.fn();
 
-// Partially mock react-router-dom to preserve BrowserRouter
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {

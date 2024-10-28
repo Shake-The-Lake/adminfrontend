@@ -1,7 +1,6 @@
-// tests/loading.test.tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import LoadingSpinner from '../../../src/components/animations/loading'; // Adjust the import path as needed
+import LoadingSpinner from '../../../src/components/animations/loading';
 import { describe, it } from 'vitest';
 
 describe('LoadingSpinner', () => {

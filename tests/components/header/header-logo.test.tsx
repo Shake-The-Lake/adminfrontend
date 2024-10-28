@@ -5,14 +5,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import HeaderLogo from '../../../src/components/header/header-logo';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }));
 
-// Mock the ShakeTheLakeIcon component
 vi.mock('../../../src/components/icons/shake-the-lake-icon', () => ({
   __esModule: true,
   default: () => <div data-testid="shake-the-lake-icon" />,

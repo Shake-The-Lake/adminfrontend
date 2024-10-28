@@ -5,13 +5,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import DefaultLayout from '../../src/components/default-layout';
 
-// Mock the HeaderDefault component
 vi.mock('../../src/components/header/header-default', () => ({
   __esModule: true,
   default: () => <div>HeaderDefault</div>,
 }));
 
-// Mock the Footer component
 vi.mock('../../src/components/footer/footer', () => ({
   __esModule: true,
   default: () => <div>Footer</div>,
@@ -50,7 +48,6 @@ describe('DefaultLayout', () => {
 
     expect(screen.getByText((content, element) => {
       return element?.textContent === 'Footer';
-    })).toBeInTheDocument(); // Ensure the layout is rendered
-    // Since Outlet is a placeholder, we can't directly test it without a route setup
+    })).toBeInTheDocument();
   });
 });

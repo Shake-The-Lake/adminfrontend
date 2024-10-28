@@ -7,7 +7,6 @@ import { defaultLocalizedStringDto } from '../../../src/models/api/localized-str
 import { ActivityTypeDto } from '../../../src/models/api/activity-type.model';
 import ActivityTypeForm from '../../../src/components/forms/activity-type';
 
-// Mock dependencies
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     i18n: { language: 'en' },

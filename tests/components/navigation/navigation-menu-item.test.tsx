@@ -5,14 +5,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import NavigationMenuItem from '../../../src/components/navigation/navigation-menu-item';
 
-// Mock the useTranslation hook
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }));
 
-// Mock the Button component
 vi.mock('../ui/button', () => ({
   Button: ({ children, ...props }: any) => (
     <button {...props}>{children}</button>

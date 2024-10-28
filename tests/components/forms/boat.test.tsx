@@ -6,7 +6,6 @@ import { type UseMutationResult } from '@tanstack/react-query';
 import { BoatDto } from '../../../src/models/api/boat.model';
 import BoatForm from '../../../src/components/forms/Boat';
 
-// Mock dependencies
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     i18n: { language: 'en' },
@@ -42,7 +41,7 @@ describe('BoatForm', () => {
     isLoading: false,
     isError: false,
     isSuccess: false,
-    reset: vi.fn(), // Add the reset method to the mock
+    reset: vi.fn(),
   } as unknown as UseMutationResult<any, Error, BoatDto>;
 
   const defaultModel: BoatDto = {

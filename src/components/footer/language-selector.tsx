@@ -28,7 +28,7 @@ const LanguageSelector: React.FC = () => {
 		<ToggleGroup
 			type="single"
 			value={language}
-			aria-label='Language Selector'
+			aria-label={t('langSwitcher.ariaLabel')}
 			onValueChange={handleLanguageChange}
 			size={'sm'}
 			className="text-white flex items-center space-x-1 text-sm">
