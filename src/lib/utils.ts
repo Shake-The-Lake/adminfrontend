@@ -1,6 +1,9 @@
 import {type ClassValue, clsx} from 'clsx';
 import {twMerge} from 'tailwind-merge';
-import {type LocalizedStringKey, type LocalizedStringDto} from '../models/api/localized-string';
+import {
+	type LocalizedStringDto,
+	type LocalizedStringKey,
+} from '../models/api/localized-string';
 import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
 import {toast} from 'sonner';
 import {type UseMutationResult} from '@tanstack/react-query';
@@ -11,7 +14,9 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export function localeToLocalizedStringProperty(locale: string): LocalizedStringKey {
+export function localeToLocalizedStringProperty(
+	locale: string,
+): LocalizedStringKey {
 	if (locale === 'gsw') {
 		return 'swissGerman';
 	}
@@ -49,7 +54,6 @@ export function tryGetErrorMessage(error: unknown) {
 				: axiosError.response.data?.message;
 		errorMessage = `Error: ${axiosError.response.status} ${axiosMessage && '- ' + axiosMessage}`;
 	} else if (error && typeof error === 'object' && 'request' in error) {
-		const axiosError = error as {request: unknown};
 		errorMessage = 'No response received from server';
 	} else if (error instanceof Error) {
 		// Handle a generic JavaScript error
@@ -94,6 +98,7 @@ export function extractTypedInfoFromRouteParams(params: Params) {
 		activityTypeId: params.activityTypeId ? Number(params.activityTypeId) : 0,
 		boatId: params.boatId ? Number(params.boatId) : 0,
 		timeSlotId: params.timeSlotId ? Number(params.timeSlotId) : 0,
+		bookingId: params.bookingId ? Number(params.bookingId) : undefined,
 	};
 }
 

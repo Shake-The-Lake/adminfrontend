@@ -10,12 +10,11 @@ const axiosInstance = axios.create({
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
 	(config) => {
-		const loginCredentials = localStorage.getItem('authCredentials');
+		const token = localStorage.getItem('authToken');
 
 		// If a token exists, add it to the Authorization header
-		if (loginCredentials) {
-			// If the token is Base64 encoded, include it in the `Authorization` header
-			config.headers.Authorization = `Basic ${loginCredentials}`;
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
 		}
 
 		return config;
@@ -29,20 +28,17 @@ axiosInstance.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError) => {
 		// Check if the error response status is 401 (Unauthorized)
-		console.log('currentLocation');
-		if (error.response && error.response.status === 401) {
+		if (error.response && (error.response.status === 401 || error.response.status === 403)) {
 			const currentLocation = window.location.pathname;
 			localStorage.setItem('redirectAfterLogin', currentLocation);
-			
-			localStorage.removeItem('authUsername');
-			localStorage.removeItem('authPassword');
+
+			localStorage.removeItem('authToken'); // Remove the JWT token
 
 			window.location.href = '/login';
 		}
 
 		throw error;
-	}
-	,
+	},
 );
 
 export default axiosInstance;

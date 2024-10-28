@@ -59,7 +59,7 @@ export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
 		// We don't expect more than 10 bookings per time slot, therefore these calls are acceptable
 		timeSlot.bookings = await Promise.all(
 			response.data.bookings.map(async (booking) => {
-				const person = await getPersonById(booking.personId);
+				const person = await getPersonById(booking.personId ?? 0);
 				return {...booking, person};
 			}),
 		);

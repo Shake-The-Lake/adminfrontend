@@ -4,9 +4,10 @@ import {
 	useQuery,
 	useQueryClient,
 } from '@tanstack/react-query';
-import {createPerson, getPersonById} from '../services/person-service';
+import {createPerson, getPersonById, updatePerson} from '../services/person-service';
 import {eventBasedBaseQueryKey} from './event';
 import {mutationKeyGenerator} from '../lib/utils';
+import {type PersonDto} from '../models/api/person.model';
 
 const identifier = 'persons';
 
@@ -41,10 +42,40 @@ export function useCreatePerson(eventId: number) {
 				);
 			}
 
+			queryClient.setQueryData(personQueryKeys.detail(eventId, data.id!), data);
+
 			await queryClient.invalidateQueries({
 				queryKey: personQueryKeys.all(eventId),
 				exact: true,
 			});
+		},
+	});
+}
+
+export function useUpdatePerson(eventId: number, id: number) {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		async mutationFn(updatedPerson: PersonDto) {
+			return updatePerson(id, updatedPerson);
+		},
+
+		async onSuccess(data: PersonDto) {
+			if (data.id === null) {
+				console.warn('Updated person has no ID, cannot update cache.');
+				return;
+			}
+
+			queryClient.setQueryData(personQueryKeys.detail(eventId, data.id!), data);
+
+			await queryClient.invalidateQueries({
+				queryKey: personQueryKeys.all(eventId),
+				exact: true,
+			});
+		},
+
+		onError(error) {
+			console.error('Error updating person:', error);
 		},
 	});
 }

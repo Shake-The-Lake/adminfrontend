@@ -6,7 +6,7 @@ import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {onInvalidFormHandler} from '../../lib/utils';
 import {Button} from '../ui/button';
-import {type LoginDto} from '../../models/api/login.model'; // Added useLocation
+import {type LoginDto} from '../../models/api/login.model';
 import {useAuth} from '../../AuthContext';
 import {toast} from 'sonner';
 import {useNavigate} from 'react-router-dom';
@@ -26,7 +26,7 @@ type LoginFormProps = {
 
 const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 	const navigate = useNavigate();
-	const {login} = useAuth();
+	const {login, isAuthenticated} = useAuth();
 	const {t} = useTranslation();
 
 	const form = useForm<LoginFormSchema>({
@@ -45,17 +45,19 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			const loggedIn = true; // Replace this with the actual login logic
-			if (!loggedIn) throw new Error('User or Password is wrong');
-
 			login(loginData.username, loginData.password);
+			if (!isAuthenticated) {
+				toast.error('Error trying to login...');
+			}
 
 			const redirectTo = localStorage.getItem('redirectAfterLogin');
 
-			if (!redirectTo || redirectTo === '/login') {
-				navigate('/', {replace: true});
-			} else {
-				navigate(redirectTo, {replace: true});
+			if (isAuthenticated) {
+				if (!redirectTo || redirectTo === '/login') {
+					navigate('/', {replace: true});
+				} else {
+					navigate(redirectTo, {replace: true});
+				}
 			}
 		} catch (error) {
 			toast.error(t('tryAgain'), {
@@ -106,8 +108,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 						)}
 					/>
 
-					<div
-						className="mt-16 flex justify-end w-full">
+					<div className="mt-16 flex justify-end w-full">
 						<Button type="submit">{t('login.login')}</Button>
 					</div>
 				</form>

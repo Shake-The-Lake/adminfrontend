@@ -21,7 +21,9 @@ export type MenuItemProperties = {
 	subNavigations?: MenuItemProperties[];
 };
 
-const SubNavigationMenuItem = (props: MenuItemProperties) => {
+const SubNavigationMenuItem: React.FC<MenuItemProperties> = (
+	props: MenuItemProperties,
+) => {
 	const {t} = useTranslation();
 	const isMobileView = props.isMobileView ?? false;
 	const iconClass = isMobileView ? 'h-5 w-5' : 'h-4 w-4';
@@ -54,7 +56,9 @@ const SubNavigationMenuItem = (props: MenuItemProperties) => {
 	);
 };
 
-const NavigationMenuItem = (props: MenuItemProperties) => {
+const NavigationMenuItem: React.FC<MenuItemProperties> = (
+	props: MenuItemProperties,
+) => {
 	const {t} = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 

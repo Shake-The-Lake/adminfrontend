@@ -12,7 +12,11 @@ import {
 	getBookingsByEventId,
 	searchBookings,
 } from '../services/booking-search-service';
-import {createBooking, updateBooking} from '../services/booking-service';
+import {
+	createBooking,
+	getBookingById,
+	updateBooking,
+} from '../services/booking-service';
 import {type BookingDto} from '../models/api/booking.model';
 import {eventBasedBaseQueryKey} from './event';
 import {mutationKeyGenerator} from '../lib/utils';
@@ -59,6 +63,13 @@ export function useSearchBookings(
 	return useQuery(bookingsSearchOptions(eventId, params, queryClient));
 }
 
+export function useGetBookingDetails(eventId: number, id: number) {
+	return useQuery({
+		queryKey: bookingQueryKeys.detail(eventId, id, true),
+		queryFn: async () => getBookingById(id, 'person'),
+	});
+}
+
 export function useCreateBooking(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -73,7 +84,7 @@ export function useCreateBooking(eventId: number) {
 	});
 }
 
-export function useUpdateBooking(id: number, eventId: number) {
+export function useUpdateBooking(eventId: number, id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: bookingMutationKeys.update,

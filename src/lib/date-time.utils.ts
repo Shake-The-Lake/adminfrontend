@@ -15,6 +15,10 @@ export function getDisplayTimeFromBackend(value: string | undefined) {
 	return value?.slice(0, 5) ?? '';
 }
 
+export function toSwissLocaleDateString(date: Date) {
+	return new Date(date).toLocaleDateString('de-CH');
+}
+
 export function toSwissLocaleTimeString(date: Date) {
 	return date.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'});
 }
