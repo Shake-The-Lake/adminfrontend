@@ -1,24 +1,47 @@
 import React from 'react';
-import {useLoaderData} from 'react-router-dom';
+import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {useBookingDetail, useUpdateBooking} from '../../../queries/booking';
+import {
+	bookingDetailOptions,
+	useBookingDetail,
+	useUpdateBooking,
+} from '../../../queries/booking';
 import {useUpdatePerson} from '../../../queries/person';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import BookingForm from '../../../components/forms/booking';
-import {type loader} from './booking-overview';
 import {defaultBooking} from '../../../models/api/booking.model';
+import {type QueryClient} from '@tanstack/react-query';
+import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 
-// Todo! needs own detail loader
+export const loader =
+	(queryClient: QueryClient) =>
+		async ({params}: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
+
+			if (!routeIds.bookingId) {
+				throw new Error('No booking ID provided');
+			}
+
+			await queryClient.ensureQueryData(
+				bookingDetailOptions(routeIds.eventId, routeIds.bookingId),
+			);
+
+			return routeIds;
+		};
+
+// Todo! refactor the Awaited<	ReturnType<ReturnType<typeof loader>>	>; things
 const EditBookingPage: React.FC = () => {
 	const {eventId, bookingId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: bookingDetails, error} = useBookingDetail(
-		eventId,
-		bookingId ?? 0,
-	);
+	const {data: bookingDetails, error} = useBookingDetail(eventId, bookingId);
+
 	const {t} = useTranslation();
-	const updateBookingMutation = useUpdateBooking(eventId, bookingId ?? 0);
+
+	const updateBookingMutation = useUpdateBooking(eventId, bookingId);
 	const updatePersonMutation = useUpdatePerson(
 		eventId,
 		bookingDetails?.personId ?? 0,

@@ -1,17 +1,15 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLoaderData, useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useCreateBooking} from '../../../queries/booking';
 import {useCreatePerson} from '../../../queries/person';
 import {defaultBooking} from '../../../models/api/booking.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import BookingForm from '../../../components/forms/booking';
-import {type loader} from './booking-overview';
 
 const AddBookingPage: React.FC = () => {
-	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
-	>;
+	const {id} = useParams<{id: string}>();
+	const eventId = Number(id);
 	const {t} = useTranslation();
 
 	const createBookingMutation = useCreateBooking(eventId);
