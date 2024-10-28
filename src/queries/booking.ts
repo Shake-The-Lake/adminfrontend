@@ -63,11 +63,14 @@ export function useSearchBookings(
 	return useQuery(bookingsSearchOptions(eventId, params, queryClient));
 }
 
-export function useGetBookingDetails(eventId: number, id: number) {
-	return useQuery({
+export const bookingDetailOptions = (eventId: number, id: number) =>
+	queryOptions({
 		queryKey: bookingQueryKeys.detail(eventId, id, true),
 		queryFn: async () => getBookingById(id, 'person'),
 	});
+
+export function useBookingDetail(eventId: number, id: number) {
+	return useQuery(bookingDetailOptions(eventId, id));
 }
 
 export function useCreateBooking(eventId: number) {
@@ -75,11 +78,9 @@ export function useCreateBooking(eventId: number) {
 	return useMutation({
 		mutationKey: bookingMutationKeys.create,
 		mutationFn: createBooking,
-		async onSuccess() {
-			await queriesToInvalidateOnCrud(queryClient, eventId);
-		},
-		onError(error) {
-			console.error('Error creating booking:', error);
+		async onSuccess(data) {
+			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0,
+				data);
 		},
 	});
 }
@@ -89,8 +90,8 @@ export function useUpdateBooking(eventId: number, id: number) {
 	return useMutation({
 		mutationKey: bookingMutationKeys.update,
 		mutationFn: async (booking: BookingDto) => updateBooking(id, booking),
-		async onSuccess() {
-			await queriesToInvalidateOnCrud(queryClient, eventId);
+		async onSuccess(data) {
+			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
 		},
 	});
 }
@@ -111,6 +112,7 @@ async function queriesToInvalidateOnCrud(
 	queryClient: QueryClient,
 	eventId: number,
 	bookingId?: number,
+	data?: BookingDto,
 ) {
 	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)}); // Not exact to catch others as well
 }

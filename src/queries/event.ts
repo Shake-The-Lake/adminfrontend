@@ -71,6 +71,7 @@ export function useCreateEvent() {
 		mutationKey: eventMutationKeys.create,
 		mutationFn: createEvent,
 		async onSuccess() {
+			// Reload list
 			await queryClient.invalidateQueries({
 				queryKey: eventQueryKeys.all(),
 				exact: true,

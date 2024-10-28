@@ -1,7 +1,7 @@
 import React from 'react';
 import {useLoaderData} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {useGetBookingDetails, useUpdateBooking} from '../../../queries/booking';
+import {useBookingDetail, useUpdateBooking} from '../../../queries/booking';
 import {useUpdatePerson} from '../../../queries/person';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import BookingForm from '../../../components/forms/booking';
@@ -13,7 +13,7 @@ const EditBookingPage: React.FC = () => {
 	const {eventId, bookingId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: bookingDetails, error} = useGetBookingDetails(
+	const {data: bookingDetails, error} = useBookingDetail(
 		eventId,
 		bookingId ?? 0,
 	);

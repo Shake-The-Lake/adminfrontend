@@ -1,5 +1,7 @@
 import {
+	type QueryClient,
 	type QueryKey,
+	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -22,11 +24,14 @@ export const personQueryKeys = {
 
 export const personMutationKeys = mutationKeyGenerator(identifier);
 
-export function useGetPerson(eventId: number, id: number) {
-	return useQuery({
+export const personDetailOptions = (eventId: number, id: number) =>
+	queryOptions({
 		queryKey: personQueryKeys.detail(eventId, id),
 		queryFn: async () => getPersonById(id),
 	});
+
+export function usePersonDetail(eventId: number, id: number) {
+	return useQuery(personDetailOptions(eventId, id));
 }
 
 export function useCreatePerson(eventId: number) {
@@ -35,47 +40,28 @@ export function useCreatePerson(eventId: number) {
 		mutationKey: personMutationKeys.create,
 		mutationFn: createPerson,
 		async onSuccess(data) {
-			if (data) {
-				queryClient.setQueryData(
-					personQueryKeys.detail(eventId, data.id ?? 0),
-					data,
-				);
-			}
-
-			queryClient.setQueryData(personQueryKeys.detail(eventId, data.id!), data);
-
-			await queryClient.invalidateQueries({
-				queryKey: personQueryKeys.all(eventId),
-				exact: true,
-			});
+			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0,
+				data);
 		},
 	});
 }
 
 export function useUpdatePerson(eventId: number, id: number) {
 	const queryClient = useQueryClient();
-
 	return useMutation({
-		async mutationFn(updatedPerson: PersonDto) {
-			return updatePerson(id, updatedPerson);
-		},
-
-		async onSuccess(data: PersonDto) {
-			if (data.id === null) {
-				console.warn('Updated person has no ID, cannot update cache.');
-				return;
-			}
-
-			queryClient.setQueryData(personQueryKeys.detail(eventId, data.id!), data);
-
-			await queryClient.invalidateQueries({
-				queryKey: personQueryKeys.all(eventId),
-				exact: true,
-			});
-		},
-
-		onError(error) {
-			console.error('Error updating person:', error);
+		mutationKey: personMutationKeys.update,
+		mutationFn: async (booking: PersonDto) => updatePerson(id, booking),
+		async onSuccess(data) {
+			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
 		},
 	});
+}
+
+async function queriesToInvalidateOnCrud(
+	queryClient: QueryClient,
+	eventId: number,
+	personId?: number,
+	data?: PersonDto,
+) {
+	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)}); // Not exact to catch others as well
 }

@@ -73,7 +73,7 @@ export function useCreateBoat(eventId: number) {
 		mutationKey: boatMutationKeys.create,
 		mutationFn: createBoat,
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0);
+			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0, data);
 		},
 	});
 }
@@ -83,8 +83,8 @@ export function useUpdateBoat(eventId: number, id: number) {
 	return useMutation({
 		mutationKey: boatMutationKeys.update,
 		mutationFn: async (boat: BoatDto) => updateBoat(id, boat),
-		async onSuccess() {
-			await queriesToInvalidateOnCrud(queryClient, eventId, id);
+		async onSuccess(data) {
+			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
 		},
 	});
 }
@@ -104,6 +104,7 @@ async function queriesToInvalidateOnCrud(
 	queryClient: QueryClient,
 	eventId: number,
 	boatId?: number,
+	data?: BoatDto,
 ) {
 	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)});
 	await queryClient.invalidateQueries({

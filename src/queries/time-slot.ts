@@ -81,8 +81,8 @@ export function useCreateTimeSlot(boatId: number, eventId: number) {
 	return useMutation({
 		mutationKey: timeSlotMutationKeys.create,
 		mutationFn: createTimeSlot,
-		async onSuccess() {
-			await queriesToInvalidateOnCrud(queryClient, eventId, boatId);
+		async onSuccess(data) {
+			await queriesToInvalidateOnCrud(queryClient, eventId, boatId, data?.id ?? 0, data);
 		},
 	});
 }
@@ -93,7 +93,7 @@ export function useUpdateTimeSlot(id: number, eventId: number) {
 		mutationKey: timeSlotMutationKeys.update,
 		mutationFn: async (timeslot: TimeSlotDto) => updateTimeSlot(id, timeslot),
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.boatId, id);
+			await queriesToInvalidateOnCrud(queryClient, eventId, data?.boatId, id, data);
 		},
 	});
 }
@@ -115,6 +115,7 @@ async function queriesToInvalidateOnCrud(
 	eventId: number,
 	boatId?: number,
 	timeSlotId?: number,
+	data?: TimeSlotDto,
 ) {
 	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)}); // Not exact to catch forBoat as well
 	await queryClient.invalidateQueries({
