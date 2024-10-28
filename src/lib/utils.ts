@@ -101,11 +101,3 @@ export function extractTypedInfoFromRouteParams(params: Params) {
 		bookingId: params.bookingId ? Number(params.bookingId) : undefined,
 	};
 }
-
-export function mutationKeyGenerator(identifier: string) {
-	return {
-		create: [identifier, 'create'],
-		update: [identifier, 'update'],
-		delete: [identifier, 'delete'],
-	};
-}

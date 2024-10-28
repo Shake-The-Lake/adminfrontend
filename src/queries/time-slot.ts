@@ -16,13 +16,15 @@ import {
 	getAllTimeSlotsFromBoat,
 } from '../services/time-slot-service';
 import {boatQueryKeys} from './boat';
-import {mutationKeyGenerator} from '../lib/utils';
-import {eventBasedBaseQueryKey} from './event';
+import {
+	getBaseQueryKey,
+	invalidateAllQueriesOfEventFor,
+	mutationKeyGenerator,
+} from './shared';
 
 const identifier = 'time-slots';
 
-const baseQueryKey = (eventId: number) =>
-	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
 
 export const timeSlotQueryKeys = {
 	forEvent: baseQueryKey,
@@ -60,11 +62,9 @@ export const timeslotDetailOptions = (eventId: number, id: number) =>
 		queryFn: async () => getTimeSlotById(id),
 	});
 
-export function useTimeSlotDetail(
-	queryClient: QueryClient,
-	eventId: number,
-	id: number,
-) {
+export function useTimeSlotDetail(eventId: number, id: number) {
+	const queryClient = useQueryClient();
+
 	return useQuery({
 		...timeslotDetailOptions(eventId, id),
 		initialData() {
@@ -82,7 +82,13 @@ export function useCreateTimeSlot(boatId: number, eventId: number) {
 		mutationKey: timeSlotMutationKeys.create,
 		mutationFn: createTimeSlot,
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, boatId, data?.id ?? 0, data);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				boatId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
@@ -93,7 +99,13 @@ export function useUpdateTimeSlot(id: number, eventId: number) {
 		mutationKey: timeSlotMutationKeys.update,
 		mutationFn: async (timeslot: TimeSlotDto) => updateTimeSlot(id, timeslot),
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.boatId, id, data);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.boatId,
+				id,
+				data,
+			);
 		},
 	});
 }
@@ -117,7 +129,8 @@ async function queriesToInvalidateOnCrud(
 	timeSlotId?: number,
 	data?: TimeSlotDto,
 ) {
-	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)}); // Not exact to catch forBoat as well
+	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
+
 	await queryClient.invalidateQueries({
 		queryKey: boatQueryKeys.detail(eventId, boatId ?? 0),
 		exact: true,

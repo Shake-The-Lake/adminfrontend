@@ -18,13 +18,16 @@ import {
 	updateBooking,
 } from '../services/booking-service';
 import {type BookingDto} from '../models/api/booking.model';
-import {eventBasedBaseQueryKey} from './event';
-import {mutationKeyGenerator} from '../lib/utils';
+import {
+	getBaseQueryKey,
+	invalidateAllQueriesOfEventFor,
+	mutationKeyGenerator,
+} from './shared';
+import {timeSlotQueryKeys} from './time-slot';
 
 const identifier = 'bookings';
 
-const baseQueryKey = (eventId: number) =>
-	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
 
 export const bookingQueryKeys = {
 	all: baseQueryKey,
@@ -79,8 +82,12 @@ export function useCreateBooking(eventId: number) {
 		mutationKey: bookingMutationKeys.create,
 		mutationFn: createBooking,
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0,
-				data);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
@@ -114,5 +121,12 @@ async function queriesToInvalidateOnCrud(
 	bookingId?: number,
 	data?: BookingDto,
 ) {
-	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)}); // Not exact to catch others as well
+	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
+
+	if (data?.timeSlotId) {
+		// If a booking for a certain timeslot changes, update the schedule page
+		await queryClient.invalidateQueries({
+			queryKey: timeSlotQueryKeys.detail(eventId, data.timeSlotId),
+		});
+	}
 }

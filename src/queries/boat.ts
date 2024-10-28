@@ -15,13 +15,18 @@ import {
 	getAllBoatsFromEvent,
 	updateBoat,
 } from '../services/boat-service';
-import {eventBasedBaseQueryKey, eventQueryKeys} from './event';
-import {mutationKeyGenerator} from '../lib/utils';
+import {eventQueryKeys} from './event';
+import {
+	getBaseQueryKey,
+	invalidateAllQueriesOfEventFor,
+	invalidateFromNavigationStructureRelevantQuery,
+	invalidateFromSelectSearchParamsRelevantQuery,
+	mutationKeyGenerator,
+} from './shared';
 
 const identifier = 'boats';
 
-const baseQueryKey = (eventId: number) =>
-	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
 
 export const boatQueryKeys = {
 	all: baseQueryKey,
@@ -56,6 +61,7 @@ export const boatDetailOptions = (eventId: number, id: number) =>
 
 export function useBoatDetail(eventId: number, id: number) {
 	const queryClient = useQueryClient();
+
 	return useQuery({
 		...boatDetailOptions(eventId, id),
 		initialData() {
@@ -73,7 +79,12 @@ export function useCreateBoat(eventId: number) {
 		mutationKey: boatMutationKeys.create,
 		mutationFn: createBoat,
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0, data);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
@@ -106,11 +117,12 @@ async function queriesToInvalidateOnCrud(
 	boatId?: number,
 	data?: BoatDto,
 ) {
-	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)});
-	await queryClient.invalidateQueries({
-		queryKey: eventQueryKeys.detail(eventId, true),
-		exact: true,
-	});
+	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
+
 	// Todo! timeslot query;
 	// todo! verify what happens on boat or timeslot deletion, especially if it already has bookings?!
+
+	await invalidateFromNavigationStructureRelevantQuery(eventId, queryClient);
+
+	await invalidateFromSelectSearchParamsRelevantQuery(eventId, queryClient);
 }

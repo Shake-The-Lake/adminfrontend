@@ -6,15 +6,21 @@ import {
 	useQuery,
 	useQueryClient,
 } from '@tanstack/react-query';
-import {createPerson, getPersonById, updatePerson} from '../services/person-service';
-import {eventBasedBaseQueryKey} from './event';
-import {mutationKeyGenerator} from '../lib/utils';
+import {
+	createPerson,
+	getPersonById,
+	updatePerson,
+} from '../services/person-service';
 import {type PersonDto} from '../models/api/person.model';
+import {
+	getBaseQueryKey,
+	invalidateAllQueriesOfEventFor,
+	mutationKeyGenerator,
+} from './shared';
 
 const identifier = 'persons';
 
-const baseQueryKey = (eventId: number) =>
-	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
 
 export const personQueryKeys = {
 	all: baseQueryKey,
@@ -40,8 +46,12 @@ export function useCreatePerson(eventId: number) {
 		mutationKey: personMutationKeys.create,
 		mutationFn: createPerson,
 		async onSuccess(data) {
-			await queriesToInvalidateOnCrud(queryClient, eventId, data?.id ?? 0,
-				data);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
@@ -63,5 +73,5 @@ async function queriesToInvalidateOnCrud(
 	personId?: number,
 	data?: PersonDto,
 ) {
-	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)}); // Not exact to catch others as well
+	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
 }

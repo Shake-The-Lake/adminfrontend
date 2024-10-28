@@ -15,13 +15,18 @@ import {
 	getAllActivityTypesFromEvent,
 	updateActivityType,
 } from '../services/activity-type-service';
-import {eventBasedBaseQueryKey, eventQueryKeys} from './event';
-import {mutationKeyGenerator} from '../lib/utils';
+import {eventQueryKeys} from './event';
+import {
+	getBaseQueryKey,
+	invalidateAllQueriesOfEventFor,
+	invalidateFromNavigationStructureRelevantQuery,
+	invalidateFromSelectSearchParamsRelevantQuery,
+	mutationKeyGenerator,
+} from './shared';
 
 const identifier = 'activity-types';
 
-const baseQueryKey = (eventId: number) =>
-	[...eventBasedBaseQueryKey(eventId), identifier] as QueryKey;
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
 
 export const activityTypeQueryKeys = {
 	all: baseQueryKey,
@@ -59,6 +64,7 @@ export const activityTypeDetailOptions = (eventId: number, id: number) =>
 
 export function useActivityTypeDetail(eventId: number, id: number) {
 	const queryClient = useQueryClient();
+
 	return useQuery({
 		...activityTypeDetailOptions(eventId, id),
 		initialData() {
@@ -115,7 +121,7 @@ async function queriesToInvalidateOnCrud(
 	activityTypeId?: number,
 	data?: ActivityTypeDto,
 ) {
-	await queryClient.invalidateQueries({queryKey: baseQueryKey(eventId)});
+	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
 
 	if (activityTypeId) {
 		queryClient.setQueryData(
@@ -124,8 +130,7 @@ async function queriesToInvalidateOnCrud(
 		);
 	}
 
-	await queryClient.invalidateQueries({
-		queryKey: eventQueryKeys.detail(eventId, true),
-		exact: true,
-	});
+	await invalidateFromNavigationStructureRelevantQuery(eventId, queryClient);
+
+	await invalidateFromSelectSearchParamsRelevantQuery(eventId, queryClient);
 }

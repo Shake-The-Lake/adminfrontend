@@ -1,4 +1,4 @@
-import {type QueryClient, useQueryClient} from '@tanstack/react-query';
+import {type QueryClient} from '@tanstack/react-query';
 import React from 'react';
 import {
 	type LoaderFunctionArgs,
@@ -47,15 +47,11 @@ const ScheduleItemPage: React.FC = () => {
 	const {timeSlotId, eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const queryClient = useQueryClient();
 	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
 
-	const {data: timeSlot} = useTimeSlotDetail(
-		queryClient,
-		eventId,
-		timeSlotId,
-	);
+	const {data: timeSlot} = useTimeSlotDetail(eventId, timeSlotId);
+
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
 	const signedUpViewers =
@@ -108,9 +104,8 @@ const ScheduleItemPage: React.FC = () => {
 									key={index}
 									className="w-full justify-between"
 									onClick={() => {
-										navigate(`/event/${eventId}/bookings/edit/${slot.id}`); 
-									}
-									}>
+										navigate(`/event/${eventId}/bookings/edit/${slot.id}`);
+									}}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}
 									</TableCell>

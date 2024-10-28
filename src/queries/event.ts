@@ -1,6 +1,5 @@
 import {type EventDto} from '../models/api/event.model';
 import {
-	type QueryClient,
 	type QueryKey,
 	queryOptions,
 	useMutation,
@@ -14,7 +13,7 @@ import {
 	getEventById,
 	updateEvent,
 } from '../services/event-service';
-import {mutationKeyGenerator} from '../lib/utils';
+import {mutationKeyGenerator} from './shared';
 
 const identifier = 'events';
 const baseQueryKey = [identifier] as QueryKey;
@@ -49,11 +48,9 @@ export const eventDetailOptions = (id: number, expanded = false) =>
 			),
 	});
 
-export function useEventDetail(
-	queryClient: QueryClient,
-	id: number,
-	expanded: boolean,
-) {
+export function useEventDetail(id: number, expanded: boolean) {
+	const queryClient = useQueryClient();
+
 	return useQuery({
 		...eventDetailOptions(id, expanded),
 		initialData() {
@@ -71,7 +68,7 @@ export function useCreateEvent() {
 		mutationKey: eventMutationKeys.create,
 		mutationFn: createEvent,
 		async onSuccess() {
-			// Reload list
+			// Reload event list
 			await queryClient.invalidateQueries({
 				queryKey: eventQueryKeys.all(),
 				exact: true,
@@ -90,6 +87,8 @@ export function useUpdateEvent(id: number) {
 				queryKey: eventQueryKeys.all(),
 				exact: true,
 			});
+			
+			// Invalidates all queries for this event
 			await queryClient.invalidateQueries({
 				queryKey: eventBasedBaseQueryKey(id),
 			});
