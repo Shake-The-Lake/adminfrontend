@@ -46,9 +46,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ model }) => {
 		};
 		try {
 			login(loginData.username, loginData.password);
+
+			await login(loginData.username, loginData.password);
+
+			const isAuthenticated = await useAuth().isAuthenticated;
+
 			if (!isAuthenticated) {
 				toast.error('Error trying to login...');
 			}
+
 			const redirectTo = localStorage.getItem('redirectAfterLogin');
 
 			if (isAuthenticated) {
