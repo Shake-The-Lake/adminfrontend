@@ -10,6 +10,8 @@ export type BookingDto = {
 	person?: PersonDto;
 	timeSlotId?: number;
 	timeSlot?: TimeSlotDto;
+	createdBy?: string;
+	modifiedBy?: string;
 };
 
 export const defaultBooking: BookingDto = {
@@ -19,4 +21,6 @@ export const defaultBooking: BookingDto = {
 	pagerNumber: undefined,
 	personId: 0,
 	timeSlotId: 0,
+	createdBy: 'timon',
+	modifiedBy: 'tim',
 };
