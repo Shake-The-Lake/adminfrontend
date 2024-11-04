@@ -1,4 +1,4 @@
-import {type QueryClient, useQueryClient} from '@tanstack/react-query';
+import { type QueryClient, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import {
 	type LoaderFunctionArgs,
@@ -17,20 +17,21 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import {EyeIcon, SailboatIcon, TagIcon, UsersIcon} from 'lucide-react';
-import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import {useDeleteBooking} from '../../../queries/booking';
+import { EyeIcon, SailboatIcon, TagIcon, UsersIcon } from 'lucide-react';
+import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
+import { useDeleteBooking } from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
 } from '../../../lib/utils';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
+import Umat from '../../../components/common/umat';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.timeSlotId) {
 				throw new Error('No Timeslot ID provided');
@@ -44,14 +45,14 @@ export const loader =
 		};
 
 const ScheduleItemPage: React.FC = () => {
-	const {timeSlotId, eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+	const { timeSlotId, eventId } = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const queryClient = useQueryClient();
-	const {i18n, t} = useTranslation();
+	const { i18n, t } = useTranslation();
 	const navigate = useNavigate();
 
-	const {data: timeSlot} = useTimeSlotDetail(
+	const { data: timeSlot } = useTimeSlotDetail(
 		queryClient,
 		timeSlotId,
 		eventId,
@@ -89,6 +90,12 @@ const ScheduleItemPage: React.FC = () => {
 						<TagIcon />
 						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
+					<Umat
+						createdBy={timeSlot?.createdBy}
+						createdAt={timeSlot?.createdAt}
+						modifiedAt={timeSlot?.modifiedAt}
+						modifiedBy={timeSlot?.modifiedBy}
+					/>
 				</div>
 				<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
 				<Table className="mt-5">
@@ -108,7 +115,7 @@ const ScheduleItemPage: React.FC = () => {
 									key={index}
 									className="w-full justify-between"
 									onClick={() => {
-										navigate(`/event/${eventId}/bookings/edit/${slot.id}`); 
+										navigate(`/event/${eventId}/bookings/edit/${slot.id}`);
 									}
 									}>
 									<TableCell>

@@ -1,9 +1,10 @@
 import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
 import {type ActivityTypeDto} from './activity-type.model';
+import {type BaseModel} from './base.model';
 import {type BoatDto} from './boat.model';
 import {type BookingDto} from './booking.model';
 
-export type TimeSlotDto = {
+export type TimeSlotDto = BaseModel &  {
 	id: number;
 	fromTime?: string;
 	untilTime?: string;
