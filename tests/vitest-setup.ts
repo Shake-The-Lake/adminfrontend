@@ -1,10 +1,21 @@
-// ./tests/setup.ts
-import {describe, it, expect, afterEach} from 'vitest';
-
+import {afterEach, vi} from 'vitest';
 import {cleanup} from '@testing-library/react';
+import '@testing-library/jest-dom'; // Corrected import
 
-import React from 'react';
-
+// Mock window.matchMedia
+Object.defineProperty(window, 'matchMedia', {
+	writable: true,
+	value: (query: string) => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: vi.fn(), // Deprecated
+		removeListener: vi.fn(), // Deprecated
+		addEventListener: vi.fn(),
+		removeEventListener: vi.fn(),
+		dispatchEvent: vi.fn(),
+	}),
+});
 
 // Runs a cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => {

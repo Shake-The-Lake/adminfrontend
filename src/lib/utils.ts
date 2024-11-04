@@ -44,6 +44,8 @@ export function getTranslation(
 export function tryGetErrorMessage(error: unknown) {
 	let errorMessage = 'An unknown error occurred';
 
+	if (!error) return errorMessage;
+
 	if (error && typeof error === 'object' && 'response' in error) {
 		const axiosError = error as {
 			response: {data?: string | {message?: string}; status: number};
@@ -70,8 +72,6 @@ export function tryGetErrorMessage(error: unknown) {
 export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	errors: FieldErrors<any>,
 ) => {
-	console.log('form has failed to submit on error, ', errors);
-
 	toast.error('Could not be saved.', {
 		description: 'There are validation errors in the form.',
 	});

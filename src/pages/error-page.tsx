@@ -28,7 +28,7 @@ const ErrorPage: React.FC = () => {
 				</div>
 				{errorStatus === 404 && (
 					<p className="mt-4 text-gray-600">
-						{t('messages.page404NavigateHome')}{' '}
+						{t('messages.page404NavigateHome')}
 						<Link
 							to="/"
 							className="text-primary-blue underline-offset-4 hover:underline">

@@ -1,6 +1,6 @@
 import React from 'react';
-import {z} from 'zod';
-import {type SubmitHandler, useForm, Controller} from 'react-hook-form';
+import { z } from 'zod';
+import { type SubmitHandler, useForm, Controller } from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -9,16 +9,16 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import {Input} from '../ui/input';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {type TimeSlotDto} from '../../models/api/time-slot.model';
-import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
-import {type BoatDto} from '../../models/api/boat.model';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {MutationToaster} from '../common/mutation-toaster';
+import { Input } from '../ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type TimeSlotDto } from '../../models/api/time-slot.model';
+import { onInvalidFormHandler, useEmitSuccessIfSucceeded } from '../../lib/utils';
+import { type BoatDto } from '../../models/api/boat.model';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { MutationToaster } from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
-import {validateTime} from '../../lib/date-time.utils';
-import {useTranslation} from 'react-i18next';
+import { validateTime } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -28,12 +28,12 @@ const TimeSlotSchema = z.object({
 	activityTypeId: z
 		.number()
 		.min(1)
-		.or(z.string().min(1, {message: 'Required'})),
+		.or(z.string().min(1, { message: 'Required' })),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
 
-type TimeSlotFormProps = {
+export type TimeSlotFormProps = {
 	model: TimeSlotDto;
 	mutation: UseMutationResult<any, Error, TimeSlotDto>; // First any is return type, second is input
 	isCreate: boolean;
@@ -58,7 +58,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		},
 		resolver: zodResolver(TimeSlotSchema),
 	});
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
@@ -89,12 +89,13 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			<Form {...form}>
 				<form
 					id="timeSlot"
+					role="form"
 					className="p-1 space-y-4 w-full"
 					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
 					<FormField
 						name="fromTime"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('from')}</FormLabel>
 								<FormControl>
@@ -111,7 +112,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 					<FormField
 						name="untilTime"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('to')}</FormLabel>
 								<FormControl>
@@ -128,7 +129,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 					<Controller
 						name="activityTypeId"
 						control={form.control}
-						render={({field}) => <ActivityTypeSelect field={field} />}
+						render={({ field }) => <ActivityTypeSelect field={field} />}
 					/>
 				</form>
 			</Form>
