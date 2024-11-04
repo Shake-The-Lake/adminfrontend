@@ -18,7 +18,7 @@ import {
 import {boatQueryKeys} from './boat';
 import {
 	getBaseQueryKey,
-	invalidateAllQueriesOfEventFor,
+	invalidateFromBookingMetaDataRelevantQuery,
 	mutationKeyGenerator,
 } from './shared';
 
@@ -27,9 +27,9 @@ const identifier = 'time-slots';
 const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
 
 export const timeSlotQueryKeys = {
-	forEvent: baseQueryKey,
-	forBoat: (eventId: number, boatId: number) =>
-		[...baseQueryKey(eventId), 'boat', boatId] as QueryKey, // Todo! verify this gets invalidated at same time as above
+	all: baseQueryKey,
+	boatDetail: (eventId: number, boatId: number) =>
+		[...baseQueryKey(eventId), 'boat-detail', boatId] as QueryKey,
 	detail: (eventId: number, id: number) =>
 		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
@@ -38,7 +38,7 @@ export const timeSlotMutationKeys = mutationKeyGenerator(identifier);
 
 export const timeslotsForEventOptions = (eventId: number) =>
 	queryOptions({
-		queryKey: timeSlotQueryKeys.forEvent(eventId),
+		queryKey: timeSlotQueryKeys.all(eventId),
 		queryFn: async () => getAllTimeSlotsFromEvent(eventId),
 	});
 
@@ -48,7 +48,7 @@ export function useGetTimeSlotsForEvent(eventId: number) {
 
 export const timeslotsForBoatOptions = (eventId: number, boatId: number) =>
 	queryOptions({
-		queryKey: timeSlotQueryKeys.forBoat(eventId, boatId),
+		queryKey: timeSlotQueryKeys.boatDetail(eventId, boatId),
 		queryFn: async () => getAllTimeSlotsFromBoat(eventId, boatId),
 	});
 
@@ -69,7 +69,7 @@ export function useTimeSlotDetail(eventId: number, id: number) {
 		...timeslotDetailOptions(eventId, id),
 		initialData() {
 			const queryData: TimeSlotDto[] | undefined = queryClient.getQueryData(
-				timeSlotQueryKeys.forEvent(eventId),
+				timeSlotQueryKeys.all(eventId),
 			);
 			return queryData?.find((t) => t.id === id);
 		},
@@ -121,7 +121,6 @@ export function useDeleteTimeSlot(boatId: number, eventId: number) {
 	});
 }
 
-// Todo! for below, invalidate all queries for schedule and bookings as well.
 async function queriesToInvalidateOnCrud(
 	queryClient: QueryClient,
 	eventId: number,
@@ -129,7 +128,7 @@ async function queriesToInvalidateOnCrud(
 	timeSlotId?: number,
 	data?: TimeSlotDto,
 ) {
-	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
+	await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId); // Own invalidation is contained
 
 	await queryClient.invalidateQueries({
 		queryKey: boatQueryKeys.detail(eventId, boatId ?? 0),

@@ -73,5 +73,9 @@ async function queriesToInvalidateOnCrud(
 	personId?: number,
 	data?: PersonDto,
 ) {
+	// It is a conscious choice not to invalidate more queries here, as from the current business perspective
+	// an update/create operation of a person always happens simultaneously with a booking.
+	// Therefore we don't want to do the invalidation twice.
+	
 	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
 }

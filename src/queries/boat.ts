@@ -19,6 +19,7 @@ import {eventQueryKeys} from './event';
 import {
 	getBaseQueryKey,
 	invalidateAllQueriesOfEventFor,
+	invalidateFromBookingMetaDataRelevantQuery,
 	invalidateFromNavigationStructureRelevantQuery,
 	invalidateFromSelectSearchParamsRelevantQuery,
 	mutationKeyGenerator,
@@ -96,6 +97,7 @@ export function useUpdateBoat(eventId: number, id: number) {
 		mutationFn: async (boat: BoatDto) => updateBoat(id, boat),
 		async onSuccess(data) {
 			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
 }
@@ -107,6 +109,7 @@ export function useDeleteBoat(eventId: number) {
 		mutationFn: deleteBoat,
 		async onSuccess() {
 			await queriesToInvalidateOnCrud(queryClient, eventId);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
 }

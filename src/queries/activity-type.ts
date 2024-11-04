@@ -19,6 +19,7 @@ import {eventQueryKeys} from './event';
 import {
 	getBaseQueryKey,
 	invalidateAllQueriesOfEventFor,
+	invalidateFromBookingMetaDataRelevantQuery,
 	invalidateFromNavigationStructureRelevantQuery,
 	invalidateFromSelectSearchParamsRelevantQuery,
 	mutationKeyGenerator,
@@ -100,6 +101,7 @@ export function useUpdateActivityType(eventId: number, id: number) {
 			updateActivityType(id, activitytype),
 		async onSuccess(data) {
 			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
 }
@@ -111,6 +113,7 @@ export function useDeleteActivityType(eventId: number) {
 		mutationFn: deleteActivityType,
 		async onSuccess() {
 			await queriesToInvalidateOnCrud(queryClient, eventId);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
 }

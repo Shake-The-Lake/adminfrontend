@@ -114,7 +114,6 @@ export function useDeleteBooking(eventId: number) {
 	});
 }
 
-// Todo! also invalidate timeslot query that is needed for schedule stuff
 async function queriesToInvalidateOnCrud(
 	queryClient: QueryClient,
 	eventId: number,
