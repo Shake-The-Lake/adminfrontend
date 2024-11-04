@@ -22,7 +22,8 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 				variant="ghost"
 				size="icon"
 				className="items-center"
-				onClick={handleDelete}>
+				onClick={handleDelete}
+				aria-label="Delete Booking">
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
 		</TableCell>

@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {Trash} from 'lucide-react';
-import {type TimeSlotDto} from '../../models/api/time-slot.model';
-import {TableCell} from '../ui/table';
+import React, { useState } from 'react';
+import { Trash } from 'lucide-react';
+import { type TimeSlotDto } from '../../models/api/time-slot.model';
+import { TableCell } from '../ui/table';
 import StlDialog from '../dialog/stl-dialog';
 import TimeSlotForm from '../forms/time-slot';
-import {type BoatDto} from '../../models/api/boat.model';
-import {Button} from '../ui/button';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useUpdateTimeSlot} from '../../queries/time-slot';
-import {useTranslation} from 'react-i18next';
+import { type BoatDto } from '../../models/api/boat.model';
+import { Button } from '../ui/button';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useUpdateTimeSlot } from '../../queries/time-slot';
+import { useTranslation } from 'react-i18next';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
@@ -24,7 +24,7 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 	deleteMutation,
 }) => {
 	const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 	const updateMutation = useUpdateTimeSlot(timeSlot?.id, eventId);
 	const handleDelete = async () => deleteMutation.mutateAsync(timeSlot?.id);
 
@@ -60,10 +60,11 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 				variant="ghost"
 				size="icon"
 				className="items-center"
-				onClick={handleDelete}>
+				onClick={handleDelete}
+				aria-label="Delete Time Slot">
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
-		</TableCell>
+		</TableCell >
 	);
 };
 

@@ -33,7 +33,7 @@ type EventFormProps = {
 	isCreate: boolean;
 };
 
-const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
+const EventForm: React.FC<EventFormProps> = ({ model, mutation, isCreate }) => {
 	const form = useForm<EventFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -43,7 +43,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 		},
 		resolver: zodResolver(eventFormSchema),
 	});
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
@@ -65,12 +65,13 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 			<Form {...form}>
 				<form
 					className="p-1 space-y-4"
+					role="form"
 					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
 					id="event">
 					<FormField
 						name="title"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('title')}</FormLabel>
 								<FormControl>
@@ -86,7 +87,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 					<FormField
 						name="description"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('description')}</FormLabel>
 								<FormControl>
@@ -102,7 +103,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 					<FormField
 						name="date"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('event.date')}</FormLabel>
 								<FormControl>
@@ -114,7 +115,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 
 					<div
 						className="mt-16 flex justify-end w-full"
-						style={isCreate ? {display: 'none'} : {}}>
+						style={isCreate ? { display: 'none' } : {}}>
 						<Button type="submit">{t('save')}</Button>
 					</div>
 				</form>

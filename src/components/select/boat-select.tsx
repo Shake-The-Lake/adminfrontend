@@ -13,10 +13,10 @@ export type BoatSelectProps = {
 	className?: string | undefined;
 };
 
-const BoatSelect: React.FC<BoatSelectProps> = ({field, className}) => {
-	const {id} = useParams<{id: string}>();
+const BoatSelect: React.FC<BoatSelectProps> = ({ field, className }) => {
+	const { id } = useParams<{ id: string }>();
 	const eventId = Number(id);
-	const {data: searchParams} = useGetSearchParameters(eventId);
+	const { data: searchParams } = useGetSearchParameters(eventId);
 
 	const {t} = useTranslation();
 
@@ -26,7 +26,7 @@ const BoatSelect: React.FC<BoatSelectProps> = ({field, className}) => {
 
 	return (
 		<FormItem className={className}>
-			<FormLabel>Boat</FormLabel>
+			<FormLabel htmlFor={field.name}>Boat</FormLabel>
 			<FormControl>
 				<StlSelect
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call

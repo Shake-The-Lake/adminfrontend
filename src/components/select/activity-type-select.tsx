@@ -17,9 +17,9 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 	field,
 	className,
 }) => {
-	const {id} = useParams<{id: string}>();
+	const { id } = useParams<{ id: string }>();
 	const eventId = Number(id);
-	const {data: searchParams} = useGetSearchParameters(eventId);
+	const { data: searchParams } = useGetSearchParameters(eventId);
 
 	const {i18n, t} = useTranslation();
 
@@ -29,7 +29,7 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 
 	return (
 		<FormItem className={className}>
-			<FormLabel>Activity Type</FormLabel>
+			<FormLabel htmlFor={field.name}>Activity Type</FormLabel>
 			<FormControl>
 				<StlSelect
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -40,7 +40,8 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 					}}
 					list={searchParams?.activityTypes ?? []}
 					getKey={getKey}
-					getLabel={getLabel}></StlSelect>
+					getLabel={getLabel}
+				></StlSelect>
 			</FormControl>
 			<FormMessage />
 		</FormItem>

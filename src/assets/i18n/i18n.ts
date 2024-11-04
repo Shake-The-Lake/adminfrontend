@@ -18,6 +18,7 @@ const resources: Resource = {
 			},
 			langSwitcher: {
 				toggleEnglish: 'Switch to English',
+				ariaLabel: 'Switch Language',
 				english: 'English',
 				german: 'German',
 				swissGerman: 'Swiss German',
@@ -201,6 +202,7 @@ const resources: Resource = {
 				english: 'Englisch',
 				german: 'Deutsch',
 				swissGerman: 'Schweizerdeutsch',
+				ariaLabel: 'Sprache wechseln',
 				toggleGerman: 'Zu Deutsch wechseln',
 				toggleSwissGerman: 'Zu Schweizerdeutsch wechseln',
 			},
@@ -383,6 +385,7 @@ const resources: Resource = {
 			langSwitcher: {
 				toggleEnglish: 'Uf Englisch wächsle',
 				english: 'Englisch',
+				ariaLabel: 'Sprach wächslä',
 				german: 'Deutsch',
 				swissGerman: 'Schwiizerdütsch',
 				toggleGerman: 'Uf Deutsch wächsle',

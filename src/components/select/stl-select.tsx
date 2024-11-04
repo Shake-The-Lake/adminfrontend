@@ -7,9 +7,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select';
-import {Button} from '../ui/button';
-import {X} from 'lucide-react';
-import {useTranslation} from 'react-i18next';
+import { Button } from '../ui/button';
+import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type StlSelectProps<T> = {
 	value: string | undefined;
@@ -55,7 +55,8 @@ const StlSelect = <T,>({
 				<Button
 					variant="ghost"
 					className="flex justify-between items-center h-7 mb-2 w-full opacity-50"
-					onClick={resetValue}>
+					onClick={resetValue}
+					data-testid="reset-button">
 					{t('clearValue')} <X className="h-4 w-4" />
 				</Button>
 				{list?.map((item) => (
