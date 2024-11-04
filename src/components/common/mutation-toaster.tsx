@@ -1,9 +1,9 @@
 import React from 'react';
-import {useEffect} from 'react';
-import {toast} from 'sonner';
-import {tryGetErrorMessage} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useTranslation} from 'react-i18next';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
+import { tryGetErrorMessage } from '../../lib/utils';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 type MutationToasterProps = {
 	type: 'create' | 'update' | 'delete';
@@ -13,7 +13,7 @@ type MutationToasterProps = {
 };
 
 const MutationToaster: React.FC<MutationToasterProps> = (props) => {
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		// Todo! test a lot! is this one even necessary?
@@ -26,32 +26,6 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 	}, [props.error, props.isValidationError]);
 
 	useEffect(() => {
-		console.log(
-			'Mutation Context:',
-			props.mutation?.context,
-			' | Mutation Data:',
-			props.mutation?.data,
-			' | Mutation Error:',
-			props.mutation?.error,
-			' | Failure Count:',
-			props.mutation?.failureCount,
-			' | Failure Reason:',
-			props.mutation?.failureReason,
-			' | Is Error:',
-			props.mutation?.isError,
-			' | Is Idle:',
-			props.mutation?.isIdle,
-			' | Is Paused:',
-			props.mutation?.isPaused,
-			' | Is Pending:',
-			props.mutation?.isPending,
-			' | Is Success:',
-			props.mutation?.isSuccess,
-			' | Mutation Status:',
-			props.mutation?.status,
-			' | Submitted At:',
-			props.mutation?.submittedAt,
-		);
 
 		if (props.mutation?.isSuccess === true) {
 			const messageKey = getSuccessMessageKeyDependingOnType(props.type);
@@ -74,7 +48,7 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 	return <></>;
 };
 
-export {MutationToaster};
+export { MutationToaster };
 
 function getSuccessMessageKeyDependingOnType(
 	type: 'create' | 'update' | 'delete',
