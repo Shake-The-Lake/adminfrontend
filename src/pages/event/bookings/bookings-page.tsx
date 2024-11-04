@@ -6,7 +6,12 @@ import {
 	defaultBookingSearchParams,
 } from '../../../models/api/booking-search.model';
 import {Button} from '../../../components/ui/button';
-import {Link, type LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
+import {
+	Link,
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import {
 	bookingsSearchOptions,
 	useSearchBookings,
@@ -40,7 +45,7 @@ export const loader =
 			return routeIds;
 		};
 
-const BookingOverview: React.FC = () => {
+const BookingsPage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
@@ -107,4 +112,4 @@ const BookingOverview: React.FC = () => {
 	);
 };
 
-export default BookingOverview;
+export default BookingsPage;

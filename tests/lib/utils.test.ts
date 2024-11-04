@@ -10,6 +10,7 @@ import {
   extractTypedInfoFromRouteParams,
 } from '../../src/lib/utils';
 import { renderHook } from '@testing-library/react';
+import { UseMutationResult } from '@tanstack/react-query';
 
 vi.mock('sonner', () => ({
   toast: {
@@ -116,12 +117,13 @@ describe('utils', () => {
 
   describe('extractTypedInfoFromRouteParams', () => {
     it('should extract typed info from route params', () => {
-      const params = { id: '1', activityTypeId: '2', boatId: '3', timeSlotId: '4' };
+      const params = { id: '1', activityTypeId: '2', boatId: '3', timeSlotId: '4', bookingId: '5' };
       expect(extractTypedInfoFromRouteParams(params)).toEqual({
         eventId: 1,
         activityTypeId: 2,
         boatId: 3,
         timeSlotId: 4,
+        bookingId: 5
       });
     });
 
@@ -132,6 +134,7 @@ describe('utils', () => {
         activityTypeId: 0,
         boatId: 0,
         timeSlotId: 0,
+        bookingId: 0,
       });
     });
   });

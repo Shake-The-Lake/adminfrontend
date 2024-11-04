@@ -33,7 +33,7 @@ export const loader =
 		};
 
 // Todo! refactor the Awaited<	ReturnType<ReturnType<typeof loader>>	>; things
-const EditBookingPage: React.FC = () => {
+const BookingPage: React.FC = () => {
 	const {eventId, bookingId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
@@ -65,4 +65,4 @@ const EditBookingPage: React.FC = () => {
 	);
 };
 
-export default EditBookingPage;
+export default BookingPage;

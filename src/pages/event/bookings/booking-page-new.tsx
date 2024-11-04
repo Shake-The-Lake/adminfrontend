@@ -7,7 +7,7 @@ import {defaultBooking} from '../../../models/api/booking.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import BookingForm from '../../../components/forms/booking';
 
-const AddBookingPage: React.FC = () => {
+const BookingPageNew: React.FC = () => {
 	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 	const {t} = useTranslation();
@@ -35,4 +35,4 @@ const AddBookingPage: React.FC = () => {
 	);
 };
 
-export default AddBookingPage;
+export default BookingPageNew;

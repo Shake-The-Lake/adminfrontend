@@ -6,7 +6,7 @@ import {
 	useEventDetail,
 	useUpdateEvent,
 } from '../../../queries/event';
-import {type QueryClient, useQueryClient} from '@tanstack/react-query';
+import {type QueryClient} from '@tanstack/react-query';
 import {defaultEventDto} from '../../../models/api/event.model';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import {useTranslation} from 'react-i18next';
@@ -28,12 +28,11 @@ export const loader =
 		};
 
 const EventOverview: React.FC = () => {
-	const queryClient = useQueryClient();
 	const {t} = useTranslation();
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: event} = useEventDetail(queryClient, eventId, false);
+	const {data: event} = useEventDetail(eventId, false);
 
 	const updateMutation = useUpdateEvent(eventId);
 
