@@ -151,6 +151,8 @@ const resources: Resource = {
 				errorSuccess: 'There was an error when creating.',
 				errorUpdate: 'There was an error when saving.',
 				errorDelete: 'There was an error when deleting.',
+				validationErrorTitle: 'Could not be saved.',
+				validationErrorDescription: 'There are validation errors in the form.',
 				validationMessageDateFormat: 'invalid date format',
 			},
 			// Meta Data
@@ -336,6 +338,8 @@ const resources: Resource = {
 				errorSuccess: 'Es gab einen Fehler beim Erstellen.',
 				errorUpdate: 'Es gab einen Fehler beim Speichern.',
 				errorDelete: 'Es gab einen Fehler beim Löschen.',
+				validationErrorTitle: 'Konnte nicht gespeichert werden.',
+				validationErrorDescription: 'Es gibt Validierungsfehler im Formular.',
 				validationMessageDateFormat: 'ungültiges Datumsformat',
 			},
 			// Meta-Daten
@@ -520,6 +524,8 @@ const resources: Resource = {
 				errorSuccess: 'Es isch en Fehler passiert bim Erstelle.',
 				errorUpdate: 'Es isch en Fehler passiert bim Speichere.',
 				errorDelete: 'Es isch en Fehler passiert bim Lösche.',
+				validationErrorTitle: 'Hett nid chönne gspichert wärde.',
+				validationErrorDescription: 'Es git Validierigsfähler im Formular.',
 				validationMessageDateFormat: 'ungültigs Datumsformat',
 			},
 			// Meta-Daten

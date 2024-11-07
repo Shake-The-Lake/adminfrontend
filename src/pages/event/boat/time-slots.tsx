@@ -20,7 +20,7 @@ import {
 	useDeleteTimeSlot,
 	useGetTimeSlotsForBoat,
 } from '../../../queries/time-slot';
-import {MutationToaster} from '../../../components/common/mutation-toaster';
+import {useMutationToaster} from '../../../components/common/mutation-toaster';
 import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
@@ -59,6 +59,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const createMutation = useCreateTimeSlot(boatId, eventId);
 	const deleteMutation = useDeleteTimeSlot(boatId, eventId);
 
+	useMutationToaster({type: 'delete', mutation: deleteMutation});
+
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
 	};
@@ -69,8 +71,6 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 	return (
 		<div>
-			<MutationToaster type="delete" mutation={deleteMutation} />
-
 			<div className="flex flex-wrap justify-between gap-5">
 				<>
 					<h1>{t('timeSlot.title')}</h1>
