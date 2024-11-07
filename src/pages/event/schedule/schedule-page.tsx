@@ -44,6 +44,14 @@ export const loader =
 			return routeIds;
 		};
 
+const scheduleColors = [
+
+	'var(--primary-blue)', // : '#004D9F',
+	'var(--primary-blue-dark)', // : '#002650',
+	'var(--primary-green)', // : '#0EC8C8',
+	'#6B46C1',
+];
+
 const SchedulePage: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
@@ -56,18 +64,8 @@ const SchedulePage: React.FC = () => {
 	const {data: timeSlots} = useGetTimeSlotsForEvent(eventId);
 
 	const mapColor = (type: number) => {
-		switch (type) {
-			case 1:
-				return '#0EC8C8';
-			case 2:
-				return '#6B46C1';
-			case 3:
-				return '#D53F8C';
-			case 4:
-				return '#FF0000';
-			default:
-				return '#002650';
-		}
+		const colorIndex = type % scheduleColors.length;
+		return scheduleColors[colorIndex];
 	};
 
 	if (boats === undefined) {
@@ -110,6 +108,7 @@ const SchedulePage: React.FC = () => {
 		channels,
 		startDate: event?.date,
 		theme: stlPlanByTheme,
+		dayWidth: 4000,
 	});
 
 	return (
