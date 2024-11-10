@@ -2,6 +2,7 @@ import { getDefaultSortedBoookings, getBookingsByEventId, searchBookings, delete
 import { type BookingSearchDto, type BookingSearchParams } from '../../src/models/api/booking-search.model';
 import axiosInstance from '../../src/services/axiosInstance';
 import { vi } from 'vitest';
+import { TimeSlotType } from '../../src/models/api/time-slot.model';
 
 vi.mock('../../src/services/axiosInstance');
 vi.mock('lodash-es/sortBy', () => ({
@@ -23,56 +24,60 @@ describe('booking-search-service', () => {
 	describe('getDefaultSortedBoookings', () => {
 		it('should return sorted bookings', () => {
 			const bookings: BookingSearchDto[] = [
-				{ person: {
-					firstName: 'John', lastName: 'Doe',
-					personType: 'EMPLOYEE',
-					emailAddress: '',
-					phoneNumber: ''
-				}, boat: {
-					name: 'Boat B',
-					id: 0,
-					type: '',
-					seatsRider: 0,
-					seatsViewer: 0,
-					operator: '',
-					availableFrom: '',
-					availableUntil: ''
-				}, timeSlot: {
-					fromTime: '10:00',
-					id: 0,
-					bookings: [],
-					availableSeats: 0,
-					seatsRider: 0,
-					seatsViewer: 0,
-					availableRiderSeats: 0,
-					availableViewerSeats: 0,
-					status: ''
-				}, activityType: { name: { en: 'Activity' } } },
-				{ person: {
-					firstName: 'Jane', lastName: 'Smith',
-					personType: 'EMPLOYEE',
-					emailAddress: '',
-					phoneNumber: ''
-				}, boat: {
-					name: 'Boat A',
-					id: 0,
-					type: '',
-					seatsRider: 0,
-					seatsViewer: 0,
-					operator: '',
-					availableFrom: '',
-					availableUntil: ''
-				}, timeSlot: {
-					fromTime: '09:00',
-					id: 0,
-					bookings: [],
-					availableSeats: 0,
-					seatsRider: 0,
-					seatsViewer: 0,
-					availableRiderSeats: 0,
-					availableViewerSeats: 0,
-					status: ''
-				}, activityType: { name: { en: 'Activity' } } },
+				{
+					person: {
+						firstName: 'John', lastName: 'Doe',
+						personType: 'EMPLOYEE',
+						emailAddress: '',
+						phoneNumber: ''
+					}, boat: {
+						name: 'Boat B',
+						id: 0,
+						type: '',
+						seatsRider: 0,
+						seatsViewer: 0,
+						operator: '',
+						availableFrom: '',
+						availableUntil: ''
+					}, timeSlot: {
+						fromTime: '10:00',
+						id: 0,
+						bookings: [],
+						availableSeats: 0,
+						seatsRider: 0,
+						seatsViewer: 0,
+						availableRiderSeats: 0,
+						availableViewerSeats: 0,
+						status: TimeSlotType.AVAILABLE
+					}, activityType: { name: { en: 'Activity' } }
+				},
+				{
+					person: {
+						firstName: 'Jane', lastName: 'Smith',
+						personType: 'EMPLOYEE',
+						emailAddress: '',
+						phoneNumber: ''
+					}, boat: {
+						name: 'Boat A',
+						id: 0,
+						type: '',
+						seatsRider: 0,
+						seatsViewer: 0,
+						operator: '',
+						availableFrom: '',
+						availableUntil: ''
+					}, timeSlot: {
+						fromTime: '09:00',
+						id: 0,
+						bookings: [],
+						availableSeats: 0,
+						seatsRider: 0,
+						seatsViewer: 0,
+						availableRiderSeats: 0,
+						availableViewerSeats: 0,
+						status: TimeSlotType.AVAILABLE
+					}, activityType: { name: { en: 'Activity' } }
+				},
 			];
 			const sortedBookings = getDefaultSortedBoookings(bookings);
 			expect(sortedBookings[0].boat.name).toBe('Boat A');
