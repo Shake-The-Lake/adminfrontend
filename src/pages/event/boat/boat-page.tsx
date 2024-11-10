@@ -13,6 +13,7 @@ import {
 import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
 import { defaultBoatDto } from '../../../models/api/boat.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
+import Umat from '../../../components/common/umat';
 
 export const loader =
 	(queryClient: QueryClient) =>

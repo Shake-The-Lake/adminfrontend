@@ -20,7 +20,7 @@ const EditBookingPage: React.FC = () => {
 
 	return (
 		<PageTransitionFadeIn>
-			<h1>{t('booking.update')}</h1>
+			<h1 className='mb-5'>{t('booking.update')}</h1>
 
 			<Umat
 				createdBy={bookingDetails?.createdBy}

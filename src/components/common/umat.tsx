@@ -6,8 +6,8 @@ import { toSwissLocalDateTimeString } from '../../lib/date-time.utils';
 type UmatProps = {
   createdBy?: string;
   modifiedBy?: string;
-  modifiedAt?: string;
-  createdAt?: string;
+  modifiedAt?: Date;
+  createdAt?: Date;
 };
 
 const Umat: React.FC<UmatProps> = ({ createdBy, modifiedBy, createdAt, modifiedAt }) => (
@@ -16,11 +16,11 @@ const Umat: React.FC<UmatProps> = ({ createdBy, modifiedBy, createdAt, modifiedA
     {(createdBy ?? modifiedBy) && (
       <div className='py-2 px-1'>
         <p className='text-xs'>{t('infoTextUmat')}</p>
-        {createdBy && (
-          <p className='text-xs'>{t('createdBy')}: {createdBy} {t('on')}: {toSwissLocalDateTimeString(new Date(createdAt ?? ''))} </p>
+        {(createdBy && createdAt) && (
+          <p className='text-xs'>{t('createdBy')}: {createdBy} {t('on')}: {toSwissLocalDateTimeString(createdAt)} </p>
         )}
-        {modifiedBy && (
-          <p className='text-xs'>{t('modifiedBy')}: {modifiedBy} {t('on')}: {toSwissLocalDateTimeString(new Date(modifiedAt ?? ''))}</p>
+        {(modifiedBy && modifiedAt) && (
+          <p className='text-xs'>{t('modifiedBy')}: {modifiedBy} {t('on')}: {toSwissLocalDateTimeString(modifiedAt)}</p>
         )}
       </div>
     )}
