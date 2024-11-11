@@ -1,14 +1,15 @@
-import { addOneHourToTime } from '../../lib/date-time.utils';
-import { type ActivityTypeDto } from './activity-type.model';
-import { type BoatDto } from './boat.model';
-import { type BookingDto } from './booking.model';
+import {addOneHourToTime} from '../../lib/date-time.utils';
+import {type ActivityTypeDto} from './activity-type.model';
+import {type BaseModel} from './base.model';
+import {type BoatDto} from './boat.model';
+import {type BookingDto} from './booking.model';
 
 export enum TimeSlotType {
 	AVAILABLE = 'AVAILABLE',
 	ON_BREAK = 'ON_BREAK',
 }
 
-export type TimeSlotDto = {
+export type TimeSlotDto = BaseModel & {
 	id: number;
 	fromTime?: string;
 	untilTime?: string;
