@@ -27,7 +27,7 @@ import {
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import Umat from '../../../components/common/umat';
+import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -90,7 +90,7 @@ const ScheduleItemPage: React.FC = () => {
 						<TagIcon />
 						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
-					<Umat
+					<ActivityTraceInfo
 						createdBy={timeSlot?.createdBy}
 						createdAt={timeSlot?.createdAt}
 						modifiedAt={timeSlot?.modifiedAt}

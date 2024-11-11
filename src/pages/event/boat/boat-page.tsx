@@ -13,7 +13,7 @@ import {
 import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
 import { defaultBoatDto } from '../../../models/api/boat.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import Umat from '../../../components/common/umat';
+import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -48,7 +48,7 @@ const BoatPage: React.FC = () => {
 					{t('boat.title')} - {boat?.name}
 				</h2>
 
-				<Umat
+				<ActivityTraceInfo
 					createdBy={boat?.createdBy}
 					createdAt={boat?.createdAt}
 					modifiedAt={boat?.modifiedAt}

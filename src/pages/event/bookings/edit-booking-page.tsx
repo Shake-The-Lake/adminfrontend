@@ -7,7 +7,7 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 import BookingForm from '../../../components/forms/booking';
 import { type loader } from './booking-overview';
 import { defaultBooking } from '../../../models/api/booking.model';
-import Umat from '../../../components/common/umat';
+import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
 
 const EditBookingPage: React.FC = () => {
 	const { eventId, bookingId } = useLoaderData() as Awaited<
@@ -22,7 +22,7 @@ const EditBookingPage: React.FC = () => {
 		<PageTransitionFadeIn>
 			<h1 className='mb-5'>{t('booking.update')}</h1>
 
-			<Umat
+			<ActivityTraceInfo
 				createdBy={bookingDetails?.createdBy}
 				createdAt={bookingDetails?.createdAt}
 				modifiedAt={bookingDetails?.modifiedAt}

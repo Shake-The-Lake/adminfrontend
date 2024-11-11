@@ -13,7 +13,7 @@ import {
 } from '../../../queries/activity-type';
 import { type QueryClient } from '@tanstack/react-query';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import Umat from '../../../components/common/umat';
+import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -56,7 +56,7 @@ const ActivityTypePage: React.FC = () => {
 				</h2>
 
 
-				<Umat
+				<ActivityTraceInfo
 					createdBy={activityType?.createdBy}
 					createdAt={activityType?.createdAt}
 					modifiedAt={activityType?.modifiedAt}
