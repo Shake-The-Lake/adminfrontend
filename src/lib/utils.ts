@@ -9,6 +9,7 @@ import {toast} from 'sonner';
 import {type UseMutationResult} from '@tanstack/react-query';
 import {useEffect} from 'react';
 import {type Params} from 'react-router-dom';
+import {t} from 'i18next';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -72,8 +73,8 @@ export function tryGetErrorMessage(error: unknown) {
 export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	errors: FieldErrors<any>,
 ) => {
-	toast.error('Could not be saved.', {
-		description: 'There are validation errors in the form.',
+	toast.error(t('messages.validationErrorTitle'), {
+		description: t('messages.validationErrorDescription'),
 	});
 };
 

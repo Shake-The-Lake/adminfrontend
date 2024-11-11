@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { UseMutationResult } from '@tanstack/react-query';
-import { TimeSlotDto } from '../../../src/models/api/time-slot.model';
+import { TimeSlotDto, TimeSlotType } from '../../../src/models/api/time-slot.model';
 import TimeSlotForm, { TimeSlotFormProps } from '../../../src/components/forms/time-slot';
 import { describe, it, expect, vi } from 'vitest';
 
@@ -53,7 +53,7 @@ const defaultModel: TimeSlotDto = {
   seatsViewer: 0,
   availableRiderSeats: 0,
   availableViewerSeats: 0,
-  status: 'AVAILABLE',
+  status: TimeSlotType.AVAILABLE,
 };
 
 const mockOnSuccessfullySubmitted = vi.fn();
