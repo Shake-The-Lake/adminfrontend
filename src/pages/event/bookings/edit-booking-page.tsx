@@ -23,10 +23,7 @@ const EditBookingPage: React.FC = () => {
 			<h1 className='mb-5'>{t('booking.update')}</h1>
 
 			<ActivityTraceInfo
-				createdBy={bookingDetails?.createdBy}
-				createdAt={bookingDetails?.createdAt}
-				modifiedAt={bookingDetails?.modifiedAt}
-				modifiedBy={bookingDetails?.modifiedBy}
+				{...bookingDetails}
 			/>
 
 			{error && <p>{t('booking.errorLoadingBooking')}</p>}

@@ -49,10 +49,7 @@ const BoatPage: React.FC = () => {
 				</h2>
 
 				<ActivityTraceInfo
-					createdBy={boat?.createdBy}
-					createdAt={boat?.createdAt}
-					modifiedAt={boat?.modifiedAt}
-					modifiedBy={boat?.modifiedBy}
+					{...boat}
 				/>
 
 				{error && <p>{t('boat.errorLoadingBoat')}</p>}

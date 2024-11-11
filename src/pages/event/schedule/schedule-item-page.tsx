@@ -91,10 +91,7 @@ const ScheduleItemPage: React.FC = () => {
 						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
 					<ActivityTraceInfo
-						createdBy={timeSlot?.createdBy}
-						createdAt={timeSlot?.createdAt}
-						modifiedAt={timeSlot?.modifiedAt}
-						modifiedBy={timeSlot?.modifiedBy}
+						{...timeSlot}
 					/>
 				</div>
 				<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>

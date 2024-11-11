@@ -57,10 +57,7 @@ const ActivityTypePage: React.FC = () => {
 
 
 				<ActivityTraceInfo
-					createdBy={activityType?.createdBy}
-					createdAt={activityType?.createdAt}
-					modifiedAt={activityType?.modifiedAt}
-					modifiedBy={activityType?.modifiedBy}
+					{...activityType}
 				/>
 
 				{error && <p>{t('activityType.errorLoadingActivityType')}</p>}

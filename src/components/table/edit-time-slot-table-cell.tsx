@@ -50,10 +50,7 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 				isIcon={true}
 				formId="timeSlot">
 				<ActivityTraceInfo
-					createdBy={timeSlot?.createdBy}
-					createdAt={timeSlot?.createdAt}
-					modifiedAt={timeSlot?.modifiedAt}
-					modifiedBy={timeSlot?.modifiedBy}
+					{...timeSlot}
 				/>
 				<TimeSlotForm
 					model={timeSlot}
