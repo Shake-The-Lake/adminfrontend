@@ -12,7 +12,7 @@ import {
 	useDeleteBoat,
 	useGetBoats,
 } from '../../../queries/boat';
-import {MutationToaster} from '../../../components/common/mutation-toaster';
+import {useMutationToaster} from '../../../components/common/mutation-toaster';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
@@ -44,6 +44,8 @@ const BoatsOverview: React.FC = () => {
 	const createMutation = useCreateBoat(eventId);
 	const deleteMutation = useDeleteBoat(eventId);
 
+	useMutationToaster({type: 'delete', mutation: deleteMutation});
+
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
 	};
@@ -55,8 +57,6 @@ const BoatsOverview: React.FC = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<MutationToaster type="delete" mutation={deleteMutation} />
-
 				<div className="w-full mb-8 flex flex-col justify-start">
 					<h1>{t('boat.title')}</h1>
 				</div>

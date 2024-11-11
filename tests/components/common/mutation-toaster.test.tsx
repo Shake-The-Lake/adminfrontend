@@ -53,15 +53,4 @@ describe('MutationToaster', () => {
       expect(mutationMock.reset).toHaveBeenCalled();
     });
   });
-
-  it('shows error message when error prop is passed', async () => {
-    const error = new Error('Direct error prop');
-    render(<MutationToaster type="delete" error={error} />);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('messages.errorDelete', {
-        description: 'Direct error prop',
-      });
-    });
-  });
 });
