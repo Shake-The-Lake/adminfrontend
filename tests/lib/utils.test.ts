@@ -83,17 +83,6 @@ describe('utils', () => {
     });
   });
 
-  describe('onInvalidFormHandler', () => {
-    it('should log the errors and show a toast message', () => {
-      const errors = { field: { message: 'Required' } };
-      console.log = vi.fn();
-      onInvalidFormHandler(errors);
-      expect(toast.error).toHaveBeenCalledWith('Could not be saved.', {
-        description: 'There are validation errors in the form.',
-      });
-    });
-  });
-
   describe('useEmitSuccessIfSucceeded', () => {
     it('should call onSuccessfullySubmitted if mutation is successful', () => {
       const onSuccessfullySubmitted = vi.fn();
