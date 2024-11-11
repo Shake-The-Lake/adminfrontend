@@ -19,6 +19,10 @@ export function toSwissLocaleDateString(date: Date) {
 	return new Date(date).toLocaleDateString('de-CH');
 }
 
+export function toSwissLocalDateTimeString(date: Date) {
+	return new Date(date).toLocaleString('de-CH');
+}
+
 export function toSwissLocaleTimeString(date: Date) {
 	return date.toLocaleTimeString('de-CH', {hour: '2-digit', minute: '2-digit'});
 }

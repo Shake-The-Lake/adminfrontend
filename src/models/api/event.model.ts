@@ -1,7 +1,8 @@
 import {type ActivityTypeDto} from './activity-type.model';
+import {type BaseModel} from './base.model';
 import {type BoatDto} from './boat.model';
 
-export type EventDto = {
+export type EventDto = BaseModel &  {
 	id: number;
 	title: string;
 	description: string;

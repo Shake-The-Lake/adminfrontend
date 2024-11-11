@@ -1,7 +1,7 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ActivityTypeForm from '../../../components/forms/activity-type';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
@@ -11,12 +11,13 @@ import {
 	useActivityTypeDetail,
 	useUpdateActivityType,
 } from '../../../queries/activity-type';
-import {type QueryClient} from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
+import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
@@ -34,17 +35,17 @@ export const loader =
 		};
 
 const ActivityTypePage: React.FC = () => {
-	const {eventId, activityTypeId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+	const { eventId, activityTypeId } = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: activityType, error} = useActivityTypeDetail(
+	const { data: activityType, error } = useActivityTypeDetail(
 		activityTypeId,
 		eventId,
 	);
 
 	const updateMutation = useUpdateActivityType(activityTypeId);
 
-	const {t, i18n} = useTranslation();
+	const { t, i18n } = useTranslation();
 
 	return (
 		<PageTransitionFadeIn>
@@ -53,6 +54,11 @@ const ActivityTypePage: React.FC = () => {
 					{t('activityType.title')} -{' '}
 					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
+
+
+				<ActivityTraceInfo
+					{...activityType}
+				/>
 
 				{error && <p>{t('activityType.errorLoadingActivityType')}</p>}
 				{activityType && (
