@@ -1,4 +1,4 @@
-import axios, { type AxiosError } from 'axios';
+import axios, {type AxiosError} from 'axios';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
 		}
 
 		throw error;
-	}
+	},
 );
 
 export default axiosInstance;
