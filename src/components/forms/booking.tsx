@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import {z} from 'zod';
+import React, { useState } from 'react';
+import { z } from 'zod';
 import {
 	Controller,
 	FormProvider,
 	type SubmitHandler,
 	useForm,
 } from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {Button} from '../ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../ui/button';
 import {
 	FormControl,
 	FormField,
@@ -23,10 +23,10 @@ import {useMutationToaster} from '../common/mutation-toaster';
 import PersonForm, {personSchema} from './person';
 import StlSelect from '../select/stl-select';
 import SelectableTimeSlotList from '../table/selectable-timeslot-list';
-import {type PersonDto} from '../../models/api/person.model';
-import {useEmitSuccessIfSucceeded} from '../../lib/utils';
-import {useNavigate} from 'react-router-dom';
-import {getIsRiderOptions} from '../../constants/constants';
+import { type PersonDto } from '../../models/api/person.model';
+import { useEmitSuccessIfSucceeded } from '../../lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { getIsRiderOptions } from '../../constants/constants';
 
 const bookingSchema = z.object({
 	id: z.number().optional(),
@@ -57,7 +57,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	eventId,
 }) => {
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<
-	number | undefined
+		number | undefined
 	>(model.timeSlotId);
 
 	const form = useForm<BookingFormSchema>({
@@ -66,7 +66,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 		resolver: zodResolver(bookingSchema),
 	});
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, bookingMutation);
@@ -78,7 +78,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	};
 
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
-		const {person} = values;
+		const { person } = values;
 		const savedPerson = await personMutation.mutateAsync(person);
 
 		const isManual = isCreate ? true : model.isManual;

@@ -66,4 +66,12 @@ export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 		accessorKey: 'person.phoneNumber',
 		header: t('phone'),
 	},
+	{
+		accessorKey: 'booking.createdBy',
+		header: t('createdBy'),
+	},
+	{
+		accessorKey: 'booking.modifiedBy',
+		header: t('modifiedBy'),
+	},
 ];

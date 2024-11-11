@@ -1,6 +1,7 @@
 import {type LocalizedStringDto} from './localized-string';
+import {type BaseModel} from './base.model';
 
-export type ActivityTypeDto = {
+export type ActivityTypeDto = BaseModel & {
 	id: number;
 	name?: LocalizedStringDto;
 	description?: LocalizedStringDto;

@@ -1,4 +1,6 @@
-export type PersonDto = {
+import {type BaseModel} from './base.model';
+
+export type PersonDto = BaseModel &  {
 	id?: number;
 	personType: 'EMPLOYEE' | 'BOAT_DRIVER' | 'CUSTOMER';
 	firstName: string;

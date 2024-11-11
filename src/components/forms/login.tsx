@@ -59,6 +59,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ model }) => {
 				} else {
 					navigate(redirectTo, { replace: true });
 				}
+			} else {
+				toast.error('Error trying to login...');
 			}
 		} catch (error) {
 			console.log(error);

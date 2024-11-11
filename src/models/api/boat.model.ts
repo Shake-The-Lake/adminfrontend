@@ -1,7 +1,8 @@
 import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
+import {type BaseModel} from './base.model';
 import {type TimeSlotDto} from './time-slot.model';
 
-export type BoatDto = {
+export type BoatDto = BaseModel & {
 	id: number;
 	name: string;
 	type: string;
