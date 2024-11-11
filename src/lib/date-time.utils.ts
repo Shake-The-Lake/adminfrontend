@@ -24,7 +24,7 @@ export function toSwissLocalDateTimeString(date: Date) {
 }
 
 export function toSwissLocaleTimeString(date: Date) {
-	return date.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'});
+	return date.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
 }
 
 export const fromTimeToDateTime = (date: Date, time: string): Date => {
@@ -41,4 +41,22 @@ export const fromTimeToDateTime = (date: Date, time: string): Date => {
 	currentDate.setMilliseconds(0);
 
 	return currentDate;
+};
+
+export const addOneHourToTime = (time: string | undefined): string => {
+	// Get the current date
+	const currentDate = new Date();
+
+	if (time !== undefined) {
+		// Split the time string into hours, minutes, and seconds
+		const [hours, minutes, seconds] = time.split(':').map(Number);
+
+		// Set the hours, minutes, and seconds of the current date
+		currentDate.setHours(hours + 1);
+		currentDate.setMinutes(minutes);
+		currentDate.setSeconds(seconds);
+		currentDate.setMilliseconds(0);
+	}
+
+	return toSwissLocaleTimeString(currentDate);
 };

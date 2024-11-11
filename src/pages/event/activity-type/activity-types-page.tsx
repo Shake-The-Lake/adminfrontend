@@ -16,7 +16,7 @@ import {
 	useDeleteActivityType,
 	useGetActivityTypes,
 } from '../../../queries/activity-type';
-import {MutationToaster} from '../../../components/common/mutation-toaster';
+import {useMutationToaster} from '../../../components/common/mutation-toaster';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
@@ -46,6 +46,8 @@ const ActivityTypesPage = () => {
 	const createMutation = useCreateActivityType(eventId);
 	const deleteMutation = useDeleteActivityType(eventId);
 
+	useMutationToaster({type: 'delete', mutation: deleteMutation});
+
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
 	};
@@ -57,7 +59,6 @@ const ActivityTypesPage = () => {
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
-				<MutationToaster type="delete" mutation={deleteMutation} />
 
 				<div className="w-full mb-8 flex flex-col justify-start">
 					<h1>{t('activityType.title')}</h1>

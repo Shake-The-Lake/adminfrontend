@@ -11,14 +11,16 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type TimeSlotDto } from '../../models/api/time-slot.model';
+import { TimeSlotType, type TimeSlotDto } from '../../models/api/time-slot.model';
 import { onInvalidFormHandler, useEmitSuccessIfSucceeded } from '../../lib/utils';
 import { type BoatDto } from '../../models/api/boat.model';
 import { type UseMutationResult } from '@tanstack/react-query';
-import { MutationToaster } from '../common/mutation-toaster';
+import { useMutationToaster } from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
 import { validateTime } from '../../lib/date-time.utils';
 import { useTranslation } from 'react-i18next';
+import StlSelect from '../select/stl-select';
+import { timeSlotTypeOptions } from '../../constants/constants';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -29,6 +31,7 @@ const TimeSlotSchema = z.object({
 		.number()
 		.min(1)
 		.or(z.string().min(1, { message: 'Required' })),
+	status: z.nativeEnum(TimeSlotType),
 });
 
 export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
@@ -38,7 +41,6 @@ export type TimeSlotFormProps = {
 	mutation: UseMutationResult<any, Error, TimeSlotDto>; // First any is return type, second is input
 	isCreate: boolean;
 	boat?: BoatDto;
-	// Status: string; // todo!still necessary?
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
@@ -51,16 +53,14 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 }) => {
 	const form = useForm<TimeSlotFormSchema>({
 		mode: 'onChange',
-		defaultValues: {
-			...model,
-			fromTime: model.fromTime,
-			untilTime: model.untilTime,
-		},
+		defaultValues: model,
 		resolver: zodResolver(TimeSlotSchema),
 	});
 	const { t } = useTranslation();
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
+
+	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
 
 	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
 		const timeSlot: TimeSlotDto = {
@@ -74,66 +74,78 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 					? undefined
 					: values.activityTypeId,
 			id: model.id,
-			status: 'AVAILABLE',
 		};
 
 		await mutation.mutateAsync(timeSlot);
 	};
 
 	return (
-		<>
-			<MutationToaster
-				type={isCreate ? 'create' : 'update'}
-				mutation={mutation}
-			/>
-			<Form {...form}>
-				<form
-					id="timeSlot"
-					role="form"
-					className="p-1 space-y-4 w-full"
-					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
-					<FormField
-						name="fromTime"
-						control={form.control}
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>{t('from')}</FormLabel>
-								<FormControl>
-									<Input
-										placeholder={t('timeSlot.timeFormat')}
-										{...field}
-										className="input"
-										type="time"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}></FormField>
-					<FormField
-						name="untilTime"
-						control={form.control}
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>{t('to')}</FormLabel>
-								<FormControl>
-									<Input
-										placeholder={t('timeSlot.timeFormat')}
-										{...field}
-										className="input"
-										type="time"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}></FormField>
-					<Controller
-						name="activityTypeId"
-						control={form.control}
-						render={({ field }) => <ActivityTypeSelect field={field} />}
-					/>
-				</form>
-			</Form>
-		</>
+		<Form {...form}>
+			<form
+				id="timeSlot"
+				role="form"
+				className="p-1 space-y-4 w-full"
+				onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
+				<FormField
+					name="fromTime"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{t('from')}</FormLabel>
+							<FormControl>
+								<Input
+									placeholder={t('timeSlot.timeFormat')}
+									{...field}
+									className="input"
+									type="time"
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}></FormField>
+				<FormField
+					name="untilTime"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{t('to')}</FormLabel>
+							<FormControl>
+								<Input
+									placeholder={t('timeSlot.timeFormat')}
+									{...field}
+									className="input"
+									type="time"
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}></FormField>
+				<Controller
+					name="activityTypeId"
+					control={form.control}
+					render={({ field }) => <ActivityTypeSelect field={field} />}
+				/>
+				<FormField
+					name="status"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{t('timeSlot.status')}</FormLabel>
+							<FormControl>
+								<StlSelect
+									value={field.value}
+									onValueChange={field.onChange}
+									list={timeSlotTypeOptions(t)}
+									getKey={(item) => item?.key}
+									getLabel={(item) => item!.label}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</form>
+		</Form>
 	);
 };
 
