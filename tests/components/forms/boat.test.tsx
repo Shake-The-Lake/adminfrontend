@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { describe, it, expect, vi } from 'vitest';
 import { type UseMutationResult } from '@tanstack/react-query';
 import { BoatDto } from '../../../src/models/api/boat.model';
-import BoatForm from '../../../src/components/forms/Boat';
+import BoatForm from '../../../src/components/forms/boat';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
