@@ -12,16 +12,14 @@ const axiosInstance = axios.create({
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
 	async (config) => {
-		const user = auth.currentUser;
-		if (user) {
-			const token = await getIdToken(user);
+		const token = localStorage.getItem('authToken');
+		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 		else {
 			const currentLocation = window.location.pathname;
 			localStorage.setItem('redirectAfterLogin', currentLocation);
 			window.location.href = '/login';
-			throw new Error('User is not authenticated');
 		}
 		return config;
 	},
