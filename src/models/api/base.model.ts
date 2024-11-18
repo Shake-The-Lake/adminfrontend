@@ -1,6 +1,6 @@
 export type BaseModel = {
 	createdBy?: string;
-	modifiedBy?: string;
+	updatedBy?: string;
 	createdAt?: Date;
-	modifiedAt?: Date;
+	updatedAt?: Date;
 };

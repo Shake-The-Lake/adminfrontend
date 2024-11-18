@@ -54,8 +54,6 @@ const ActivityTypePage: React.FC = () => {
 					{t('activityType.title')} -{' '}
 					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
-
-
 				<ActivityTraceInfo
 					{...activityType}
 				/>
