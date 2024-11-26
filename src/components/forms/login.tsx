@@ -45,7 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			await login(loginData.username, loginData.password);
+			login(loginData.username, loginData.password);
 
 			const redirectTo = localStorage.getItem('redirectAfterLogin');
 
@@ -59,6 +59,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 				toast.error('Error trying to login...');
 			}
 		} catch (error) {
+			console.log(error);
 			toast.error(t('tryAgain'), {
 				description: t('login.error'),
 			});
