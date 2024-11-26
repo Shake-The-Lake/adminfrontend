@@ -15,12 +15,12 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import {Input} from '../ui/input';
-import {useTranslation} from 'react-i18next';
-import {type BookingDto} from '../../models/api/booking.model';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useMutationToaster} from '../common/mutation-toaster';
-import PersonForm, {personSchema} from './person';
+import { Input } from '../ui/input';
+import { useTranslation } from 'react-i18next';
+import { type BookingDto } from '../../models/api/booking.model';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useMutationToaster } from '../common/mutation-toaster';
+import PersonForm, { personSchema } from './person';
 import StlSelect from '../select/stl-select';
 import SelectableTimeSlotList from '../table/selectable-timeslot-list';
 import { type PersonDto } from '../../models/api/person.model';
@@ -71,7 +71,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, bookingMutation);
 
-	useMutationToaster({type: isCreate ? 'create' : 'update', mutation: bookingMutation});
+	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation: bookingMutation });
 
 	const handleCancel = () => {
 		navigate(`/event/${eventId}/bookings`);
@@ -102,7 +102,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					setSelectedTimeSlotId={setSelectedTimeSlotId}
 				/>
 
-				<div className="space-y-4 w-1/3 mt-20">
+				<div className="space-y-4 mt-20">
 					<PersonForm />
 
 					<FormItem>
@@ -111,7 +111,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 							<Controller
 								name="isRider"
 								control={form.control}
-								render={({field}) => (
+								render={({ field }) => (
 									<StlSelect
 										value={field.value ? 'driver' : 'viewer'}
 										onValueChange={(value) => {
@@ -131,7 +131,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					<FormField
 						name="pagerNumber"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('pagerNumber')}</FormLabel>
 								<FormControl>
