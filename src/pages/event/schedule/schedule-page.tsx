@@ -61,7 +61,7 @@ const SchedulePage: React.FC = () => {
 	const { i18n, t } = useTranslation();
 
 	const queryClient = useQueryClient();
-	const { data: event } = useEventDetail(queryClient, eventId, false);
+	const { data: event } = useEventDetail(eventId, false);
 	const { data: boats } = useGetBoats(eventId);
 	const { data: timeSlots } = useGetTimeSlotsForEvent(eventId);
 

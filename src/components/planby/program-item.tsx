@@ -36,16 +36,20 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 		<ProgramBox
 			width={styles.width}
 			style={styles.position}
-			className="relative">
+			className={'relative'}>
 			<ProgramContent
 				width={styles.width}
 				isLive={isLive}
-				style={{background: color}}>
+				className={disable ? '!cursor-default' : 'cursor-pointer'}
+				style={{ background: color }}>
 				<ProgramFlex>
-					<ProgramStack className="w-full">
-						<Link
-							to={`${data.id}`}
-							className="after:absolute after:inset-0"></Link>
+					<ProgramStack
+						className={'w-full'}>
+						{!disable && (
+							<Link
+								to={`${data.id}`}
+								className="after:absolute after:inset-0" />
+						)}
 						<ProgramTitle>{title}</ProgramTitle>
 						<div className="flex justify-between w-full">
 							<ProgramText>
