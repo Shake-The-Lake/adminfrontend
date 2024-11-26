@@ -8,7 +8,7 @@ import {
 	type Channel,
 	type Theme,
 } from 'planby';
-import { useQueryClient, type QueryClient } from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router-dom';
 import { boatsOptions, useGetBoats } from '../../../queries/boat';
 import { useEventDetail } from '../../../queries/event';
@@ -60,7 +60,6 @@ const SchedulePage: React.FC = () => {
 	>;
 	const { i18n, t } = useTranslation();
 
-	const queryClient = useQueryClient();
 	const { data: event } = useEventDetail(eventId, false);
 	const { data: boats } = useGetBoats(eventId);
 	const { data: timeSlots } = useGetTimeSlotsForEvent(eventId);

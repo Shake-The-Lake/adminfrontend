@@ -12,6 +12,7 @@ import BookingForm from '../../../components/forms/booking';
 import {defaultBooking} from '../../../models/api/booking.model';
 import {type QueryClient} from '@tanstack/react-query';
 import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -49,7 +50,9 @@ const BookingPage: React.FC = () => {
 
 	return (
 		<PageTransitionFadeIn>
-			<h1>{t('booking.update')}</h1>
+			<h1 className='mb-5'>{t('booking.update')}</h1>
+
+			<ActivityTraceInfo {...bookingDetails} />
 
 			{error && <p>{t('booking.errorLoadingBooking')}</p>}
 			{bookingDetails && (

@@ -1,4 +1,4 @@
-import { type QueryClient, useQueryClient } from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import React from 'react';
 import {
 	type LoaderFunctionArgs,
@@ -48,6 +48,7 @@ const ScheduleItemPage: React.FC = () => {
 	const { timeSlotId, eventId } = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
+
 	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
 
