@@ -20,6 +20,10 @@ vi.mock('../src/config/firebaseConfig', async (importOriginal) => {
 	};
 });
 
+vi.mock('../src/queries/shared', () => ({
+	mutationKeyGenerator: vi.fn().mockReturnValue('key'),
+}));
+
 describe('A truthy statement', () => {
 	it('renders the App component', () => {
 		render(<App />);
