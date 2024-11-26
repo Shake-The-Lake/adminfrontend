@@ -1,9 +1,9 @@
 import React from 'react';
 import './assets/i18n/i18n';
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import DefaultLayout from './components/default-layout';
-import {loader as sideNavigationLoader} from './components/event-detail-layout';
-import {eventDetailRoutes} from './constants';
+import { loader as sideNavigationLoader } from './components/event-detail-layout';
+import { eventDetailRoutes } from './constants';
 import {
 	ActivityTypePage,
 	ActivityTypesPage,
@@ -18,26 +18,27 @@ import {
 	ScheduleItemPage,
 	SchedulePage,
 } from './pages';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
-import {Toaster} from './components/ui/sonner';
-import {loader as eventsLoader} from './pages/event/event-list';
-import {loader as eventDetailLoader} from './pages/event/overview/event-overview';
-import {loader as activityTypesLoader} from './pages/event/activity-type/activity-types-page';
-import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
-import {loader as boatsLoader} from './pages/event/boat/boats-page';
-import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
-import {loader as bookingsLoader} from './pages/event/bookings/bookings-page';
-import {loader as bookingDetailLoader} from './pages/event/bookings/booking-page';
-import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
-import {AuthProvider} from './AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from './components/ui/sonner';
+import { loader as eventsLoader } from './pages/event/event-list';
+import { loader as eventDetailLoader } from './pages/event/overview/event-overview';
+import { loader as activityTypesLoader } from './pages/event/activity-type/activity-types-page';
+import { loader as activityTypeDetailLoader } from './pages/event/activity-type/activity-type-page';
+import { loader as boatsLoader } from './pages/event/boat/boats-page';
+import { loader as boatDetailLoader } from './pages/event/boat/boat-page';
+import { loader as bookingsLoader } from './pages/event/bookings/bookings-page';
+import { loader as bookingDetailLoader } from './pages/event/bookings/booking-page';
+import { loader as scheduleLoader } from './pages/event/schedule/schedule-page';
+import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
-import {loader as scheduleLoaderItem} from './pages/event/schedule/schedule-item-page';
+import { loader as scheduleLoaderItem } from './pages/event/schedule/schedule-item-page';
 import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
 import QueryLoader from './components/common/query-loader';
-import {AnimatePresence} from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import BookingPage from './pages/event/bookings/booking-page';
+import LogoutPage from './pages/logout';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
 		path: '/',
 		element: <DefaultLayout />,
 		children: [
-			{index: true, element: <HomePage />, loader: eventsLoader(queryClient)},
+			{ index: true, element: <HomePage />, loader: eventsLoader(queryClient) },
 		],
 		errorElement: (
 			<DefaultLayout>
@@ -63,6 +64,15 @@ const router = createBrowserRouter([
 	{
 		path: '/login',
 		element: <LoginPage />,
+		errorElement: (
+			<DefaultLayout>
+				<ErrorPage />
+			</DefaultLayout>
+		),
+	},
+	{
+		path: '/logout',
+		element: <LogoutPage />,
 		errorElement: (
 			<DefaultLayout>
 				<ErrorPage />

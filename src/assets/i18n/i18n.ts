@@ -1,6 +1,6 @@
-import i18n, { type Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { en, languages } from '../../constants';
+import i18n, {type Resource} from 'i18next';
+import {initReactI18next} from 'react-i18next';
+import {en, languages} from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -164,6 +164,7 @@ const resources: Resource = {
 			home: 'Home',
 			events: 'Events',
 			boats: 'Boats',
+			logout: 'Logout',
 			overview: 'Overview',
 			activityTypes: 'Activity Types',
 			bookings: 'Bookings',
@@ -356,6 +357,7 @@ const resources: Resource = {
 			home: 'Startseite',
 			events: 'Veranstaltungen',
 			boats: 'Boote',
+			logout: 'Abmelden',
 			overview: 'Übersicht',
 			activityTypes: 'Aktivitätstypen',
 			bookings: 'Buchungen',
@@ -547,6 +549,7 @@ const resources: Resource = {
 			home: 'Startsite',
 			events: 'Veranstaltige',
 			boats: 'Böt',
+			logout: 'Abmälde',
 			overview: 'Übersicht',
 			activityTypes: 'Aktivitätstype',
 			bookings: 'Buechige',
