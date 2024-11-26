@@ -38,7 +38,7 @@ export const loader =
 			}
 
 			await queryClient.ensureQueryData(
-				timeslotDetailOptions(Number(params.timeSlotId)),
+				timeslotDetailOptions(routeIds.eventId, routeIds.timeSlotId),
 			);
 
 			return routeIds;
@@ -48,15 +48,11 @@ const ScheduleItemPage: React.FC = () => {
 	const { timeSlotId, eventId } = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const queryClient = useQueryClient();
-	const { i18n, t } = useTranslation();
+	const {i18n, t} = useTranslation();
 	const navigate = useNavigate();
 
-	const { data: timeSlot } = useTimeSlotDetail(
-		queryClient,
-		timeSlotId,
-		eventId,
-	);
+	const {data: timeSlot} = useTimeSlotDetail(eventId, timeSlotId);
+
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
 	const signedUpViewers =
@@ -113,8 +109,7 @@ const ScheduleItemPage: React.FC = () => {
 									className="w-full justify-between"
 									onClick={() => {
 										navigate(`/event/${eventId}/bookings/edit/${slot.id}`);
-									}
-									}>
+									}}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}
 									</TableCell>

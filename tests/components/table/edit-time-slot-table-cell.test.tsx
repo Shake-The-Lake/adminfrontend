@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import EditTimeSlotTableCell from '../../../src/components/table/edit-time-slot-table-cell';
 import { QueryClient, QueryClientProvider, type UseMutationResult } from '@tanstack/react-query';
@@ -31,6 +30,10 @@ describe('EditTimeSlotTableCell', () => {
     availableViewerSeats: 0,
     status: TimeSlotType.AVAILABLE
   };
+
+  vi.mock('../../../src/queries/shared', () => ({
+    mutationKeyGenerator: vi.fn().mockReturnValue('key'),
+  }));
 
   const mockBoat: BoatDto = {
     id: 1,

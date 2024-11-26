@@ -8,9 +8,12 @@ import {
 	NavigationStructureContext,
 	getNavigationItemsForEvent,
 } from './navigation/navigation-models';
-import {type QueryClient, useQuery} from '@tanstack/react-query';
-import {eventDetailOptions} from '../queries/event';
+import {
+	type QueryClient,
+} from '@tanstack/react-query';
+import {eventDetailOptions, useEventDetail} from '../queries/event';
 import {extractTypedInfoFromRouteParams} from '../lib/utils';
+
 export const loader =
 	(queryClient: QueryClient) =>
 		async ({params}: LoaderFunctionArgs) => {
@@ -30,7 +33,8 @@ const EventDetailLayout: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
 	ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: event} = useQuery(eventDetailOptions(Number(eventId), true));
+
+	const {data: event} = useEventDetail(eventId, true);
 	const {i18n} = useTranslation();
 	const navigationItems = getNavigationItemsForEvent(event, i18n.language);
 

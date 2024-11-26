@@ -27,7 +27,8 @@ import {loader as activityTypesLoader} from './pages/event/activity-type/activit
 import {loader as activityTypeDetailLoader} from './pages/event/activity-type/activity-type-page';
 import {loader as boatsLoader} from './pages/event/boat/boats-page';
 import {loader as boatDetailLoader} from './pages/event/boat/boat-page';
-import {loader as bookingsLoader} from './pages/event/bookings/booking-overview';
+import {loader as bookingsLoader} from './pages/event/bookings/bookings-page';
+import {loader as bookingDetailLoader} from './pages/event/bookings/booking-page';
 import {loader as scheduleLoader} from './pages/event/schedule/schedule-page';
 import {AuthProvider} from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
@@ -36,7 +37,7 @@ import LoadingSpinner from './components/animations/loading';
 import MutationLoader from './components/common/mutation-loader';
 import QueryLoader from './components/common/query-loader';
 import {AnimatePresence} from 'framer-motion';
-import EditBookingPage from './pages/event/bookings/edit-booking-page';
+import BookingPage from './pages/event/bookings/booking-page';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -105,13 +106,13 @@ const router = createBrowserRouter([
 			},
 			{
 				path: eventDetailRoutes.schedule,
-				loader: scheduleLoader(queryClient),
 				element: <SchedulePage />,
+				loader: scheduleLoader(queryClient),
 			},
 			{
 				path: `${eventDetailRoutes.schedule}/${eventDetailRoutes.timeSlotId}`,
-				loader: scheduleLoaderItem(queryClient),
 				element: <ScheduleItemPage />,
+				loader: scheduleLoaderItem(queryClient),
 			},
 			{
 				path: eventDetailRoutes.bookings,
@@ -121,12 +122,11 @@ const router = createBrowserRouter([
 			{
 				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.addBooking}`,
 				element: <AddBookingPage />,
-				loader: bookingsLoader(queryClient),
 			},
 			{
 				path: `${eventDetailRoutes.bookings}/${eventDetailRoutes.editBooking}`,
-				element: <EditBookingPage />,
-				loader: bookingsLoader(queryClient),
+				element: <BookingPage />,
+				loader: bookingDetailLoader(queryClient),
 			},
 		],
 	},

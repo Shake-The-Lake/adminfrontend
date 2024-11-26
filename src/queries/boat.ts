@@ -8,43 +8,66 @@ import {
 	useQueryClient,
 	type QueryKey,
 } from '@tanstack/react-query';
-import {createBoat, deleteBoat, getBoatById, getAllBoatsFromEvent, updateBoat} from '../services/boat-service';
-import {eventKeys} from './event';
+import {
+	createBoat,
+	deleteBoat,
+	getBoatById,
+	getAllBoatsFromEvent,
+	updateBoat,
+} from '../services/boat-service';
+import {eventQueryKeys} from './event';
+import {
+	getBaseQueryKey,
+	invalidateAllQueriesOfEventFor,
+	invalidateFromBookingMetaDataRelevantQuery,
+	invalidateFromNavigationStructureRelevantQuery,
+	invalidateFromSelectSearchParamsRelevantQuery,
+	mutationKeyGenerator,
+} from './shared';
 
-export const boatKeys = {
-	all: (eventId: number) => ['boats', eventId] as QueryKey,
-	detail: (id: number) => ['boats', 'detail', id] as QueryKey,
+const identifier = 'boats';
+
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
+
+export const boatQueryKeys = {
+	all: baseQueryKey,
+	detail: (eventId: number, id: number) =>
+		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
-export const boatsOptions = (eventId: number, queryClient: QueryClient) => queryOptions({
-	queryKey: boatKeys.all(eventId),
-	queryFn: async () => getAllBoatsFromEvent(eventId),
-	initialData() {
-		const queryData: EventDto | undefined = queryClient.getQueryData(eventKeys.detail(eventId, true));
-		return queryData?.boats;
-	},
-});
+export const boatMutationKeys = mutationKeyGenerator(identifier);
+
+export const boatsOptions = (eventId: number, queryClient: QueryClient) =>
+	queryOptions({
+		queryKey: boatQueryKeys.all(eventId),
+		queryFn: async () => getAllBoatsFromEvent(eventId),
+		initialData() {
+			const queryData: EventDto | undefined = queryClient.getQueryData(
+				eventQueryKeys.detail(eventId, true),
+			);
+			return queryData?.boats;
+		},
+	});
 
 export function useGetBoats(eventId: number) {
 	const queryClient = useQueryClient();
 	return useQuery(boatsOptions(eventId, queryClient));
 }
 
-export const boatDetailOptions = (id: number) => queryOptions({
-	queryKey: boatKeys.detail(id),
-	queryFn: async () => getBoatById(id),
-});
+export const boatDetailOptions = (eventId: number, id: number) =>
+	queryOptions({
+		queryKey: boatQueryKeys.detail(eventId, id),
+		queryFn: async () => getBoatById(id),
+	});
 
-export function useBoatDetail(
-	id: number,
-	eventId: number,
-) {
+export function useBoatDetail(eventId: number, id: number) {
 	const queryClient = useQueryClient();
+
 	return useQuery({
-		...boatDetailOptions(id),
+		...boatDetailOptions(eventId, id),
 		initialData() {
 			const queryData: BoatDto[] | undefined = queryClient.getQueryData(
-				boatKeys.all(eventId),
+				boatQueryKeys.all(eventId),
 			);
 			return queryData?.find((d) => d.id === eventId);
 		},
@@ -54,27 +77,27 @@ export function useBoatDetail(
 export function useCreateBoat(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: boatMutationKeys.create,
 		mutationFn: createBoat,
 		async onSuccess(data) {
-			if (data) {
-				queryClient.setQueryData(boatKeys.detail(data.id ?? 0), data);
-			}
-
-			await queryClient.invalidateQueries({queryKey: boatKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
 
-export function useUpdateBoat(id: number) {
+export function useUpdateBoat(eventId: number, id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: boatMutationKeys.update,
 		mutationFn: async (boat: BoatDto) => updateBoat(id, boat),
 		async onSuccess(data) {
-			queryClient.setQueryData(boatKeys.detail(data?.id ?? 0), data);
-
-			await queryClient.invalidateQueries({queryKey: boatKeys.all(data?.eventId ?? 0), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(data?.eventId ?? 0, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId, id, data);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
 }
@@ -82,10 +105,27 @@ export function useUpdateBoat(id: number) {
 export function useDeleteBoat(eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: boatMutationKeys.delete,
 		mutationFn: deleteBoat,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: boatKeys.all(eventId), exact: true});
-			await queryClient.invalidateQueries({queryKey: eventKeys.detail(eventId, true), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
+}
+
+async function queriesToInvalidateOnCrud(
+	queryClient: QueryClient,
+	eventId: number,
+	boatId?: number,
+	data?: BoatDto,
+) {
+	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
+
+	// Todo! timeslot query;
+	// todo! verify what happens on boat or timeslot deletion, especially if it already has bookings?!
+
+	await invalidateFromNavigationStructureRelevantQuery(eventId, queryClient);
+
+	await invalidateFromSelectSearchParamsRelevantQuery(eventId, queryClient);
 }
