@@ -42,17 +42,16 @@ const ActivityTypePage: React.FC = () => {
 		activityTypeId,
 		eventId,
 	);
-
 	const updateMutation = useUpdateActivityType(eventId, activityTypeId);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<PageTransitionFadeIn>
 			<div className="flex flex-col items-center">
 				<h2 className="w-full mb-6">
 					{t('activityType.title')} -{' '}
-					{getTranslation(i18n.language, activityType?.name)}
+					{getTranslation('de', activityType?.name)}
 				</h2>
 				<ActivityTraceInfo
 					{...activityType}

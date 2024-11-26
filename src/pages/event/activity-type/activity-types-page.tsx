@@ -1,27 +1,27 @@
-import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {defaultActivityTypeDto} from '../../../models/api/activity-type.model';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { defaultActivityTypeDto } from '../../../models/api/activity-type.model';
 import StlCard from '../../../components/cards/stl-card';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
 } from '../../../lib/utils';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import ActivityTypeForm from '../../../components/forms/activity-type';
-import {type QueryClient} from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import {
 	activityTypesOptions,
 	useCreateActivityType,
 	useDeleteActivityType,
 	useGetActivityTypes,
 } from '../../../queries/activity-type';
-import {useMutationToaster} from '../../../components/common/mutation-toaster';
+import { useMutationToaster } from '../../../components/common/mutation-toaster';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
@@ -34,19 +34,19 @@ export const loader =
 		};
 
 const ActivityTypesPage = () => {
-	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+	const { eventId } = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
 	>;
-	const {data: activityTypes, error} = useGetActivityTypes(eventId);
+	const { data: activityTypes, error } = useGetActivityTypes(eventId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const {i18n, t} = useTranslation();
+	const { i18n, t } = useTranslation();
 
 	const createMutation = useCreateActivityType(eventId);
 	const deleteMutation = useDeleteActivityType(eventId);
 
-	useMutationToaster({type: 'delete', mutation: deleteMutation});
+	useMutationToaster({ type: 'delete', mutation: deleteMutation });
 
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
@@ -76,9 +76,9 @@ const ActivityTypesPage = () => {
 							<div key={activityType.id} className="flex justify-center">
 								<StlCard
 									id={activityType.id}
-									title={getTranslation(i18n.language, activityType.name)}
+									title={getTranslation('de', activityType.name)}
 									description={getTranslation(
-										i18n.language,
+										'de',
 										activityType.description,
 									)}
 									link={activityType.id.toString()}
@@ -89,7 +89,8 @@ const ActivityTypesPage = () => {
 
 					<StlDialog
 						title={t('activityType.createActivityType')}
-						description={t('activityType.description')}
+						description=''
+						// Description={t('activityType.description')}
 						triggerLabel={t('activityType.create')}
 						isOpen={isCreateDialogOpen}
 						onClose={closeCreateDialog}

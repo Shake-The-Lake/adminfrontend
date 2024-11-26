@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {z} from 'zod';
+import React, { useState } from 'react';
+import { z } from 'zod';
 import {
 	type SubmitHandler,
 	useForm,
@@ -13,33 +13,29 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import {Input} from '../ui/input';
-import {Button} from '../ui/button';
-import {Tabs, TabsList, TabsTrigger, TabsContent} from '../ui/tabs';
-import {type ActivityTypeDto} from '../../models/api/activity-type.model';
-import {defaultLocalizedStringDto} from '../../models/api/localized-string';
-import {useParams} from 'react-router-dom';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {useTranslation} from 'react-i18next';
-import {Textarea} from '../ui/textarea';
-import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useMutationToaster} from '../common/mutation-toaster';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
+import { type ActivityTypeDto } from '../../models/api/activity-type.model';
+import { defaultLocalizedStringDto } from '../../models/api/localized-string';
+import { useParams } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
+import { Textarea } from '../ui/textarea';
+import { onInvalidFormHandler, useEmitSuccessIfSucceeded } from '../../lib/utils';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useMutationToaster } from '../common/mutation-toaster';
 import PageTransitionFadeIn from '../animations/page-transition-fade-in';
 
 const localizedStringSchema = z.object({
-	en: z.string(),
-	de: z.string().optional(),
+	en: z.string().optional(),
+	de: z.string(),
 	swissGerman: z.string().optional(),
 });
 
 const activityTypeSchema = z.object({
 	id: z.number().min(0).optional(),
-	name: z.object({
-		en: z.string().min(5).max(20),
-		de: z.string().max(20).optional(),
-		swissGerman: z.string().max(20).optional(),
-	}),
+	name: localizedStringSchema,
 	description: localizedStringSchema,
 	checklist: localizedStringSchema,
 	icon: z.string(),
@@ -67,15 +63,15 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		resolver: zodResolver(activityTypeSchema),
 	});
 
-	const {i18n, t} = useTranslation();
-	const {id} = useParams<{id: string}>();
+	const { i18n, t } = useTranslation();
+	const { id } = useParams<{ id: string }>();
 	const eventId = Number(id);
 
 	const [tabWithErrors, setTabWithErrors] = useState<string[]>([]);
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-	useMutationToaster({type: isCreate ? 'create' : 'update', mutation});
+	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
 
 	const onSubmit: SubmitHandler<ActivityTypeFormSchema> = async (values) => {
 		setTabWithErrors([]);
@@ -85,28 +81,28 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId === 0 ? eventId : model.eventId,
 			// Avoid null values on localized strings
-			name: {...defaultLocalizedStringDto, ...values.name},
-			description: {...defaultLocalizedStringDto, ...values.description},
-			checklist: {...defaultLocalizedStringDto, ...values.checklist},
+			name: { ...defaultLocalizedStringDto, ...values.name },
+			description: { ...defaultLocalizedStringDto, ...values.description },
+			checklist: { ...defaultLocalizedStringDto, ...values.checklist },
 		};
 
 		await mutation.mutateAsync(activityType);
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
-		const englishErrors =
-			errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
+		// Const englishErrors =
+		// 	errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
 		const germanErrors =
 			errors.name?.de ?? errors.description?.de ?? errors.checklist?.de;
-		const swissGermanErrors =
-			errors.name?.swissGerman ??
-			errors.description?.swissGerman ??
-			errors.checklist?.swissGerman;
+		// Const swissGermanErrors =
+		// 	errors.name?.swissGerman ??
+		// 	errors.description?.swissGerman ??
+		// 	errors.checklist?.swissGerman;
 
 		const errorLanguages = [
-			englishErrors ? 'en' : '',
+			// EnglishErrors ? 'en' : '',
 			germanErrors ? 'de' : '',
-			swissGermanErrors ? 'gsw' : '',
+			// SwissGermanErrors ? 'gsw' : '',
 		];
 
 		setTabWithErrors(errorLanguages);
@@ -121,8 +117,9 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				id="activityType"
 				role="form"
 				onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
-				<Tabs defaultValue={i18n.language}>
-					<TabsList className="w-full justify-start gap-1">
+				{/* <Tabs defaultValue={i18n.language}> */}
+				<Tabs defaultValue='de'>
+					<TabsList className="w-full hidden justify-start gap-1">
 						<TabsTrigger
 							value="en"
 							className={
@@ -147,14 +144,14 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					</TabsList>
 					<TabsContent value="en">
 						<PageTransitionFadeIn>
-							<p className="text-primary-dark-stroke mb-2 mt-2">
+							<p className="text-primary-dark-stroke mb-2 mt-2 hidden">
 								{t('activityType.infoText')}
 							</p>
 							<div className="space-y-4">
 								<FormField
 									name="name.en"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
@@ -170,7 +167,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="description.en"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
@@ -186,7 +183,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="icon"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
@@ -202,7 +199,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="checklist.en"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
@@ -220,14 +217,14 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					</TabsContent>
 					<TabsContent value="de">
 						<PageTransitionFadeIn>
-							<p className="text-primary-dark-stroke mb-2 mt-2">
+							<p className="text-primary-dark-stroke mb-2 mt-2 hidden">
 								{t('activityType.descriptionGerman')}
 							</p>
 							<div className="space-y-4">
 								<FormField
 									name="name.de"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
@@ -243,7 +240,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="description.de"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
@@ -259,7 +256,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="icon"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
@@ -275,7 +272,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="checklist.de"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
@@ -300,7 +297,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="name.swissGerman"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
@@ -316,7 +313,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="description.swissGerman"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
@@ -332,7 +329,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="icon"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
@@ -348,7 +345,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="checklist.swissGerman"
 									control={form.control}
-									render={({field}) => (
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>
 												{t('activityType.checklistSwissGerman')}
@@ -369,7 +366,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				</Tabs>
 				<div
 					className="mt-16 flex justify-end w-full"
-					style={isCreate ? {display: 'none'} : {}}>
+					style={isCreate ? { display: 'none' } : {}}>
 					<Button type="submit">{t('save')}</Button>
 				</div>
 			</form>
