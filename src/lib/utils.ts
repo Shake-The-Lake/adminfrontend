@@ -73,8 +73,9 @@ export function tryGetErrorMessage(error: unknown) {
 export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	errors: FieldErrors<any>,
 ) => {
+	console.log(errors);
 	toast.error(t('messages.validationErrorTitle'), {
-		description: t('messages.validationErrorDescription'),
+		description: t('messages.validationErrorDescription') + ' ' + (errors.description?.message?.toString() ?? ''),
 	});
 };
 

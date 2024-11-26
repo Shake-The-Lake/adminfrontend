@@ -1,22 +1,22 @@
 import React from 'react';
-import {type SubmitHandler, useForm} from 'react-hook-form';
-import {z} from 'zod';
-import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
-import {Input} from '../ui/input';
-import {type EventDto} from '../../models/api/event.model';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {onInvalidFormHandler} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useMutationToaster} from '../common/mutation-toaster';
-import {Button} from '../ui/button';
-import {validateDate} from '../../lib/date-time.utils';
-import {useTranslation} from 'react-i18next';
-import {t} from 'i18next';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Input } from '../ui/input';
+import { type EventDto } from '../../models/api/event.model';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { onInvalidFormHandler } from '../../lib/utils';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useMutationToaster } from '../common/mutation-toaster';
+import { Button } from '../ui/button';
+import { validateDate } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 // Schema definition
 export const eventFormSchema = z.object({
 	title: z.string().min(5).max(20),
-	description: z.string(),
+	description: z.string().max(250),
 	date: z
 		.string()
 		.refine((val) => validateDate(val), {
@@ -33,7 +33,7 @@ type EventFormProps = {
 	isCreate: boolean;
 };
 
-const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
+const EventForm: React.FC<EventFormProps> = ({ model, mutation, isCreate }) => {
 	const form = useForm<EventFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -44,9 +44,9 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 		resolver: zodResolver(eventFormSchema),
 	});
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
-	useMutationToaster({type: isCreate ? 'create' : 'update', mutation});
+	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
 
 	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
@@ -69,7 +69,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 				<FormField
 					name="title"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('title')}</FormLabel>
 							<FormControl>
@@ -85,7 +85,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 				<FormField
 					name="description"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('description')}</FormLabel>
 							<FormControl>
@@ -101,7 +101,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 				<FormField
 					name="date"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('event.date')}</FormLabel>
 							<FormControl>
@@ -113,7 +113,7 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 
 				<div
 					className="mt-16 flex justify-end w-full"
-					style={isCreate ? {display: 'none'} : {}}>
+					style={isCreate ? { display: 'none' } : {}}>
 					<Button type="submit">{t('save')}</Button>
 				</div>
 			</form>
