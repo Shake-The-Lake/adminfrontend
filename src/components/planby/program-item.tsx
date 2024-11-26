@@ -30,8 +30,6 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 	const { data } = props.program;
 	const { title, description, since, till, color, disable } = data;
 
-	console.log(disable);
-
 	const sinceTime = toSwissLocaleTimeString(new Date(since));
 	const tillTime = toSwissLocaleTimeString(new Date(till));
 
