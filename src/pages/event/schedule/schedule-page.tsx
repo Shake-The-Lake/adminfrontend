@@ -81,6 +81,7 @@ const SchedulePage: React.FC = () => {
 		const program: Program = {
 			id: timeSlot.id.toString(),
 			color: isBreak ? breakScheduleColor : mapColor(timeSlot?.activityTypeId ?? 0),
+			disable: isBreak,
 			title: slotName,
 			channelId: timeSlot.boatId,
 			channelUuid: timeSlot.boatId?.toString() ?? '',

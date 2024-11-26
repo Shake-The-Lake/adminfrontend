@@ -10,8 +10,8 @@ import {
 	ProgramText,
 	useProgram,
 } from 'planby';
-import {Link} from 'react-router-dom';
-import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
+import { Link } from 'react-router-dom';
+import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
 
 export type PlanByProgramItemProps = {
 	program: any;
@@ -21,13 +21,13 @@ export type PlanByProgramItemProps = {
 };
 
 export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
-	const {styles, isLive} = useProgram({
+	const { styles, isLive } = useProgram({
 		...props,
 		isBaseTimeFormat: props.isBaseTimeFormat ?? true,
 	});
 
-	const {data} = props.program;
-	const {title, description, since, till, color} = data;
+	const { data } = props.program;
+	const { title, description, since, till, color, disable } = data;
 
 	const sinceTime = toSwissLocaleTimeString(new Date(since));
 	const tillTime = toSwissLocaleTimeString(new Date(till));
