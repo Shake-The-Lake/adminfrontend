@@ -1,6 +1,6 @@
-import i18n, {type Resource} from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {en, languages} from '../../constants';
+import i18n, { type Resource } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { en, languages } from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -78,6 +78,7 @@ const resources: Resource = {
 				descriptionEdit: 'Edit time slots for the boat',
 				triggerLabelEdit: 'Edit time slot',
 				timeFormat: 'Time in the format HH:MM',
+				status: 'Status',
 				statusBreak: 'Break',
 				statusAvailable: 'available for activities',
 			},
@@ -152,6 +153,8 @@ const resources: Resource = {
 				errorSuccess: 'There was an error when creating.',
 				errorUpdate: 'There was an error when saving.',
 				errorDelete: 'There was an error when deleting.',
+				validationErrorTitle: 'Could not be saved.',
+				validationErrorDescription: 'There are validation errors in the form.',
 				validationMessageDateFormat: 'invalid date format',
 			},
 			// Meta Data
@@ -173,6 +176,10 @@ const resources: Resource = {
 			riderSeats: 'Rider Seats',
 			name: 'Name',
 			email: 'Email',
+			infoTextActivityTraceInfo: 'This is the person who edited',
+			on: 'on',
+			createdBy: 'Created by',
+			modifiedBy: 'Modified by',
 			phone: 'Phone Number',
 			personType: 'Person Type',
 			employee: 'Employee',
@@ -261,6 +268,7 @@ const resources: Resource = {
 				descriptionEdit: 'Bearbeiten Sie Zeitfenster für das Boot',
 				triggerLabelEdit: 'Zeitfenster bearbeiten',
 				timeFormat: 'Zeit im Format HH:MM',
+				status: 'Status',
 				statusBreak: 'Pause',
 				statusAvailable: 'verfügbar für Aktivitäten',
 			},
@@ -337,6 +345,8 @@ const resources: Resource = {
 				errorSuccess: 'Es gab einen Fehler beim Erstellen.',
 				errorUpdate: 'Es gab einen Fehler beim Speichern.',
 				errorDelete: 'Es gab einen Fehler beim Löschen.',
+				validationErrorTitle: 'Konnte nicht gespeichert werden.',
+				validationErrorDescription: 'Es gibt Validierungsfehler im Formular.',
 				validationMessageDateFormat: 'ungültiges Datumsformat',
 			},
 			// Meta-Daten
@@ -358,6 +368,10 @@ const resources: Resource = {
 			riderSeats: 'Rider Plätze',
 			name: 'Name',
 			email: 'E-Mail',
+			infoTextActivityTraceInfo: 'Das sind die Personen welche das Entry bearbeitet haben',
+			on: 'am',
+			createdBy: 'Erstellt von',
+			modifiedBy: 'Geändert von',
 			phone: 'Telefonnummer',
 			personType: 'Personentyp',
 			employee: 'Mitarbeiter',
@@ -445,6 +459,7 @@ const resources: Resource = {
 				descriptionEdit: 'Bearbeite d Ziitfenster für s Boot',
 				triggerLabelEdit: 'Ziitfenster bearbeite',
 				timeFormat: 'Ziit im Format HH:MM',
+				status: 'Status',
 				statusBreak: 'Pouse',
 				statusAvailable: 'verfüegbar für Aktivitäte',
 			},
@@ -521,6 +536,8 @@ const resources: Resource = {
 				errorSuccess: 'Es isch en Fehler passiert bim Erstelle.',
 				errorUpdate: 'Es isch en Fehler passiert bim Speichere.',
 				errorDelete: 'Es isch en Fehler passiert bim Lösche.',
+				validationErrorTitle: 'Hett nid chönne gspichert wärde.',
+				validationErrorDescription: 'Es git Validierigsfähler im Formular.',
 				validationMessageDateFormat: 'ungültigs Datumsformat',
 			},
 			// Meta-Daten
@@ -542,6 +559,10 @@ const resources: Resource = {
 			riderSeats: 'Fahrer Plätz',
 			name: 'Name',
 			email: 'E-Mail',
+			createdBy: 'Ersteut vo',
+			modifiedBy: 'Gänderet vo',
+			infoTextActivityTraceInfo: 'Hiä gsesch wär d ihstellig aus letsts Veränderet het.',
+			on: 'am',
 			clearValue: 'Lösch d Uswau',
 			phone: 'Telefonnummer',
 			personType: 'Personetyp',

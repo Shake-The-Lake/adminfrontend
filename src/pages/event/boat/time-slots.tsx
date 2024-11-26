@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {defaultTimeSlot} from '../../../models/api/time-slot.model';
+import React, { useState } from 'react';
+import { getDefaultTimeSlotBasedOnBoat, getDefaultTimeSlotBasedOnPrevious, TimeSlotType } from '../../../models/api/time-slot.model';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
 import {
@@ -10,27 +10,27 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import {type BoatDto} from '../../../models/api/boat.model';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
+import { type BoatDto } from '../../../models/api/boat.model';
 import EditTimeSlotTableCell from '../../../components/table/edit-time-slot-table-cell';
-import {type QueryClient} from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import {
 	timeslotsForBoatOptions,
 	useCreateTimeSlot,
 	useDeleteTimeSlot,
 	useGetTimeSlotsForBoat,
 } from '../../../queries/time-slot';
-import {MutationToaster} from '../../../components/common/mutation-toaster';
-import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
+import { useMutationToaster } from '../../../components/common/mutation-toaster';
+import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
 } from '../../../lib/utils';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
@@ -47,17 +47,23 @@ export const loader =
 		};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
-	const {eventId, boatId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+	const { eventId, boatId } = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
 	>;
 
-	const {i18n, t} = useTranslation();
+	const { i18n, t } = useTranslation();
 
-	const {data: timeSlots} = useGetTimeSlotsForBoat(eventId, boatId);
+	const { data: timeSlots } = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
 	const createMutation = useCreateTimeSlot(boatId, eventId);
 	const deleteMutation = useDeleteTimeSlot(boatId, eventId);
+
+	useMutationToaster({ type: 'delete', mutation: deleteMutation });
+
+	const currentDefaultModel = timeSlots === undefined || timeSlots.length === 0
+		? getDefaultTimeSlotBasedOnBoat(boat)
+		: getDefaultTimeSlotBasedOnPrevious(timeSlots[timeSlots.length - 1], boat);
 
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);
@@ -69,8 +75,6 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 
 	return (
 		<div>
-			<MutationToaster type="delete" mutation={deleteMutation} />
-
 			<div className="flex flex-wrap justify-between gap-5">
 				<>
 					<h1>{t('timeSlot.title')}</h1>
@@ -84,7 +88,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						isCard={false}
 						formId="timeSlot">
 						<TimeSlotForm
-							model={{...defaultTimeSlot, boatId: boat.id}}
+							model={currentDefaultModel}
 							mutation={createMutation}
 							boat={boat}
 							isCreate={true}
@@ -101,7 +105,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 						<TableRow>
 							<TableHead>{t('from')}</TableHead>
 							<TableHead>{t('to')}</TableHead>
-							<TableHead>{t('type')}</TableHead>
+							<TableHead>{t('timeSlot.status')}</TableHead>
 							<TableHead>{t('activityType.title')}</TableHead>
 							<TableHead></TableHead>
 						</TableRow>
@@ -117,7 +121,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 										{getDisplayTimeFromBackend(slot?.untilTime)}
 									</TableCell>
 									<TableCell>
-										{slot.status === 'AVAILABLE'
+										{slot.status === TimeSlotType.AVAILABLE
 											? t('timeSlot.statusAvailable')
 											: t('timeSlot.statusBreak')}
 									</TableCell>

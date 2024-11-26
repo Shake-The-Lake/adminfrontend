@@ -14,7 +14,7 @@ import {useTranslation} from 'react-i18next';
 
 // Schema definition
 export const loginFormSchema = z.object({
-	username: z.string(),
+	username: z.string().email({ message: 'Invalid email address' }),
 	password: z.string(),
 });
 
@@ -45,15 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			login(loginData.username, loginData.password);
-
 			await login(loginData.username, loginData.password);
-
-			const isAuthenticated = await useAuth().isAuthenticated;
-
-			if (!isAuthenticated) {
-				toast.error('Error trying to login...');
-			}
 
 			const redirectTo = localStorage.getItem('redirectAfterLogin');
 
@@ -63,6 +55,8 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 				} else {
 					navigate(redirectTo, {replace: true});
 				}
+			} else {
+				toast.error('Error trying to login...');
 			}
 		} catch (error) {
 			toast.error(t('tryAgain'), {
