@@ -16,7 +16,7 @@ export function getDisplayTimeFromBackend(value: string | undefined) {
 }
 
 export function toSwissLocaleDateString(date: Date) {
-	return new Date(date).toLocaleDateString('de-CH');
+	return new Date(date).toLocaleDateString('de-CH', {day: '2-digit', month:'2-digit', year: 'numeric'});
 }
 
 export function toSwissLocalDateTimeString(date: Date) {

@@ -27,7 +27,9 @@ export const loader =
 				throw new Error('No boat ID provided');
 			}
 
-			await queryClient.ensureQueryData(boatDetailOptions(routeIds.boatId));
+			await queryClient.ensureQueryData(
+				boatDetailOptions(routeIds.eventId, routeIds.boatId),
+			);
 			return routeIds;
 		};
 
@@ -37,7 +39,7 @@ const BoatPage: React.FC = () => {
 	>;
 	const { data: boat, error } = useBoatDetail(boatId, eventId);
 
-	const updateMutation = useUpdateBoat(boatId);
+	const updateMutation = useUpdateBoat(eventId, boatId);
 
 	const { t } = useTranslation();
 

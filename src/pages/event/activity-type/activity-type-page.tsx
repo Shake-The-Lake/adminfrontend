@@ -28,7 +28,7 @@ export const loader =
 			}
 
 			await queryClient.ensureQueryData(
-				activityTypeDetailOptions(routeIds.activityTypeId),
+				activityTypeDetailOptions(routeIds.eventId, routeIds.activityTypeId),
 			);
 
 			return routeIds;
@@ -43,7 +43,7 @@ const ActivityTypePage: React.FC = () => {
 		eventId,
 	);
 
-	const updateMutation = useUpdateActivityType(activityTypeId);
+	const updateMutation = useUpdateActivityType(eventId, activityTypeId);
 
 	const { t, i18n } = useTranslation();
 

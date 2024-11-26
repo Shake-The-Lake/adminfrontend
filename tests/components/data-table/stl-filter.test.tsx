@@ -17,6 +17,11 @@ vi.mock('react-i18next', async (importOriginal) => {
   };
 });
 
+vi.mock('../../../src/queries/shared', () => ({
+  mutationKeyGenerator: vi.fn().mockReturnValue('key'),
+  getBaseQueryKey: vi.fn().mockReturnValue('key'),
+}));
+
 const mockParams: StlFilterParams = {
   onSearchTermChange: vi.fn(),
   onActivityTypeChange: vi.fn(),

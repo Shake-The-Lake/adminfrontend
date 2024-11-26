@@ -99,6 +99,6 @@ export function extractTypedInfoFromRouteParams(params: Params) {
 		activityTypeId: params.activityTypeId ? Number(params.activityTypeId) : 0,
 		boatId: params.boatId ? Number(params.boatId) : 0,
 		timeSlotId: params.timeSlotId ? Number(params.timeSlotId) : 0,
-		bookingId: params.bookingId ? Number(params.bookingId) : undefined,
+		bookingId: params.bookingId ? Number(params.bookingId) : 0,
 	};
 }

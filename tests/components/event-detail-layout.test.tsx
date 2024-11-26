@@ -4,6 +4,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
 import EventDetailLayout from '../../src/components/event-detail-layout';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -19,6 +20,9 @@ vi.mock('react-router-dom', async () => {
     useLoaderData: () => ({ eventId: '1' }),
   };
 });
+vi.mock('../../src/queries/shared', () => ({
+  mutationKeyGenerator: vi.fn().mockReturnValue('key'),
+}));
 
 vi.mock('@tanstack/react-query', async (importOriginal) => {
   const actual = await importOriginal();
@@ -46,13 +50,17 @@ vi.mock('../../src/components/footer/footer', () => ({
 }));
 
 describe('EventDetailLayout', () => {
+  const queryClient = new QueryClient();
+
   it('renders the SideNavigation, HeaderEvent, and Footer components', () => {
     render(
-      <Router>
-        <Routes>
-          <Route path="/" element={<EventDetailLayout />} />
-        </Routes>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<EventDetailLayout />} />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     );
 
     expect(screen.getByText('SideNavigation')).toBeInTheDocument();
@@ -62,11 +70,13 @@ describe('EventDetailLayout', () => {
 
   it('renders the event title', () => {
     render(
-      <Router>
-        <Routes>
-          <Route path="/" element={<EventDetailLayout />} />
-        </Routes>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<EventDetailLayout />} />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     );
 
     expect(screen.getByText('Event Title')).toBeInTheDocument();
@@ -74,11 +84,13 @@ describe('EventDetailLayout', () => {
 
   it('renders the Outlet component', () => {
     render(
-      <Router>
-        <Routes>
-          <Route path="/" element={<EventDetailLayout />} />
-        </Routes>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<EventDetailLayout />} />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     );
 
     expect(screen.getByText('Footer')).toBeInTheDocument();
