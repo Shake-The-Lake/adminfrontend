@@ -1,6 +1,6 @@
 import React from 'react';
-import { z } from 'zod';
-import { type SubmitHandler, useForm, Controller } from 'react-hook-form';
+import {z} from 'zod';
+import {Controller, type SubmitHandler, useForm} from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -9,16 +9,16 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import { Input } from '../ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TimeSlotType, type TimeSlotDto } from '../../models/api/time-slot.model';
-import { onInvalidFormHandler, useEmitSuccessIfSucceeded } from '../../lib/utils';
-import { type BoatDto } from '../../models/api/boat.model';
-import { type UseMutationResult } from '@tanstack/react-query';
-import { useMutationToaster } from '../common/mutation-toaster';
+import {Input} from '../ui/input';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {TimeSlotType,type TimeSlotDto} from '../../models/api/time-slot.model';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {type BoatDto} from '../../models/api/boat.model';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useMutationToaster} from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
-import { validateTime } from '../../lib/date-time.utils';
-import { useTranslation } from 'react-i18next';
+import {validateTime} from '../../lib/date-time.utils';
+import {useTranslation} from 'react-i18next';
 import StlSelect from '../select/stl-select';
 import { timeSlotTypeOptions } from '../../constants/constants';
 
@@ -30,7 +30,7 @@ const TimeSlotSchema = z.object({
 	activityTypeId: z
 		.number()
 		.min(1)
-		.or(z.string().min(1, { message: 'Required' })),
+		.or(z.string().min(1, {message: 'Required'})),
 	status: z.nativeEnum(TimeSlotType),
 });
 
@@ -38,10 +38,10 @@ export type TimeSlotFormSchema = z.infer<typeof TimeSlotSchema>;
 
 export type TimeSlotFormProps = {
 	model: TimeSlotDto;
-	mutation: UseMutationResult<any, Error, TimeSlotDto>; // First any is return type, second is input
+	mutation: UseMutationResult<any, Error, TimeSlotDto>;
 	isCreate: boolean;
 	boat?: BoatDto;
-	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
+	onSuccessfullySubmitted: () => void;
 };
 
 const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
@@ -56,7 +56,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 		defaultValues: model,
 		resolver: zodResolver(TimeSlotSchema),
 	});
-	const { t } = useTranslation();
+	const {t} = useTranslation();
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
@@ -81,50 +81,52 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 
 	return (
 		<Form {...form}>
-			<form
-				id="timeSlot"
-				role="form"
-				className="p-1 space-y-4 w-full"
-				onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
-				<FormField
-					name="fromTime"
-					control={form.control}
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>{t('from')}</FormLabel>
-							<FormControl>
-								<Input
-									placeholder={t('timeSlot.timeFormat')}
-									{...field}
-									className="input"
-									type="time"
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}></FormField>
-				<FormField
-					name="untilTime"
-					control={form.control}
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>{t('to')}</FormLabel>
-							<FormControl>
-								<Input
-									placeholder={t('timeSlot.timeFormat')}
-									{...field}
-									className="input"
-									type="time"
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}></FormField>
-				<Controller
-					name="activityTypeId"
-					control={form.control}
-					render={({ field }) => <ActivityTypeSelect field={field} />}
-				/>
+				<form
+					id="timeSlot"
+					role="form"
+					className="p-1 space-y-4 w-full"
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}>
+					<FormField
+						name="fromTime"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('from')}</FormLabel>
+								<FormControl>
+									<Input
+										placeholder={t('timeSlot.timeFormat')}
+										{...field}
+										className="input"
+										type="time"
+										data-testid="timeSlot.fromTime"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}></FormField>
+					<FormField
+						name="untilTime"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('to')}</FormLabel>
+								<FormControl>
+									<Input
+										placeholder={t('timeSlot.timeFormat')}
+										{...field}
+										className="input"
+										type="time"
+										data-testid="timeSlot.untilTime"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}></FormField>
+					<Controller
+						name="activityTypeId"
+						control={form.control}
+						render={({field}) => <ActivityTypeSelect field={field} />}
+					/>
 				<FormField
 					name="status"
 					control={form.control}

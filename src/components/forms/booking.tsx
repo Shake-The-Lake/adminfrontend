@@ -113,14 +113,16 @@ const BookingForm: React.FC<BookingFormProps> = ({
 								control={form.control}
 								render={({field}) => (
 									<StlSelect
-										value={field.value ? 'driver' : 'viewer'}
-										onValueChange={(value) => {
-											field.onChange(value === 'driver');
-										}}
-										defaultValue="viewer"
-										list={getIsRiderOptions(t)}
-										getKey={(item) => item?.key}
-										getLabel={(item) => item!.label}
+										data-testid="booking-is-rider"
+											value={field.value ? 'driver' : 'viewer'}
+											onValueChange={(value) => {
+												field.onChange(value === 'driver');
+											}}
+											defaultValue="viewer"
+											list={getIsRiderOptions(t)}
+											getKey={(item) => item?.key}
+											getLabel={(item) => item!.label}
+											dataTestId="driverOrViewerDropdown"
 									/>
 								)}
 							/>
@@ -135,7 +137,11 @@ const BookingForm: React.FC<BookingFormProps> = ({
 							<FormItem>
 								<FormLabel>{t('pagerNumber')}</FormLabel>
 								<FormControl>
-									<Input placeholder={t('pagerNumber')} {...field} />
+									<Input
+											placeholder={t('pagerNumber')}
+											{...field}
+											data-testid="booking-pager-number"
+										/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -147,7 +153,10 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					<Button type="button" variant="secondary" onClick={handleCancel}>
 						{t('cancel')}
 					</Button>
-					<Button type="submit" className="ml-4">
+					<Button
+							type="submit"
+							className="ml-4"
+							data-testid="booking-submit-button">
 						{t('save')}
 					</Button>
 				</div>

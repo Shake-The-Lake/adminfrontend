@@ -11,7 +11,6 @@ import {
 } from '../ui/form';
 import {Input} from '../ui/input';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Button} from '../ui/button';
 import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
 import {type BoatDto} from '../../models/api/boat.model';
 import {useParams} from 'react-router-dom';
@@ -97,37 +96,48 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						<FormItem>
 							<FormLabel>{t('boat.name')}</FormLabel>
 							<FormControl>
-								<Input placeholder={t('boat.name')} {...field} className="input" />
+								<Input
+										placeholder={t('boat.name')}
+										{...field}
+										className="input"
+										data-testid="boat.name"
+									/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
 
-				<FormField
-					name="type"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('boat.type')}</FormLabel>
-							<FormControl>
-								<Input placeholder={t('boat.type')} {...field} className="input" />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					name="operator"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('boatDriver')}</FormLabel>
-							<FormControl>
-								<Input
-									placeholder={t('boatDriver')}
-									{...field}
-									className="input"
+					<FormField
+						name="type"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('boat.type')}</FormLabel>
+								<FormControl>
+									<Input
+										placeholder={t('boat.type')}
+										{...field}
+										className="input"
+										data-testid="boat.type"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						name="operator"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('boatDriver')}</FormLabel>
+								<FormControl>
+									<Input
+										placeholder={t('boatDriver')}
+										{...field}
+										className="input"
+										data-testid="boat.driver"
 								/>
 							</FormControl>
 							<FormMessage />
@@ -135,24 +145,25 @@ const BoatForm: React.FC<BoatFormProps> = ({
 					)}
 				/>
 
-				<FormField
-					name="seatsRider"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('boat.maxSeats')}</FormLabel>
-							<FormControl>
-								<Input
-									type="number"
-									placeholder="0"
-									{...field}
-									className="input"
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+					<FormField
+						name="seatsRider"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('boat.maxSeats')}</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="0"
+										{...field}
+										className="input"
+										data-testid="boat.maxSeatsRiders"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
 				<FormField
 					name="seatsViewer"
@@ -163,7 +174,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 							<FormControl>
 								<Input
 									type="number"
-									data-testid="maxSeatsViewers"
+									data-testid="boat.maxSeatsViewers"
 									placeholder="0"
 									{...field}
 									className="input"
@@ -181,32 +192,36 @@ const BoatForm: React.FC<BoatFormProps> = ({
 						<FormItem>
 							<FormLabel>{t('boat.availableFrom')}</FormLabel>
 							<FormControl>
-								<Input type="time" {...field} className="input" data-testid="availableFrom" />
+								<Input
+										type="time"
+										{...field}
+										className="input"
+										data-testid="boat.availableFrom"
+									/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
 
-				<FormField
-					name="availableUntil"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('boat.availableUntil')}</FormLabel>
-							<FormControl>
-								<Input type="time" {...field} className="input" data-testid="availableUntil" />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<div
-					className="mt-16 flex justify-end w-full"
-					style={isCreate ? {display: 'none'} : {}}>
-					<Button type="submit">{t('save')}</Button>
-				</div>
+					<FormField
+						name="availableUntil"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('boat.availableUntil')}</FormLabel>
+								<FormControl>
+									<Input
+										type="time"
+										{...field}
+										className="input"
+										data-testid="boat.availableUntil"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 			</form>
 		</Form>
 	);

@@ -44,7 +44,7 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 			password: values.password,
 		};
 		try {
-			await login(loginData.username, loginData.password);
+			login(loginData.username, loginData.password);
 		} catch (error) {
 			toast.error(t('tryAgain'), {
 				description: t('login.error'),
