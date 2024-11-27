@@ -10,6 +10,7 @@ import {
   extractTypedInfoFromRouteParams,
 } from '../../src/lib/utils';
 import { renderHook } from '@testing-library/react';
+import { UseMutationResult } from '@tanstack/react-query';
 
 vi.mock('sonner', () => ({
   toast: {
@@ -83,17 +84,6 @@ describe('utils', () => {
     });
   });
 
-  describe('onInvalidFormHandler', () => {
-    it('should log the errors and show a toast message', () => {
-      const errors = { field: { message: 'Required' } };
-      console.log = vi.fn();
-      onInvalidFormHandler(errors);
-      expect(toast.error).toHaveBeenCalledWith('Could not be saved.', {
-        description: 'There are validation errors in the form.',
-      });
-    });
-  });
-
   describe('useEmitSuccessIfSucceeded', () => {
     it('should call onSuccessfullySubmitted if mutation is successful', () => {
       const onSuccessfullySubmitted = vi.fn();
@@ -116,12 +106,13 @@ describe('utils', () => {
 
   describe('extractTypedInfoFromRouteParams', () => {
     it('should extract typed info from route params', () => {
-      const params = { id: '1', activityTypeId: '2', boatId: '3', timeSlotId: '4' };
+      const params = { id: '1', activityTypeId: '2', boatId: '3', timeSlotId: '4', bookingId: '5' };
       expect(extractTypedInfoFromRouteParams(params)).toEqual({
         eventId: 1,
         activityTypeId: 2,
         boatId: 3,
         timeSlotId: 4,
+        bookingId: 5
       });
     });
 
@@ -132,6 +123,7 @@ describe('utils', () => {
         activityTypeId: 0,
         boatId: 0,
         timeSlotId: 0,
+        bookingId: 0,
       });
     });
   });

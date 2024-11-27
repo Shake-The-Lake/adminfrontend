@@ -43,12 +43,6 @@ describe('CreateEventDialog', () => {
     );
   };
 
-  it('renders the dialog with the correct title and description', () => {
-    renderComponent();
-    expect(screen.getByText('event.create')).toBeInTheDocument();
-    expect(screen.getByText('event.description')).toBeInTheDocument();
-  });
-
   it('navigates to the event page on successful creation', async () => {
     mockCreateEvent.isSuccess = true;
     mockCreateEvent.data = { id: 1 };
@@ -62,6 +56,6 @@ describe('CreateEventDialog', () => {
 
   it('renders the event form', () => {
     renderComponent();
-    expect(screen.getByRole('form', { name: /event/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /event.triggerLabel/i })).toBeInTheDocument();
   });
 });

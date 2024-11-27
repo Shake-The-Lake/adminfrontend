@@ -21,7 +21,8 @@ type StlSelectProps<T> = {
 	getLabel: (e?: T) => string;
 };
 
-export const StlSelectDefaultLabelKey = 'select';
+// eslint-disable-next-line @typescript-eslint/no-inferrable-types
+export const StlSelectDefaultLabelKey: string = 'select';
 
 // eslint-disable-next-line @typescript-eslint/comma-dangle
 const StlSelect = <T,>({

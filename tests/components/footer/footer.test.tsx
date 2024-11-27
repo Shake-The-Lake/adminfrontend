@@ -45,6 +45,6 @@ describe('Footer', () => {
     const logo = screen.getByAltText('ti&m Logo');
     expect(logo).toBeInTheDocument();
 
-    expect(screen.getByLabelText('Language Selector')).toBeInTheDocument();
+    expect(screen.getByLabelText('langSwitcher.ariaLabel')).toBeInTheDocument();
   });
 });

@@ -7,49 +7,71 @@ import {
 	useQueryClient,
 	type QueryKey,
 } from '@tanstack/react-query';
-import {createTimeSlot, deleteTimeSlot, getTimeSlotById, updateTimeSlot, getAllTimeSlotsFromEvent, getAllTimeSlotsFromBoat} from '../services/time-slot-service';
-import {boatKeys} from './boat';
+import {
+	createTimeSlot,
+	deleteTimeSlot,
+	getTimeSlotById,
+	updateTimeSlot,
+	getAllTimeSlotsFromEvent,
+	getAllTimeSlotsFromBoat,
+} from '../services/time-slot-service';
+import {boatQueryKeys} from './boat';
+import {
+	getBaseQueryKey,
+	invalidateFromBookingMetaDataRelevantQuery,
+	mutationKeyGenerator,
+} from './shared';
 
-export const timeSlotKeys = {
-	forEvent: (eventId: number) => ['time-slots', eventId] as QueryKey,
-	forBoat: (eventId: number, boatId: number) => ['time-slots', eventId, 'boat', boatId] as QueryKey, // Todo! verify this gets invalidated at same time as above
-	detail: (id: number) => ['time-slots', 'detail', id] as QueryKey,
+const identifier = 'time-slots';
+
+const baseQueryKey = (eventId: number) => getBaseQueryKey(eventId, identifier);
+
+export const timeSlotQueryKeys = {
+	all: baseQueryKey,
+	boatDetail: (eventId: number, boatId: number) =>
+		[...baseQueryKey(eventId), 'boat-detail', boatId] as QueryKey,
+	detail: (eventId: number, id: number) =>
+		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
-export const timeslotsForEventOptions = (eventId: number) => queryOptions({
-	queryKey: timeSlotKeys.forEvent(eventId),
-	queryFn: async () => getAllTimeSlotsFromEvent(eventId),
-});
+export const timeSlotMutationKeys = mutationKeyGenerator(identifier);
+
+export const timeslotsForEventOptions = (eventId: number) =>
+	queryOptions({
+		queryKey: timeSlotQueryKeys.all(eventId),
+		queryFn: async () => getAllTimeSlotsFromEvent(eventId),
+	});
 
 export function useGetTimeSlotsForEvent(eventId: number) {
 	return useQuery(timeslotsForEventOptions(eventId));
 }
 
-export const timeslotsForBoatOptions = (eventId: number, boatId: number) => queryOptions({
-	queryKey: timeSlotKeys.forBoat(eventId, boatId),
-	queryFn: async () => getAllTimeSlotsFromBoat(eventId, boatId),
-});
+export const timeslotsForBoatOptions = (eventId: number, boatId: number) =>
+	queryOptions({
+		queryKey: timeSlotQueryKeys.boatDetail(eventId, boatId),
+		queryFn: async () => getAllTimeSlotsFromBoat(eventId, boatId),
+	});
 
 export function useGetTimeSlotsForBoat(eventId: number, boatId: number) {
 	return useQuery(timeslotsForBoatOptions(eventId, boatId));
 }
 
-export const timeslotDetailOptions = (id: number) => queryOptions({
-	queryKey: timeSlotKeys.detail(id),
-	queryFn: async () => getTimeSlotById(id),
-});
+export const timeslotDetailOptions = (eventId: number, id: number) =>
+	queryOptions({
+		queryKey: timeSlotQueryKeys.detail(eventId, id),
+		queryFn: async () => getTimeSlotById(id),
+	});
 
-export function useTimeSlotDetail(
-	queryClient: QueryClient,
-	id: number,
-	eventId: number,
-) {
+export function useTimeSlotDetail(eventId: number, id: number) {
+	const queryClient = useQueryClient();
+
 	return useQuery({
-		...timeslotDetailOptions(id),
+		...timeslotDetailOptions(eventId, id),
 		initialData() {
-			const queryData: TimeSlotDto[] | undefined = queryClient
-				.getQueryData(timeSlotKeys.forEvent(eventId));
-			return queryData?.find(t => t.id === id);
+			const queryData: TimeSlotDto[] | undefined = queryClient.getQueryData(
+				timeSlotQueryKeys.all(eventId),
+			);
+			return queryData?.find((t) => t.id === id);
 		},
 	});
 }
@@ -57,35 +79,59 @@ export function useTimeSlotDetail(
 export function useCreateTimeSlot(boatId: number, eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: timeSlotMutationKeys.create,
 		mutationFn: createTimeSlot,
-		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: timeSlotKeys.forEvent(eventId)}); // Not exact to catch forBoat as well
-			await queryClient.invalidateQueries({queryKey: boatKeys.detail(boatId), exact: true});
+		async onSuccess(data) {
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				boatId,
+				data?.id ?? 0,
+				data,
+			);
 		},
 	});
 }
 
-// Todo! for below, invalidate all queries for schedule and bookings as well. but make sure not too many, so the same data will get reloaded x times..
 export function useUpdateTimeSlot(id: number, eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: timeSlotMutationKeys.update,
 		mutationFn: async (timeslot: TimeSlotDto) => updateTimeSlot(id, timeslot),
 		async onSuccess(data) {
-			await queryClient.invalidateQueries({queryKey: timeSlotKeys.detail(id), exact: true});
-			await queryClient.invalidateQueries({queryKey: timeSlotKeys.forEvent(eventId)}); // Not exact to catch forBoat as well
-			await queryClient.invalidateQueries({queryKey: boatKeys.detail(data?.boatId ?? 0), exact: true});
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				data?.boatId,
+				id,
+				data,
+			);
 		},
 	});
 }
 
-// Todo! for below, invalidate all queries for schedule and bookings as well.
 export function useDeleteTimeSlot(boatId: number, eventId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
+		mutationKey: timeSlotMutationKeys.delete,
 		mutationFn: deleteTimeSlot,
 		async onSuccess() {
-			await queryClient.invalidateQueries({queryKey: timeSlotKeys.forEvent(eventId)}); // Not exact to catch forBoat as well
-			await queryClient.invalidateQueries({queryKey: boatKeys.detail(boatId), exact: true});
+			await queriesToInvalidateOnCrud(queryClient, eventId, boatId);
 		},
+	});
+}
+
+async function queriesToInvalidateOnCrud(
+	queryClient: QueryClient,
+	eventId: number,
+	boatId?: number,
+	timeSlotId?: number,
+	data?: TimeSlotDto,
+) {
+	await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId); // Own invalidation is contained
+
+	await queryClient.invalidateQueries({
+		queryKey: boatQueryKeys.detail(eventId, boatId ?? 0),
+		exact: true,
 	});
 }

@@ -8,26 +8,27 @@ import {
 	type Channel,
 	type Theme,
 } from 'planby';
-import {useQueryClient, type QueryClient} from '@tanstack/react-query';
-import {useLoaderData, type LoaderFunctionArgs} from 'react-router-dom';
-import {boatsOptions, useGetBoats} from '../../../queries/boat';
-import {useEventDetail} from '../../../queries/event';
-import {ProgramItem} from '../../../components/planby/program-item';
-import {fromTimeToDateTime} from '../../../lib/date-time.utils';
+import { type QueryClient } from '@tanstack/react-query';
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router-dom';
+import { boatsOptions, useGetBoats } from '../../../queries/boat';
+import { useEventDetail } from '../../../queries/event';
+import { ProgramItem } from '../../../components/planby/program-item';
+import { fromTimeToDateTime } from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
 } from '../../../lib/utils';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import {
 	timeslotsForEventOptions,
 	useGetTimeSlotsForEvent,
 } from '../../../queries/time-slot';
+import { TimeSlotType } from '../../../models/api/time-slot.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
@@ -44,30 +45,28 @@ export const loader =
 			return routeIds;
 		};
 
-const SchedulePage: React.FC = () => {
-	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
-	>;
-	const {i18n, t} = useTranslation();
+const scheduleColors = [
+	'var(--primary-blue)', // '#004D9F',
+	'var(--primary-blue-dark)', // '#002650',
+	'var(--primary-green)', // '#0EC8C8',
+	'#6B46C1',
+];
 
-	const queryClient = useQueryClient();
-	const {data: event} = useEventDetail(queryClient, eventId, false);
-	const {data: boats} = useGetBoats(eventId);
-	const {data: timeSlots} = useGetTimeSlotsForEvent(eventId);
+const breakScheduleColor = '#F48A4E';
+
+const SchedulePage: React.FC = () => {
+	const { eventId } = useLoaderData() as Awaited<
+		ReturnType<ReturnType<typeof loader>>
+	>;
+	const { i18n, t } = useTranslation();
+
+	const { data: event } = useEventDetail(eventId, false);
+	const { data: boats } = useGetBoats(eventId);
+	const { data: timeSlots } = useGetTimeSlotsForEvent(eventId);
 
 	const mapColor = (type: number) => {
-		switch (type) {
-			case 1:
-				return '#0EC8C8';
-			case 2:
-				return '#6B46C1';
-			case 3:
-				return '#D53F8C';
-			case 4:
-				return '#FF0000';
-			default:
-				return '#002650';
-		}
+		const colorIndex = type % scheduleColors.length;
+		return scheduleColors[colorIndex];
 	};
 
 	if (boats === undefined) {
@@ -75,12 +74,13 @@ const SchedulePage: React.FC = () => {
 	}
 
 	const programs: Program[] = Array.from(timeSlots ?? []).map((timeSlot) => {
-		const activityTypeName =
+		const isBreak = timeSlot?.status === TimeSlotType.ON_BREAK;
+		const slotName = isBreak ? t('timeSlot.statusBreak') :
 			getTranslation(i18n.language, timeSlot.activityType?.name) ?? '';
 		const program: Program = {
 			id: timeSlot.id.toString(),
-			color: mapColor(timeSlot?.activityTypeId ?? 0),
-			title: activityTypeName,
+			color: isBreak ? breakScheduleColor : mapColor(timeSlot?.activityTypeId ?? 0),
+			title: slotName,
 			channelId: timeSlot.boatId,
 			channelUuid: timeSlot.boatId?.toString() ?? '',
 			description: timeSlot.boat!.name,
@@ -103,13 +103,14 @@ const SchedulePage: React.FC = () => {
 		name: boat.name,
 		logo: 'https://via.placeholder.com/150',
 		uuid: boat?.id?.toString() ?? '',
-		position: {top: 0, height: 0},
+		position: { top: 0, height: 0 },
 	}));
-	const {getEpgProps, getLayoutProps} = useEpg({
+	const { getEpgProps, getLayoutProps } = useEpg({
 		epg: programs,
 		channels,
 		startDate: event?.date,
 		theme: stlPlanByTheme,
+		dayWidth: 4000,
 	});
 
 	return (
@@ -118,10 +119,10 @@ const SchedulePage: React.FC = () => {
 				<Epg {...getEpgProps()}>
 					<Layout
 						{...getLayoutProps()}
-						renderProgram={({program}) => (
+						renderProgram={({ program }) => (
 							<ProgramItem key={program.data.id} program={program} />
 						)}
-						renderChannel={({channel}) => (
+						renderChannel={({ channel }) => (
 							<div
 								key={channel.uuid}
 								className="w-full h-20 font-semibold text-right flex place-content-end items-center p-3">

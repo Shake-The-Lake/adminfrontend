@@ -1,7 +1,8 @@
+import {type BaseModel} from './base.model';
 import {type PersonDto} from './person.model';
 import {type TimeSlotDto} from './time-slot.model';
 
-export type BookingDto = {
+export type BookingDto = BaseModel & {
 	id?: number;
 	isRider: boolean;
 	isManual: boolean;
@@ -19,4 +20,6 @@ export const defaultBooking: BookingDto = {
 	pagerNumber: undefined,
 	personId: 0,
 	timeSlotId: 0,
+	createdBy: 'timon',
+	modifiedBy: 'tim',
 };
