@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {type SubmitHandler, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
@@ -13,7 +13,7 @@ import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 export const loginFormSchema = z.object({
-	username: z.string().email({message: 'Invalid email address'}),
+	username: z.string(),
 	password: z.string(),
 });
 
@@ -45,26 +45,24 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 		};
 		try {
 			login(loginData.username, loginData.password);
-
-			const redirectTo = localStorage.getItem('redirectAfterLogin');
-
-			if (isAuthenticated) {
-				if (!redirectTo || redirectTo === '/login') {
-					navigate('/', {replace: true});
-				} else {
-					navigate(redirectTo, {replace: true});
-				}
-			} else {
-				toast.error('Error trying to login...');
-			}
 		} catch (error) {
-			console.log(error);
 			toast.error(t('tryAgain'), {
 				description: t('login.error'),
 			});
 			form.reset();
 		}
 	};
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			const redirectTo = localStorage.getItem('redirectAfterLogin') || '/';
+			if (redirectTo === '/login') {
+				navigate('/', {replace: true});
+			} else {
+				navigate(redirectTo, {replace: true});
+			}
+		}
+	}, [isAuthenticated, navigate]);
 
 	return (
 		<>
@@ -106,7 +104,6 @@ const LoginForm: React.FC<LoginFormProps> = ({model}) => {
 							</FormItem>
 						)}
 					/>
-
 					<div className="mt-16 flex justify-end w-full">
 						<Button type="submit">{t('login.login')}</Button>
 					</div>
