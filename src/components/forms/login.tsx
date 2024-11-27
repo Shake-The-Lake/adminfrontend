@@ -12,7 +12,6 @@ import {toast} from 'sonner';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-// Schema definition
 export const loginFormSchema = z.object({
 	username: z.string().email({message: 'Invalid email address'}),
 	password: z.string(),
