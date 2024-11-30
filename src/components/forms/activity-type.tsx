@@ -90,10 +90,12 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
+		// Wish of customer not in release 1
 		// Const englishErrors =
 		// 	errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
 		const germanErrors =
 			errors.name?.de ?? errors.description?.de ?? errors.checklist?.de;
+		// Wish of customer not in release 1
 		// Const swissGermanErrors =
 		// 	errors.name?.swissGerman ??
 		// 	errors.description?.swissGerman ??
@@ -118,7 +120,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				role="form"
 				onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
 				{/* <Tabs defaultValue={i18n.language}> */}
-				<Tabs defaultValue='de'>
+				<Tabs defaultValue={i18n.language}>
 					<TabsList className="w-full hidden justify-start gap-1">
 						<TabsTrigger
 							value="en"

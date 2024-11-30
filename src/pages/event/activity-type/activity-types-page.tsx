@@ -76,9 +76,9 @@ const ActivityTypesPage = () => {
 							<div key={activityType.id} className="flex justify-center">
 								<StlCard
 									id={activityType.id}
-									title={getTranslation('de', activityType.name)}
+									title={getTranslation(i18n.language, activityType.name)}
 									description={getTranslation(
-										'de',
+										i18n.language,
 										activityType.description,
 									)}
 									link={activityType.id.toString()}

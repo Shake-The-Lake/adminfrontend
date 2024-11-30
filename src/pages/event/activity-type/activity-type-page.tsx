@@ -14,6 +14,7 @@ import {
 import { type QueryClient } from '@tanstack/react-query';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import i18n from '../../../assets/i18n/i18n';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -51,7 +52,7 @@ const ActivityTypePage: React.FC = () => {
 			<div className="flex flex-col items-center">
 				<h2 className="w-full mb-6">
 					{t('activityType.title')} -{' '}
-					{getTranslation('de', activityType?.name)}
+					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
 				<ActivityTraceInfo
 					{...activityType}
