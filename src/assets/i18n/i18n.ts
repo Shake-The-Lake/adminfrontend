@@ -1,6 +1,6 @@
-import i18n, {type Resource} from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {en, languages} from '../../constants';
+import i18n, { type Resource } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { en, languages } from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -150,7 +150,7 @@ const resources: Resource = {
 				successCreate: 'Item was created successfully!',
 				successUpdate: 'Item was saved successfully!',
 				successDelete: 'Item was deleted successfully!',
-				errorSuccess: 'There was an error when creating.',
+				errorCreate: 'There was an error when creating.',
 				errorUpdate: 'There was an error when saving.',
 				errorDelete: 'There was an error when deleting.',
 				validationErrorTitle: 'Could not be saved.',
@@ -343,7 +343,7 @@ const resources: Resource = {
 				successCreate: 'Das Element wurde erfolgreich erstellt!',
 				successUpdate: 'Das Element wurde erfolgreich gespeichert!',
 				successDelete: 'Das Element wurde erfolgreich gelöscht!',
-				errorSuccess: 'Es gab einen Fehler beim Erstellen.',
+				errorCreate: 'Es gab einen Fehler beim Erstellen.',
 				errorUpdate: 'Es gab einen Fehler beim Speichern.',
 				errorDelete: 'Es gab einen Fehler beim Löschen.',
 				validationErrorTitle: 'Konnte nicht gespeichert werden.',
@@ -535,7 +535,7 @@ const resources: Resource = {
 				successCreate: 'Ds Element isch erfolgrich erstellt worde!',
 				successUpdate: 'Ds Element isch erfolgrich gspicheret worde!',
 				successDelete: 'Ds Element isch erfolgrich glöscht worde!',
-				errorSuccess: 'Es isch en Fehler passiert bim Erstelle.',
+				errorCreate: 'Es isch en Fehler passiert bim Erstelle.',
 				errorUpdate: 'Es isch en Fehler passiert bim Speichere.',
 				errorDelete: 'Es isch en Fehler passiert bim Lösche.',
 				validationErrorTitle: 'Hett nid chönne gspichert wärde.',
