@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
 	Select,
 	SelectContent,
@@ -7,9 +6,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select';
-import { Button } from '../ui/button';
-import { X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import {Button} from '../ui/button';
+import {X} from 'lucide-react';
+import {useTranslation} from 'react-i18next';
 
 type StlSelectProps<T> = {
 	value: string | undefined;
@@ -19,12 +18,11 @@ type StlSelectProps<T> = {
 	defaultValue?: string;
 	getKey: (e?: T) => string | undefined;
 	getLabel: (e?: T) => string;
+	dataTestId?: string;
 };
-
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
 export const StlSelectDefaultLabelKey: string = 'select';
 
-// eslint-disable-next-line @typescript-eslint/comma-dangle
 const StlSelect = <T,>({
 	value,
 	onValueChange,
@@ -33,6 +31,7 @@ const StlSelect = <T,>({
 	defaultValue,
 	getKey,
 	getLabel,
+	dataTestId,
 }: StlSelectProps<T>) => {
 	const {t} = useTranslation();
 
@@ -42,7 +41,8 @@ const StlSelect = <T,>({
 
 	return (
 		<Select value={value} onValueChange={onValueChange}>
-			<SelectTrigger>
+			<SelectTrigger
+				data-testid={`${dataTestId ?? 'stlSelect'}.triggerDropdown`}>
 				<div className="flex justify-between items-center gap-1 w-full">
 					<SelectValue
 						placeholder={defaultLabel ?? t(StlSelectDefaultLabelKey)}>
@@ -52,16 +52,19 @@ const StlSelect = <T,>({
 					</SelectValue>
 				</div>
 			</SelectTrigger>
-			<SelectContent>
+			<SelectContent data-testid={`${dataTestId ?? 'stlSelect'}.content`}>
 				<Button
 					variant="ghost"
 					className="flex justify-between items-center h-7 mb-2 w-full opacity-50"
 					onClick={resetValue}
-					data-testid="reset-button">
+					data-testid={`${dataTestId ?? 'stlSelect'}.resetButton`}>
 					{t('clearValue')} <X className="h-4 w-4" />
 				</Button>
 				{list?.map((item) => (
-					<SelectItem key={getKey(item)} value={getKey(item) ?? ''}>
+					<SelectItem
+						key={getKey(item)}
+						value={getKey(item) ?? ''}
+						data-testid={`${dataTestId ?? 'stlSelect'}.item.${getKey(item)}`}>
 						{getLabel(item)}
 					</SelectItem>
 				))}

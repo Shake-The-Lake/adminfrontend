@@ -18,22 +18,22 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				boatsOptions(routeIds.eventId, queryClient),
-			);
+		await queryClient.ensureQueryData(
+			boatsOptions(routeIds.eventId, queryClient),
+		);
 
-			return routeIds;
-		};
+		return routeIds;
+	};
 
 const BoatsOverview: React.FC = () => {
 	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
+		ReturnType<ReturnType<typeof loader>>
 	>;
 	const {data: boats} = useGetBoats(eventId);
 
@@ -56,26 +56,32 @@ const BoatsOverview: React.FC = () => {
 
 	return (
 		<PageTransitionFadeIn>
-			<div className="flex flex-col items-center">
+			<div className="flex flex-col items-center" data-testid="boats-overview">
 				<div className="w-full mb-8 flex flex-col justify-start">
-					<h1>{t('boat.title')}</h1>
+					<h1 data-testid="boats-title">{t('boat.title')}</h1>
 				</div>
 				{boats?.length === 0 && (
-					<div className="w-full py-5">
+					<div className="w-full py-5" data-testid="no-boats-message">
 						<p className="text-lg">{t('boat.noBoatsYet')}</p>
 					</div>
 				)}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+				<div
+					className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
+					data-testid="boat-list">
 					{boats &&
 						boats.length > 0 &&
 						boats.map((boat) => (
-							<div key={boat.id} className="flex justify-center">
+							<div
+								key={boat.id}
+								className="flex justify-center"
+								data-testid={`boat-card-${boat.name}`}>
 								<StlCard
 									id={boat.id}
 									title={boat.name}
 									description={`${t('boat.type')}: ${boat.type}, ${t('boat.seatsRider')}: ${boat.seatsRider}, ${t('boat.seatsViewer')}: ${boat.seatsViewer}`}
 									link={boat.id.toString()}
 									deleteMutation={deleteMutation}
+									data-testid={`boat-card-title-${boat.name}`}
 								/>
 							</div>
 						))}
@@ -87,7 +93,8 @@ const BoatsOverview: React.FC = () => {
 						isOpen={isCreateDialogOpen}
 						formId="boat"
 						onClose={closeCreateDialog}
-						onOpen={openCreateDialog}>
+						onOpen={openCreateDialog}
+						data-testid="create-boat-dialog">
 						<BoatForm
 							mutation={createMutation}
 							onSuccessfullySubmitted={closeCreateDialog}
