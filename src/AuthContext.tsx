@@ -14,8 +14,8 @@ import {
 
 type AuthContextType = {
 	isAuthenticated: boolean;
-	login: (username: string, password: string) => void;
-	logout: () => void;
+	login: (username: string, password: string) => Promise<void>;
+	logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,7 +24,7 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{isAuthenticated, login, logout}}>
+		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

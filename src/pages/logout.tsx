@@ -7,9 +7,9 @@ import { Navigate } from 'react-router-dom';
 const LogoutPage: React.FC = () => {
 	const { logout } = useAuth();
 
-	useEffect(() => {
+	useEffect(async () => {
 		localStorage.setItem('redirectAfterLogin', '');
-		logout();
+		await logout();
 	}, []);
 
 	return <Navigate to={'/login'} replace />;

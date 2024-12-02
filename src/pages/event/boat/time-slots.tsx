@@ -30,21 +30,21 @@ import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({ params }: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({ params }: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		if (!routeIds.boatId) {
-			throw new Error('No boat ID provided');
-		}
+			if (!routeIds.boatId) {
+				throw new Error('No boat ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId),
-		);
-		return routeIds;
-	};
+			await queryClient.ensureQueryData(
+				timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId),
+			);
+			return routeIds;
+		};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const { eventId, boatId } = useLoaderData() as Awaited<
@@ -56,8 +56,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const { data: timeSlots } = useGetTimeSlotsForBoat(eventId, boatId);
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const createMutation = useCreateTimeSlot(boatId, eventId);
-	const deleteMutation = useDeleteTimeSlot(boatId, eventId);
+	const createMutation = useCreateTimeSlot(eventId, boatId);
+	const deleteMutation = useDeleteTimeSlot(eventId, boatId);
 
 	useMutationToaster({ type: 'delete', mutation: deleteMutation });
 
