@@ -15,6 +15,7 @@ export const timeSlotColumns = (
 		id: 'select',
 		cell: ({row}) => (
 			<Checkbox
+				data-testid={`time-slot-checkbox-${row.index}`}
 				checked={row.original.id === selectedTimeSlotId}
 				onCheckedChange={(value) => {
 					if (value) {

@@ -21,12 +21,16 @@ type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
 	data: TyData[];
 	onRowClick?: (row: TyData) => void;
+	rowTestIdPrefix?: string;
+	cellTestIdPrefix?: string;
 };
 
 export function DataTable<TyData, TyValue>({
 	columns,
 	data,
 	onRowClick,
+	rowTestIdPrefix = 'data-table-row',
+	cellTestIdPrefix = 'data-table-cell',
 }: DataTableProps<TyData, TyValue>) {
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[],
@@ -57,9 +61,9 @@ export function DataTable<TyData, TyValue>({
 										{header.isPlaceholder
 											? null
 											: flexRender(
-												header.column.columnDef.header,
-												header.getContext(),
-											)}
+													header.column.columnDef.header,
+													header.getContext(),
+												)}
 									</TableHead>
 								))}
 							</TableRow>
@@ -67,13 +71,16 @@ export function DataTable<TyData, TyValue>({
 					</TableHeader>
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
+							table.getRowModel().rows.map((row, rowIndex) => (
 								<TableRow
 									key={row.id}
+									data-testid={`${rowTestIdPrefix}-${rowIndex}`}
 									data-state={row.getIsSelected() && 'selected'}
 									onClick={() => onRowClick?.(row.original)}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
+									{row.getVisibleCells().map((cell, cellIndex) => (
+										<TableCell
+											key={cell.id}
+											data-testid={`${cellTestIdPrefix}-${rowIndex}-${cellIndex}`}>
 											{flexRender(
 												cell.column.columnDef.cell,
 												cell.getContext(),

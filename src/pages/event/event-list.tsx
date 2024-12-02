@@ -12,13 +12,9 @@ export const loader = (queryClient: QueryClient) => async () =>
 
 const EventList: React.FC = () => {
 	const {t} = useTranslation();
-	// Todo! throws warning sometimes:
-	// Warning: A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://reactjs.org/link/controlled-components
 
 	const {data: events, error} = useGetEvents();
 	const deleteMutation = useDeleteEvent();
-
-	// Todo! add "real" error handling. maybe use the mutation.error to handle this? make an error component that takes that as an input and displays the sonner. important! not per default on card, because then it would get triggered for each
 
 	return (
 		<div className="flex justify-center w-full max-w-lg">
@@ -29,16 +25,24 @@ const EventList: React.FC = () => {
 					<CreateEventDialog />
 				</div>
 				{error === null ? (
-					<ul className="mb-5">
+					<ul className="mb-5" data-testid="event-list">
+						{' '}
 						{events && events.length > 0 ? (
 							events.map((event) => (
-								<li key={event.id} className="mb-4 flex justify-center">
+								<li
+									key={event.id}
+									className="mb-4 flex justify-center"
+									data-testid={`event-card-${event.id}`}>
 									<StlCard
 										{...event}
 										title={`${event.title} (${toSwissLocaleDateString(event.date)})`}
 										link={'/event/' + event.id.toString()}
 										deleteMutation={deleteMutation}
+										data-testid={`event-card-${event.id}`}
 									/>
+									<button
+										data-testid={`delete-event-button-${event.id}`}
+										onClick={() => deleteMutation.mutate(event.id)}></button>
 								</li>
 							))
 						) : (

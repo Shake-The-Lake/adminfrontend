@@ -26,8 +26,7 @@ const CreateEventDialog: React.FC = () => {
 			title={t('event.create')}
 			description={t('event.description')}
 			triggerLabel={t('event.triggerLabel')}
-			formId="event"
-		>
+			formId="event">
 			<EventForm
 				mutation={createMutation}
 				model={defaultEventDto}
