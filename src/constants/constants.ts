@@ -2,7 +2,6 @@ import {TimeSlotType} from '../models/api/time-slot.model';
 
 export const personTypeOptions = (t: (key: string) => string) => [
 	{key: 'EMPLOYEE', label: t('employee')},
-	{key: 'BOAT_DRIVER', label: t('boatDriver')},
 	{key: 'CUSTOMER', label: t('customer')},
 ];
 
