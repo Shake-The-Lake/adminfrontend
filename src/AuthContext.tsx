@@ -5,12 +5,7 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import { auth } from './config/firebaseConfig';
-import {
-	signInWithEmailAndPassword,
-	signOut,
-	onAuthStateChanged,
-} from 'firebase/auth';
+import axiosInstance from './services/axiosInstance';
 
 type AuthContextType = {
 	isAuthenticated: boolean;
@@ -28,36 +23,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, async (user) => {
-			if (user) {
-				setIsAuthenticated(true);
-			} else {
-				localStorage.removeItem('authToken');
-				setIsAuthenticated(false);
-			}
-		});
+		const token = localStorage.getItem('authToken');
+		if (token) {
+			// Check if the token is valid
+			axiosInstance
+				.post('/auth/verify', {token})
+				.then((response) => {
+					if (response.data.valid === true) {
+						setIsAuthenticated(true);
+					} else {
+						localStorage.removeItem('authToken');
+						setIsAuthenticated(false);
+					}
+				})
+				.catch(() => {
+					localStorage.removeItem('authToken');
+					setIsAuthenticated(false);
+				});
+		}
 	}, []);
 
 	const login = async (username: string, password: string) => {
 		try {
-			const authUser = await signInWithEmailAndPassword(auth, username, password);
-			localStorage.setItem('authToken', await authUser.user.getIdToken());
+			const response = await axiosInstance.post('/auth/login', {
+				username,
+				password,
+			});
+			const {token} = response.data;
+			localStorage.setItem('authToken', token);
 			setIsAuthenticated(true);
 		} catch (error) {
-			console.error('Login failed', error);
 			setIsAuthenticated(false);
-			throw error;
 		}
 	};
 
-	const logout = async () => {
-		try {
-			await signOut(auth);
-			localStorage.removeItem('authToken');
-			setIsAuthenticated(false);
-		} catch (error) {
-			console.error('Logout failed', error);
-		}
+	const logout = () => {
+		localStorage.removeItem('authToken');
+		setIsAuthenticated(false);
 	};
 
 	return (
