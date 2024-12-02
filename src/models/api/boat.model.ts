@@ -1,6 +1,6 @@
-import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
-import {type BaseModel} from './base.model';
-import {type TimeSlotDto} from './time-slot.model';
+import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
+import { type BaseModel } from './base.model';
+import { type TimeSlotDto } from './time-slot.model';
 
 export type BoatDto = BaseModel & {
 	id: number;
@@ -22,8 +22,8 @@ export const defaultBoatDto: BoatDto = {
 	id: 0,
 	name: '',
 	type: '',
-	seatsRider: 0,
-	seatsViewer: 0,
+	seatsRider: 4,
+	seatsViewer: 2,
 	operator: '',
 	slotDurationInMins: undefined,
 	availableFrom: toSwissLocaleTimeString(new Date()),

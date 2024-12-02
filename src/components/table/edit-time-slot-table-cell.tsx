@@ -26,7 +26,7 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 }) => {
 	const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 	const { t } = useTranslation();
-	const updateMutation = useUpdateTimeSlot(timeSlot?.id, eventId);
+	const updateMutation = useUpdateTimeSlot(eventId, timeSlot?.id);
 	const handleDelete = async () => deleteMutation.mutateAsync(timeSlot?.id);
 
 	const openUpdateDialog = () => {

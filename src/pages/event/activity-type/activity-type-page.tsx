@@ -39,8 +39,8 @@ const ActivityTypePage: React.FC = () => {
 		ReturnType<ReturnType<typeof loader>>
 	>;
 	const { data: activityType, error } = useActivityTypeDetail(
-		activityTypeId,
 		eventId,
+		activityTypeId,
 	);
 
 	const updateMutation = useUpdateActivityType(eventId, activityTypeId);
