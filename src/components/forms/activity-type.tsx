@@ -119,7 +119,6 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				id="activityType"
 				role="form"
 				onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
-				{/* <Tabs defaultValue={i18n.language}> */}
 				<Tabs defaultValue={i18n.language}>
 					<TabsList className="w-full hidden justify-start gap-1">
 						<TabsTrigger
