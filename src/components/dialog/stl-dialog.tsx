@@ -73,25 +73,36 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
+		<Dialog open={open} onOpenChange={onOpenChange} data-testid="dialog">
 			<DialogTrigger asChild>
 				{isCard ? (
 					<Button
-						className="h-40  mb-5 w-full flex items-center justify-center"
-						title={triggerLabel}>
+						className="h-40 mb-5 w-full flex items-center justify-center"
+						title={triggerLabel}
+						data-testid="dialog-trigger-button">
 						<Plus className="size-24" />
 					</Button>
 				) : isIcon ? (
-					<Button type="button" title={triggerLabel} variant="ghost">
-						<PencilIcon></PencilIcon>
+					<Button
+						type="button"
+						title={triggerLabel}
+						variant="ghost"
+						data-testid="dialog-trigger-icon-button">
+						<PencilIcon />
 					</Button>
 				) : (
-					<Button type="button" title={triggerLabel}>
+					<Button
+						type="button"
+						title={triggerLabel}
+						data-testid="dialog-trigger-text-button">
 						{triggerLabel}
 					</Button>
 				)}
 			</DialogTrigger>
-			<DialogContent ref={dialogContentRef} className="flex flex-col">
+			<DialogContent
+				ref={dialogContentRef}
+				className="flex flex-col"
+				data-testid="dialog-content">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
@@ -103,12 +114,16 @@ const StlDialog: React.FC<StlDialogProps> = ({
 							type="button"
 							variant="secondary"
 							className="max-sm:mt-2"
-							onClick={handleClose}>
+							onClick={handleClose}
+							data-testid="dialog-close-button">
 							{t('cancel')}
 						</Button>
 					</DialogClose>
 					{formId && (
-						<Button type="submit" form={formId}>
+						<Button
+							type="submit"
+							form={formId}
+							data-testid="dialog-submit-button">
 							{t('save')}
 						</Button>
 					)}

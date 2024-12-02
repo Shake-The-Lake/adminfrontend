@@ -30,21 +30,21 @@ import { useTranslation } from 'react-i18next';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({ params }: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({ params }: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			if (!routeIds.boatId) {
-				throw new Error('No boat ID provided');
-			}
+		if (!routeIds.boatId) {
+			throw new Error('No boat ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId),
-			);
-			return routeIds;
-		};
+		await queryClient.ensureQueryData(
+			timeslotsForBoatOptions(routeIds.eventId, routeIds.boatId),
+		);
+		return routeIds;
+	};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const { eventId, boatId } = useLoaderData() as Awaited<
@@ -113,19 +113,22 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 					<TableBody>
 						{timeSlots?.length ? (
 							timeSlots?.map((slot, index) => (
-								<TableRow key={index} className="w-full justify-between">
-									<TableCell>
+								<TableRow
+									key={index}
+									className="w-full justify-between"
+									data-testid={`timeslot-row-${index}`}>
+									<TableCell data-testid={`timeslot-from-${index}`}>
 										{getDisplayTimeFromBackend(slot?.fromTime)}
 									</TableCell>
-									<TableCell>
+									<TableCell data-testid={`timeslot-to-${index}`}>
 										{getDisplayTimeFromBackend(slot?.untilTime)}
 									</TableCell>
-									<TableCell>
+									<TableCell data-testid={`timeslot-status-${index}`}>
 										{slot.status === TimeSlotType.AVAILABLE
 											? t('timeSlot.statusAvailable')
 											: t('timeSlot.statusBreak')}
 									</TableCell>
-									<TableCell>
+									<TableCell data-testid={`timeslot-activity-${index}`}>
 										{getTranslation(i18n.language, slot.activityType?.name)}
 									</TableCell>
 									<EditTimeSlotTableCell
