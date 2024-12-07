@@ -24,7 +24,7 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
@@ -32,16 +32,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 			if (user) {
 				setIsAuthenticated(true);
 			} else {
-				localStorage.removeItem('authToken');
 				setIsAuthenticated(false);
 			}
 		});
+		return () => unsubscribe();
 	}, []);
 
 	const login = async (username: string, password: string) => {
 		try {
-			const authUser = await signInWithEmailAndPassword(auth, username, password);
-			localStorage.setItem('authToken', await authUser.user.getIdToken());
+			await signInWithEmailAndPassword(auth, username, password);
 			setIsAuthenticated(true);
 		} catch (error) {
 			console.error('Login failed', error);
@@ -53,7 +52,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	const logout = async () => {
 		try {
 			await signOut(auth);
-			localStorage.removeItem('authToken');
 			setIsAuthenticated(false);
 		} catch (error) {
 			console.error('Logout failed', error);
@@ -61,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{isAuthenticated, login, logout}}>
+		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);
