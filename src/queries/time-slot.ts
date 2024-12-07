@@ -1,4 +1,4 @@
-import {type TimeSlotDto} from '../models/api/time-slot.model';
+import { type TimeSlotDto } from '../models/api/time-slot.model';
 import {
 	type QueryClient,
 	queryOptions,
@@ -15,7 +15,7 @@ import {
 	getAllTimeSlotsFromEvent,
 	getAllTimeSlotsFromBoat,
 } from '../services/time-slot-service';
-import {boatQueryKeys} from './boat';
+import { boatQueryKeys } from './boat';
 import {
 	getBaseQueryKey,
 	invalidateFromBookingMetaDataRelevantQuery,
@@ -76,7 +76,7 @@ export function useTimeSlotDetail(eventId: number, id: number) {
 	});
 }
 
-export function useCreateTimeSlot(boatId: number, eventId: number) {
+export function useCreateTimeSlot(eventId: number, boatId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: timeSlotMutationKeys.create,
@@ -93,7 +93,7 @@ export function useCreateTimeSlot(boatId: number, eventId: number) {
 	});
 }
 
-export function useUpdateTimeSlot(id: number, eventId: number) {
+export function useUpdateTimeSlot(eventId: number, id: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: timeSlotMutationKeys.update,
@@ -110,7 +110,7 @@ export function useUpdateTimeSlot(id: number, eventId: number) {
 	});
 }
 
-export function useDeleteTimeSlot(boatId: number, eventId: number) {
+export function useDeleteTimeSlot(eventId: number, boatId: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: timeSlotMutationKeys.delete,

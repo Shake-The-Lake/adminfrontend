@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	Dialog,
 	DialogClose,
@@ -9,9 +9,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../ui/dialog';
-import {Button} from '../ui/button';
-import {PencilIcon, Plus} from 'lucide-react';
-import {useTranslation} from 'react-i18next';
+import { Button } from '../ui/button';
+import { PencilIcon, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export type StlDialogProps = {
 	title: string;
@@ -40,7 +40,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 }) => {
 	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (isOpen !== undefined) {
@@ -102,6 +102,11 @@ const StlDialog: React.FC<StlDialogProps> = ({
 			<DialogContent
 				ref={dialogContentRef}
 				className="flex flex-col"
+				onInteractOutside={(e) => {
+					// We assume a click on the backdrop is an accident and
+					// the user does not want to lose data, therefore disallow closing
+					e.preventDefault();
+				}}
 				data-testid="dialog-content">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
