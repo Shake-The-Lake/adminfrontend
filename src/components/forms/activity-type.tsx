@@ -28,18 +28,14 @@ import { useMutationToaster } from '../common/mutation-toaster';
 import PageTransitionFadeIn from '../animations/page-transition-fade-in';
 
 const localizedStringSchema = z.object({
-	en: z.string(),
-	de: z.string().optional(),
+	en: z.string().optional(),
+	de: z.string(),
 	swissGerman: z.string().optional(),
 });
 
 const activityTypeSchema = z.object({
 	id: z.number().min(0).optional(),
-	name: z.object({
-		en: z.string().min(5).max(20),
-		de: z.string().max(20).optional(),
-		swissGerman: z.string().max(20).optional(),
-	}),
+	name: localizedStringSchema,
 	description: localizedStringSchema,
 	checklist: localizedStringSchema,
 	icon: z.string(),
@@ -94,19 +90,21 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 	};
 
 	const onInvalid: SubmitErrorHandler<ActivityTypeFormSchema> = (errors) => {
-		const englishErrors =
-			errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
+		// Wish of customer not in release 1
+		// Const englishErrors =
+		// 	errors.name?.en ?? errors.description?.en ?? errors.checklist?.en;
 		const germanErrors =
 			errors.name?.de ?? errors.description?.de ?? errors.checklist?.de;
-		const swissGermanErrors =
-			errors.name?.swissGerman ??
-			errors.description?.swissGerman ??
-			errors.checklist?.swissGerman;
+		// Wish of customer not in release 1
+		// Const swissGermanErrors =
+		// 	errors.name?.swissGerman ??
+		// 	errors.description?.swissGerman ??
+		// 	errors.checklist?.swissGerman;
 
 		const errorLanguages = [
-			englishErrors ? 'en' : '',
+			// EnglishErrors ? 'en' : '',
 			germanErrors ? 'de' : '',
-			swissGermanErrors ? 'gsw' : '',
+			// SwissGermanErrors ? 'gsw' : '',
 		];
 
 		setTabWithErrors(errorLanguages);
@@ -122,7 +120,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				role="form"
 				onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
 				<Tabs defaultValue={i18n.language}>
-					<TabsList className="w-full justify-start gap-1">
+					<TabsList className="w-full hidden justify-start gap-1">
 						<TabsTrigger
 							value="en"
 							className={
@@ -147,7 +145,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					</TabsList>
 					<TabsContent value="en">
 						<PageTransitionFadeIn>
-							<p className="text-primary-dark-stroke mb-2 mt-2">
+							<p className="text-primary-dark-stroke mb-2 mt-2 hidden">
 								{t('activityType.infoText')}
 							</p>
 							<div className="space-y-4">
@@ -224,7 +222,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 					</TabsContent>
 					<TabsContent value="de">
 						<PageTransitionFadeIn>
-							<p className="text-primary-dark-stroke mb-2 mt-2">
+							<p className="text-primary-dark-stroke mb-2 mt-2 hidden">
 								{t('activityType.descriptionGerman')}
 							</p>
 							<div className="space-y-4">
