@@ -34,6 +34,13 @@ describe('EditTimeSlotTableCell', () => {
   vi.mock('../../../src/queries/shared', () => ({
     mutationKeyGenerator: vi.fn().mockReturnValue('key'),
   }));
+  vi.mock('../../../src/config/firebaseConfig', () => ({
+    auth: {
+      currentUser: { uid: 'test-user' },
+      signInWithEmailAndPassword: vi.fn(),
+      signOut: vi.fn(),
+    },
+  }));
 
   const mockBoat: BoatDto = {
     id: 1,
