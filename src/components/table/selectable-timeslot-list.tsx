@@ -19,8 +19,8 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 	selectedTimeSlotId,
 	setSelectedTimeSlotId,
 }) => {
-	const {t, i18n} = useTranslation();
-	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
+	const { t, i18n } = useTranslation();
+	const { data: timeSlots, error } = useGetTimeSlotsForEvent(eventId);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>(
 		() => timeSlots ?? [],
 	);
@@ -79,7 +79,7 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 			);
 		}
 
-		return filtered;
+		return filtered.filter((slot) => slot.status !== TimeSlotType.ON_BREAK);
 	};
 
 	if (error) {
@@ -105,13 +105,13 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 									}));
 								},
 								onBoatChange(boatId?: number) {
-									setFilter((prevFilter) => ({...prevFilter, boatId}));
+									setFilter((prevFilter) => ({ ...prevFilter, boatId }));
 								},
 								onFromChange(from?: string) {
-									setFilter((prevFilter) => ({...prevFilter, from}));
+									setFilter((prevFilter) => ({ ...prevFilter, from }));
 								},
 								onToChange(to?: string) {
-									setFilter((prevFilter) => ({...prevFilter, to}));
+									setFilter((prevFilter) => ({ ...prevFilter, to }));
 								},
 							}}
 						/>
