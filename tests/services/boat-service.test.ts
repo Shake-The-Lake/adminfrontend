@@ -7,6 +7,13 @@ import { vi } from 'vitest';
 vi.mock('../../src/services/axiosInstance');
 vi.mock('../../src/services/time-slot-service', () => ({
 	getSortedTimeSlots: vi.fn((timeSlots) => timeSlots),
+})); 
+vi.mock('../../src/config/firebaseConfig', () => ({
+	auth: {
+		currentUser: { uid: 'test-user' },
+		signInWithEmailAndPassword: vi.fn(),
+		signOut: vi.fn(),
+	},
 }));
 
 describe('boat-service', () => {

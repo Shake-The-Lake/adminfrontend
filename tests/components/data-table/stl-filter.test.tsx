@@ -16,7 +16,13 @@ vi.mock('react-i18next', async (importOriginal) => {
     }),
   };
 });
-
+vi.mock('../../../src/config/firebaseConfig', () => ({
+  auth: {
+    currentUser: { uid: 'test-user' },
+    signInWithEmailAndPassword: vi.fn(),
+    signOut: vi.fn(),
+  },
+}));
 vi.mock('../../../src/queries/shared', () => ({
   mutationKeyGenerator: vi.fn().mockReturnValue('key'),
   getBaseQueryKey: vi.fn().mockReturnValue('key'),

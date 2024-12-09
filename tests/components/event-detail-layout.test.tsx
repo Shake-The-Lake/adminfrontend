@@ -49,6 +49,14 @@ vi.mock('../../src/components/footer/footer', () => ({
   default: () => <div>Footer</div>,
 }));
 
+vi.mock('../../src/config/firebaseConfig', () => ({
+  auth: {
+    currentUser: { uid: 'test-user' },
+    signInWithEmailAndPassword: vi.fn(),
+    signOut: vi.fn(),
+  },
+}));
+
 describe('EventDetailLayout', () => {
   const queryClient = new QueryClient();
 

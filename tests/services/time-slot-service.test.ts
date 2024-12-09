@@ -19,6 +19,13 @@ vi.mock('../../src/services/person-service');
 vi.mock('../../src/lib/utils', () => ({
 	getTranslation: vi.fn(),
 }));
+vi.mock('../../src/config/firebaseConfig', () => ({
+	auth: {
+		currentUser: { uid: 'test-user' },
+		signInWithEmailAndPassword: vi.fn(),
+		signOut: vi.fn(),
+	},
+}));
 vi.mock('react-i18next', () => ({
 	getI18n: vi.fn(() => ({language: 'en'})),
 }));
