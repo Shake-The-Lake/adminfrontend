@@ -9,13 +9,19 @@ vi.mock('../src/config/firebaseConfig', async (importOriginal) => {
 			signInWithEmailAndPassword: vi.fn(),
 			createUserWithEmailAndPassword: vi.fn(),
 			signOut: vi.fn(),
-			onAuthStateChanged: vi.fn(),
+			onAuthStateChanged: vi.fn().mockImplementation((callback) => {
+				callback();
+				return () => { };
+			}),
 		}),
 		auth: {
 			signInWithEmailAndPassword: vi.fn(),
 			createUserWithEmailAndPassword: vi.fn(),
 			signOut: vi.fn(),
-			onAuthStateChanged: vi.fn(),
+			onAuthStateChanged: vi.fn().mockImplementation((callback) => {
+				callback();
+				return () => { };
+			}),
 		},
 	};
 });
