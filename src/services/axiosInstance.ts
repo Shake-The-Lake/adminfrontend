@@ -1,4 +1,5 @@
 import axios, {type AxiosError} from 'axios';
+import {auth} from '../config/firebaseConfig';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -9,12 +10,14 @@ const axiosInstance = axios.create({
 
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
-	(config) => {
-		const token = localStorage.getItem('authToken');
-
-		// If a token exists, add it to the Authorization header
+	async (config) => {
+		const token = await auth.currentUser?.getIdToken();
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
+		} else {
+			const currentLocation = window.location.pathname === '/login' ? '/' : window.location.pathname;
+			localStorage.setItem('redirectAfterLogin', currentLocation);
+			window.location.href = '/login';
 		}
 
 		return config;
@@ -28,15 +31,9 @@ axiosInstance.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError) => {
 		// Check if the error response status is 401 (Unauthorized)
-		if (
-			error.response &&
-			(error.response.status === 401 || error.response.status === 403)
-		) {
+		if (error.response && (error.response.status === 401 || error.response.status === 403)) {
 			const currentLocation = window.location.pathname;
 			localStorage.setItem('redirectAfterLogin', currentLocation);
-
-			localStorage.removeItem('authToken'); // Remove the JWT token
-
 			window.location.href = '/login';
 		}
 

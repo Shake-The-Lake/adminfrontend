@@ -11,7 +11,13 @@ vi.mock('react-i18next', () => ({
 vi.mock('../../src/lib/utils', () => ({
 	getTranslation: vi.fn(),
 }));
-
+vi.mock('../../src/config/firebaseConfig', () => ({
+	auth: {
+		currentUser: { uid: 'test-user' },
+		signInWithEmailAndPassword: vi.fn(),
+		signOut: vi.fn(),
+	},
+}));
 describe('activity-type-service', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
