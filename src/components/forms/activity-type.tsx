@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { z } from 'zod';
 import {
+	type SubmitErrorHandler,
 	type SubmitHandler,
 	useForm,
-	type SubmitErrorHandler,
 } from 'react-hook-form';
 import {
 	Form,
@@ -15,7 +15,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { type ActivityTypeDto } from '../../models/api/activity-type.model';
 import { defaultLocalizedStringDto } from '../../models/api/localized-string';
 import { useParams } from 'react-router-dom';
@@ -160,6 +160,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.nameEnglish')}
 													{...field}
 													className="input"
+													data-testid="activityType.name"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -176,6 +177,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.descEnglish')}
 													{...field}
 													className="input"
+													data-testid="activityType.description"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -192,6 +194,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('icon')}
 													{...field}
 													className="input"
+													data-testid="activityType.icon"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -208,6 +211,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.checklistEnglish')}
 													{...field}
 													className="input"
+													data-testid="activityType.checklist"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -367,11 +371,13 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				</Tabs>
 				<div
 					className="mt-16 flex justify-end w-full"
+					data-testid="activityType.submit"
 					style={isCreate ? { display: 'none' } : {}}>
 					<Button type="submit">{t('save')}</Button>
 				</div>
 			</form>
 		</Form>
+
 	);
 };
 

@@ -21,20 +21,20 @@ import PageTransitionFadeIn from '../../../components/animations/page-transition
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({ params }: LoaderFunctionArgs) => {
-			const routeIds = extractTypedInfoFromRouteParams(params);
-			if (!routeIds.eventId) {
-				throw new Error('No event ID provided');
-			}
+	async ({params}: LoaderFunctionArgs) => {
+		const routeIds = extractTypedInfoFromRouteParams(params);
+		if (!routeIds.eventId) {
+			throw new Error('No event ID provided');
+		}
 
-			await queryClient.ensureQueryData(
-				activityTypesOptions(routeIds.eventId, queryClient),
-			);
-			return routeIds;
-		};
+		await queryClient.ensureQueryData(
+			activityTypesOptions(routeIds.eventId, queryClient),
+		);
+		return routeIds;
+	};
 
 const ActivityTypesPage = () => {
-	const { eventId } = useLoaderData() as Awaited<
+	const {eventId} = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
 	const { data: activityTypes, error } = useGetActivityTypes(eventId);
@@ -69,7 +69,9 @@ const ActivityTypesPage = () => {
 					</div>
 				)}
 				{error && <p>{t('activityType.failedToLoadActivityTypes')}</p>}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+				<div
+					className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
+					data-testid="activity-type-list">
 					{activityTypes &&
 						activityTypes.length > 0 &&
 						activityTypes.map((activityType) => (

@@ -61,60 +61,69 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 
 	return (
 		<Form {...form}>
-			<form
-				className="p-1 space-y-4"
-				role="form"
-				onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
-				id="event">
-				<FormField
-					name="title"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('title')}</FormLabel>
-							<FormControl>
-								<Input
-									placeholder={t('event.placeholder')}
-									{...field}
-									className="input"
-								/>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-				<FormField
-					name="description"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('description')}</FormLabel>
-							<FormControl>
-								<Input
-									placeholder={t('description')}
-									{...field}
-									className="input"
-								/>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-				<FormField
-					name="date"
-					control={form.control}
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>{t('event.date')}</FormLabel>
-							<FormControl>
-								<Input type="date" {...field} className="input" />
-							</FormControl>
-						</FormItem>
-					)}
-				/>
+				<form
+					className="p-1 space-y-4"
+					role="form"
+					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
+					id="event">
+					<FormField
+						name="title"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('title')}</FormLabel>
+								<FormControl>
+									<Input
+										placeholder={t('event.placeholder')}
+										{...field}
+										className="input"
+										data-testid="event-title-input"
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+					<FormField
+						name="description"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('description')}</FormLabel>
+								<FormControl>
+									<Input
+										placeholder={t('description')}
+										{...field}
+										className="input"
+										data-testid="event-description-input"
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+					<FormField
+						name="date"
+						control={form.control}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>{t('event.date')}</FormLabel>
+								<FormControl>
+									<Input
+										type="date"
+										{...field}
+										className="input"
+										data-testid="event-date-input"
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
 
 				<div
 					className="mt-16 flex justify-end w-full"
 					style={isCreate ? {display: 'none'} : {}}>
-					<Button type="submit">{t('save')}</Button>
+					<Button type="submit" data-testid="save-event-button">
+							{t('save')}
+						</Button>
 				</div>
 			</form>
 		</Form>

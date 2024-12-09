@@ -43,7 +43,11 @@ const PersonForm: React.FC = () => {
 					<FormItem>
 						<FormLabel>{t('firstName')}</FormLabel>
 						<FormControl>
-							<Input {...field} placeholder={t('firstName')} />
+							<Input
+								{...field}
+								placeholder={t('firstName')}
+								data-testid="person-first-name"
+							/>
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -57,7 +61,11 @@ const PersonForm: React.FC = () => {
 					<FormItem>
 						<FormLabel>{t('lastName')}</FormLabel>
 						<FormControl>
-							<Input {...field} placeholder={t('lastName')} />
+							<Input
+								{...field}
+								placeholder={t('lastName')}
+								data-testid="person-last-name"
+							/>
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -71,7 +79,12 @@ const PersonForm: React.FC = () => {
 					<FormItem>
 						<FormLabel>{t('email')}</FormLabel>
 						<FormControl>
-							<Input {...field} placeholder={t('email')} type="email" />
+							<Input
+								{...field}
+								placeholder={t('email')}
+								type="email"
+								data-testid="person-email"
+							/>
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -85,7 +98,12 @@ const PersonForm: React.FC = () => {
 					<FormItem>
 						<FormLabel>{t('phone')}</FormLabel>
 						<FormControl>
-							<Input {...field} placeholder={t('phone')} type="tel" />
+							<Input
+								{...field}
+								placeholder={t('phone')}
+								type="tel"
+								data-testid="person-phone"
+							/>
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -106,6 +124,7 @@ const PersonForm: React.FC = () => {
 								list={personTypeOptions(t)}
 								getKey={(item) => item!.key}
 								getLabel={(item) => item!.label}
+								dataTestId="personTypeDropdown"
 							/>
 						</FormControl>
 						<FormMessage />

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	Dialog,
 	DialogClose,
@@ -9,9 +9,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../ui/dialog';
-import {Button} from '../ui/button';
-import {PencilIcon, Plus} from 'lucide-react';
-import {useTranslation} from 'react-i18next';
+import { Button } from '../ui/button';
+import { PencilIcon, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export type StlDialogProps = {
 	title: string;
@@ -40,7 +40,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 }) => {
 	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (isOpen !== undefined) {
@@ -73,25 +73,41 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
+		<Dialog open={open} onOpenChange={onOpenChange} data-testid="dialog">
 			<DialogTrigger asChild>
 				{isCard ? (
 					<Button
-						className="h-40  mb-5 w-full flex items-center justify-center"
-						title={triggerLabel}>
+						className="h-40 mb-5 w-full flex items-center justify-center"
+						title={triggerLabel}
+						data-testid="dialog-trigger-button">
 						<Plus className="size-24" />
 					</Button>
 				) : isIcon ? (
-					<Button type="button" title={triggerLabel} variant="ghost">
-						<PencilIcon></PencilIcon>
+					<Button
+						type="button"
+						title={triggerLabel}
+						variant="ghost"
+						data-testid="dialog-trigger-icon-button">
+						<PencilIcon />
 					</Button>
 				) : (
-					<Button type="button" title={triggerLabel}>
+					<Button
+						type="button"
+						title={triggerLabel}
+						data-testid="dialog-trigger-text-button">
 						{triggerLabel}
 					</Button>
 				)}
 			</DialogTrigger>
-			<DialogContent ref={dialogContentRef} className="flex flex-col">
+			<DialogContent
+				ref={dialogContentRef}
+				className="flex flex-col"
+				onInteractOutside={(e) => {
+					// We assume a click on the backdrop is an accident and
+					// the user does not want to lose data, therefore disallow closing
+					e.preventDefault();
+				}}
+				data-testid="dialog-content">
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
@@ -103,12 +119,16 @@ const StlDialog: React.FC<StlDialogProps> = ({
 							type="button"
 							variant="secondary"
 							className="max-sm:mt-2"
-							onClick={handleClose}>
+							onClick={handleClose}
+							data-testid="dialog-close-button">
 							{t('cancel')}
 						</Button>
 					</DialogClose>
 					{formId && (
-						<Button type="submit" form={formId}>
+						<Button
+							type="submit"
+							form={formId}
+							data-testid="dialog-submit-button">
 							{t('save')}
 						</Button>
 					)}
