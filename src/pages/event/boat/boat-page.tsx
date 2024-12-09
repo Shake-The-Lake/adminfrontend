@@ -37,7 +37,7 @@ const BoatPage: React.FC = () => {
 	const { eventId, boatId } = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
-	const { data: boat, error } = useBoatDetail(boatId, eventId);
+	const { data: boat, error } = useBoatDetail(eventId, boatId);
 
 	const updateMutation = useUpdateBoat(eventId, boatId);
 
