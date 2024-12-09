@@ -13,7 +13,13 @@ vi.mock('../../src/services/boat-service', () => ({
   getBoatWithSortedProperties: vi.fn((boat) => boat),
   getSortedBoats: vi.fn((boats) => boats),
 }));
-
+vi.mock('../../src/config/firebaseConfig', () => ({
+  auth: {
+    currentUser: { uid: 'test-user' },
+    signInWithEmailAndPassword: vi.fn(),
+    signOut: vi.fn(),
+  },
+}));
 describe('event-service', () => {
   beforeEach(() => {
     vi.spyOn(eventService, 'getEventWithSortedProperties');

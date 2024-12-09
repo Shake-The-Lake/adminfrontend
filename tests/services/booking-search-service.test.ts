@@ -16,6 +16,13 @@ vi.mock('lodash-es/sortBy', () => ({
 		return 0;
 	})),
 }));
+vi.mock('../../src/config/firebaseConfig', () => ({
+	auth: {
+		currentUser: { uid: 'test-user' },
+		signInWithEmailAndPassword: vi.fn(),
+		signOut: vi.fn(),
+	},
+}));
 vi.mock('../../src/components/data-table/cleanEmptyParams', () => ({
 	cleanEmptyParams: vi.fn((params) => params),
 }));
