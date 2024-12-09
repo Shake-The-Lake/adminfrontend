@@ -1,12 +1,13 @@
 /* eslint-disable no-bitwise */
-import React, {useEffect, useState} from 'react';
-import StlFilter, {StlFilterOptions} from '../data-table/stl-filter';
-import {DataTable} from '../data-table/data-table';
-import {useTranslation} from 'react-i18next';
-import {timeSlotColumns} from '../../pages/event/bookings/time-slot-columns';
-import {useGetTimeSlotsForEvent} from '../../queries/time-slot';
-import {type TimeSlotDto} from '../../models/api/time-slot.model';
-import {defaultFilterParams, type StlFilterParams} from '../../models/api/search.model';
+import React, { useEffect, useState } from 'react';
+import StlFilter, { StlFilterOptions } from '../data-table/stl-filter';
+import { DataTable } from '../data-table/data-table';
+import { useTranslation } from 'react-i18next';
+import { timeSlotColumns } from '../../pages/event/bookings/time-slot-columns';
+import { TimeSlotType } from '../../models/api/time-slot.model';
+import { useGetTimeSlotsForEvent } from '../../queries/time-slot';
+import { type TimeSlotDto } from '../../models/api/time-slot.model';
+import { defaultFilterParams, type StlFilterParams } from '../../models/api/search.model';
 
 type BookingFormProps = {
 	eventId: number;
