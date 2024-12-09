@@ -23,7 +23,7 @@ const firebaseConfig: FirebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-let auth: any;
+let auth: ReturnType<typeof getAuth>;
 if (!app) {
 	auth = getAuth(app);
 }
