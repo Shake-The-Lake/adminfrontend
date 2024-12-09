@@ -1,7 +1,7 @@
 import React from 'react';
-import { ArrowRight, Trash } from 'lucide-react';
+import {ArrowRight, Trash} from 'lucide-react';
 
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {
 	Card,
 	CardContent,
@@ -9,8 +9,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from '../ui/card';
-import { Button } from '../ui/button';
-import { type UseMutationResult } from '@tanstack/react-query';
+import {Button} from '../ui/button';
+import {type UseMutationResult} from '@tanstack/react-query';
 
 export type StlCardProps = {
 	id?: number;
@@ -21,7 +21,6 @@ export type StlCardProps = {
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
-
 	const handleDelete = async () => {
 		props.deleteMutation.mutate(props.id ?? 0);
 	};
@@ -44,10 +43,11 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 			<CardContent className="relative">
 				<CardDescription>{props.description}</CardDescription>
 			</CardContent>
-			<Link to={props.link}
+			<Link
+				to={props.link}
 				data-testid="arrow-right-icon"
 				className="after:absolute after:inset-0 after:hover:cursor-pointer after:focus-visible::outline after:focus-visible::outline-2">
-				<ArrowRight className='bottom-4 right-4 absolute' />
+				<ArrowRight className="bottom-4 right-4 absolute" />
 			</Link>
 		</Card>
 	);
