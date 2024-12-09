@@ -23,7 +23,6 @@ const firebaseConfig: FirebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-let auth: ReturnType<typeof getAuth>;
-auth = getAuth(app);
+const auth = getAuth(app);
 
 export {auth};
