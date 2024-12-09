@@ -14,6 +14,7 @@ import {
 import { type QueryClient } from '@tanstack/react-query';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import i18n from '../../../assets/i18n/i18n';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -42,10 +43,9 @@ const ActivityTypePage: React.FC = () => {
 		eventId,
 		activityTypeId,
 	);
-
 	const updateMutation = useUpdateActivityType(eventId, activityTypeId);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<PageTransitionFadeIn>
