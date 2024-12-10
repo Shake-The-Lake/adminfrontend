@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { z } from 'zod';
+import React, {useState} from 'react';
+import {z} from 'zod';
 import {
 	type SubmitErrorHandler,
 	type SubmitHandler,
@@ -13,18 +13,18 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { type ActivityTypeDto } from '../../models/api/activity-type.model';
-import { defaultLocalizedStringDto } from '../../models/api/localized-string';
-import { useParams } from 'react-router-dom';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslation } from 'react-i18next';
-import { Textarea } from '../ui/textarea';
-import { onInvalidFormHandler, useEmitSuccessIfSucceeded } from '../../lib/utils';
-import { type UseMutationResult } from '@tanstack/react-query';
-import { useMutationToaster } from '../common/mutation-toaster';
+import {Input} from '../ui/input';
+import {Button} from '../ui/button';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '../ui/tabs';
+import {type ActivityTypeDto} from '../../models/api/activity-type.model';
+import {defaultLocalizedStringDto} from '../../models/api/localized-string';
+import {useParams} from 'react-router-dom';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {useTranslation} from 'react-i18next';
+import {Textarea} from '../ui/textarea';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useMutationToaster} from '../common/mutation-toaster';
 import PageTransitionFadeIn from '../animations/page-transition-fade-in';
 
 const localizedStringSchema = z.object({
@@ -63,15 +63,15 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		resolver: zodResolver(activityTypeSchema),
 	});
 
-	const { i18n, t } = useTranslation();
-	const { id } = useParams<{ id: string }>();
+	const {i18n, t} = useTranslation();
+	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
 
 	const [tabWithErrors, setTabWithErrors] = useState<string[]>([]);
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
+	useMutationToaster({type: isCreate ? 'create' : 'update', mutation});
 
 	const onSubmit: SubmitHandler<ActivityTypeFormSchema> = async (values) => {
 		setTabWithErrors([]);
@@ -81,9 +81,9 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 			id: values.id ?? 0,
 			eventId: model.eventId === 0 ? eventId : model.eventId,
 			// Avoid null values on localized strings
-			name: { ...defaultLocalizedStringDto, ...values.name },
-			description: { ...defaultLocalizedStringDto, ...values.description },
-			checklist: { ...defaultLocalizedStringDto, ...values.checklist },
+			name: {...defaultLocalizedStringDto, ...values.name},
+			description: {...defaultLocalizedStringDto, ...values.description},
+			checklist: {...defaultLocalizedStringDto, ...values.checklist},
 		};
 
 		await mutation.mutateAsync(activityType);
@@ -152,7 +152,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="name.en"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
@@ -169,7 +169,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="description.en"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
@@ -186,7 +186,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="icon"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
@@ -203,7 +203,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="checklist.en"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
@@ -229,7 +229,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="name.de"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
@@ -237,6 +237,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.nameGerman')}
 													{...field}
 													className="input"
+													data-testid="activityType.name"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -245,7 +246,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="description.de"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
@@ -253,6 +254,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.descGerman')}
 													{...field}
 													className="input"
+													data-testid="activityType.description"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -261,7 +263,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="icon"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
@@ -277,7 +279,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="checklist.de"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('checklist')}</FormLabel>
 											<FormControl>
@@ -285,6 +287,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.checklistGerman')}
 													{...field}
 													className="input"
+													data-testid="activityType.checklist"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -302,7 +305,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="name.swissGerman"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('name')}</FormLabel>
 											<FormControl>
@@ -310,6 +313,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.nameSwissGerman')}
 													{...field}
 													className="input"
+													data-testid="activityType.name"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -318,7 +322,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="description.swissGerman"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('description')}</FormLabel>
 											<FormControl>
@@ -326,6 +330,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.descSwissGerman')}
 													{...field}
 													className="input"
+													data-testid="activityType.description"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -334,7 +339,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="icon"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
@@ -342,6 +347,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('icon')}
 													{...field}
 													className="input"
+													data-testid="activityType.icon"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -350,7 +356,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 								<FormField
 									name="checklist.swissGerman"
 									control={form.control}
-									render={({ field }) => (
+									render={({field}) => (
 										<FormItem>
 											<FormLabel>
 												{t('activityType.checklistSwissGerman')}
@@ -360,6 +366,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 													placeholder={t('activityType.checklistSwissGerman')}
 													{...field}
 													className="input"
+													data-testid="activityType.checklist"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -371,13 +378,11 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				</Tabs>
 				<div
 					className="mt-16 flex justify-end w-full"
-					data-testid="activityType.submit"
-					style={isCreate ? { display: 'none' } : {}}>
+					style={isCreate ? {display: 'none'} : {}}>
 					<Button type="submit">{t('save')}</Button>
 				</div>
 			</form>
 		</Form>
-
 	);
 };
 
