@@ -19,10 +19,9 @@ check-job:
 
 e2e:
   stage: e2e
-  script: echo "Triggering E2E pipeline"
   trigger:
-    project: your-group/e2e-project # Replace with the actual E2E project path
-    branch: main # The branch in the E2E project to trigger
+    project: ip34-24bb/ip34-24bb_shakethelake/shakethelakee2e
+    branch: main
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always # Trigger when the pipeline is for a merge request
