@@ -1,4 +1,5 @@
 import axios, {type AxiosError} from 'axios';
+import {auth} from '../config/firebaseConfig';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -10,11 +11,11 @@ const axiosInstance = axios.create({
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
 	async (config) => {
-		const token = localStorage.getItem('authToken');
+		const token = await auth.currentUser?.getIdToken();
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		} else {
-			const currentLocation = window.location.pathname;
+			const currentLocation = window.location.pathname === '/login' ? '/' : window.location.pathname;
 			localStorage.setItem('redirectAfterLogin', currentLocation);
 			window.location.href = '/login';
 		}

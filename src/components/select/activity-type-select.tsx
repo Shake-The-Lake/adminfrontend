@@ -17,9 +17,9 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 	field,
 	className,
 }) => {
-	const { id } = useParams<{ id: string }>();
+	const {id} = useParams<{id: string}>();
 	const eventId = Number(id);
-	const { data: searchParams } = useGetSearchParameters(eventId);
+	const {data: searchParams} = useGetSearchParameters(eventId);
 
 	const {i18n, t} = useTranslation();
 
@@ -32,16 +32,14 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 			<FormLabel htmlFor={field.name}>Activity Type</FormLabel>
 			<FormControl>
 				<StlSelect
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 					value={field.value?.toString() ?? ''}
 					onValueChange={(value?: string) => {
-						// React-hook-form does not support undefined as a value, therefore need to "hack" this
 						field.onChange(value === '' ? '' : Number(value));
 					}}
 					list={searchParams?.activityTypes ?? []}
 					getKey={getKey}
 					getLabel={getLabel}
-				></StlSelect>
+				/>
 			</FormControl>
 			<FormMessage />
 		</FormItem>

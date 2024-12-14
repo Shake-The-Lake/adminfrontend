@@ -54,8 +54,8 @@ describe('utils', () => {
     });
 
     it('should return the default translation if the locale translation is not available', () => {
-      const object = { en: 'Hello' };
-      expect(getTranslation('gsw', object)).toBe('Hello');
+      const object = { de: 'Hallo' };
+      expect(getTranslation('gsw', object)).toBe('Hallo');
     });
 
     it('should return an empty string if the object is undefined', () => {

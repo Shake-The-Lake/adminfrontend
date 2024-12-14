@@ -4,7 +4,13 @@ import axiosInstance from '../../src/services/axiosInstance';
 import { vi } from 'vitest';
 
 vi.mock('../../src/services/axiosInstance');
-
+vi.mock('../../src/config/firebaseConfig', () => ({
+	auth: {
+		currentUser: { uid: 'test-user' },
+		signInWithEmailAndPassword: vi.fn(),
+		signOut: vi.fn(),
+	},
+}));
 describe('search-service', () => {
 	describe('getSearchParams', () => {
 		it('should return search parameters for a given event ID', async () => {

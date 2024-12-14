@@ -11,10 +11,10 @@ const ActivityTraceInfo: React.FC<BaseModel> = ({ createdBy, updatedBy, createdA
       <div className='py-2 px-1'>
         <p className='text-xs'>{t('infoTextActivityTraceInfo')}</p>
         {(createdBy && createdAt) && (
-          <p className='text-xs'>{t('createdBy')}: {createdBy} {t('on')}: {toSwissLocalDateTimeString(createdAt)} </p>
+          <p className='text-xs'>- {t('createdBy')} "{createdBy}" {t('on')} {toSwissLocalDateTimeString(createdAt)} </p>
         )}
         {(updatedBy && updatedAt) && (
-          <p className='text-xs'>{t('modifiedBy')}: {updatedBy} {t('on')}: {toSwissLocalDateTimeString(updatedAt)}</p>
+          <p className='text-xs'>- {t('modifiedBy')} "{updatedBy}" {t('on')} {toSwissLocalDateTimeString(updatedAt)}</p>
         )}
       </div>
     )}

@@ -39,7 +39,7 @@ export function getTranslation(
 		return translation;
 	}
 
-	return object.en; // Make english the default language
+	return object.de; // Make german the default language
 }
 
 export function tryGetErrorMessage(error: unknown) {

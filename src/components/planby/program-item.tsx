@@ -10,8 +10,8 @@ import {
 	ProgramText,
 	useProgram,
 } from 'planby';
-import {Link} from 'react-router-dom';
-import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
+import { Link } from 'react-router-dom';
+import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
 
 export type PlanByProgramItemProps = {
 	program: any;
@@ -21,13 +21,13 @@ export type PlanByProgramItemProps = {
 };
 
 export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
-	const {styles, isLive} = useProgram({
+	const { styles, isLive } = useProgram({
 		...props,
 		isBaseTimeFormat: props.isBaseTimeFormat ?? true,
 	});
 
-	const {data} = props.program;
-	const {title, description, since, till, color} = data;
+	const { data } = props.program;
+	const { title, description, since, till, color, disable } = data;
 
 	const sinceTime = toSwissLocaleTimeString(new Date(since));
 	const tillTime = toSwissLocaleTimeString(new Date(till));
@@ -36,16 +36,20 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 		<ProgramBox
 			width={styles.width}
 			style={styles.position}
-			className="relative">
+			className={'relative'}>
 			<ProgramContent
 				width={styles.width}
 				isLive={isLive}
-				style={{background: color}}>
+				className={disable ? '!cursor-default' : 'cursor-pointer'}
+				style={{ background: color }}>
 				<ProgramFlex>
-					<ProgramStack className="w-full">
-						<Link
-							to={`${data.id}`}
-							className="after:absolute after:inset-0"></Link>
+					<ProgramStack
+						className={'w-full'}>
+						{!disable && (
+							<Link
+								to={`${data.id}`}
+								className="after:absolute after:inset-0" />
+						)}
 						<ProgramTitle>{title}</ProgramTitle>
 						<div className="flex justify-between w-full">
 							<ProgramText>

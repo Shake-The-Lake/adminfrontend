@@ -1,15 +1,13 @@
 /* eslint-disable no-bitwise */
-import React, {useEffect, useState} from 'react';
-import StlFilter, {StlFilterOptions} from '../data-table/stl-filter';
-import {DataTable} from '../data-table/data-table';
-import {useTranslation} from 'react-i18next';
-import {timeSlotColumns} from '../../pages/event/bookings/time-slot-columns';
-import {useGetTimeSlotsForEvent} from '../../queries/time-slot';
-import {type TimeSlotDto} from '../../models/api/time-slot.model';
-import {
-	defaultFilterParams,
-	type StlFilterParams,
-} from '../../models/api/search.model';
+import React, { useEffect, useState } from 'react';
+import StlFilter, { StlFilterOptions } from '../data-table/stl-filter';
+import { DataTable } from '../data-table/data-table';
+import { useTranslation } from 'react-i18next';
+import { timeSlotColumns } from '../../pages/event/bookings/time-slot-columns';
+import { TimeSlotType } from '../../models/api/time-slot.model';
+import { useGetTimeSlotsForEvent } from '../../queries/time-slot';
+import { type TimeSlotDto } from '../../models/api/time-slot.model';
+import { defaultFilterParams, type StlFilterParams } from '../../models/api/search.model';
 
 type BookingFormProps = {
 	eventId: number;
@@ -22,8 +20,8 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 	selectedTimeSlotId,
 	setSelectedTimeSlotId,
 }) => {
-	const {t, i18n} = useTranslation();
-	const {data: timeSlots, error} = useGetTimeSlotsForEvent(eventId);
+	const { t, i18n } = useTranslation();
+	const { data: timeSlots, error } = useGetTimeSlotsForEvent(eventId);
 	const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlotDto[]>(
 		() => timeSlots ?? [],
 	);
@@ -82,7 +80,7 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 			);
 		}
 
-		return filtered;
+		return filtered.filter((slot) => slot.status !== TimeSlotType.ON_BREAK);
 	};
 
 	if (error) {
@@ -108,13 +106,13 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 									}));
 								},
 								onBoatChange(boatId?: number) {
-									setFilter((prevFilter) => ({...prevFilter, boatId}));
+									setFilter((prevFilter) => ({ ...prevFilter, boatId }));
 								},
 								onFromChange(from?: string) {
-									setFilter((prevFilter) => ({...prevFilter, from}));
+									setFilter((prevFilter) => ({ ...prevFilter, from }));
 								},
 								onToChange(to?: string) {
-									setFilter((prevFilter) => ({...prevFilter, to}));
+									setFilter((prevFilter) => ({ ...prevFilter, to }));
 								},
 							}}
 						/>
@@ -125,6 +123,8 @@ const SelectableTimeSlotList: React.FC<BookingFormProps> = ({
 								selectedTimeSlotId,
 							)}
 							data={filteredTimeSlots}
+							rowTestIdPrefix="bookings-time-slot-row"
+							cellTestIdPrefix="bookings-time-slot-cell"
 						/>
 					</div>
 				</div>

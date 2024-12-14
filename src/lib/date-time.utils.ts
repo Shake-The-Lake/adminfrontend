@@ -15,16 +15,16 @@ export function getDisplayTimeFromBackend(value: string | undefined) {
 	return value?.slice(0, 5) ?? '';
 }
 
-export function toSwissLocaleDateString(date: Date) {
-	return new Date(date).toLocaleDateString('de-CH', {day: '2-digit', month:'2-digit', year: 'numeric'});
+export function toSwissLocalDateTimeString(date: Date) {
+	return `${toSwissLocaleDateString(date)} ${toSwissLocaleTimeString(date)}`;
 }
 
-export function toSwissLocalDateTimeString(date: Date) {
-	return new Date(date).toLocaleString('de-CH');
+export function toSwissLocaleDateString(date: Date) {
+	return new Date(date).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 export function toSwissLocaleTimeString(date: Date) {
-	return date.toLocaleTimeString('de-CH', {hour: '2-digit', minute: '2-digit'});
+	return new Date(date).toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
 }
 
 export const fromTimeToDateTime = (date: Date, time: string): Date => {
