@@ -14,7 +14,7 @@ import {
 } from '../../../queries/activity-type';
 import { type QueryClient } from '@tanstack/react-query';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import AuditTrailInfo from '../../../components/common/audit-trail-info';
 import i18n from '../../../assets/i18n/i18n';
 
 export const loader =
@@ -53,9 +53,7 @@ const ActivityTypePage: React.FC = () => {
 					{t('activityType.title')} -{' '}
 					{getTranslation(i18n.language, activityType?.name)}
 				</h2>
-				<ActivityTraceInfo
-					{...activityType}
-				/>
+				<AuditTrailInfo {...activityType} />
 
 				{error && <p>{t('activityType.errorLoadingActivityType')}</p>}
 				{activityType && (

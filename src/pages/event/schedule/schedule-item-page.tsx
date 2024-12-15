@@ -28,7 +28,7 @@ import {
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import AuditTrailInfo from '../../../components/common/audit-trail-info';
 import { bookingsRoute, eventDetailRoutes } from '../../../constants';
 import { Button } from '../../../components/ui/button';
 
@@ -95,9 +95,7 @@ const ScheduleItemPage: React.FC = () => {
 						<TagIcon />
 						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 					</span>
-					<ActivityTraceInfo
-						{...timeSlot}
-					/>
+					<AuditTrailInfo {...timeSlot} />
 				</div>
 				<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
 				<Table className="mt-5">

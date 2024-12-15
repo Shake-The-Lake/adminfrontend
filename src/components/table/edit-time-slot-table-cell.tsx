@@ -9,7 +9,7 @@ import { Button } from '../ui/button';
 import { type UseMutationResult } from '@tanstack/react-query';
 import { useUpdateTimeSlot } from '../../queries/time-slot';
 import { useTranslation } from 'react-i18next';
-import ActivityTraceInfo from '../common/ActivityTraceInfo';
+import AuditTrailInfo from '../common/audit-trail-info';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
@@ -49,9 +49,7 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 				isCard={false}
 				isIcon={true}
 				formId="timeSlot">
-				<ActivityTraceInfo
-					{...timeSlot}
-				/>
+				<AuditTrailInfo {...timeSlot} />
 				<TimeSlotForm
 					model={timeSlot}
 					mutation={updateMutation}

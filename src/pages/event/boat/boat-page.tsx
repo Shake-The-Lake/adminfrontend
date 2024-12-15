@@ -13,7 +13,7 @@ import {
 import { extractTypedInfoFromRouteParams, type RouteParamsLoaderData } from '../../../lib/utils';
 import { defaultBoatDto } from '../../../models/api/boat.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import AuditTrailInfo from '../../../components/common/audit-trail-info';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -48,9 +48,7 @@ const BoatPage: React.FC = () => {
 					{t('boat.title')} - {boat?.name}
 				</h2>
 
-				<ActivityTraceInfo
-					{...boat}
-				/>
+				<AuditTrailInfo {...boat} />
 
 				{error && <p>{t('boat.errorLoadingBoat')}</p>}
 				{boat && (
