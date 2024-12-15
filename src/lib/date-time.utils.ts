@@ -60,3 +60,10 @@ export const addOneHourToTime = (time: string | undefined): string => {
 
 	return toSwissLocaleTimeString(currentDate);
 };
+
+export const isSameTime = (a: string | undefined, b: string | undefined): boolean => {
+	const timeA = getDisplayTimeFromBackend(a);
+	const timeB = getDisplayTimeFromBackend(b);
+
+	return timeA === timeB;
+};

@@ -86,7 +86,9 @@ const resources: Resource = {
 				moveTimeSlotDescription: 'To move a time slot, adjust the relevant times.',
 				moveTimeSlotInfo: 'What happens when you adjust the time of this slot?',
 				moveTimeSlotInfoDescription: '- The start and end times of this time slot will be updated with the new values.\n- All subsequent time slots of this boat will be shifted forward to maintain the schedule. In case this would make the last slot be longer than the rented time of the boat, you have to do the correction manually.\n- You cannot move this time slot earlier than its current start or end time.\n- If the slot is moved to a later time, its duration must remain the same unless it starts at the same time.\n\nUsers affected by this change will be automatically notified with the updated timings.',
+				moveTimeSlotIsRunning: 'Time Slot is running and therefore only the end time can be adjusted.',
 				unchangedTime: 'unchanged time',
+				originalTime: 'original time',
 			},
 			booking: {
 				errorLoadingBooking: 'Error while loading booking...',
@@ -283,7 +285,9 @@ const resources: Resource = {
 				moveTimeSlotDescription: 'Um ein Zeitfenster zu verschieben, passen Sie die entsprechenden Zeiten an.',
 				moveTimeSlotInfo: 'Was passiert, wenn Sie die Zeit dieses Zeitfensters anpassen?',
 				moveTimeSlotInfoDescription: '- Die Start- und Endzeiten dieses Zeitfensters werden mit den neuen Werten aktualisiert.\n- Alle nachfolgenden Zeitfenster dieses Boots werden nach vorne verschoben, um den Zeitplan einzuhalten. Sollte dies dazu führen, dass das letzte Zeitfenster länger ist als die gemietete Zeit des Boots, müssen Sie die Korrektur manuell vornehmen.\n- Sie können dieses Zeitfenster nicht früher als die aktuelle Start- oder Endzeit verschieben.\n- Wenn das Zeitfenster auf eine spätere Zeit verschoben wird, muss die Dauer gleich bleiben, es sei denn, es beginnt zur gleichen Zeit.\n\nBenutzer, die von dieser Änderung betroffen sind, werden automatisch mit den aktualisierten Zeiten benachrichtigt.',
+				moveTimeSlotIsRunning: 'Das Zeitfenster läuft gerade und deswegen kann nur der End-Zeitpunkt bearbeitet werden.',
 				unchangedTime: 'unveränderte Zeit',
+				originalTime: 'ursprüngliche Zeit',
 			},
 			booking: {
 				errorLoadingBooking: 'Fehler beim Laden der Buchung...',
@@ -481,7 +485,9 @@ const resources: Resource = {
 				moveTimeSlotDescription: 'Um es Ziitfenster z verschiebe, pass die entspräche Zyte aa.',
 				moveTimeSlotInfo: 'Was passiert, wenn du d Zyt vo dem Ziitfenster apasst?',
 				moveTimeSlotInfoDescription: '- D Start- und Ändzyte vo dem Ziitfenster wärde mit de neie Werte aktualisiert.\n- Alli folgendi Ziitfenster vo dem Boot wärde nach vore verschobe, zum dr Zytplan iihalte. Falls s letschte Ziitfenster de länger wärde würd als d gmieteti Zyt vom Boot, muesch du d Korrektur manual mache.\n- Du chasch das Ziitfenster nid früener verschiebe als d aktuelli Start- oder Ändzyt.\n- Wenn s Ziitfenster auf en spötere Zyt verschobe wird, mues d Duer gliich blibe, usser es fangt zur gliiche Zyt aa.\n\nBenutzer, wo vo dere Änderig betroffe sind, wärde automatic mit de aktualisierte Zyte informiert.',
+				moveTimeSlotIsRunning: 'Das Ziitfenster louft grad u drum cha nur dr End-Zitpunkt bearbeitet wärde.',
 				unchangedTime: 'unveränderti Zyt',
+				originalTime: 'ursprünglichi Zyt',
 			},
 			booking: {
 				errorLoadingBooking: 'Fähler bim Lade vo de Buechig...',

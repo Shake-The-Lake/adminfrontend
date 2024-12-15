@@ -1,6 +1,6 @@
 import React from 'react';
 import { z } from 'zod';
-import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -18,7 +18,7 @@ import { type BoatDto } from '../../models/api/boat.model';
 import { type UseMutationResult } from '@tanstack/react-query';
 import { useMutationToaster } from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
-import { getDisplayTimeFromBackend, validateTime } from '../../lib/date-time.utils';
+import { getDisplayTimeFromBackend, isSameTime, validateTime } from '../../lib/date-time.utils';
 import { useTranslation } from 'react-i18next';
 import StlSelect from '../select/stl-select';
 import { timeSlotTypeOptions } from '../../constants/constants';
@@ -86,12 +86,13 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 			id: model.id,
 		};
 
-		// Todo! change to this: Einfach die zuletzt geloggte Zeit zusätzlich speichern. Bei einer erneuten Anpassung wird die neue Zeit als „current“ festgelegt, während die vorherige Zeit als „last time“ gespeichert bleibt. Es geht primär um die letzte eingetragen Zeit nicht um die erstel. Daher bitte so wie beschriebe umsetzen
-		if (event?.date !== undefined && new Date() < event.date) {
-			// During the event itself and after, we don't want to change the original time,
-			// so we can trigger notifications and otherwise track the changes
-			timeSlot.originalFromTime = timeSlot.fromTime;
-			timeSlot.originalUntilTime = timeSlot.untilTime;
+		// Wir speichern die zuletzt geloggte Zeit. Bei einer erneuten Anpassung wird die neue Zeit als „current“ festgelegt, während die vorherige Zeit als „last time“ gespeichert bleibt.
+		if (!isSameTime(model.fromTime, values.fromTime)) {
+			timeSlot.originalFromTime = model.fromTime;
+		}
+
+		if (!isSameTime(model.untilTime, values.untilTime)) {
+			timeSlot.originalUntilTime = model.untilTime;
 		}
 
 		await mutation.mutateAsync(timeSlot);
@@ -119,7 +120,7 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 								/>
 							</FormControl>
 							{model.originalFromTime && <FormDescription>
-								original time: {getDisplayTimeFromBackend(model.originalFromTime)}
+								{t('timeSlot.originalTime')}: {getDisplayTimeFromBackend(model.originalFromTime)}
 							</FormDescription>}
 							<FormMessage />
 						</FormItem>
@@ -139,16 +140,15 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 								/>
 							</FormControl>
 							{model.originalUntilTime && <FormDescription>
-								original time: {getDisplayTimeFromBackend(model.originalUntilTime)}
+								{t('timeSlot.originalTime')}: {getDisplayTimeFromBackend(model.originalUntilTime)}
 							</FormDescription>}
 							<FormMessage />
 						</FormItem>
 					)}></FormField>
-				<Controller
+				<FormField
 					name="activityTypeId"
 					control={form.control}
-					render={({ field }) => <ActivityTypeSelect field={field} />}
-				/>
+					render={({ field }) => (<ActivityTypeSelect field={field} />)}></FormField>
 				<FormField
 					name="status"
 					control={form.control}

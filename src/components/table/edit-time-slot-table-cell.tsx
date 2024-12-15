@@ -25,13 +25,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
-import { validateTime, getDisplayTimeFromBackend } from '../../lib/date-time.utils';
+import { validateTime, getDisplayTimeFromBackend, fromTimeToDateTime, toSwissLocaleTimeString } from '../../lib/date-time.utils';
 import { onInvalidFormHandler } from '../../lib/utils';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { useMoveTimeSlot } from '../../queries/time-slot';
 import { useMutationToaster } from '../common/mutation-toaster';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { useEventDetail } from '../../queries/event';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
@@ -58,9 +59,6 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 	const closeUpdateDialog = () => {
 		setIsUpdateDialogOpen(false);
 	};
-
-	// Todo! only show icon if same day as event... or maybe not
-	// todo! Laufende Sessions: Können verlängert oder verkürzt werden, aber nicht verschoben.
 
 	return (
 		<TableCell className="text-right">
@@ -110,10 +108,12 @@ export type TimeSlotMoveFormSchema = z.infer<typeof TimeSlotMoveSchema>;
 
 const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 	const { id, boatId } = useParams<{ id: string; boatId: string }>();
+	const eventId = Number(id);
+	const { data: event } = useEventDetail(eventId, false);
 
 	const form = useForm<TimeSlotMoveFormSchema>({
 		mode: 'onChange',
-		defaultValues: dto, // Todo! from/until does not get updated correctly
+		defaultValues: dto,
 		resolver: zodResolver(TimeSlotMoveSchema),
 	});
 
@@ -121,7 +121,7 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 	const { t } = useTranslation();
 	const [open, setOpen] = useState(false);
 
-	const moveMutation = useMoveTimeSlot(Number(id), Number(boatId), dto?.id);
+	const moveMutation = useMoveTimeSlot(eventId, Number(boatId), dto?.id);
 	useMutationToaster({ type: 'update', mutation: moveMutation });
 
 	useEffect(() => {
@@ -129,6 +129,28 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 		form.setValue('fromTime', dto.fromTime ?? '', { shouldTouch: false });
 		form.setValue('untilTime', dto.untilTime ?? '', { shouldTouch: false });
 	}, [dto.id, dto.fromTime, dto.untilTime, open]);
+
+	const [isTimeSlotInFuture, setIsTimeSlotInFuture] = useState(false); // Todo! for these, add texts to explain
+	const [isTimeSlotRunning, setIsTimeSlotRunning] = useState(false);
+	const [isTimeSlotOver, setIsTimeSlotOver] = useState(false);
+
+	useEffect(() => {
+		if (event !== undefined) {
+			const now = new Date();
+			const timeSlotFrom = fromTimeToDateTime(event.date, dto.fromTime ?? '00:00');
+			const timeSlotUntil = fromTimeToDateTime(event.date, dto.untilTime ?? '23:59');
+
+			// Zukünftige Sessions: Können verschoben, verlängert oder verkürzt werden. Verschiebungen wirken sich auf alle darauffolgenden Sessions aus.
+			setIsTimeSlotInFuture(timeSlotFrom > now);
+
+			// Laufende Sessions: Können verlängert oder verkürzt werden, aber *nicht* verschoben.
+			setIsTimeSlotRunning(timeSlotFrom <= now && timeSlotUntil >= now);
+
+			// Bereits abgeschlossene Sessions: Bleiben unverändert.
+			setIsTimeSlotOver(timeSlotUntil < now);
+		}
+
+	}, [event?.date, toSwissLocaleTimeString(new Date())]);
 
 	const onOpenChange = (value: boolean) => {
 		if (value) {
@@ -146,17 +168,16 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 		setOpen(true);
 	};
 
-
 	const onSubmit: SubmitHandler<TimeSlotMoveFormSchema> = async (values) => {
-		const timeSlot: MoveTimeSlotDto = { ...values }; // Todo! move from time too
-		// todo! better handle flow, bc right now we can't shorten / lengthen
-
+		const timeSlot: MoveTimeSlotDto = { ...values };
 		await moveMutation.mutateAsync(timeSlot);
 
 		handleClose();
 	};
 
-	// Todo! fix all translations, including originl time everywhere
+	if (isTimeSlotOver) {
+		return <></>;
+	}
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange} data-testid="dialog">
@@ -211,10 +232,11 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 												{...field}
 												className="input"
 												type="time"
+												disabled={isTimeSlotRunning}
 											/>
 										</FormControl>
 										{dto.fromTime && <FormDescription>
-											{t('timeSlot.unchangedTime')}: {getDisplayTimeFromBackend(dto.fromTime)}
+											{isTimeSlotRunning ? t('timeSlot.moveTimeSlotIsRunning') : (`${t('timeSlot.unchangedTime')}: ${getDisplayTimeFromBackend(dto.fromTime)}`)}
 										</FormDescription>}
 										<FormMessage />
 									</FormItem>

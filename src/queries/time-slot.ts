@@ -125,7 +125,6 @@ export function useDeleteTimeSlot(eventId: number, boatId: number) {
 
 export function useMoveTimeSlot(eventId: number, boatId: number, id: number) {
 	const queryClient = useQueryClient();
-	console.log('eventId', eventId, 'boatId', boatId, 'id', id);
 	return useMutation({
 		mutationKey: timeSlotMutationKeys.move,
 		mutationFn: async (timeslot: MoveTimeSlotDto) => moveTimeSlot(id, timeslot),
