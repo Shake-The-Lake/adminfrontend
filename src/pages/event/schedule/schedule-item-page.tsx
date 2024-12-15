@@ -20,7 +20,7 @@ import {
 import { EyeIcon, SailboatIcon, TagIcon, UsersIcon } from 'lucide-react';
 import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import { useDeleteBooking } from '../../../queries/booking';
-import EditBookingTableCell from '../../../components/table/edit-booking';
+import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
@@ -49,10 +49,10 @@ const ScheduleItemPage: React.FC = () => {
 		ReturnType<ReturnType<typeof loader>>
 	>;
 
-	const {i18n, t} = useTranslation();
+	const { i18n, t } = useTranslation();
 	const navigate = useNavigate();
 
-	const {data: timeSlot} = useTimeSlotDetail(eventId, timeSlotId);
+	const { data: timeSlot } = useTimeSlotDetail(eventId, timeSlotId);
 
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
