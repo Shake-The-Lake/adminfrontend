@@ -31,6 +31,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, For
 import { Input } from '../ui/input';
 import { useMoveTimeSlot } from '../../queries/time-slot';
 import { useMutationToaster } from '../common/mutation-toaster';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
@@ -180,9 +181,18 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 				data-testid="dialog-content">
 				<DialogHeader>
 					<DialogTitle>{t('timeSlot.moveTimeSlot')}</DialogTitle>
-					<DialogDescription>{'timeSlot.moveTimeSlotDescription'}</DialogDescription>
+					<DialogDescription className='whitespace-pre text-wrap'>
+						{t('timeSlot.moveTimeSlotDescription')}
+					</DialogDescription>
 				</DialogHeader>
 				<div className="flex-grow overflow-auto p-1">
+					<Accordion type="single" collapsible>
+						<AccordionItem value="item-1">
+							<AccordionTrigger className='text-sm'>{t('timeSlot.moveTimeSlotInfo')}</AccordionTrigger>
+							<AccordionContent className='whitespace-pre text-wrap'>{t('timeSlot.moveTimeSlotInfoDescription')}</AccordionContent>
+						</AccordionItem>
+					</Accordion>
+
 					<Form {...form}>
 						<form
 							id="moveTimeSlot"
@@ -204,7 +214,7 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 											/>
 										</FormControl>
 										{dto.fromTime && <FormDescription>
-											original time: {getDisplayTimeFromBackend(dto.fromTime)}
+											{t('timeSlot.unchangedTime')}: {getDisplayTimeFromBackend(dto.fromTime)}
 										</FormDescription>}
 										<FormMessage />
 									</FormItem>
@@ -224,7 +234,7 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 											/>
 										</FormControl>
 										{dto.untilTime && <FormDescription>
-											original time: {getDisplayTimeFromBackend(dto.untilTime)}
+											{t('timeSlot.unchangedTime')}: {getDisplayTimeFromBackend(dto.untilTime)}
 										</FormDescription>}
 										<FormMessage />
 									</FormItem>
@@ -247,7 +257,7 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 						type="submit"
 						form="moveTimeSlot"
 						data-testid="dialog-submit-button">
-						{t('move')}
+						{t('timeSlot.move')}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
