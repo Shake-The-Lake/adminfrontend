@@ -5,6 +5,7 @@ import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import {
 	activityTypeDetailOptions,
@@ -36,9 +37,7 @@ export const loader =
 		};
 
 const ActivityTypePage: React.FC = () => {
-	const { eventId, activityTypeId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { eventId, activityTypeId } = useLoaderData() as RouteParamsLoaderData;
 	const { data: activityType, error } = useActivityTypeDetail(
 		eventId,
 		activityTypeId,

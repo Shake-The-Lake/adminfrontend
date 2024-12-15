@@ -25,6 +25,7 @@ import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 
@@ -47,9 +48,7 @@ export const loader =
 		};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
-	const { eventId, boatId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { eventId, boatId } = useLoaderData() as RouteParamsLoaderData;
 
 	const { i18n, t } = useTranslation();
 

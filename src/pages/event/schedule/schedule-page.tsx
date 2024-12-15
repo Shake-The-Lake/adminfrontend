@@ -17,6 +17,7 @@ import { fromTimeToDateTime } from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
@@ -55,9 +56,7 @@ const scheduleColors = [
 const breakScheduleColor = '#F48A4E';
 
 const SchedulePage: React.FC = () => {
-	const { eventId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { eventId } = useLoaderData() as RouteParamsLoaderData;
 	const { i18n, t } = useTranslation();
 
 	const { data: event } = useEventDetail(eventId, false);

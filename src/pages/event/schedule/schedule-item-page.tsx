@@ -24,6 +24,7 @@ import EditBookingTableCell from '../../../components/table/edit-booking';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
@@ -45,14 +46,12 @@ export const loader =
 		};
 
 const ScheduleItemPage: React.FC = () => {
-	const { timeSlotId, eventId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { timeSlotId, eventId } = useLoaderData() as RouteParamsLoaderData;
 
-	const {i18n, t} = useTranslation();
+	const { i18n, t } = useTranslation();
 	const navigate = useNavigate();
 
-	const {data: timeSlot} = useTimeSlotDetail(eventId, timeSlotId);
+	const { data: timeSlot } = useTimeSlotDetail(eventId, timeSlotId);
 
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
