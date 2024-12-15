@@ -1,8 +1,8 @@
-import {addOneHourToTime} from '../../lib/date-time.utils';
-import {type ActivityTypeDto} from './activity-type.model';
-import {type BaseModel} from './base.model';
-import {type BoatDto} from './boat.model';
-import {type BookingDto} from './booking.model';
+import { addOneHourToTime } from '../../lib/date-time.utils';
+import { type ActivityTypeDto } from './activity-type.model';
+import { type BaseModel } from './base.model';
+import { type BoatDto } from './boat.model';
+import { type BookingDto } from './booking.model';
 
 export enum TimeSlotType {
 	AVAILABLE = 'AVAILABLE',
@@ -25,6 +25,8 @@ export type TimeSlotDto = BaseModel & {
 	availableRiderSeats: number;
 	availableViewerSeats: number;
 	status: TimeSlotType;
+	originalFromTime?: string;
+	originalUntilTime?: string;
 };
 
 export const getDefaultTimeSlotBasedOnBoat = (boat: BoatDto): TimeSlotDto => ({
@@ -43,6 +45,8 @@ export const getDefaultTimeSlotBasedOnBoat = (boat: BoatDto): TimeSlotDto => ({
 	availableRiderSeats: boat.seatsRider,
 	availableViewerSeats: boat.seatsViewer,
 	status: TimeSlotType.AVAILABLE,
+	originalFromTime: undefined,
+	originalUntilTime: undefined,
 });
 
 export const getDefaultTimeSlotBasedOnPrevious = (previous: TimeSlotDto, boat: BoatDto): TimeSlotDto => ({
