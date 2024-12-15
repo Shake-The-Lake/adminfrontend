@@ -88,7 +88,6 @@ export function useCreateTimeSlot(eventId: number, boatId: number) {
 				eventId,
 				boatId,
 				data?.id ?? 0,
-				data,
 			);
 		},
 	});
@@ -100,13 +99,11 @@ export function useUpdateTimeSlot(eventId: number, id: number) {
 		mutationKey: timeSlotMutationKeys.update,
 		mutationFn: async (timeslot: TimeSlotDto) => updateTimeSlot(id, timeslot),
 		async onSuccess(data) {
-			console.log('on success update: eventId', eventId, 'boatId', data?.boatId, 'id', id);
 			await queriesToInvalidateOnCrud(
 				queryClient,
 				eventId,
 				data?.boatId,
 				id,
-				data,
 			);
 		},
 	});
@@ -129,13 +126,11 @@ export function useMoveTimeSlot(eventId: number, boatId: number, id: number) {
 		mutationKey: timeSlotMutationKeys.move,
 		mutationFn: async (timeslot: MoveTimeSlotDto) => moveTimeSlot(id, timeslot),
 		async onSuccess() {
-			console.log('on success move: eventId', eventId, 'boatId', boatId, 'id', id);
 			await queriesToInvalidateOnCrud(
 				queryClient,
 				eventId,
 				boatId,
 				id,
-				undefined,
 			);
 		},
 	});
@@ -146,7 +141,6 @@ async function queriesToInvalidateOnCrud(
 	eventId: number,
 	boatId?: number,
 	timeSlotId?: number,
-	data?: TimeSlotDto,
 ) {
 	await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId); // Own invalidation is contained
 
