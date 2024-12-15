@@ -38,17 +38,18 @@ const resources: Resource = {
 				triggerLabel: 'Add new Activity Type',
 				nameGerman: 'Name in German',
 				nameEnglish: 'Name in English',
+				nameSwissGerman: 'Name in Swiss German',
 				descEnglish: 'Description in English',
 				descGerman: 'Description in German',
 				descSwissGerman: 'Description in Swiss German',
 				checklistGerman: 'Checklist in German',
 				checklistEnglish: 'Checklist in English',
 				checklistSwissGerman: 'Checklist in Swiss German',
-				nameSwissGerman: 'Name in Swiss German',
 				descriptionGerman:
 					'Enter German content and content that does not belong to a specific language here.',
 				descriptionSwissGerman:
 					'Enter Swiss German content and content that does not belong to a specific language here.',
+				checklistDescription: 'This checklist will eventually be displayed to the user so they know what they have to do before they climb on board (e.g. change into swimwear, come to the hut when the boat is about to leave...)',
 			},
 			boat: {
 				errorLoadingBoat: 'Error while loading boat...',
@@ -228,17 +229,19 @@ const resources: Resource = {
 				triggerLabel: 'Neuen Aktivitätstyp hinzufügen',
 				nameEnglish: 'Name auf Englisch',
 				nameGerman: 'Name auf Deutsch',
+				nameSwissGerman: 'Name auf Schweizerdeutsch',
 				descEnglish: 'Beschreibung auf Englisch',
 				descGerman: 'Beschreibung auf Deutsch',
 				descSwissGerman: 'Beschreibung auf Schweizerdeutsch',
 				checklistGerman: 'Checkliste auf Deutsch',
 				checklistEnglish: 'Checkliste auf Englisch',
 				checklistSwissGerman: 'Checkliste auf Schweizerdeutsch',
-				nameSwissGerman: 'Name auf Schweizerdeutsch',
 				descriptionGerman:
 					'Geben Sie hier deutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
 				descriptionSwissGerman:
 					'Geben Sie hier schweizerdeutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
+				checklistDescription: 'Diese Checkliste wird dem Benutzer letztendlich angezeigt, damit er weiss, was er tun muss, bevor er an Bord geht (z. B. Badebekleidung anziehen, zur Hütte kommen, bevor das Boot ablegt...)',
+
 			},
 			boat: {
 				errorLoadingBoat: 'Fehler beim Laden des Boots...',
@@ -421,17 +424,18 @@ const resources: Resource = {
 				triggerLabel: 'Neui Aktivitätstyp hinzfüege',
 				nameEnglish: 'Name uf Englisch',
 				nameGerman: 'Name uf Dütsch',
+				nameSwissGerman: 'Name uf Schwiizerdütsch',
 				descEnglish: 'Bschrybig uf Englisch',
 				descGerman: 'Bschrybig uf Dütsch',
 				descSwissGerman: 'Bschrybig uf Schwiizerdütsch',
 				checklistGerman: 'Checklist uf Dütsch',
 				checklistEnglish: 'Checklist uf Englisch',
 				checklistSwissGerman: 'Checklist uf Schwiizerdütsch',
-				nameSwissGerman: 'Name uf Schwiizerdütsch',
 				descriptionGerman:
 					'Gib do dütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
 				descriptionSwissGerman:
 					'Gib do schwiizerdütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
+				checklistDescription: 'Die Checkliste wird dä Benutzer schlussändlech azeigt, damit si wüsse, was si müesse mache, bevor si a Bord göh (z. B. Badechleider azieh, zur Hüttä cho, bevor s Boot abfahrt...)',
 			},
 			boat: {
 				errorLoadingBoat: 'Fähler bim Lade vom Boot...',
