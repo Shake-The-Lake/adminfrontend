@@ -57,3 +57,8 @@ export const getDefaultTimeSlotBasedOnPrevious = (previous: TimeSlotDto, boat: B
 	activityType: previous.activityType,
 	status: TimeSlotType.AVAILABLE,
 });
+
+export type MoveTimeSlotDto = {
+	fromTime?: string;
+	untilTime?: string;
+};

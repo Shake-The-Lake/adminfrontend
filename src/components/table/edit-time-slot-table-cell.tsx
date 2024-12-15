@@ -10,6 +10,7 @@ import { type UseMutationResult } from '@tanstack/react-query';
 import { useUpdateTimeSlot } from '../../queries/time-slot';
 import { useTranslation } from 'react-i18next';
 import ActivityTraceInfo from '../common/ActivityTraceInfo';
+import TimeSlotMoveDialog from '../dialog/time-slot-move-dialog';
 
 type EditTimeSlotTableCellProps = {
 	timeSlot: TimeSlotDto;
@@ -37,9 +38,14 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 		setIsUpdateDialogOpen(false);
 	};
 
+	// Todo! only show icon if same day as event... or maybe not
+	// todo! Laufende Sessions: Können verlängert oder verkürzt werden, aber nicht verschoben.
+
 	return (
 		<TableCell className="text-right">
+			<TimeSlotMoveDialog key={`move-${timeSlot.id}`} {...timeSlot}></TimeSlotMoveDialog>
 			<StlDialog
+				key={`update-${timeSlot.id}`}
 				title={t('timeSlot.edit')}
 				description={t('timeSlot.editDescription')}
 				triggerLabel={t('timeSlot.edit')}

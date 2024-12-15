@@ -1,4 +1,4 @@
-import { type TimeSlotDto } from '../models/api/time-slot.model';
+import { type MoveTimeSlotDto, type TimeSlotDto } from '../models/api/time-slot.model';
 import {
 	type QueryClient,
 	queryOptions,
@@ -14,6 +14,7 @@ import {
 	updateTimeSlot,
 	getAllTimeSlotsFromEvent,
 	getAllTimeSlotsFromBoat,
+	moveTimeSlot,
 } from '../services/time-slot-service';
 import { boatQueryKeys } from './boat';
 import {
@@ -34,7 +35,7 @@ export const timeSlotQueryKeys = {
 		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
-export const timeSlotMutationKeys = mutationKeyGenerator(identifier);
+export const timeSlotMutationKeys = { ...mutationKeyGenerator(identifier), move: [identifier, 'move'] };
 
 export const timeslotsForEventOptions = (eventId: number) =>
 	queryOptions({
@@ -99,6 +100,7 @@ export function useUpdateTimeSlot(eventId: number, id: number) {
 		mutationKey: timeSlotMutationKeys.update,
 		mutationFn: async (timeslot: TimeSlotDto) => updateTimeSlot(id, timeslot),
 		async onSuccess(data) {
+			console.log('on success update: eventId', eventId, 'boatId', data?.boatId, 'id', id);
 			await queriesToInvalidateOnCrud(
 				queryClient,
 				eventId,
@@ -117,6 +119,25 @@ export function useDeleteTimeSlot(eventId: number, boatId: number) {
 		mutationFn: deleteTimeSlot,
 		async onSuccess() {
 			await queriesToInvalidateOnCrud(queryClient, eventId, boatId);
+		},
+	});
+}
+
+export function useMoveTimeSlot(eventId: number, boatId: number, id: number) {
+	const queryClient = useQueryClient();
+	console.log('eventId', eventId, 'boatId', boatId, 'id', id);
+	return useMutation({
+		mutationKey: timeSlotMutationKeys.move,
+		mutationFn: async (timeslot: MoveTimeSlotDto) => moveTimeSlot(id, timeslot),
+		async onSuccess() {
+			console.log('on success move: eventId', eventId, 'boatId', boatId, 'id', id);
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				boatId,
+				id,
+				undefined,
+			);
 		},
 	});
 }

@@ -27,7 +27,6 @@ import {
 	getTranslation,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
-import { EventDto } from '../../../models/api/event.model';
 import { useEventDetail } from '../../../queries/event';
 
 export const loader =
