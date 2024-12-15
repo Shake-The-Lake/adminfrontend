@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useCreateBooking } from '../../../queries/booking';
 import { useCreatePerson } from '../../../queries/person';
 import { defaultBooking } from '../../../models/api/booking.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import BookingForm from '../../../components/forms/booking';
+import { bookingsRoute } from '../../../constants';
 
 const BookingPageNew: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -16,8 +17,19 @@ const BookingPageNew: React.FC = () => {
 	const createPersonMutation = useCreatePerson(eventId);
 	const navigate = useNavigate();
 
-	const handleSuccessfullySubmitted = () => {
-		navigate(`/event/${eventId}/bookings`);
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+	const { state } = useLocation();
+
+	const handleSuccessfullySubmitted = (id: number) => {
+
+		if (state !== undefined && state !== null && typeof state.timeSlotId === 'number') {
+			// With react-router-dom this triggers a browser-back.
+			// This way we can handle having the add button on multiple different pages.
+			navigate(-1);
+		} else {
+			// Navigate to detail page if created from overview route
+			navigate(`${bookingsRoute(eventId)}/edit/${id}`, { replace: true });
+		}
 	};
 
 	return (

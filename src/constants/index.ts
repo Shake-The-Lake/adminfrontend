@@ -3,9 +3,9 @@ export const de = 'de';
 export const ch = 'gsw';
 
 export const languages = [
-	{label: 'German', code: de},
-	{label: 'English', code: en},
-	{label: 'Swiss-German', code: ch},
+	{ label: 'German', code: de },
+	{ label: 'English', code: en },
+	{ label: 'Swiss-German', code: ch },
 ];
 
 export const eventBaseRoute = '/event/';
@@ -23,6 +23,8 @@ export const eventDetailRoutes = {
 	editBooking: 'edit/:bookingId',
 	bookingId: ':bookingId',
 };
+
+export const bookingsRoute = (eventId: number) => `/event/${eventId}/bookings`;
 
 export const iconPaths = {
 	tiAndM: '/ti-and-m-logo.svg',

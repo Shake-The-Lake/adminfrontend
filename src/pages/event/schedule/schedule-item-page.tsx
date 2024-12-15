@@ -29,6 +29,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import { bookingsRoute, eventDetailRoutes } from '../../../constants';
+import { Button } from '../../../components/ui/button';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -60,6 +62,10 @@ const ScheduleItemPage: React.FC = () => {
 
 	const deleteMutation = useDeleteBooking(eventId);
 
+	const onCreateBookingClick = () => {
+		navigate(`${bookingsRoute(eventId)}/${eventDetailRoutes.addBooking}`, { state: { timeSlotId: timeSlot?.id } });
+	};
+
 	return (
 		<PageTransitionFadeIn>
 			<div className="mt-10">
@@ -69,6 +75,9 @@ const ScheduleItemPage: React.FC = () => {
 						{getDisplayTimeFromBackend(timeSlot?.fromTime)} -{' '}
 						{getDisplayTimeFromBackend(timeSlot?.untilTime)}
 					</h2>
+					<Button data-testid="booking-create-button" onClick={onCreateBookingClick}>
+						{t('booking.create')}
+					</Button>
 				</div>
 				<div className="flex flex-wrap gap-5">
 					<span className="flex gap-2">
@@ -108,7 +117,7 @@ const ScheduleItemPage: React.FC = () => {
 									key={index}
 									className="w-full justify-between"
 									onClick={() => {
-										navigate(`/event/${eventId}/bookings/edit/${slot.id}`);
+										navigate(`${bookingsRoute(eventId)}/edit/${slot.id}`);
 									}}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}

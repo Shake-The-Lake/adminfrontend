@@ -93,6 +93,21 @@ export function useEmitSuccessIfSucceeded(
 	}, [mutation?.isSuccess, mutation?.data?.id]);
 }
 
+export function useEmitSuccessIfSucceededWithParameter(
+	onSuccessfullySubmitted: ((id: number) => void) | undefined,
+	mutation: UseMutationResult<any, Error, any>,
+) {
+	useEffect(() => {
+		if (
+			onSuccessfullySubmitted &&
+			mutation?.isSuccess &&
+			Boolean(mutation.data?.id)
+		) {
+			onSuccessfullySubmitted(Number(mutation.data?.id));
+		}
+	}, [mutation?.isSuccess, mutation?.data?.id]);
+}
+
 export function extractTypedInfoFromRouteParams(params: Params) {
 	return {
 		eventId: params.id ? Number(params.id) : 0,

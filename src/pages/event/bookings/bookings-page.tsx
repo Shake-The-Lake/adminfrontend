@@ -21,7 +21,7 @@ import StlFilter, {
 	StlFilterOptions,
 } from '../../../components/data-table/stl-filter';
 import { defaultFilterParams } from '../../../models/api/search.model';
-import { eventDetailRoutes } from '../../../constants';
+import { bookingsRoute, eventDetailRoutes } from '../../../constants';
 import { extractTypedInfoFromRouteParams, type RouteParamsLoaderData } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
@@ -74,7 +74,7 @@ const BookingsPage: React.FC = () => {
 	};
 
 	const handleRowClick = (row: BookingSearchDto) => {
-		navigate(`/event/${eventId}/bookings/edit/${row.booking.id}`);
+		navigate(`${bookingsRoute(eventId)}/edit/${row.booking.id}`);
 	};
 
 	return (
