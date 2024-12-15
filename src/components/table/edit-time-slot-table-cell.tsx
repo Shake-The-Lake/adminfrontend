@@ -130,7 +130,7 @@ const TimeSlotMoveDialog: React.FC<TimeSlotDto> = (dto) => {
 		form.setValue('untilTime', dto.untilTime ?? '', { shouldTouch: false });
 	}, [dto.id, dto.fromTime, dto.untilTime, open]);
 
-	const [isTimeSlotInFuture, setIsTimeSlotInFuture] = useState(false); // Todo! for these, add texts to explain
+	const [_isTimeSlotInFuture, setIsTimeSlotInFuture] = useState(false);
 	const [isTimeSlotRunning, setIsTimeSlotRunning] = useState(false);
 	const [isTimeSlotOver, setIsTimeSlotOver] = useState(false);
 

@@ -65,11 +65,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-	// Todo! add comment in move dialog: • Laufende Sessions: Können verlängert oder verkürzt werden, aber nicht verschoben.
-	// • Zukünftige Sessions: Können verschoben, verlängert oder verkürzt werden.Verschiebungen wirken sich auf alle darauffolgenden Sessions aus.
-	// • Bereits abgeschlossene Sessions: Bleiben unverändert.Anpassungen gelten nur ab dem aktuellen Zeitpunkt(„jetzt“).
-	// todo! in move dialog, handle exception: Überschneidungen sind nicht erlaubt (siehe Punkte 1 und 2). Sobald keine freien Slots mehr verfügbar sind, müssen alle verbleibenden Slots storniert werden. Die betroffenen Nutzer sollen benachrichtigt werden, dass die Fahrt nicht mehr stattfindet.
-
 	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
 
 	const onSubmit: SubmitHandler<TimeSlotFormSchema> = async (values) => {
