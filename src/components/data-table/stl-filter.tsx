@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import ActivityTypeSelect from '../select/activity-type-select';
 import BoatSelect from '../select/boat-select';
 import {
@@ -37,8 +37,8 @@ type StlFilterProps = {
 
 const filterSchema = z.object({
 	searchTerm: z.string().optional(),
-	activityTypeId: z.number().min(0).optional(),
-	boatId: z.number().min(0).optional(),
+	activityTypeId: z.number().min(0).optional().or(z.string().optional()),
+	boatId: z.number().min(0).optional().or(z.string().optional()),
 	from: z
 		.string()
 		.optional()
@@ -63,9 +63,11 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
 			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {
-				params.onActivityTypeChange(value.activityTypeId);
+				const activityTypeId = typeof value.activityTypeId === 'string' ? undefined : value.activityTypeId;
+				params.onActivityTypeChange(activityTypeId);
 			} else if (name === 'boatId' && params.onBoatChange) {
-				params.onBoatChange(value.boatId);
+				const boatId = typeof value.boatId === 'string' ? undefined : value.boatId;
+				params.onBoatChange(boatId);
 			} else if (name === 'from' && params.onFromChange) {
 				params.onFromChange(value.from);
 			} else if (name === 'to' && params.onToChange) {
@@ -103,29 +105,26 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 				)}
 
 				{hasOption(options, StlFilterOptions.ActivityType) && (
-					<Controller
+					<FormField
 						name="activityTypeId"
 						control={form.control}
 						render={({ field }) => (
 							<ActivityTypeSelect
 								field={field}
-								className="min-w-[200px] flex-grow flex-shrink-0"
-							/>
-						)}
-					/>
+								className="min-w-[200px] flex-grow flex-shrink-0" />
+						)}>
+					</FormField>
 				)}
 
 				{hasOption(options, StlFilterOptions.Boat) && (
-					<Controller
+					<FormField
 						name="boatId"
 						control={form.control}
 						render={({ field }) => (
 							<BoatSelect
 								field={field}
 								className="min-w-[200px] flex-grow flex-shrink-0"
-							/>
-						)}
-					/>
+							/>)}></FormField>
 				)}
 
 				{hasOption(options, StlFilterOptions.TimeRange) && (
