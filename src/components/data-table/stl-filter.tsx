@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/prefer-literal-enum-member */
 /* eslint-disable no-bitwise */
-import React, {useEffect} from 'react';
-import {z} from 'zod';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {Controller, useForm} from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 import ActivityTypeSelect from '../select/activity-type-select';
 import BoatSelect from '../select/boat-select';
 import {
@@ -14,10 +14,10 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import {Input} from '../ui/input';
-import {type StlFilterParams} from '../../models/api/search.model';
-import {validateTime} from '../../lib/date-time.utils';
-import {useTranslation} from 'react-i18next';
+import { Input } from '../ui/input';
+import { type StlFilterParams } from '../../models/api/search.model';
+import { validateTime } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
 
 export enum StlFilterOptions {
 	SearchTerm = 1 << 0, // 0001 -- the bitshift is unnecessary, but done for consistency
@@ -49,17 +49,17 @@ const filterSchema = z.object({
 		.refine((value) => validateTime(value), 'Invalid time'),
 });
 
-const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
+const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 	const form = useForm<z.infer<typeof filterSchema>>({
 		mode: 'onChange',
 		defaultValues: params,
 		resolver: zodResolver(filterSchema),
 	});
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
-		const subscription = form.watch((value, {name}) => {
+		const subscription = form.watch((value, { name }) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
 			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {
@@ -81,12 +81,12 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 		<Form {...form}>
 			<form
 				id="filter"
-				className="p-1 w-full flex flex-wrap gap-4 justify-between items-center">
+				className="p-3 w-full flex flex-wrap gap-4 justify-between items-center rounded-lg border bg-muted/50">
 				{hasOption(options, StlFilterOptions.SearchTerm) && (
 					<FormField
 						name="searchTerm"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem className="min-w-[200px] flex-grow">
 								<FormLabel>{t('search')}</FormLabel>
 								<FormControl>
@@ -106,7 +106,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 					<Controller
 						name="activityTypeId"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<ActivityTypeSelect
 								field={field}
 								className="min-w-[200px] flex-grow flex-shrink-0"
@@ -119,7 +119,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 					<Controller
 						name="boatId"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<BoatSelect
 								field={field}
 								className="min-w-[200px] flex-grow flex-shrink-0"
@@ -133,7 +133,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						<FormField
 							name="from"
 							control={form.control}
-							render={({field}) => (
+							render={({ field }) => (
 								<FormItem>
 									<FormLabel>{t('from')}</FormLabel>
 									<FormControl>
@@ -151,7 +151,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						<FormField
 							name="to"
 							control={form.control}
-							render={({field}) => (
+							render={({ field }) => (
 								<FormItem className="sm:ml-4">
 									<FormLabel>To</FormLabel>
 									<FormControl>
