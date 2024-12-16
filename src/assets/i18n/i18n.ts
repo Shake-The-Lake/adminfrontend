@@ -1,6 +1,6 @@
-import i18n, {type Resource} from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {en, languages} from '../../constants';
+import i18n, { type Resource } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { en, languages } from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -106,6 +106,7 @@ const resources: Resource = {
 				driverOrViewer: 'Driver Or Viewer?',
 				isRider: 'is riding',
 				isViewer: 'is viewing',
+				free: 'free',
 			},
 			login: {
 				username: 'Username',
@@ -300,6 +301,7 @@ const resources: Resource = {
 				driverOrViewer: 'Fahrer oder Zuschauer?',
 				isRider: 'fährt',
 				isViewer: 'schaut zu',
+				free: 'frei',
 			},
 			login: {
 				username: 'Benutzername',
@@ -495,6 +497,7 @@ const resources: Resource = {
 				driverOrViewer: 'Fahrer oder Zueschouer?',
 				isRider: 'duet fahre',
 				isViewer: 'duet zueluege',
+				free: 'frei',
 			},
 			login: {
 				username: 'Benutzername',

@@ -153,7 +153,7 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 							control={form.control}
 							render={({ field }) => (
 								<FormItem className="sm:ml-4">
-									<FormLabel>To</FormLabel>
+									<FormLabel>{t('to')}</FormLabel>
 									<FormControl>
 										<Input
 											placeholder={t('timeSlot.timeFormat')}
