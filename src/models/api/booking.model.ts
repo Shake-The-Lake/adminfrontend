@@ -1,6 +1,6 @@
-import {type BaseModel} from './base.model';
-import {type PersonDto} from './person.model';
-import {type TimeSlotDto} from './time-slot.model';
+import { type BaseModel } from './base.model';
+import { defaultPerson, type PersonDto } from './person.model';
+import { type TimeSlotDto } from './time-slot.model';
 
 export type BookingDto = BaseModel & {
 	id?: number;
@@ -15,11 +15,10 @@ export type BookingDto = BaseModel & {
 
 export const defaultBooking: BookingDto = {
 	id: 0,
-	isRider: false,
+	isRider: true,
 	isManual: true,
+	person: defaultPerson,
 	pagerNumber: undefined,
 	personId: 0,
 	timeSlotId: 0,
-	createdBy: 'timon',
-	modifiedBy: 'tim',
 };

@@ -1,50 +1,48 @@
-import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
-import {defaultBoatDto} from '../../../models/api/boat.model';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
+import { defaultBoatDto } from '../../../models/api/boat.model';
 import StlCard from '../../../components/cards/stl-card';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import BoatForm from '../../../components/forms/boat';
-import {type QueryClient} from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import {
 	boatsOptions,
 	useCreateBoat,
 	useDeleteBoat,
 	useGetBoats,
 } from '../../../queries/boat';
-import {useMutationToaster} from '../../../components/common/mutation-toaster';
-import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
+import { useMutationToaster } from '../../../components/common/mutation-toaster';
+import { extractTypedInfoFromRouteParams, type RouteParamsLoaderData } from '../../../lib/utils';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.eventId) {
-			throw new Error('No event ID provided');
-		}
+		async ({ params }: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.eventId) {
+				throw new Error('No event ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			boatsOptions(routeIds.eventId, queryClient),
-		);
+			await queryClient.ensureQueryData(
+				boatsOptions(routeIds.eventId, queryClient),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const BoatsOverview: React.FC = () => {
-	const {eventId} = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
-	const {data: boats} = useGetBoats(eventId);
+	const { eventId } = useLoaderData() as RouteParamsLoaderData;
+	const { data: boats } = useGetBoats(eventId);
 
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	const createMutation = useCreateBoat(eventId);
 	const deleteMutation = useDeleteBoat(eventId);
 
-	useMutationToaster({type: 'delete', mutation: deleteMutation});
+	useMutationToaster({ type: 'delete', mutation: deleteMutation });
 
 	const openCreateDialog = () => {
 		setIsCreateDialogOpen(true);

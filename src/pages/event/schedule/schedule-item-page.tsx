@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type QueryClient } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
@@ -7,6 +8,7 @@ import {
 } from 'react-router-dom';
 import {
 	timeslotDetailOptions,
+	useDeleteTimeSlot,
 	useTimeSlotDetail,
 } from '../../../queries/time-slot';
 import {
@@ -17,17 +19,21 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import { EyeIcon, SailboatIcon, TagIcon, UsersIcon } from 'lucide-react';
+import { EyeIcon, SailboatIcon, TagIcon, TimerResetIcon, Trash, UsersIcon } from 'lucide-react';
 import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import { useDeleteBooking } from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import AuditTrailInfo from '../../../components/common/audit-trail-info';
+import { bookingsRoute, eventDetailRoutes, scheduleRoute } from '../../../constants';
+import { Button } from '../../../components/ui/button';
+import { TimeSlotType } from '../../../models/api/time-slot.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -45,14 +51,18 @@ export const loader =
 		};
 
 const ScheduleItemPage: React.FC = () => {
-	const { timeSlotId, eventId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { timeSlotId, eventId } = useLoaderData() as RouteParamsLoaderData;
 
 	const { i18n, t } = useTranslation();
 	const navigate = useNavigate();
 
 	const { data: timeSlot } = useTimeSlotDetail(eventId, timeSlotId);
+
+	useEffect(() => {
+		if (timeSlot?.status === TimeSlotType.ON_BREAK) {
+			navigate(scheduleRoute(eventId));
+		}
+	}, [timeSlot?.status]);
 
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
@@ -60,6 +70,16 @@ const ScheduleItemPage: React.FC = () => {
 		(timeSlot?.seatsViewer ?? 0) - (timeSlot?.availableViewerSeats ?? 0);
 
 	const deleteMutation = useDeleteBooking(eventId);
+
+	const deleteTimeSlotMutation = useDeleteTimeSlot(eventId, timeSlot?.boatId ?? 0);
+	const handleTimeSlotDelete = async () => {
+		navigate(-1); // We assume delete will succeed (cannot be after as otherwise we would get stuck in a loop due to invalidation)
+		await deleteTimeSlotMutation.mutateAsync(timeSlot?.id ?? 0);
+	};
+
+	const onCreateBookingClick = () => {
+		navigate(`${bookingsRoute(eventId)}/${eventDetailRoutes.addBooking}`, { state: { timeSlotId: timeSlot?.id } });
+	};
 
 	return (
 		<PageTransitionFadeIn>
@@ -70,28 +90,51 @@ const ScheduleItemPage: React.FC = () => {
 						{getDisplayTimeFromBackend(timeSlot?.fromTime)} -{' '}
 						{getDisplayTimeFromBackend(timeSlot?.untilTime)}
 					</h2>
+					{timeSlot?.bookings === undefined || timeSlot?.bookings?.length === 0 && (<Button
+						variant="ghost"
+						size="icon"
+						className="items-center"
+						onClick={handleTimeSlotDelete}
+						title={t('delete')}
+						aria-label={t('delete')}>
+						<Trash className="cursor-pointer hover:text-red-600" />
+					</Button>)}
 				</div>
 				<div className="flex flex-wrap gap-5">
-					<span className="flex gap-2">
-						<SailboatIcon /> {timeSlot?.boat?.operator}
-					</span>
-					<span className="flex gap-2">
-						<EyeIcon />
-						{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
-					</span>
-					<span className="flex gap-2">
-						<UsersIcon />
-						{signedUpRiders} / {timeSlot?.seatsRider ?? 0}
-					</span>
-					<span className="flex gap-2">
-						<TagIcon />
-						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
-					</span>
-					<ActivityTraceInfo
-						{...timeSlot}
-					/>
+					<div className="flex w-full justify-between">
+						<div className="flex flex-wrap gap-5">
+							<span className="flex gap-2">
+								<SailboatIcon /> {timeSlot?.boat?.operator}
+							</span>
+							<span className="flex gap-2">
+								<EyeIcon />
+								{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
+							</span>
+							<span className="flex gap-2">
+								<UsersIcon />
+								{signedUpRiders} / {timeSlot?.seatsRider ?? 0}
+							</span>
+							<span className="flex gap-2">
+								<TagIcon />
+								{getTranslation(i18n.language, timeSlot?.activityType?.name)}
+							</span>
+
+						</div>
+						<span className="flex gap-2 text-primary-dark-stroke">
+							<TimerResetIcon />
+							{t('timeSlot.originalTime')}:{' '}
+							{getDisplayTimeFromBackend(timeSlot?.originalFromTime ?? timeSlot?.fromTime)} -{' '}
+							{getDisplayTimeFromBackend(timeSlot?.originalUntilTime ?? timeSlot?.untilTime)}
+						</span>
+					</div>
+					<AuditTrailInfo {...timeSlot} />
 				</div>
-				<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
+				<div className="flex justify-between items-end">
+					<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
+					<Button data-testid="booking-create-button" onClick={onCreateBookingClick}>
+						{t('booking.create')}
+					</Button>
+				</div>
 				<Table className="mt-5">
 					<TableHeader>
 						<TableRow>
@@ -107,9 +150,9 @@ const ScheduleItemPage: React.FC = () => {
 							timeSlot?.bookings.map((slot, index) => (
 								<TableRow
 									key={index}
-									className="w-full justify-between"
+									className="w-full justify-between cursor-pointer hover:underline underline-offset-4"
 									onClick={() => {
-										navigate(`/event/${eventId}/bookings/edit/${slot.id}`);
+										navigate(`${bookingsRoute(eventId)}/edit/${slot.id}`);
 									}}>
 									<TableCell>
 										{slot.person?.firstName} {slot.person?.lastName}

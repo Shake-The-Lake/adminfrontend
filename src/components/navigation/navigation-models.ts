@@ -4,7 +4,6 @@ import {
 	CalendarRange,
 	FolderCog,
 	Sailboat,
-	LogOut,
 } from 'lucide-react';
 import {eventBaseRoute, eventDetailRoutes} from '../../constants';
 import {type MenuItemProperties} from './navigation-menu-item';
@@ -68,12 +67,6 @@ export function getNavigationItemsForEvent(
 			link: `${eventBasePath}/${eventDetailRoutes.bookings}`,
 			labelKey: 'bookings',
 			icon: CalendarCheck2,
-			needsFullMatch: false,
-		},
-		{
-			link: '/logout',
-			labelKey: 'logout',
-			icon: LogOut,
 			needsFullMatch: false,
 		},
 	];

@@ -1,7 +1,7 @@
 import React from 'react';
-import {ArrowRight, Trash} from 'lucide-react';
+import { ArrowRight, Trash } from 'lucide-react';
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
 	Card,
 	CardContent,
@@ -9,8 +9,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '../ui/card';
-import {Button} from '../ui/button';
-import {type UseMutationResult} from '@tanstack/react-query';
+import { Button } from '../ui/button';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 export type StlCardProps = {
 	id?: number;
@@ -21,6 +22,8 @@ export type StlCardProps = {
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
+	const { t } = useTranslation();
+
 	const handleDelete = async () => {
 		props.deleteMutation.mutate(props.id ?? 0);
 	};
@@ -33,6 +36,8 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 					size="icon"
 					className="items-center"
 					onClick={handleDelete}
+					title={t('delete')}
+					aria-label={t('delete')}
 					data-testid="trash-button">
 					<Trash className="cursor-pointer hover:text-red-600 z-20 hover:bg-transparent" />
 				</Button>

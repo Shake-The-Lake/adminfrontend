@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
 import {
@@ -17,6 +18,7 @@ import { fromTimeToDateTime } from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
@@ -25,6 +27,7 @@ import {
 	useGetTimeSlotsForEvent,
 } from '../../../queries/time-slot';
 import { TimeSlotType } from '../../../models/api/time-slot.model';
+import { TimeSlotCreateDialog } from '../boat/time-slots';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -55,9 +58,7 @@ const scheduleColors = [
 const breakScheduleColor = '#F48A4E';
 
 const SchedulePage: React.FC = () => {
-	const { eventId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { eventId } = useLoaderData() as RouteParamsLoaderData;
 	const { i18n, t } = useTranslation();
 
 	const { data: event } = useEventDetail(eventId, false);
@@ -85,6 +86,8 @@ const SchedulePage: React.FC = () => {
 			channelId: timeSlot.boatId,
 			channelUuid: timeSlot.boatId?.toString() ?? '',
 			description: timeSlot.boat!.name,
+			seatsViewer: timeSlot.availableRiderSeats - timeSlot.seatsViewer,
+			seatsRider: timeSlot.availableRiderSeats - timeSlot.seatsRider,
 			since: fromTimeToDateTime(
 				event?.date ?? new Date(),
 				timeSlot.fromTime ?? '',
@@ -101,10 +104,11 @@ const SchedulePage: React.FC = () => {
 
 	const channels: Channel[] = boats.map((boat) => ({
 		id: boat.id,
-		name: boat.name,
+		name: `${boat.name} R: ${boat.seatsRider} V:${boat.seatsViewer}`,
 		logo: 'https://via.placeholder.com/150',
 		uuid: boat?.id?.toString() ?? '',
 		position: { top: 0, height: 0 },
+		boat,
 	}));
 	const { getEpgProps, getLayoutProps } = useEpg({
 		epg: programs,
@@ -126,7 +130,8 @@ const SchedulePage: React.FC = () => {
 						renderChannel={({ channel }) => (
 							<div
 								key={channel.uuid}
-								className="w-full h-20 font-semibold text-right flex place-content-end items-center p-3">
+								className="w-full h-20 font-semibold text-right flex place-content-end items-center p-3 border-b last:border-none justify-between">
+								<TimeSlotCreateDialog boat={channel.boat} timeSlots={undefined} isCreateFromSchedule={true}></TimeSlotCreateDialog>
 								{channel.name}
 							</div>
 						)}

@@ -80,13 +80,13 @@ describe('EditTimeSlotTableCell', () => {
   it('renders the EditTimeSlotTableCell component', () => {
     renderComponent();
 
-    expect(screen.getByRole('button', { name: /delete time slot/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
   });
 
   it('calls delete mutation when delete button is clicked', async () => {
     renderComponent();
 
-    fireEvent.click(screen.getByRole('button', { name: /delete time slot/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
     expect(mockDeleteMutation.mutateAsync).toHaveBeenCalledWith(mockTimeSlot.id);
   });
 });
