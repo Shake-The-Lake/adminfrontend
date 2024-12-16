@@ -4,21 +4,22 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import { Input } from '../ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { onInvalidFormHandler, useEmitSuccessIfSucceeded } from '../../lib/utils';
-import { type BoatDto } from '../../models/api/boat.model';
-import { useParams } from 'react-router-dom';
-import { type UseMutationResult } from '@tanstack/react-query';
-import { useMutationToaster } from '../common/mutation-toaster';
-import { validateTime } from '../../lib/date-time.utils';
-import { useTranslation } from 'react-i18next';
-import { Button } from '../ui/button';
+import {Input} from '../ui/input';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {onInvalidFormHandler, useEmitSuccessIfSucceeded} from '../../lib/utils';
+import {type BoatDto} from '../../models/api/boat.model';
+import {useParams} from 'react-router-dom';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useMutationToaster} from '../common/mutation-toaster';
+import {validateTime} from '../../lib/date-time.utils';
+import {useTranslation} from 'react-i18next';
+import {Button} from '../ui/button';
 
 const boatFormSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -112,7 +113,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				<FormField
 					name="type"
 					control={form.control}
-					render={({ field }) => (
+					render={({field}) => (
 						<FormItem>
 							<FormLabel>{t('boat.type')}</FormLabel>
 							<FormControl>
@@ -123,14 +124,16 @@ const BoatForm: React.FC<BoatFormProps> = ({
 									data-testid="boat.type"
 								/>
 							</FormControl>
+							<FormDescription>{t('boat.typeDescription')}</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
+
 				<FormField
 					name="operator"
 					control={form.control}
-					render={({ field }) => (
+					render={({field}) => (
 						<FormItem>
 							<FormLabel>{t('boatDriver')}</FormLabel>
 							<FormControl>
@@ -208,7 +211,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				<FormField
 					name="availableUntil"
 					control={form.control}
-					render={({ field }) => (
+					render={({field}) => (
 						<FormItem>
 							<FormLabel>{t('boat.availableUntil')}</FormLabel>
 							<FormControl>
@@ -225,7 +228,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				/>
 				<div
 					className="mt-16 flex justify-end w-full"
-					style={isCreate ? { display: 'none' } : {}}>
+					style={isCreate ? {display: 'none'} : {}}>
 					<Button type="submit">{t('save')}</Button>
 				</div>
 			</form>

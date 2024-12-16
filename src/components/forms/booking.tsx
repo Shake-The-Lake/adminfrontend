@@ -170,7 +170,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					/>
 				</div>
 
-				<div className="flex w-full justify-between mt-auto pt-4">
+				<div className="flex w-full justify-between items-end mt-auto pt-4">
 					{!isCreate && (<Button
 						type="button"
 						variant="destructiveOutline"
