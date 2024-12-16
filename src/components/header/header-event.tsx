@@ -57,6 +57,14 @@ const HeaderEvent: React.FC = () => {
 				}}>
 				{t('events')}
 			</Button>
+			<Button
+				variant="link"
+				className="heading-s-upper text-primary"
+				onClick={() => {
+					navigate('/logout');
+				}}>
+				{t('logout')}
+			</Button>
 		</header>
 	);
 };
