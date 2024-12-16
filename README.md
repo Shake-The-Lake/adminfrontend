@@ -1,4 +1,3 @@
-
 # Shake The Lake Admin UI
 Welcome to the Admin frontend for Shake the Lake!
 
@@ -12,6 +11,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - [ESLint](#eslint)
   - [Prettier](#prettier)
 - [Unit Testing](#unit-testing)
+- [Debugging](#debugging)
 - [Deployment](#deployment)
 - [Learn More](#learn-more)
 
@@ -19,6 +19,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Description
 The Shake The Lake Frontend is a React application that serves as the admin dashboard for the Shake The Lake project. It allows employers to manage events.
+
+### Architecture
+The application leverages a modern architecture with several key components:
+- **Firebase**: Used for authentication and real-time database functionalities.
+- **Backend API**: A RESTful API that handles business logic and data management.
+- **React**: For building the user interface.
+- **Vite**: For fast development and build processes.
+- **Docker**: For containerizing the application and ensuring consistent deployment environments.
 
 ## Getting Started
 
@@ -32,6 +40,12 @@ You can install pnpm globally using npm:
 npm install -g pnpm
 ```
 
+Additionally, you need to copy the `env.template` file to `.env` and fill in the appropriate environment variables from the services you are using.
+
+```bash
+cp env.template .env
+```
+
 ### Available Scripts
 
 In the project directory, the following commands are available to streamline development:
@@ -41,6 +55,8 @@ In the project directory, the following commands are available to streamline dev
 - **`pnpm serve`**: Serves the production build locally.
 - **`pnpm lint`**: Lints the codebase for style and formatting issues based on the project's ESLint configuration.
 - **`pnpm test`**: Runs unit tests using the Vite testing setup (more information below).
+- **`pnpm start`**: Alias for `pnpm dev`, starts the development server.
+- **`pnpm format`**: Formats the codebase using Prettier.
 
 ---
 
@@ -78,8 +94,48 @@ For more information on configuring Vitest with React, check out this [setup gui
 
 ---
 
+## Debugging
+
+To debug the application, you can use the following tips:
+
+1. **Browser Developer Tools**: Use the developer tools in your browser (usually accessible with F12 or right-click > Inspect) to debug JavaScript, inspect elements, and view network requests.
+
+2. **Source Maps**: Ensure source maps are enabled in your development environment to map minified code back to the original source code.
+
+3. **Console Logs**: Use `console.log` statements to output variable values and application state at different points in your code.
+
+4. **React Developer Tools**: Install the [React Developer Tools](https://reactjs.org/blog/2019/08/15/new-react-devtools.html) extension for your browser to inspect the React component hierarchy and state.
+
+5. **VSCode Debugger**: Configure the VSCode debugger to set breakpoints and step through your code. You can create a `.vscode/launch.json` file with the following configuration:
+    ```json
+    {
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "type": "chrome",
+          "request": "launch",
+          "name": "Launch Chrome against localhost",
+          "url": "http://localhost:3000",
+          "webRoot": "${workspaceFolder}/src"
+        }
+      ]
+    }
+    ```
+
+---
+
 ### Deployment
-We use a Ci/CD pipeline to deploy the application. The pipeline is triggered when a pull request is merged into the main branch. The pipeline builds the application with the dockerfile and deploys it to the production environment on Azure.
+
+We use a CI/CD pipeline to deploy the application. The workflow is as follows:
+
+1. **Feature Branches**: Developers work on feature branches and create pull requests (PRs) on GitLab.
+2. **Pull Requests**: When a PR is created, the CI pipeline is triggered. The pipeline includes the following quality gates:
+   - **ESLint**: Lints the codebase to ensure code style consistency.
+   - **Unit Tests**: Runs the unit tests to ensure code correctness.
+3. **Merge to Main**: Once th e PR passes all quality gates and is approved, it can be merged into the main branch.
+4. **Deployment**: Merging into the main branch triggers the deployment pipeline, which builds the application using the Dockerfile and triggers the GitHub pipeline which deploys it to the production environment on Azure.
+
+This ensures that only high-quality code is deployed to production.
 
 ## Learn More
 

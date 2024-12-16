@@ -1,6 +1,6 @@
-import i18n, { type Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { en, languages } from '../../constants';
+import i18n, {type Resource} from 'i18next';
+import {initReactI18next} from 'react-i18next';
+import {en, languages} from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -66,6 +66,7 @@ const resources: Resource = {
 				maxSeatsViewers: 'Max available seats for viewers',
 				availableFrom: 'Boat available from',
 				availableUntil: 'Boat available until',
+				typeDescription: 'Technical Type (for example: NXT22)',
 			},
 			timeSlot: {
 				errorLoadingTimeSlot: 'Error while loading time slot...',
@@ -73,7 +74,8 @@ const resources: Resource = {
 				noTimeSlotsYet: 'No time slots yet',
 				create: 'Create Time Slot',
 				description: 'Add a new time slot by entering the necessary data.',
-				editDescription: 'Caution when updating a time slot: changing the time will have an effect on all related bookings and may not be communicated transparently to the app user.',
+				editDescription:
+					'Caution when updating a time slot: changing the time will have an effect on all related bookings and may not be communicated transparently to the app user.',
 				triggerLabel: 'Add new time slot',
 				edit: 'Edit Time Slot',
 				descriptionEdit: 'Edit time slots for the boat',
@@ -84,10 +86,13 @@ const resources: Resource = {
 				statusAvailable: 'available for activities',
 				move: 'Move',
 				moveTimeSlot: 'Move Time Slot',
-				moveTimeSlotDescription: 'To move a time slot, adjust the relevant times.',
+				moveTimeSlotDescription:
+					'To move a time slot, adjust the relevant times.',
 				moveTimeSlotInfo: 'What happens when you adjust the time of this slot?',
-				moveTimeSlotInfoDescription: '- The start and end times of this time slot will be updated with the new values.\n- All subsequent time slots of this boat will be shifted forward to maintain the schedule. In case this would make the last slot be longer than the rented time of the boat, you have to do the correction manually.\n- You cannot move this time slot earlier than its current start or end time.\n- If the slot is moved to a later time, its duration must remain the same unless it starts at the same time.\n\nUsers affected by this change will be automatically notified with the updated timings.',
-				moveTimeSlotIsRunning: 'Time Slot is running and therefore only the end time can be adjusted.',
+				moveTimeSlotInfoDescription:
+					'- The start and end times of this time slot will be updated with the new values.\n- All subsequent time slots of this boat will be shifted forward to maintain the schedule. In case this would make the last slot be longer than the rented time of the boat, you have to do the correction manually.\n- You cannot move this time slot earlier than its current start or end time.\n- If the slot is moved to a later time, its duration must remain the same unless it starts at the same time.\n\nUsers affected by this change will be automatically notified with the updated timings.',
+				moveTimeSlotIsRunning:
+					'Time Slot is running and therefore only the end time can be adjusted.',
 				unchangedTime: 'unchanged time',
 				originalTime: 'original time',
 			},
@@ -154,10 +159,10 @@ const resources: Resource = {
 			messages: {
 				pageErrorOops: 'Oops! Something went wrong.',
 				pageErrorNotFound: 'This page could not be found.',
-				pageErrorNotAuthorized: 'You aren\'t authorized to see this.',
+				pageErrorNotAuthorized: "You aren't authorized to see this.",
 				pageErrorApiDown: 'Looks like our API is down.',
 				pageErrorTeapot: 'Surfing makes thirsty 🍵.',
-				page404NavigateHome: 'Let\'s get you back',
+				page404NavigateHome: "Let's get you back",
 				successCreate: 'Item was created successfully!',
 				successUpdate: 'Item was saved successfully!',
 				successDelete: 'Item was deleted successfully!',
@@ -188,7 +193,8 @@ const resources: Resource = {
 			riderSeats: 'Rider Seats',
 			name: 'Name',
 			email: 'Email',
-			infoTextActivityTraceInfo: 'This are the people who last edited this item:',
+			infoTextActivityTraceInfo:
+				'This are the people who last edited this item:',
 			on: 'on',
 			createdBy: 'Created by',
 			modifiedBy: 'Modified by',
@@ -269,14 +275,17 @@ const resources: Resource = {
 				maxSeatsViewers: 'Maximal verfügbare Sitzplätze für Zuschauer',
 				availableFrom: 'Boot verfügbar ab',
 				availableUntil: 'Boot verfügbar bis',
+				typeDescription: 'Technischer Typ (z.B NXT22)',
 			},
 			timeSlot: {
 				errorLoadingTimeSlot: 'Fehler beim Laden des Zeitfensters...',
 				title: 'Zeitfenster',
 				noTimeSlotsYet: 'Noch keine Zeitfenster',
 				create: 'Zeitfenster erstellen',
-				description: 'Fügen Sie ein neues Zeitfenster hinzu, indem Sie die erforderlichen Daten eingeben.',
-				editDescription: 'Vorsicht bei der Aktualisierung eines Zeitfensters: Die Änderung der Uhrzeit wirkt sich auf alle zugehörigen Buchungen aus und wird dem Nutzer der App möglicherweise nicht transparent mitgeteilt.',
+				description:
+					'Fügen Sie ein neues Zeitfenster hinzu, indem Sie die erforderlichen Daten eingeben.',
+				editDescription:
+					'Vorsicht bei der Aktualisierung eines Zeitfensters: Die Änderung der Uhrzeit wirkt sich auf alle zugehörigen Buchungen aus und wird dem Nutzer der App möglicherweise nicht transparent mitgeteilt.',
 				triggerLabel: 'Neues Zeitfenster hinzufügen',
 				edit: 'Zeitfenster bearbeiten',
 				descriptionEdit: 'Bearbeiten Sie Zeitfenster für das Boot',
@@ -287,10 +296,14 @@ const resources: Resource = {
 				statusAvailable: 'verfügbar für Aktivitäten',
 				move: 'Verschieben',
 				moveTimeSlot: 'Zeitfenster verschieben',
-				moveTimeSlotDescription: 'Um ein Zeitfenster zu verschieben, passen Sie die entsprechenden Zeiten an.',
-				moveTimeSlotInfo: 'Was passiert, wenn Sie die Zeit dieses Zeitfensters anpassen?',
-				moveTimeSlotInfoDescription: '- Die Start- und Endzeiten dieses Zeitfensters werden mit den neuen Werten aktualisiert.\n- Alle nachfolgenden Zeitfenster dieses Boots werden nach vorne verschoben, um den Zeitplan einzuhalten. Sollte dies dazu führen, dass das letzte Zeitfenster länger ist als die gemietete Zeit des Boots, müssen Sie die Korrektur manuell vornehmen.\n- Sie können dieses Zeitfenster nicht früher als die aktuelle Start- oder Endzeit verschieben.\n- Wenn das Zeitfenster auf eine spätere Zeit verschoben wird, muss die Dauer gleich bleiben, es sei denn, es beginnt zur gleichen Zeit.\n\nBenutzer, die von dieser Änderung betroffen sind, werden automatisch mit den aktualisierten Zeiten benachrichtigt.',
-				moveTimeSlotIsRunning: 'Das Zeitfenster läuft gerade und deswegen kann nur der End-Zeitpunkt bearbeitet werden.',
+				moveTimeSlotDescription:
+					'Um ein Zeitfenster zu verschieben, passen Sie die entsprechenden Zeiten an.',
+				moveTimeSlotInfo:
+					'Was passiert, wenn Sie die Zeit dieses Zeitfensters anpassen?',
+				moveTimeSlotInfoDescription:
+					'- Die Start- und Endzeiten dieses Zeitfensters werden mit den neuen Werten aktualisiert.\n- Alle nachfolgenden Zeitfenster dieses Boots werden nach vorne verschoben, um den Zeitplan einzuhalten. Sollte dies dazu führen, dass das letzte Zeitfenster länger ist als die gemietete Zeit des Boots, müssen Sie die Korrektur manuell vornehmen.\n- Sie können dieses Zeitfenster nicht früher als die aktuelle Start- oder Endzeit verschieben.\n- Wenn das Zeitfenster auf eine spätere Zeit verschoben wird, muss die Dauer gleich bleiben, es sei denn, es beginnt zur gleichen Zeit.\n\nBenutzer, die von dieser Änderung betroffen sind, werden automatisch mit den aktualisierten Zeiten benachrichtigt.',
+				moveTimeSlotIsRunning:
+					'Das Zeitfenster läuft gerade und deswegen kann nur der End-Zeitpunkt bearbeitet werden.',
 				unchangedTime: 'unveränderte Zeit',
 				originalTime: 'ursprüngliche Zeit',
 			},
@@ -360,7 +373,8 @@ const resources: Resource = {
 				pageErrorOops: 'Ups! Da ist etwas schiefgelaufen.',
 				pageErrorNotFound: 'Diese Seite konnte nicht gefunden werden.',
 				pageErrorNotAuthorized: 'Sie sind nicht berechtigt, dies zu sehen.',
-				pageErrorApiDown: 'Es sieht so aus, als wäre unsere API nicht erreichbar.',
+				pageErrorApiDown:
+					'Es sieht so aus, als wäre unsere API nicht erreichbar.',
 				pageErrorTeapot: 'Surfen macht durstig 🍵.',
 				page404NavigateHome: 'Lassen Sie uns zurück gehen auf die ',
 				successCreate: 'Das Element wurde erfolgreich erstellt!',
@@ -393,7 +407,8 @@ const resources: Resource = {
 			riderSeats: 'Rider Plätze',
 			name: 'Name',
 			email: 'E-Mail',
-			infoTextActivityTraceInfo: 'Das sind die Personen, die diesen Eintrag als Letztes bearbeitet haben:',
+			infoTextActivityTraceInfo:
+				'Das sind die Personen, die diesen Eintrag als Letztes bearbeitet haben:',
 			on: 'am',
 			createdBy: 'Erstellt von',
 			modifiedBy: 'Geändert von',
@@ -472,14 +487,17 @@ const resources: Resource = {
 				maxSeatsViewers: 'Maximal verfiegbari Sitzplätz für Zuächer',
 				availableFrom: 'Boot verfüegbar ab',
 				availableUntil: 'Boot verfüegbar bis',
+				typeDescription: 'Technischä Type (zum Bispiu: NXT22)',
 			},
 			timeSlot: {
 				errorLoadingTimeSlot: 'Fähler bim Lade vom Ziitfenster...',
 				title: 'Ziitfenster',
 				noTimeSlotsYet: 'No kei Ziitfenster',
 				create: 'Ziitfenster erstelle',
-				description: 'Füeg es neus Ziitfenster hinzu, indem d nöötige Date iigähsch.',
-				editDescription: 'Achtung bim Aktualisiere vo enem Zytfenster: D Änderig vo de Uhrzyt betrifft alli zueghörige Buchige und wird em App-Nutzer villech nöd transparent mitteilt.',
+				description:
+					'Füeg es neus Ziitfenster hinzu, indem d nöötige Date iigähsch.',
+				editDescription:
+					'Achtung bim Aktualisiere vo enem Zytfenster: D Änderig vo de Uhrzyt betrifft alli zueghörige Buchige und wird em App-Nutzer villech nöd transparent mitteilt.',
 				triggerLabel: 'Neus Ziitfenster hinzfüege',
 				edit: 'Ziitfenster bearbeite',
 				descriptionEdit: 'Bearbeite d Ziitfenster für s Boot',
@@ -490,10 +508,14 @@ const resources: Resource = {
 				statusAvailable: 'verfüegbar für Aktivitäte',
 				move: 'Verschiebe',
 				moveTimeSlot: 'Ziitfenster verschiebe',
-				moveTimeSlotDescription: 'Um es Ziitfenster z verschiebe, pass die entspräche Zyte aa.',
-				moveTimeSlotInfo: 'Was passiert, wenn du d Zyt vo dem Ziitfenster apasst?',
-				moveTimeSlotInfoDescription: '- D Start- und Ändzyte vo dem Ziitfenster wärde mit de neie Werte aktualisiert.\n- Alli folgendi Ziitfenster vo dem Boot wärde nach vore verschobe, zum dr Zytplan iihalte. Falls s letschte Ziitfenster de länger wärde würd als d gmieteti Zyt vom Boot, muesch du d Korrektur manual mache.\n- Du chasch das Ziitfenster nid früener verschiebe als d aktuelli Start- oder Ändzyt.\n- Wenn s Ziitfenster auf en spötere Zyt verschobe wird, mues d Duer gliich blibe, usser es fangt zur gliiche Zyt aa.\n\nBenutzer, wo vo dere Änderig betroffe sind, wärde automatic mit de aktualisierte Zyte informiert.',
-				moveTimeSlotIsRunning: 'Das Ziitfenster louft grad u drum cha nur dr End-Zitpunkt bearbeitet wärde.',
+				moveTimeSlotDescription:
+					'Um es Ziitfenster z verschiebe, pass die entspräche Zyte aa.',
+				moveTimeSlotInfo:
+					'Was passiert, wenn du d Zyt vo dem Ziitfenster apasst?',
+				moveTimeSlotInfoDescription:
+					'- D Start- und Ändzyte vo dem Ziitfenster wärde mit de neie Werte aktualisiert.\n- Alli folgendi Ziitfenster vo dem Boot wärde nach vore verschobe, zum dr Zytplan iihalte. Falls s letschte Ziitfenster de länger wärde würd als d gmieteti Zyt vom Boot, muesch du d Korrektur manual mache.\n- Du chasch das Ziitfenster nid früener verschiebe als d aktuelli Start- oder Ändzyt.\n- Wenn s Ziitfenster auf en spötere Zyt verschobe wird, mues d Duer gliich blibe, usser es fangt zur gliiche Zyt aa.\n\nBenutzer, wo vo dere Änderig betroffe sind, wärde automatic mit de aktualisierte Zyte informiert.',
+				moveTimeSlotIsRunning:
+					'Das Ziitfenster louft grad u drum cha nur dr End-Zitpunkt bearbeitet wärde.',
 				unchangedTime: 'unveränderti Zyt',
 				originalTime: 'ursprünglichi Zyt',
 			},
@@ -598,7 +620,8 @@ const resources: Resource = {
 			email: 'E-Mail',
 			createdBy: 'Ersteut vo',
 			modifiedBy: 'Gänderet vo',
-			infoTextActivityTraceInfo: 'Das sii d Lüüt wo dä Iitrag us letschts bearbeitet heii:',
+			infoTextActivityTraceInfo:
+				'Das sii d Lüüt wo dä Iitrag us letschts bearbeitet heii:',
 			on: 'am',
 			clearValue: 'Lösch d Uswau',
 			phone: 'Telefonnummer',
