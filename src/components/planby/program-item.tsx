@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
 import {
 	ProgramBox,
@@ -11,7 +13,7 @@ import {
 import { Link } from 'react-router-dom';
 import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
 import { useTranslation } from 'react-i18next';
-import {HoverCard, HoverCardContent, HoverCardTrigger} from '../ui/hover-card';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card';
 
 
 export type PlanByProgramItemProps = {
@@ -22,15 +24,15 @@ export type PlanByProgramItemProps = {
 };
 
 export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
-	const {styles, isLive} = useProgram({
+	const { styles, isLive } = useProgram({
 		...props,
 		isBaseTimeFormat: props.isBaseTimeFormat ?? true,
 	});
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
-	const {data} = props.program;
-	const {title, since, till, color, disable} = data;
+	const { data } = props.program;
+	const { title, since, till, color, disable } = data;
 
 	const sinceTime = toSwissLocaleTimeString(new Date(since));
 	const tillTime = toSwissLocaleTimeString(new Date(till));
@@ -46,7 +48,7 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 						width={styles.width}
 						isLive={isLive}
 						className={disable ? '!cursor-default' : 'cursor-pointer'}
-						style={{background: color}}>
+						style={{ background: color }}>
 						<ProgramFlex>
 							<ProgramStack className="w-full">
 								{disable ? null : (

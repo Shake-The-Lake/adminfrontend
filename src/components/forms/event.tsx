@@ -12,6 +12,7 @@ import { Button } from '../ui/button';
 import { validateDate } from '../../lib/date-time.utils';
 import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
+import { Textarea } from '../ui/textarea';
 
 // Schema definition
 export const eventFormSchema = z.object({
@@ -90,7 +91,7 @@ const EventForm: React.FC<EventFormProps> = ({ model, mutation, isCreate }) => {
 						<FormItem>
 							<FormLabel>{t('description')}</FormLabel>
 							<FormControl>
-								<Input
+								<Textarea
 									placeholder={t('description')}
 									{...field}
 									className="input"
