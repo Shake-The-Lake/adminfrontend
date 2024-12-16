@@ -18,11 +18,10 @@ import { type BoatDto } from '../../models/api/boat.model';
 import { type UseMutationResult } from '@tanstack/react-query';
 import { useMutationToaster } from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
-import { getDisplayTimeFromBackend, isSameTime, validateTime } from '../../lib/date-time.utils';
+import { getDisplayTimeFromBackend, validateTime } from '../../lib/date-time.utils';
 import { useTranslation } from 'react-i18next';
 import StlSelect from '../select/stl-select';
 import { timeSlotTypeOptions } from '../../constants/constants';
-import { type EventDto } from '../../models/api/event.model';
 
 const TimeSlotSchema = z.object({
 	id: z.number().min(0).optional(),
@@ -43,7 +42,6 @@ export type TimeSlotFormProps = {
 	mutation: UseMutationResult<any, Error, TimeSlotDto>;
 	isCreate: boolean;
 	boat?: BoatDto;
-	event?: EventDto;
 	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
@@ -52,7 +50,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 	mutation,
 	isCreate,
 	boat,
-	event,
 	onSuccessfullySubmitted,
 }) => {
 	const form = useForm<TimeSlotFormSchema>({
@@ -80,15 +77,6 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 					: values.activityTypeId,
 			id: model.id,
 		};
-
-		// Wir speichern die zuletzt geloggte Zeit. Bei einer erneuten Anpassung wird die neue Zeit als „current“ festgelegt, während die vorherige Zeit als „last time“ gespeichert bleibt.
-		if (!isSameTime(model.fromTime, values.fromTime)) {
-			timeSlot.originalFromTime = model.fromTime;
-		}
-
-		if (!isSameTime(model.untilTime, values.untilTime)) {
-			timeSlot.originalUntilTime = model.untilTime;
-		}
 
 		await mutation.mutateAsync(timeSlot);
 	};
