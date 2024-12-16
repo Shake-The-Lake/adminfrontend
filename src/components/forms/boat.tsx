@@ -1,6 +1,6 @@
 import React from 'react';
-import {z} from 'zod';
-import {type SubmitHandler, useForm} from 'react-hook-form';
+import { z } from 'zod';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import {
 	Form,
 	FormControl,
@@ -62,13 +62,13 @@ const BoatForm: React.FC<BoatFormProps> = ({
 		},
 		resolver: zodResolver(boatFormSchema),
 	});
-	const {t} = useTranslation();
-	const {id} = useParams<{id: string}>();
+	const { t } = useTranslation();
+	const { id } = useParams<{ id: string }>();
 	const eventId = Number(id);
 
 	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, mutation);
 
-	useMutationToaster({type: isCreate ? 'create' : 'update', mutation});
+	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
 
 	const onSubmit: SubmitHandler<BoatFormSchema> = async (values) => {
 		const boat: BoatDto = {
@@ -94,7 +94,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				<FormField
 					name="name"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('boat.name')}</FormLabel>
 							<FormControl>
@@ -152,7 +152,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				<FormField
 					name="seatsRider"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('boat.maxSeats')}</FormLabel>
 							<FormControl>
@@ -172,7 +172,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				<FormField
 					name="seatsViewer"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('boat.maxSeatsViewers')}</FormLabel>
 							<FormControl>
@@ -192,7 +192,7 @@ const BoatForm: React.FC<BoatFormProps> = ({
 				<FormField
 					name="availableFrom"
 					control={form.control}
-					render={({field}) => (
+					render={({ field }) => (
 						<FormItem>
 							<FormLabel>{t('boat.availableFrom')}</FormLabel>
 							<FormControl>

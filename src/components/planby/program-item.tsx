@@ -8,10 +8,11 @@ import {
 	ProgramTitle,
 	useProgram,
 } from 'planby';
-import {Link} from 'react-router-dom';
-import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
-import {useTranslation} from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
 import {HoverCard, HoverCardContent, HoverCardTrigger} from '../ui/hover-card';
+
 
 export type PlanByProgramItemProps = {
 	program: any;

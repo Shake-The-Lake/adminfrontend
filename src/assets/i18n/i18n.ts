@@ -49,8 +49,7 @@ const resources: Resource = {
 					'Enter German content and content that does not belong to a specific language here.',
 				descriptionSwissGerman:
 					'Enter Swiss German content and content that does not belong to a specific language here.',
-				checklistDescription:
-					'This checklist will eventually be displayed to the user so they know what they have to do before they climb on board (e.g. change into swimwear, come to the hut when the boat is about to leave...)',
+				checklistDescription: 'This checklist will eventually be displayed to the user so they know what they have to do before they climb on board (e.g. change into swimwear, come to the hut when the boat is about to leave...)',
 			},
 			boat: {
 				errorLoadingBoat: 'Error while loading boat...',
@@ -257,8 +256,8 @@ const resources: Resource = {
 					'Geben Sie hier deutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
 				descriptionSwissGerman:
 					'Geben Sie hier schweizerdeutsche Inhalte und Inhalte ein, die keiner bestimmten Sprache zugeordnet sind.',
-				checklistDescription:
-					'Diese Checkliste wird dem Benutzer letztendlich angezeigt, damit er weiss, was er tun muss, bevor er an Bord geht (z. B. Badebekleidung anziehen, zur Hütte kommen, bevor das Boot ablegt...)',
+				checklistDescription: 'Diese Checkliste wird dem Benutzer letztendlich angezeigt, damit er weiss, was er tun muss, bevor er an Bord geht (z. B. Badebekleidung anziehen, zur Hütte kommen, bevor das Boot ablegt...)',
+
 			},
 			boat: {
 				errorLoadingBoat: 'Fehler beim Laden des Boots...',
@@ -471,8 +470,7 @@ const resources: Resource = {
 					'Gib do dütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
 				descriptionSwissGerman:
 					'Gib do schwiizerdütschi Inhalte ii und Inhalte, wo keini spezifischi Sproch hei.',
-				checklistDescription:
-					'Die Checkliste wird dä Benutzer schlussändlech azeigt, damit si wüsse, was si müesse mache, bevor si a Bord göh (z. B. Badechleider azieh, zur Hüttä cho, bevor s Boot abfahrt...)',
+				checklistDescription: 'Die Checkliste wird dä Benutzer schlussändlech azeigt, damit si wüsse, was si müesse mache, bevor si a Bord göh (z. B. Badechleider azieh, zur Hüttä cho, bevor s Boot abfahrt...)',
 			},
 			boat: {
 				errorLoadingBoat: 'Fähler bim Lade vom Boot...',

@@ -1,43 +1,62 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import {type QueryClient} from '@tanstack/react-query';
-import React, {useEffect} from 'react';
-import {type LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
-import {timeslotDetailOptions, useDeleteTimeSlot, useTimeSlotDetail} from '../../../queries/time-slot';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '../../../components/ui/table';
-import {EyeIcon, SailboatIcon, TagIcon, TimerResetIcon, Trash, UsersIcon} from 'lucide-react';
-import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
-import {useDeleteBooking} from '../../../queries/booking';
-import {extractTypedInfoFromRouteParams, getTranslation, type RouteParamsLoaderData} from '../../../lib/utils';
-import {useTranslation} from 'react-i18next';
+import { type QueryClient } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
+import {
+	timeslotDetailOptions,
+	useDeleteTimeSlot,
+	useTimeSlotDetail,
+} from '../../../queries/time-slot';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '../../../components/ui/table';
+import { EyeIcon, SailboatIcon, TagIcon, TimerResetIcon, Trash, UsersIcon } from 'lucide-react';
+import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
+import { useDeleteBooking } from '../../../queries/booking';
+import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
+import {
+	extractTypedInfoFromRouteParams,
+	getTranslation,
+	type RouteParamsLoaderData,
+} from '../../../lib/utils';
+import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import AuditTrailInfo from '../../../components/common/audit-trail-info';
-import {bookingsRoute, eventDetailRoutes, scheduleRoute} from '../../../constants';
-import {Button} from '../../../components/ui/button';
-import {TimeSlotType} from '../../../models/api/time-slot.model';
-import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
+import { bookingsRoute, eventDetailRoutes, scheduleRoute } from '../../../constants';
+import { Button } from '../../../components/ui/button';
+import { TimeSlotType } from '../../../models/api/time-slot.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
-	async ({params}: LoaderFunctionArgs) => {
-		const routeIds = extractTypedInfoFromRouteParams(params);
-		if (!routeIds.timeSlotId) {
-			throw new Error('No Timeslot ID provided');
-		}
+		async ({ params }: LoaderFunctionArgs) => {
+			const routeIds = extractTypedInfoFromRouteParams(params);
+			if (!routeIds.timeSlotId) {
+				throw new Error('No Timeslot ID provided');
+			}
 
-		await queryClient.ensureQueryData(
-			timeslotDetailOptions(routeIds.eventId, routeIds.timeSlotId),
-		);
+			await queryClient.ensureQueryData(
+				timeslotDetailOptions(routeIds.eventId, routeIds.timeSlotId),
+			);
 
-		return routeIds;
-	};
+			return routeIds;
+		};
 
 const ScheduleItemPage: React.FC = () => {
-	const {timeSlotId, eventId} = useLoaderData() as RouteParamsLoaderData;
+	const { timeSlotId, eventId } = useLoaderData() as RouteParamsLoaderData;
 
-	const {i18n, t} = useTranslation();
+	const { i18n, t } = useTranslation();
 	const navigate = useNavigate();
 
-	const {data: timeSlot} = useTimeSlotDetail(eventId, timeSlotId);
+	const { data: timeSlot } = useTimeSlotDetail(eventId, timeSlotId);
 
 	useEffect(() => {
 		if (timeSlot?.status === TimeSlotType.ON_BREAK) {
@@ -52,19 +71,14 @@ const ScheduleItemPage: React.FC = () => {
 
 	const deleteMutation = useDeleteBooking(eventId);
 
-	const deleteTimeSlotMutation = useDeleteTimeSlot(
-		eventId,
-		timeSlot?.boatId ?? 0,
-	);
+	const deleteTimeSlotMutation = useDeleteTimeSlot(eventId, timeSlot?.boatId ?? 0);
 	const handleTimeSlotDelete = async () => {
 		navigate(-1); // We assume delete will succeed (cannot be after as otherwise we would get stuck in a loop due to invalidation)
 		await deleteTimeSlotMutation.mutateAsync(timeSlot?.id ?? 0);
 	};
 
 	const onCreateBookingClick = () => {
-		navigate(`${bookingsRoute(eventId)}/${eventDetailRoutes.addBooking}`, {
-			state: {timeSlotId: timeSlot?.id},
-		});
+		navigate(`${bookingsRoute(eventId)}/${eventDetailRoutes.addBooking}`, { state: { timeSlotId: timeSlot?.id } });
 	};
 
 	return (
@@ -76,18 +90,15 @@ const ScheduleItemPage: React.FC = () => {
 						{getDisplayTimeFromBackend(timeSlot?.fromTime)} -{' '}
 						{getDisplayTimeFromBackend(timeSlot?.untilTime)}
 					</h2>
-					{timeSlot?.bookings === undefined ||
-						(timeSlot?.bookings?.length === 0 && (
-							<Button
-								variant="ghost"
-								size="icon"
-								className="items-center"
-								onClick={handleTimeSlotDelete}
-								title={t('delete')}
-								aria-label={t('delete')}>
-								<Trash className="cursor-pointer hover:text-red-600" />
-							</Button>
-						))}
+					{timeSlot?.bookings === undefined || timeSlot?.bookings?.length === 0 && (<Button
+						variant="ghost"
+						size="icon"
+						className="items-center"
+						onClick={handleTimeSlotDelete}
+						title={t('delete')}
+						aria-label={t('delete')}>
+						<Trash className="cursor-pointer hover:text-red-600" />
+					</Button>)}
 				</div>
 				<div className="flex flex-wrap gap-5">
 					<div className="flex w-full justify-between">
@@ -107,26 +118,20 @@ const ScheduleItemPage: React.FC = () => {
 								<TagIcon />
 								{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 							</span>
+
 						</div>
 						<span className="flex gap-2 text-primary-dark-stroke">
 							<TimerResetIcon />
 							{t('timeSlot.originalTime')}:{' '}
-							{getDisplayTimeFromBackend(
-								timeSlot?.originalFromTime ?? timeSlot?.fromTime,
-							)}{' '}
-							-{' '}
-							{getDisplayTimeFromBackend(
-								timeSlot?.originalUntilTime ?? timeSlot?.untilTime,
-							)}
+							{getDisplayTimeFromBackend(timeSlot?.originalFromTime ?? timeSlot?.fromTime)} -{' '}
+							{getDisplayTimeFromBackend(timeSlot?.originalUntilTime ?? timeSlot?.untilTime)}
 						</span>
 					</div>
 					<AuditTrailInfo {...timeSlot} />
 				</div>
 				<div className="flex justify-between items-end">
 					<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
-					<Button
-						data-testid="booking-create-button"
-						onClick={onCreateBookingClick}>
+					<Button data-testid="booking-create-button" onClick={onCreateBookingClick}>
 						{t('booking.create')}
 					</Button>
 				</div>
