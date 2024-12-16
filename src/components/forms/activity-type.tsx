@@ -8,6 +8,7 @@ import {
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -27,6 +28,12 @@ import { type UseMutationResult } from '@tanstack/react-query';
 import { useMutationToaster } from '../common/mutation-toaster';
 import PageTransitionFadeIn from '../animations/page-transition-fade-in';
 
+const requiredLocalizedStringSchema = z.object({
+	en: z.string().optional(),
+	de: z.string().min(1),
+	swissGerman: z.string().optional(),
+});
+
 const localizedStringSchema = z.object({
 	en: z.string().optional(),
 	de: z.string(),
@@ -35,10 +42,10 @@ const localizedStringSchema = z.object({
 
 const activityTypeSchema = z.object({
 	id: z.number().min(0).optional(),
-	name: localizedStringSchema,
+	name: requiredLocalizedStringSchema,
 	description: localizedStringSchema,
 	checklist: localizedStringSchema,
-	icon: z.string(),
+	icon: z.string(), // Icon is currently not used, therefore we hide it in the form below
 	eventId: z.number().optional(),
 });
 
@@ -63,7 +70,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		resolver: zodResolver(activityTypeSchema),
 	});
 
-	const { i18n, t } = useTranslation();
+	const { t } = useTranslation();
 	const { id } = useParams<{ id: string }>();
 	const eventId = Number(id);
 
@@ -112,6 +119,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 		onInvalidFormHandler.call(this, errors);
 	};
 
+	// Only the german tab will be displayed due to Wish of customer not in release 1, the tab selection is hidden with the .hidden tailwind class instead of removing it completely
 	return (
 		<Form {...form}>
 			<form
@@ -119,7 +127,8 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 				id="activityType"
 				role="form"
 				onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
-				<Tabs defaultValue={i18n.language}>
+				{/* <Tabs defaultValue={i18n.language}> - Wish of customer not in release 1, therefore always german */}
+				<Tabs defaultValue="de">
 					<TabsList className="w-full hidden justify-start gap-1">
 						<TabsTrigger
 							value="en"
@@ -187,7 +196,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									name="icon"
 									control={form.control}
 									render={({ field }) => (
-										<FormItem>
+										<FormItem className='hidden'>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
 												<Input
@@ -215,6 +224,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 												/>
 											</FormControl>
 											<FormMessage />
+											<FormDescription>{t('activityType.checklistDescription')}</FormDescription>
 										</FormItem>
 									)}></FormField>
 							</div>
@@ -262,7 +272,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									name="icon"
 									control={form.control}
 									render={({ field }) => (
-										<FormItem>
+										<FormItem className='hidden'>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
 												<Input
@@ -288,6 +298,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 												/>
 											</FormControl>
 											<FormMessage />
+											<FormDescription>{t('activityType.checklistDescription')}</FormDescription>
 										</FormItem>
 									)}></FormField>
 							</div>
@@ -335,7 +346,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 									name="icon"
 									control={form.control}
 									render={({ field }) => (
-										<FormItem>
+										<FormItem className='hidden'>
 											<FormLabel>{t('icon')}</FormLabel>
 											<FormControl>
 												<Input
@@ -363,6 +374,7 @@ const ActivityTypeForm: React.FC<ActivityTypeFormProps> = ({
 												/>
 											</FormControl>
 											<FormMessage />
+											<FormDescription>{t('activityType.checklistDescription')}</FormDescription>
 										</FormItem>
 									)}></FormField>
 							</div>

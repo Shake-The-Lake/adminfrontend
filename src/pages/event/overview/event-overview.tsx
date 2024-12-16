@@ -1,20 +1,20 @@
 import React from 'react';
 import EventForm from '../../../components/forms/event';
-import {type LoaderFunctionArgs, useLoaderData} from 'react-router-dom';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import {
 	eventDetailOptions,
 	useEventDetail,
 	useUpdateEvent,
 } from '../../../queries/event';
-import {type QueryClient} from '@tanstack/react-query';
-import {defaultEventDto} from '../../../models/api/event.model';
-import {extractTypedInfoFromRouteParams} from '../../../lib/utils';
-import {useTranslation} from 'react-i18next';
+import { type QueryClient } from '@tanstack/react-query';
+import { defaultEventDto } from '../../../models/api/event.model';
+import { extractTypedInfoFromRouteParams, type RouteParamsLoaderData } from '../../../lib/utils';
+import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 
 export const loader =
 	(queryClient: QueryClient) =>
-		async ({params}: LoaderFunctionArgs) => {
+		async ({ params }: LoaderFunctionArgs) => {
 			const routeIds = extractTypedInfoFromRouteParams(params);
 			if (!routeIds.eventId) {
 				throw new Error('No event ID provided');
@@ -28,11 +28,9 @@ export const loader =
 		};
 
 const EventOverview: React.FC = () => {
-	const {t} = useTranslation();
-	const {eventId} = useLoaderData() as Awaited<
-	ReturnType<ReturnType<typeof loader>>
-	>;
-	const {data: event} = useEventDetail(eventId, false);
+	const { t } = useTranslation();
+	const { eventId } = useLoaderData() as RouteParamsLoaderData;
+	const { data: event } = useEventDetail(eventId, false);
 
 	const updateMutation = useUpdateEvent(eventId);
 

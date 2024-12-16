@@ -1,17 +1,17 @@
 import React from 'react';
-import {type SubmitHandler, useForm} from 'react-hook-form';
-import {z} from 'zod';
-import {Form, FormControl, FormField, FormItem, FormLabel} from '../ui/form';
-import {Input} from '../ui/input';
-import {type EventDto} from '../../models/api/event.model';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {onInvalidFormHandler} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useMutationToaster} from '../common/mutation-toaster';
-import {Button} from '../ui/button';
-import {validateDate} from '../../lib/date-time.utils';
-import {useTranslation} from 'react-i18next';
-import {t} from 'i18next';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Input } from '../ui/input';
+import { type EventDto } from '../../models/api/event.model';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { onInvalidFormHandler } from '../../lib/utils';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useMutationToaster } from '../common/mutation-toaster';
+import { Button } from '../ui/button';
+import { validateDate } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 // Schema definition
 export const eventFormSchema = z.object({
@@ -33,7 +33,7 @@ type EventFormProps = {
 	isCreate: boolean;
 };
 
-const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
+const EventForm: React.FC<EventFormProps> = ({ model, mutation, isCreate }) => {
 	const form = useForm<EventFormSchema>({
 		mode: 'onChange',
 		defaultValues: {
@@ -44,9 +44,9 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 		resolver: zodResolver(eventFormSchema),
 	});
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
-	useMutationToaster({type: isCreate ? 'create' : 'update', mutation});
+	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation });
 
 	const onSubmit: SubmitHandler<EventFormSchema> = async (values) => {
 		const event: EventDto = {
@@ -61,69 +61,69 @@ const EventForm: React.FC<EventFormProps> = ({model, mutation, isCreate}) => {
 
 	return (
 		<Form {...form}>
-				<form
-					className="p-1 space-y-4"
-					role="form"
-					onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
-					id="event">
-					<FormField
-						name="title"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>{t('title')}</FormLabel>
-								<FormControl>
-									<Input
-										placeholder={t('event.placeholder')}
-										{...field}
-										className="input"
-										data-testid="event-title-input"
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						name="description"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>{t('description')}</FormLabel>
-								<FormControl>
-									<Input
-										placeholder={t('description')}
-										{...field}
-										className="input"
-										data-testid="event-description-input"
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						name="date"
-						control={form.control}
-						render={({field}) => (
-							<FormItem>
-								<FormLabel>{t('event.date')}</FormLabel>
-								<FormControl>
-									<Input
-										type="date"
-										{...field}
-										className="input"
-										data-testid="event-date-input"
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
+			<form
+				className="p-1 space-y-4"
+				role="form"
+				onSubmit={form.handleSubmit(onSubmit, onInvalidFormHandler)}
+				id="event">
+				<FormField
+					name="title"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{t('title')}</FormLabel>
+							<FormControl>
+								<Input
+									placeholder={t('event.placeholder')}
+									{...field}
+									className="input"
+									data-testid="event-title-input"
+								/>
+							</FormControl>
+						</FormItem>
+					)}
+				/>
+				<FormField
+					name="description"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{t('description')}</FormLabel>
+							<FormControl>
+								<Input
+									placeholder={t('description')}
+									{...field}
+									className="input"
+									data-testid="event-description-input"
+								/>
+							</FormControl>
+						</FormItem>
+					)}
+				/>
+				<FormField
+					name="date"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{t('event.date')}</FormLabel>
+							<FormControl>
+								<Input
+									type="date"
+									{...field}
+									className="input"
+									data-testid="event-date-input"
+								/>
+							</FormControl>
+						</FormItem>
+					)}
+				/>
 
 				<div
 					className="mt-16 flex justify-end w-full"
-					style={isCreate ? {display: 'none'} : {}}>
+					style={isCreate ? { display: 'none' } : {}}>
 					<Button type="submit" data-testid="save-event-button">
-							{t('save')}
-						</Button>
+						{t('save')}
+					</Button>
 				</div>
 			</form>
 		</Form>

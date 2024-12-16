@@ -24,6 +24,7 @@ export type StlDialogProps = {
 	isCard?: boolean;
 	isIcon?: boolean;
 	formId?: string;
+	icon?: React.ReactNode;
 };
 
 const StlDialog: React.FC<StlDialogProps> = ({
@@ -37,6 +38,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 	isCard = true,
 	isIcon = false,
 	formId,
+	icon = <PencilIcon />,
 }) => {
 	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false);
@@ -88,7 +90,7 @@ const StlDialog: React.FC<StlDialogProps> = ({
 						title={triggerLabel}
 						variant="ghost"
 						data-testid="dialog-trigger-icon-button">
-						<PencilIcon />
+						{icon}
 					</Button>
 				) : (
 					<Button

@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import ActivityTypeSelect from '../select/activity-type-select';
 import BoatSelect from '../select/boat-select';
 import {
@@ -37,8 +37,8 @@ type StlFilterProps = {
 
 const filterSchema = z.object({
 	searchTerm: z.string().optional(),
-	activityTypeId: z.number().min(0).optional().or(z.string().optional()),
-	boatId: z.number().min(0).optional().or(z.string().optional()),
+	activityTypeId: z.number().min(0).optional(),
+	boatId: z.number().min(0).optional(),
 	from: z
 		.string()
 		.optional()
@@ -62,9 +62,9 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 		const subscription = form.watch((value, { name }) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
-			} else if (name === 'activityTypeId' && params.onActivityTypeChange && typeof value.activityTypeId !== 'string') {
+			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {
 				params.onActivityTypeChange(value.activityTypeId);
-			} else if (name === 'boatId' && params.onBoatChange && typeof value.boatId !== 'string') {
+			} else if (name === 'boatId' && params.onBoatChange) {
 				params.onBoatChange(value.boatId);
 			} else if (name === 'from' && params.onFromChange) {
 				params.onFromChange(value.from);
@@ -81,7 +81,7 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 		<Form {...form}>
 			<form
 				id="filter"
-				className="p-1 w-full flex flex-wrap gap-4 justify-between items-center">
+				className="p-3 w-full flex flex-wrap gap-4 justify-between items-center rounded-lg border bg-muted/50">
 				{hasOption(options, StlFilterOptions.SearchTerm) && (
 					<FormField
 						name="searchTerm"
@@ -103,24 +103,29 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 				)}
 
 				{hasOption(options, StlFilterOptions.ActivityType) && (
-					<FormField
+					<Controller
 						name="activityTypeId"
 						control={form.control}
-						render={({ field }) => (<ActivityTypeSelect
-							field={field}
-							className="min-w-[200px] flex-grow flex-shrink-0"
-						/>)}></FormField>
+						render={({ field }) => (
+							<ActivityTypeSelect
+								field={field}
+								className="min-w-[200px] flex-grow flex-shrink-0"
+							/>
+						)}
+					/>
 				)}
 
 				{hasOption(options, StlFilterOptions.Boat) && (
-					<FormField
+					<Controller
 						name="boatId"
 						control={form.control}
 						render={({ field }) => (
 							<BoatSelect
 								field={field}
 								className="min-w-[200px] flex-grow flex-shrink-0"
-							/>)}></FormField>
+							/>
+						)}
+					/>
 				)}
 
 				{hasOption(options, StlFilterOptions.TimeRange) && (
@@ -148,7 +153,7 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 							control={form.control}
 							render={({ field }) => (
 								<FormItem className="sm:ml-4">
-									<FormLabel>To</FormLabel>
+									<FormLabel>{t('to')}</FormLabel>
 									<FormControl>
 										<Input
 											placeholder={t('timeSlot.timeFormat')}

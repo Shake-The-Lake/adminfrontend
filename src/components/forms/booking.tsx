@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { z } from 'zod';
 import {
 	Controller,
@@ -24,9 +24,10 @@ import PersonForm, { personSchema } from './person';
 import StlSelect from '../select/stl-select';
 import SelectableTimeSlotList from '../table/selectable-timeslot-list';
 import { type PersonDto } from '../../models/api/person.model';
-import { useEmitSuccessIfSucceeded } from '../../lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { useEmitSuccessIfSucceededWithParameter } from '../../lib/utils';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getIsRiderOptions } from '../../constants/constants';
+import { useDeleteBooking } from '../../queries/booking';
 
 const bookingSchema = z.object({
 	id: z.number().optional(),
@@ -44,7 +45,7 @@ type BookingFormProps = {
 	bookingMutation: UseMutationResult<BookingDto, Error, BookingDto>;
 	personMutation: UseMutationResult<PersonDto, Error, PersonDto>;
 	isCreate: boolean;
-	onSuccessfullySubmitted?: () => void;
+	onSuccessfullySubmitted?: (id: number) => void;
 	eventId: number;
 };
 
@@ -69,12 +70,23 @@ const BookingForm: React.FC<BookingFormProps> = ({
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
-	useEmitSuccessIfSucceeded(onSuccessfullySubmitted, bookingMutation);
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+	const { state } = useLocation();
+
+	useEffect(() => {
+		if (state !== undefined && state !== null) {
+			setSelectedTimeSlotId(Number(state.timeSlotId));
+		}
+	}, [state]);
+
+	useEmitSuccessIfSucceededWithParameter(onSuccessfullySubmitted, bookingMutation);
 
 	useMutationToaster({ type: isCreate ? 'create' : 'update', mutation: bookingMutation });
 
 	const handleCancel = () => {
-		navigate(`/event/${eventId}/bookings`);
+		// With react-router-dom this triggers a browser-back.
+		// This way we can handle having the add button on multiple different pages.
+		navigate(-1);
 	};
 
 	const onSubmit: SubmitHandler<BookingFormSchema> = async (values) => {
@@ -90,7 +102,16 @@ const BookingForm: React.FC<BookingFormProps> = ({
 			personId: savedPerson.id,
 			isManual,
 		};
+
 		await bookingMutation.mutateAsync(booking);
+	};
+
+	const deleteMutation = useDeleteBooking(eventId);
+	const handleDelete = async () => {
+		if (!isCreate) {
+			navigate(-1); // We assume delete will succeed (cannot be after as otherwise we would get stuck in a loop due to invalidation)
+			await deleteMutation.mutateAsync(model?.id ?? 0);
+		}
 	};
 
 	return (
@@ -114,15 +135,15 @@ const BookingForm: React.FC<BookingFormProps> = ({
 								render={({ field }) => (
 									<StlSelect
 										data-testid="booking-is-rider"
-											value={field.value ? 'driver' : 'viewer'}
-											onValueChange={(value) => {
-												field.onChange(value === 'driver');
-											}}
-											defaultValue="viewer"
-											list={getIsRiderOptions(t)}
-											getKey={(item) => item?.key}
-											getLabel={(item) => item!.label}
-											dataTestId="driverOrViewerDropdown"
+										value={field.value ? 'driver' : 'viewer'}
+										onValueChange={(value) => {
+											field.onChange(value === 'driver');
+										}}
+										defaultValue="viewer"
+										list={getIsRiderOptions(t)}
+										getKey={(item) => item?.key}
+										getLabel={(item) => item!.label}
+										dataTestId="driverOrViewerDropdown"
 									/>
 								)}
 							/>
@@ -138,10 +159,10 @@ const BookingForm: React.FC<BookingFormProps> = ({
 								<FormLabel>{t('pagerNumber')}</FormLabel>
 								<FormControl>
 									<Input
-											placeholder={t('pagerNumber')}
-											{...field}
-											data-testid="booking-pager-number"
-										/>
+										placeholder={t('pagerNumber')}
+										{...field}
+										data-testid="booking-pager-number"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -149,16 +170,26 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					/>
 				</div>
 
-				<div className="flex w-full justify-end mt-auto pt-4">
-					<Button type="button" variant="secondary" onClick={handleCancel}>
-						{t('cancel')}
-					</Button>
-					<Button
+				<div className="flex w-full justify-between mt-auto pt-4">
+					{!isCreate && (<Button
+						type="button"
+						variant="destructiveOutline"
+						onClick={handleDelete}
+						title={t('delete')}>
+						{t('delete')}
+					</Button>)}
+
+					<div className="flex w-full justify-end mt-auto pt-4">
+						<Button type="button" variant="secondary" onClick={handleCancel}>
+							{t('cancel')}
+						</Button>
+						<Button
 							type="submit"
 							className="ml-4"
 							data-testid="booking-submit-button">
-						{t('save')}
-					</Button>
+							{t('save')}
+						</Button>
+					</div>
 				</div>
 			</form>
 		</FormProvider>
