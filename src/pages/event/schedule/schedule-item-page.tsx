@@ -1,41 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {type QueryClient} from '@tanstack/react-query';
 import React, {useEffect} from 'react';
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-	useNavigate,
-} from 'react-router-dom';
-import {
-	timeslotDetailOptions,
-	useDeleteTimeSlot,
-	useTimeSlotDetail,
-} from '../../../queries/time-slot';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '../../../components/ui/table';
-import { EyeIcon, SailboatIcon, TagIcon, TimerResetIcon, Trash, UsersIcon } from 'lucide-react';
-import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
-import { useDeleteBooking } from '../../../queries/booking';
-import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
-import {
-	extractTypedInfoFromRouteParams,
-	getTranslation,
-	type RouteParamsLoaderData,
-} from '../../../lib/utils';
+import {type LoaderFunctionArgs, useLoaderData, useNavigate} from 'react-router-dom';
+import {timeslotDetailOptions, useDeleteTimeSlot, useTimeSlotDetail} from '../../../queries/time-slot';
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '../../../components/ui/table';
+import {EyeIcon, SailboatIcon, TagIcon, TimerResetIcon, Trash, UsersIcon} from 'lucide-react';
+import {getDisplayTimeFromBackend} from '../../../lib/date-time.utils';
+import {useDeleteBooking} from '../../../queries/booking';
+import {extractTypedInfoFromRouteParams, getTranslation, type RouteParamsLoaderData} from '../../../lib/utils';
 import {useTranslation} from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import AuditTrailInfo from '../../../components/common/audit-trail-info';
-import {
-	bookingsRoute,
-	eventDetailRoutes,
-	scheduleRoute,
-} from '../../../constants';
+import {bookingsRoute, eventDetailRoutes, scheduleRoute} from '../../../constants';
 import {Button} from '../../../components/ui/button';
 import {TimeSlotType} from '../../../models/api/time-slot.model';
 import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
@@ -131,13 +107,17 @@ const ScheduleItemPage: React.FC = () => {
 								<TagIcon />
 								{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 							</span>
-
 						</div>
 						<span className="flex gap-2 text-primary-dark-stroke">
 							<TimerResetIcon />
 							{t('timeSlot.originalTime')}:{' '}
-							{getDisplayTimeFromBackend(timeSlot?.originalFromTime ?? timeSlot?.fromTime)} -{' '}
-							{getDisplayTimeFromBackend(timeSlot?.originalUntilTime ?? timeSlot?.untilTime)}
+							{getDisplayTimeFromBackend(
+								timeSlot?.originalFromTime ?? timeSlot?.fromTime,
+							)}{' '}
+							-{' '}
+							{getDisplayTimeFromBackend(
+								timeSlot?.originalUntilTime ?? timeSlot?.untilTime,
+							)}
 						</span>
 					</div>
 					<AuditTrailInfo {...timeSlot} />
