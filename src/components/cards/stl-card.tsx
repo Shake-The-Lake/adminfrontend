@@ -1,7 +1,6 @@
 import React from 'react';
-import { ArrowRight, Trash } from 'lucide-react';
-
-import { Link } from 'react-router-dom';
+import {ArrowRight, Trash} from 'lucide-react';
+import {Link} from 'react-router-dom';
 import {
 	Card,
 	CardContent,
@@ -9,9 +8,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '../ui/card';
-import { Button } from '../ui/button';
-import { type UseMutationResult } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import {Button} from '../ui/button';
+import {type UseMutationResult} from '@tanstack/react-query';
+import {useTranslation} from 'react-i18next';
 
 export type StlCardProps = {
 	id?: number;
@@ -19,17 +18,29 @@ export type StlCardProps = {
 	description?: string;
 	link: string;
 	deleteMutation: UseMutationResult<any, Error, number>; // First any is return type, second is input
+	maxDescriptionLength?: number; // Add this optional prop for max description length
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation();
 
 	const handleDelete = async () => {
 		props.deleteMutation.mutate(props.id ?? 0);
 	};
 
+	// Truncate the description if it exceeds the maxDescriptionLength
+	const truncateDescription = (
+		description: string,
+		maxLength: number,
+	): string => {
+		if (description.length > maxLength) {
+			return description.slice(0, maxLength) + '...';
+		}
+		return description;
+	};
+
 	return (
-		<Card className="relative w-full max-w-full h-40 hover:bg-slate-50">
+		<Card className="relative w-full max-w-full h-40 hover:bg-slate-50 overflow-hidden">
 			<div className="absolute top-2 right-2 flex space-x-2">
 				<Button
 					variant="ghost"
@@ -46,7 +57,14 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 				<CardTitle>{props.title}</CardTitle>
 			</CardHeader>
 			<CardContent className="relative">
-				<CardDescription>{props.description}</CardDescription>
+				<CardDescription>
+					{props.description
+						? truncateDescription(
+								props.description,
+								props.maxDescriptionLength || 100,
+							)
+						: ''}
+				</CardDescription>
 			</CardContent>
 			<Link
 				to={props.link}
