@@ -86,6 +86,8 @@ const SchedulePage: React.FC = () => {
 			channelId: timeSlot.boatId,
 			channelUuid: timeSlot.boatId?.toString() ?? '',
 			description: timeSlot.boat!.name,
+			seatsViewer: timeSlot.boat!.seatsViewer,
+			seatsRider: timeSlot.boat!.seatsRider,
 			since: fromTimeToDateTime(
 				event?.date ?? new Date(),
 				timeSlot.fromTime ?? '',

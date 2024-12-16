@@ -12,6 +12,8 @@ import {
 } from 'planby';
 import { Link } from 'react-router-dom';
 import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
+
 
 export type PlanByProgramItemProps = {
 	program: any;
@@ -26,8 +28,10 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 		isBaseTimeFormat: props.isBaseTimeFormat ?? true,
 	});
 
+	const { t } = useTranslation();
+
 	const { data } = props.program;
-	const { title, description, since, till, color, disable } = data;
+	const { title, since, till, color, disable } = data;
 
 	const sinceTime = toSwissLocaleTimeString(new Date(since));
 	const tillTime = toSwissLocaleTimeString(new Date(till));
@@ -55,7 +59,7 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 							<ProgramText>
 								{sinceTime} - {tillTime}
 							</ProgramText>
-							<ProgramText>{description}</ProgramText>
+							<ProgramText>{` R: ${data.seatsRider} / V: ${data.seatsViewer}`}</ProgramText>
 						</div>
 					</ProgramStack>
 				</ProgramFlex>
