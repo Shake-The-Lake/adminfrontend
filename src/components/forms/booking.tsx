@@ -135,11 +135,11 @@ const BookingForm: React.FC<BookingFormProps> = ({
 								render={({ field }) => (
 									<StlSelect
 										data-testid="booking-is-rider"
-										value={field.value ? 'driver' : 'viewer'}
-										onValueChange={(value) => {
-											field.onChange(value === 'driver');
+										value={field.value ? 'rider' : 'viewer'}
+										onValueChange={(value?: string) => {
+											field.onChange(value !== 'viewer');
 										}}
-										defaultValue="viewer"
+										defaultValue="rider"
 										list={getIsRiderOptions(t)}
 										getKey={(item) => item?.key}
 										getLabel={(item) => item!.label}
