@@ -141,6 +141,7 @@ const resources: Resource = {
 			loading: 'Loading...',
 			yes: 'Yes',
 			no: 'No',
+			delete: 'Delete',
 			messages: {
 				pageErrorOops: 'Oops! Something went wrong.',
 				pageErrorNotFound: 'This page could not be found.',
@@ -336,6 +337,7 @@ const resources: Resource = {
 			loading: 'Laden...',
 			yes: 'Ja',
 			no: 'Nein',
+			delete: 'Löschen',
 			messages: {
 				pageErrorOops: 'Ups! Da ist etwas schiefgelaufen.',
 				pageErrorNotFound: 'Diese Seite konnte nicht gefunden werden.',
@@ -529,6 +531,7 @@ const resources: Resource = {
 			loading: 'Am Lade...',
 			yes: 'Ja',
 			no: 'Neii',
+			delete: 'Löschä',
 			messages: {
 				pageErrorOops: 'Ohje! Öppis isch schiefglaufe.',
 				pageErrorNotFound: 'Die Seite händ mir nöd gfunde.',

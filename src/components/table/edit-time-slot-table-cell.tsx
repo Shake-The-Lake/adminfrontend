@@ -63,7 +63,8 @@ const EditTimeSlotTableCell: React.FC<EditTimeSlotTableCellProps> = ({
 				size="icon"
 				className="items-center"
 				onClick={handleDelete}
-				aria-label="Delete Time Slot">
+				title={t('delete')}
+				aria-label={t('delete')}>
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
 		</TableCell >

@@ -1,9 +1,10 @@
 import React from 'react';
-import {Trash} from 'lucide-react';
-import {TableCell} from '../ui/table';
-import {Button} from '../ui/button';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {type BookingDto} from '../../models/api/booking.model';
+import { Trash } from 'lucide-react';
+import { TableCell } from '../ui/table';
+import { Button } from '../ui/button';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { type BookingDto } from '../../models/api/booking.model';
+import { useTranslation } from 'react-i18next';
 
 type EditBookingTableCellProps = {
 	booking: BookingDto;
@@ -14,6 +15,7 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 	booking,
 	deleteMutation,
 }) => {
+	const { t } = useTranslation();
 	const handleDelete = async () => deleteMutation.mutateAsync(booking?.id ?? 0);
 
 	return (
@@ -23,7 +25,8 @@ const EditBookingTableCell: React.FC<EditBookingTableCellProps> = ({
 				size="icon"
 				className="items-center"
 				onClick={handleDelete}
-				aria-label="Delete Booking">
+				title={t('delete')}
+				aria-label={t('delete')}>
 				<Trash className="cursor-pointer hover:text-red-600" />
 			</Button>
 		</TableCell>
