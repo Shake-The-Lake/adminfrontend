@@ -21,7 +21,7 @@ import {
 import { EyeIcon, SailboatIcon, TagIcon, Trash, UsersIcon } from 'lucide-react';
 import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import { useDeleteBooking } from '../../../queries/booking';
-import EditBookingTableCell from '../../../components/table/edit-booking';
+import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,

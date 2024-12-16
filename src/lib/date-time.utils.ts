@@ -1,3 +1,5 @@
+const timeZone = 'Europe/Zurich';
+
 export function validateDate(value: string) {
 	return !isNaN(Date.parse(value));
 }
@@ -20,11 +22,11 @@ export function toSwissLocalDateTimeString(date: Date) {
 }
 
 export function toSwissLocaleDateString(date: Date) {
-	return new Date(date).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+	return new Date(date).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone });
 }
 
 export function toSwissLocaleTimeString(date: Date) {
-	return new Date(date).toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
+	return new Date(date).toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit', timeZone });
 }
 
 export const fromTimeToDateTime = (date: Date, time: string): Date => {

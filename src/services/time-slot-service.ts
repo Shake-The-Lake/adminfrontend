@@ -1,9 +1,9 @@
-import {type TimeSlotDto} from '../models/api/time-slot.model';
+import { type MoveTimeSlotDto, type TimeSlotDto } from '../models/api/time-slot.model';
 import sortBy from 'lodash-es/sortBy';
 import axiosInstance from './axiosInstance';
-import {getPersonById} from './person-service';
-import {getTranslation} from '../lib/utils';
-import {getI18n} from 'react-i18next';
+import { getPersonById } from './person-service';
+import { getTranslation } from '../lib/utils';
+import { getI18n } from 'react-i18next';
 
 const timeSlotUrl = '/timeslot';
 
@@ -30,7 +30,7 @@ export const getAllTimeSlotsFromEvent = async (
 	eventId: number,
 ): Promise<TimeSlotDto[]> => {
 	const expand = 'boat,activityType';
-	const params = {expand, eventId};
+	const params = { expand, eventId };
 	const response = await axiosInstance.get<TimeSlotDto[]>(timeSlotUrl, {
 		params,
 	});
@@ -59,7 +59,7 @@ export const getTimeSlotById = async (id: number): Promise<TimeSlotDto> => {
 		timeSlot.bookings = await Promise.all(
 			response.data.bookings.map(async (booking) => {
 				const person = await getPersonById(booking.personId ?? 0);
-				return {...booking, person};
+				return { ...booking, person };
 			}),
 		);
 	}
@@ -74,6 +74,7 @@ export const createTimeSlot = async (
 		`${timeSlotUrl}`,
 		TimeSlot,
 	);
+
 	return response.data;
 };
 
@@ -85,9 +86,22 @@ export const updateTimeSlot = async (
 		`${timeSlotUrl}/${id}`,
 		timeSlot,
 	);
+
 	return response.data;
 };
 
 export const deleteTimeSlot = async (id: number): Promise<void> => {
 	await axiosInstance.delete(`${timeSlotUrl}/${id}`);
+};
+
+export const moveTimeSlot = async (
+	id: number,
+	timeSlot: MoveTimeSlotDto,
+): Promise<TimeSlotDto[]> => {
+	const response = await axiosInstance.post<TimeSlotDto[]>(
+		`${timeSlotUrl}/${id}/move`,
+		timeSlot,
+	);
+
+	return response.data;
 };

@@ -1,9 +1,10 @@
 import React from 'react';
 import { z } from 'zod';
-import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -17,7 +18,7 @@ import { type BoatDto } from '../../models/api/boat.model';
 import { type UseMutationResult } from '@tanstack/react-query';
 import { useMutationToaster } from '../common/mutation-toaster';
 import ActivityTypeSelect from '../select/activity-type-select';
-import { validateTime } from '../../lib/date-time.utils';
+import { getDisplayTimeFromBackend, validateTime } from '../../lib/date-time.utils';
 import { useTranslation } from 'react-i18next';
 import StlSelect from '../select/stl-select';
 import { timeSlotTypeOptions } from '../../constants/constants';
@@ -41,7 +42,7 @@ export type TimeSlotFormProps = {
 	mutation: UseMutationResult<any, Error, TimeSlotDto>;
 	isCreate: boolean;
 	boat?: BoatDto;
-	onSuccessfullySubmitted: () => void;
+	onSuccessfullySubmitted: () => void; // Method triggers when onSubmit has run successfully (e.g. to close dialog outside)
 };
 
 const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
@@ -101,6 +102,9 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 									data-testid="timeSlot.fromTime"
 								/>
 							</FormControl>
+							{model?.originalFromTime && model?.originalFromTime !== undefined && <FormDescription>
+								{t('timeSlot.originalTime')}: {getDisplayTimeFromBackend(model.originalFromTime)}
+							</FormDescription>}
 							<FormMessage />
 						</FormItem>
 					)}></FormField>
@@ -119,14 +123,16 @@ const TimeSlotForm: React.FC<TimeSlotFormProps> = ({
 									data-testid="timeSlot.untilTime"
 								/>
 							</FormControl>
+							{model?.originalUntilTime && model?.originalUntilTime !== undefined && <FormDescription>
+								{t('timeSlot.originalTime')}: {getDisplayTimeFromBackend(model.originalUntilTime)}
+							</FormDescription>}
 							<FormMessage />
 						</FormItem>
 					)}></FormField>
-				<Controller
+				<FormField
 					name="activityTypeId"
 					control={form.control}
-					render={({ field }) => <ActivityTypeSelect field={field} />}
-				/>
+					render={({ field }) => (<ActivityTypeSelect field={field} />)}></FormField>
 				<FormField
 					name="status"
 					control={form.control}
