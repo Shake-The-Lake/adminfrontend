@@ -53,6 +53,7 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 									<ProgramText>
 										{sinceTime} - {tillTime}
 									</ProgramText>
+									<ProgramText>{` R: ${data.seatsRider} / V: ${data.seatsViewer}`}</ProgramText>
 								</div>
 							</ProgramStack>
 						</ProgramFlex>
