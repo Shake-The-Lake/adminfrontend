@@ -98,6 +98,21 @@ export function useEmitSuccessIfSucceeded(
 	}, [mutation?.isSuccess, mutation?.data?.id]);
 }
 
+export function useEmitSuccessIfSucceededWithParameter(
+	onSuccessfullySubmitted: ((id: number) => void) | undefined,
+	mutation: UseMutationResult<any, Error, any>,
+) {
+	useEffect(() => {
+		if (
+			onSuccessfullySubmitted &&
+			mutation?.isSuccess &&
+			Boolean(mutation.data?.id)
+		) {
+			onSuccessfullySubmitted(Number(mutation.data?.id));
+		}
+	}, [mutation?.isSuccess, mutation?.data?.id]);
+}
+
 export function extractTypedInfoFromRouteParams(params: Params) {
 	return {
 		eventId: params.id ? Number(params.id) : 0,
@@ -107,3 +122,5 @@ export function extractTypedInfoFromRouteParams(params: Params) {
 		bookingId: params.bookingId ? Number(params.bookingId) : 0,
 	};
 }
+
+export type RouteParamsLoaderData = Awaited<ReturnType<typeof extractTypedInfoFromRouteParams>>;

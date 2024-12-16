@@ -1,11 +1,11 @@
 import React from 'react';
-import {Button} from '../ui/button';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { Button } from '../ui/button';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import HeaderLogo from './header-logo';
 
 const HeaderDefault: React.FC = () => {
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	return (
@@ -19,6 +19,14 @@ const HeaderDefault: React.FC = () => {
 					navigate('/');
 				}}>
 				{t('events')}
+			</Button>
+			<Button
+				variant="link"
+				className="heading-s-upper text-primary"
+				onClick={() => {
+					navigate('/logout');
+				}}>
+				{t('logout')}
 			</Button>
 		</header>
 	);

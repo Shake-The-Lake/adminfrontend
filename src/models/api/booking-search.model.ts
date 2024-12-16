@@ -1,11 +1,11 @@
-import {type TimeSlotDto} from './time-slot.model';
-import {type ColumnDef} from '@tanstack/react-table';
-import {type PersonDto} from './person.model';
-import {type BoatDto} from './boat.model';
-import {type ActivityTypeDto} from './activity-type.model';
-import {getDisplayTimeFromBackend} from '../../lib/date-time.utils';
-import {t} from 'i18next';
-import {type BookingDto} from './booking.model';
+import { type TimeSlotDto } from './time-slot.model';
+import { type ColumnDef } from '@tanstack/react-table';
+import { type PersonDto } from './person.model';
+import { type BoatDto } from './boat.model';
+import { type ActivityTypeDto } from './activity-type.model';
+import { getDisplayTimeFromBackend } from '../../lib/date-time.utils';
+import { t } from 'i18next';
+import { type BookingDto } from './booking.model';
 
 export type BookingSearchDto = {
 	person: PersonDto;
@@ -43,12 +43,12 @@ export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 	{
 		accessorKey: 'timeSlot.fromTime',
 		header: t('from'),
-		cell: ({row}) => getDisplayTimeFromBackend(row.original.timeSlot.fromTime),
+		cell: ({ row }) => getDisplayTimeFromBackend(row.original.timeSlot.fromTime),
 	},
 	{
 		accessorKey: 'timeSlot.untilTime',
 		header: t('to'),
-		cell: ({row}) => getDisplayTimeFromBackend(row.original.timeSlot.untilTime),
+		cell: ({ row }) => getDisplayTimeFromBackend(row.original.timeSlot.untilTime),
 	},
 	{
 		accessorKey: 'activityType.name.en',
@@ -71,7 +71,7 @@ export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 		header: t('createdBy'),
 	},
 	{
-		accessorKey: 'booking.modifiedBy',
+		accessorKey: 'booking.updatedBy',
 		header: t('modifiedBy'),
 	},
 ];

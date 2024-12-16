@@ -62,10 +62,12 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 		const subscription = form.watch((value, { name }) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
-			} else if (name === 'activityTypeId' && params.onActivityTypeChange && typeof value.activityTypeId !== 'string') {
-				params.onActivityTypeChange(value.activityTypeId);
-			} else if (name === 'boatId' && params.onBoatChange && typeof value.boatId !== 'string') {
-				params.onBoatChange(value.boatId);
+			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {
+				const activityTypeId = typeof value.activityTypeId === 'string' ? undefined : value.activityTypeId;
+				params.onActivityTypeChange(activityTypeId);
+			} else if (name === 'boatId' && params.onBoatChange) {
+				const boatId = typeof value.boatId === 'string' ? undefined : value.boatId;
+				params.onBoatChange(boatId);
 			} else if (name === 'from' && params.onFromChange) {
 				params.onFromChange(value.from);
 			} else if (name === 'to' && params.onToChange) {
@@ -81,7 +83,7 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 		<Form {...form}>
 			<form
 				id="filter"
-				className="p-1 w-full flex flex-wrap gap-4 justify-between items-center">
+				className="p-3 w-full flex flex-wrap gap-4 justify-between items-center rounded-lg border bg-muted/50">
 				{hasOption(options, StlFilterOptions.SearchTerm) && (
 					<FormField
 						name="searchTerm"
@@ -106,10 +108,12 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 					<FormField
 						name="activityTypeId"
 						control={form.control}
-						render={({ field }) => (<ActivityTypeSelect
-							field={field}
-							className="min-w-[200px] flex-grow flex-shrink-0"
-						/>)}></FormField>
+						render={({ field }) => (
+							<ActivityTypeSelect
+								field={field}
+								className="min-w-[200px] flex-grow flex-shrink-0" />
+						)}>
+					</FormField>
 				)}
 
 				{hasOption(options, StlFilterOptions.Boat) && (
@@ -148,7 +152,7 @@ const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 							control={form.control}
 							render={({ field }) => (
 								<FormItem className="sm:ml-4">
-									<FormLabel>To</FormLabel>
+									<FormLabel>{t('to')}</FormLabel>
 									<FormControl>
 										<Input
 											placeholder={t('timeSlot.timeFormat')}

@@ -15,7 +15,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '../ui/table';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
@@ -36,7 +36,7 @@ export function DataTable<TyData, TyValue>({
 		[],
 	);
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	const table = useReactTable({
 		data,
@@ -61,9 +61,9 @@ export function DataTable<TyData, TyValue>({
 										{header.isPlaceholder
 											? null
 											: flexRender(
-													header.column.columnDef.header,
-													header.getContext(),
-												)}
+												header.column.columnDef.header,
+												header.getContext(),
+											)}
 									</TableHead>
 								))}
 							</TableRow>
@@ -76,7 +76,8 @@ export function DataTable<TyData, TyValue>({
 									key={row.id}
 									data-testid={`${rowTestIdPrefix}-${rowIndex}`}
 									data-state={row.getIsSelected() && 'selected'}
-									onClick={() => onRowClick?.(row.original)}>
+									onClick={() => onRowClick?.(row.original)}
+									className={onRowClick ? ('cursor-pointer hover:underline underline-offset-4') : ''}>
 									{row.getVisibleCells().map((cell, cellIndex) => (
 										<TableCell
 											key={cell.id}

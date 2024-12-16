@@ -10,10 +10,10 @@ import {
 	useBoatDetail,
 	useUpdateBoat,
 } from '../../../queries/boat';
-import { extractTypedInfoFromRouteParams } from '../../../lib/utils';
+import { extractTypedInfoFromRouteParams, type RouteParamsLoaderData } from '../../../lib/utils';
 import { defaultBoatDto } from '../../../models/api/boat.model';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
-import ActivityTraceInfo from '../../../components/common/ActivityTraceInfo';
+import AuditTrailInfo from '../../../components/common/audit-trail-info';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -34,9 +34,7 @@ export const loader =
 		};
 
 const BoatPage: React.FC = () => {
-	const { eventId, boatId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
+	const { eventId, boatId } = useLoaderData() as RouteParamsLoaderData;
 	const { data: boat, error } = useBoatDetail(eventId, boatId);
 
 	const updateMutation = useUpdateBoat(eventId, boatId);
@@ -50,9 +48,7 @@ const BoatPage: React.FC = () => {
 					{t('boat.title')} - {boat?.name}
 				</h2>
 
-				<ActivityTraceInfo
-					{...boat}
-				/>
+				<AuditTrailInfo {...boat} />
 
 				{error && <p>{t('boat.errorLoadingBoat')}</p>}
 				{boat && (

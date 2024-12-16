@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getDefaultTimeSlotBasedOnBoat, getDefaultTimeSlotBasedOnPrevious, TimeSlotType } from '../../../models/api/time-slot.model';
+import { getDefaultTimeSlotBasedOnBoat, getDefaultTimeSlotBasedOnPrevious, type TimeSlotDto, TimeSlotType } from '../../../models/api/time-slot.model';
 import StlDialog from '../../../components/dialog/stl-dialog';
 import TimeSlotForm from '../../../components/forms/time-slot';
 import {
@@ -25,9 +25,10 @@ import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import {
 	extractTypedInfoFromRouteParams,
 	getTranslation,
+	type RouteParamsLoaderData,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
-import { useEventDetail } from '../../../queries/event';
+import { CalendarPlus } from 'lucide-react';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -48,58 +49,21 @@ export const loader =
 		};
 
 const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
-	const { eventId, boatId } = useLoaderData() as Awaited<
-		ReturnType<ReturnType<typeof loader>>
-	>;
-
-	const { data: event } = useEventDetail(eventId, false);
+	const { eventId, boatId } = useLoaderData() as RouteParamsLoaderData;
 
 	const { i18n, t } = useTranslation();
 
 	const { data: timeSlots } = useGetTimeSlotsForBoat(eventId, boatId);
-	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-	const createMutation = useCreateTimeSlot(eventId, boatId);
 	const deleteMutation = useDeleteTimeSlot(eventId, boatId);
 
 	useMutationToaster({ type: 'delete', mutation: deleteMutation });
 
-	const currentDefaultModel = timeSlots === undefined || timeSlots.length === 0
-		? getDefaultTimeSlotBasedOnBoat(boat)
-		: getDefaultTimeSlotBasedOnPrevious(timeSlots[timeSlots.length - 1], boat);
-
-	const openCreateDialog = () => {
-		setIsCreateDialogOpen(true);
-	};
-
-	const closeCreateDialog = () => {
-		setIsCreateDialogOpen(false);
-	};
-
 	return (
 		<div>
 			<div className="flex flex-wrap justify-between gap-5">
-				<>
-					<h1>{t('timeSlot.title')}</h1>
-					<StlDialog
-						title={t('timeSlot.create')}
-						description={t('timeSlot.description')}
-						triggerLabel={t('timeSlot.triggerLabel')}
-						isOpen={isCreateDialogOpen}
-						onClose={closeCreateDialog}
-						onOpen={openCreateDialog}
-						isCard={false}
-						formId="timeSlot">
-						<TimeSlotForm
-							model={currentDefaultModel}
-							mutation={createMutation}
-							boat={boat}
-							event={event}
-							isCreate={true}
-							onSuccessfullySubmitted={closeCreateDialog}
-						/>
-					</StlDialog>
-				</>
+				<h1>{t('timeSlot.title')}</h1>
+				<TimeSlotCreateDialog boat={boat} timeSlots={timeSlots} isCreateFromSchedule={false}></TimeSlotCreateDialog>
 			</div>
 
 			{/* Wrapper div to enable overflow */}
@@ -157,3 +121,55 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 };
 
 export default TimeSlots;
+
+type TimeSlotCreateDialogProps = {
+	boat: BoatDto;
+	timeSlots?: TimeSlotDto[];
+	isCreateFromSchedule: boolean;
+};
+
+const TimeSlotCreateDialog: React.FC<TimeSlotCreateDialogProps> = ({ boat, timeSlots, isCreateFromSchedule }) => {
+	const { eventId, boatId } = useLoaderData() as RouteParamsLoaderData;
+
+	const { t } = useTranslation();
+
+	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
+	const createMutation = useCreateTimeSlot(eventId, boatId);
+
+	const currentDefaultModel = timeSlots === undefined || timeSlots.length === 0
+		? getDefaultTimeSlotBasedOnBoat(boat)
+		: getDefaultTimeSlotBasedOnPrevious(timeSlots[timeSlots.length - 1], boat);
+
+	const openCreateDialog = () => {
+		setIsCreateDialogOpen(true);
+	};
+
+	const closeCreateDialog = () => {
+		setIsCreateDialogOpen(false);
+	};
+
+	return (
+		<StlDialog
+			title={isCreateFromSchedule ? `${t('timeSlot.create')} - ${boat?.name}` : t('timeSlot.create')}
+			description={t('timeSlot.description')}
+			triggerLabel={t('timeSlot.triggerLabel')}
+			isOpen={isCreateDialogOpen}
+			onClose={closeCreateDialog}
+			onOpen={openCreateDialog}
+			isCard={false}
+			isIcon={isCreateFromSchedule}
+			icon={<CalendarPlus size={18} className='-mx-2 -my-1' />}
+			formId="timeSlot">
+			<TimeSlotForm
+				model={currentDefaultModel}
+				mutation={createMutation}
+				boat={boat}
+				isCreate={true}
+				onSuccessfullySubmitted={closeCreateDialog}
+			/>
+		</StlDialog>
+	);
+};
+
+export { TimeSlotCreateDialog };
