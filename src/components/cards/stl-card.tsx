@@ -1,5 +1,6 @@
 import React from 'react';
 import {ArrowRight, Trash} from 'lucide-react';
+
 import {Link} from 'react-router-dom';
 import {
 	Card,
@@ -18,7 +19,6 @@ export type StlCardProps = {
 	description?: string;
 	link: string;
 	deleteMutation: UseMutationResult<any, Error, number>; // First any is return type, second is input
-	maxDescriptionLength?: number; // Add this optional prop for max description length
 };
 
 const StlCard: React.FC<StlCardProps> = (props) => {
@@ -26,17 +26,6 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 
 	const handleDelete = async () => {
 		props.deleteMutation.mutate(props.id ?? 0);
-	};
-
-	// Truncate the description if it exceeds the maxDescriptionLength
-	const truncateDescription = (
-		description: string,
-		maxLength: number,
-	): string => {
-		if (description.length > maxLength) {
-			return description.slice(0, maxLength) + '...';
-		}
-		return description;
 	};
 
 	return (
@@ -57,13 +46,8 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 				<CardTitle>{props.title}</CardTitle>
 			</CardHeader>
 			<CardContent className="relative">
-				<CardDescription>
-					{props.description
-						? truncateDescription(
-								props.description,
-								props.maxDescriptionLength || 150,
-							)
-						: ''}
+				<CardDescription className="truncate">
+					{props.description}
 				</CardDescription>
 			</CardContent>
 			<Link
