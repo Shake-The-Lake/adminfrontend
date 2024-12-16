@@ -110,7 +110,7 @@ const ScheduleItemPage: React.FC = () => {
 					</span>
 					<AuditTrailInfo {...timeSlot} />
 				</div>
-				<div className="flex justify-between">
+				<div className="flex justify-between items-end">
 					<h2 className="text-2xl mt-10">{t('booking.currentBooking')}</h2>
 					<Button data-testid="booking-create-button" onClick={onCreateBookingClick}>
 						{t('booking.create')}

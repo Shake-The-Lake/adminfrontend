@@ -27,6 +27,7 @@ import { type PersonDto } from '../../models/api/person.model';
 import { useEmitSuccessIfSucceededWithParameter } from '../../lib/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getIsRiderOptions } from '../../constants/constants';
+import { useDeleteBooking } from '../../queries/booking';
 
 const bookingSchema = z.object({
 	id: z.number().optional(),
@@ -101,7 +102,16 @@ const BookingForm: React.FC<BookingFormProps> = ({
 			personId: savedPerson.id,
 			isManual,
 		};
+
 		await bookingMutation.mutateAsync(booking);
+	};
+
+	const deleteMutation = useDeleteBooking(eventId);
+	const handleDelete = async () => {
+		if (!isCreate) {
+			navigate(-1); // We assume delete will succeed (cannot be after as otherwise we would get stuck in a loop due to invalidation)
+			await deleteMutation.mutateAsync(model?.id ?? 0);
+		}
 	};
 
 	return (
@@ -160,16 +170,26 @@ const BookingForm: React.FC<BookingFormProps> = ({
 					/>
 				</div>
 
-				<div className="flex w-full justify-end mt-auto pt-4">
-					<Button type="button" variant="secondary" onClick={handleCancel}>
-						{t('cancel')}
-					</Button>
-					<Button
-						type="submit"
-						className="ml-4"
-						data-testid="booking-submit-button">
-						{t('save')}
-					</Button>
+				<div className="flex w-full justify-between mt-auto pt-4">
+					{!isCreate && (<Button
+						type="button"
+						variant="destructiveOutline"
+						onClick={handleDelete}
+						title={t('delete')}>
+						{t('delete')}
+					</Button>)}
+
+					<div className="flex w-full justify-end mt-auto pt-4">
+						<Button type="button" variant="secondary" onClick={handleCancel}>
+							{t('cancel')}
+						</Button>
+						<Button
+							type="submit"
+							className="ml-4"
+							data-testid="booking-submit-button">
+							{t('save')}
+						</Button>
+					</div>
 				</div>
 			</form>
 		</FormProvider>

@@ -1,4 +1,4 @@
-import {type BookingSearchParams} from '../models/api/booking-search.model';
+import { type BookingSearchParams } from '../models/api/booking-search.model';
 import {
 	type QueryClient,
 	type QueryKey,
@@ -17,13 +17,14 @@ import {
 	getBookingById,
 	updateBooking,
 } from '../services/booking-service';
-import {type BookingDto} from '../models/api/booking.model';
+import { type BookingDto } from '../models/api/booking.model';
 import {
 	getBaseQueryKey,
 	invalidateAllQueriesOfEventFor,
+	invalidateFromBookingMetaDataRelevantQuery,
 	mutationKeyGenerator,
 } from './shared';
-import {timeSlotQueryKeys} from './time-slot';
+import { timeSlotQueryKeys } from './time-slot';
 
 const identifier = 'bookings';
 
@@ -110,6 +111,7 @@ export function useDeleteBooking(eventId: number) {
 		mutationFn: deleteBooking,
 		async onSuccess() {
 			await queriesToInvalidateOnCrud(queryClient, eventId);
+			await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId);
 		},
 	});
 }
