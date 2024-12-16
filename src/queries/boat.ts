@@ -122,9 +122,6 @@ async function queriesToInvalidateOnCrud(
 ) {
 	await invalidateAllQueriesOfEventFor(identifier, eventId, queryClient);
 
-	// Todo! timeslot query;
-	// todo! verify what happens on boat or timeslot deletion, especially if it already has bookings?!
-
 	await invalidateFromNavigationStructureRelevantQuery(eventId, queryClient);
 
 	await invalidateFromSelectSearchParamsRelevantQuery(eventId, queryClient);

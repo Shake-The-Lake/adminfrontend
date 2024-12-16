@@ -39,7 +39,6 @@ export const getAllTimeSlotsFromEvent = async (
 	return getSortedTimeSlotsFromArray(result);
 };
 
-// Todo! refactor usage to use expanded event instead
 export const getAllTimeSlotsFromBoat = async (
 	eventId: number,
 	boatId: number,

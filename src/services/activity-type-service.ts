@@ -15,7 +15,6 @@ export const getSortedActivityTypes = (activityTypes?: ActivityTypeDto[]) => {
 		: [];
 };
 
-// Todo! refactor usage to use expanded event instead
 export const getAllActivityTypesFromEvent = async (
 	eventId: number,
 ): Promise<ActivityTypeDto[]> => {

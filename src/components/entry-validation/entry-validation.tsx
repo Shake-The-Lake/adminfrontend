@@ -10,7 +10,7 @@ const EntryValidation: React.FC = () => {
 	const handleSubmit: SubmitHandler<
 		z.infer<typeof entryValidationSchema>
 	> = () => {
-		// TODO Implement API in case you ever want to re-introduce this feature instead of the auto-generated QR Codes
+		// Implement API in case you ever want to re-introduce this feature instead of the auto-generated QR Codes
 	};
 
 	return (
