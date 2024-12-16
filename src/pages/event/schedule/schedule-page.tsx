@@ -104,7 +104,7 @@ const SchedulePage: React.FC = () => {
 
 	const channels: Channel[] = boats.map((boat) => ({
 		id: boat.id,
-		name: `${boat.name} R: ${boat.seatsRider} V:${boat.seatsViewer}`,
+		name: boat.name,
 		logo: 'https://via.placeholder.com/150',
 		uuid: boat?.id?.toString() ?? '',
 		position: { top: 0, height: 0 },
