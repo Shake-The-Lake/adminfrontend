@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/prefer-literal-enum-member */
 /* eslint-disable no-bitwise */
-import React, {useEffect} from 'react';
-import {z} from 'zod';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {Controller, useForm} from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import ActivityTypeSelect from '../select/activity-type-select';
 import BoatSelect from '../select/boat-select';
 import {
@@ -14,10 +14,10 @@ import {
 	FormLabel,
 	FormMessage,
 } from '../ui/form';
-import {Input} from '../ui/input';
-import {type StlFilterParams} from '../../models/api/search.model';
-import {validateTime} from '../../lib/date-time.utils';
-import {useTranslation} from 'react-i18next';
+import { Input } from '../ui/input';
+import { type StlFilterParams } from '../../models/api/search.model';
+import { validateTime } from '../../lib/date-time.utils';
+import { useTranslation } from 'react-i18next';
 
 export enum StlFilterOptions {
 	SearchTerm = 1 << 0, // 0001 -- the bitshift is unnecessary, but done for consistency
@@ -37,8 +37,8 @@ type StlFilterProps = {
 
 const filterSchema = z.object({
 	searchTerm: z.string().optional(),
-	activityTypeId: z.number().min(0).optional(),
-	boatId: z.number().min(0).optional(),
+	activityTypeId: z.number().min(0).optional().or(z.string().optional()),
+	boatId: z.number().min(0).optional().or(z.string().optional()),
 	from: z
 		.string()
 		.optional()
@@ -49,22 +49,22 @@ const filterSchema = z.object({
 		.refine((value) => validateTime(value), 'Invalid time'),
 });
 
-const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
+const StlFilter: React.FC<StlFilterProps> = ({ options, params }) => {
 	const form = useForm<z.infer<typeof filterSchema>>({
 		mode: 'onChange',
 		defaultValues: params,
 		resolver: zodResolver(filterSchema),
 	});
 
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
-		const subscription = form.watch((value, {name}) => {
+		const subscription = form.watch((value, { name }) => {
 			if (name === 'searchTerm' && params.onSearchTermChange) {
 				params.onSearchTermChange(value.searchTerm);
-			} else if (name === 'activityTypeId' && params.onActivityTypeChange) {
+			} else if (name === 'activityTypeId' && params.onActivityTypeChange && typeof value.activityTypeId !== 'string') {
 				params.onActivityTypeChange(value.activityTypeId);
-			} else if (name === 'boatId' && params.onBoatChange) {
+			} else if (name === 'boatId' && params.onBoatChange && typeof value.boatId !== 'string') {
 				params.onBoatChange(value.boatId);
 			} else if (name === 'from' && params.onFromChange) {
 				params.onFromChange(value.from);
@@ -86,7 +86,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 					<FormField
 						name="searchTerm"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<FormItem className="min-w-[200px] flex-grow">
 								<FormLabel>{t('search')}</FormLabel>
 								<FormControl>
@@ -103,29 +103,24 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 				)}
 
 				{hasOption(options, StlFilterOptions.ActivityType) && (
-					<Controller
+					<FormField
 						name="activityTypeId"
 						control={form.control}
-						render={({field}) => (
-							<ActivityTypeSelect
-								field={field}
-								className="min-w-[200px] flex-grow flex-shrink-0"
-							/>
-						)}
-					/>
+						render={({ field }) => (<ActivityTypeSelect
+							field={field}
+							className="min-w-[200px] flex-grow flex-shrink-0"
+						/>)}></FormField>
 				)}
 
 				{hasOption(options, StlFilterOptions.Boat) && (
-					<Controller
+					<FormField
 						name="boatId"
 						control={form.control}
-						render={({field}) => (
+						render={({ field }) => (
 							<BoatSelect
 								field={field}
 								className="min-w-[200px] flex-grow flex-shrink-0"
-							/>
-						)}
-					/>
+							/>)}></FormField>
 				)}
 
 				{hasOption(options, StlFilterOptions.TimeRange) && (
@@ -133,7 +128,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						<FormField
 							name="from"
 							control={form.control}
-							render={({field}) => (
+							render={({ field }) => (
 								<FormItem>
 									<FormLabel>{t('from')}</FormLabel>
 									<FormControl>
@@ -151,7 +146,7 @@ const StlFilter: React.FC<StlFilterProps> = ({options, params}) => {
 						<FormField
 							name="to"
 							control={form.control}
-							render={({field}) => (
+							render={({ field }) => (
 								<FormItem className="sm:ml-4">
 									<FormLabel>To</FormLabel>
 									<FormControl>

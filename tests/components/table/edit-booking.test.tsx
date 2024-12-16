@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, it, vi } from 'vitest';
-import EditBookingTableCell from '../../../src/components/table/edit-booking';
+import EditBookingTableCell from '../../../src/components/table/edit-booking-table-cell';
 import { QueryClient, QueryClientProvider, type UseMutationResult } from '@tanstack/react-query';
 import { type BookingDto } from '../../../src/models/api/booking.model';
 

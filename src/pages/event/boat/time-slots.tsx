@@ -27,6 +27,7 @@ import {
 	getTranslation,
 } from '../../../lib/utils';
 import { useTranslation } from 'react-i18next';
+import { useEventDetail } from '../../../queries/event';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -50,6 +51,8 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 	const { eventId, boatId } = useLoaderData() as Awaited<
 		ReturnType<ReturnType<typeof loader>>
 	>;
+
+	const { data: event } = useEventDetail(eventId, false);
 
 	const { i18n, t } = useTranslation();
 
@@ -91,6 +94,7 @@ const TimeSlots: React.FC<BoatDto> = (boat: BoatDto) => {
 							model={currentDefaultModel}
 							mutation={createMutation}
 							boat={boat}
+							event={event}
 							isCreate={true}
 							onSuccessfullySubmitted={closeCreateDialog}
 						/>
