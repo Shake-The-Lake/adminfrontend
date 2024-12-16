@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
 import {
@@ -26,6 +27,7 @@ import {
 	useGetTimeSlotsForEvent,
 } from '../../../queries/time-slot';
 import { TimeSlotType } from '../../../models/api/time-slot.model';
+import { TimeSlotCreateDialog } from '../boat/time-slots';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -104,6 +106,7 @@ const SchedulePage: React.FC = () => {
 		logo: 'https://via.placeholder.com/150',
 		uuid: boat?.id?.toString() ?? '',
 		position: { top: 0, height: 0 },
+		boat,
 	}));
 	const { getEpgProps, getLayoutProps } = useEpg({
 		epg: programs,
@@ -125,7 +128,8 @@ const SchedulePage: React.FC = () => {
 						renderChannel={({ channel }) => (
 							<div
 								key={channel.uuid}
-								className="w-full h-20 font-semibold text-right flex place-content-end items-center p-3">
+								className="w-full h-20 font-semibold text-right flex place-content-end items-center p-3 border-b last:border-none justify-between">
+								<TimeSlotCreateDialog boat={channel.boat} timeSlots={undefined} isCreateFromSchedule={true}></TimeSlotCreateDialog>
 								{channel.name}
 							</div>
 						)}
