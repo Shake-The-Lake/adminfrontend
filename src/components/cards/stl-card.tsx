@@ -61,7 +61,7 @@ const StlCard: React.FC<StlCardProps> = (props) => {
 					{props.description
 						? truncateDescription(
 								props.description,
-								props.maxDescriptionLength || 200,
+								props.maxDescriptionLength || 150,
 							)
 						: ''}
 				</CardDescription>
