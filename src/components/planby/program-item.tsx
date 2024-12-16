@@ -68,12 +68,12 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 				<HoverCardContent className="p-4 bg-white shadow-md rounded-md">
 					<h4 className="font-semibold mb-2">{title}</h4>
 					<p>
-						{t('From')}: {sinceTime} <br />
-						{t('To')}: {tillTime}
+						{t('from')}: {sinceTime} <br />
+						{t('to')}: {tillTime}
 					</p>
 					<p>
-						{t('Seats Riders')}: {data.seatsRider} <br />
-						{t('Seats Viewers')}: {data.seatsViewer}
+						{t('riderSeats')}: {data.seatsRider} <br />
+						{t('viewerSeats')}: {data.seatsViewer}
 					</p>
 				</HoverCardContent>
 			</HoverCard>
