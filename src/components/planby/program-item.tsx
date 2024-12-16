@@ -1,20 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
-import {
-	ProgramBox,
-	ProgramContent,
-	ProgramFlex,
-	ProgramStack,
-	ProgramText,
-	ProgramTitle,
-	useProgram,
-} from 'planby';
-import { Link } from 'react-router-dom';
-import { toSwissLocaleTimeString } from '../../lib/date-time.utils';
-import { useTranslation } from 'react-i18next';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card';
-
+import {ProgramBox, ProgramContent, ProgramFlex, ProgramStack, ProgramText, ProgramTitle, useProgram} from 'planby';
+import {Link} from 'react-router-dom';
+import {toSwissLocaleTimeString} from '../../lib/date-time.utils';
+import {useTranslation} from 'react-i18next';
+import {HoverCard, HoverCardContent, HoverCardTrigger} from '../ui/hover-card';
 
 export type PlanByProgramItemProps = {
 	program: any;
@@ -24,15 +15,15 @@ export type PlanByProgramItemProps = {
 };
 
 export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
-	const { styles, isLive } = useProgram({
+	const {styles, isLive} = useProgram({
 		...props,
 		isBaseTimeFormat: props.isBaseTimeFormat ?? true,
 	});
 
-	const { t } = useTranslation();
+	const {t} = useTranslation();
 
-	const { data } = props.program;
-	const { title, since, till, color, disable } = data;
+	const {data} = props.program;
+	const {title, since, till, color, disable} = data;
 
 	const sinceTime = toSwissLocaleTimeString(new Date(since));
 	const tillTime = toSwissLocaleTimeString(new Date(till));
@@ -48,7 +39,7 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 						width={styles.width}
 						isLive={isLive}
 						className={disable ? '!cursor-default' : 'cursor-pointer'}
-						style={{ background: color }}>
+						style={{background: color}}>
 						<ProgramFlex>
 							<ProgramStack className="w-full">
 								{disable ? null : (
@@ -62,7 +53,6 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 									<ProgramText>
 										{sinceTime} - {tillTime}
 									</ProgramText>
-									<ProgramText>{` R: ${data.seatsRider} / V: ${data.seatsViewer}`}</ProgramText>
 								</div>
 							</ProgramStack>
 						</ProgramFlex>
@@ -75,8 +65,8 @@ export const ProgramItem: React.FC<PlanByProgramItemProps> = (props) => {
 						{t('to')}: {tillTime}
 					</p>
 					<p>
-						{t('riderSeats')}: {data.seatsRider} <br />
-						{t('viewerSeats')}: {data.seatsViewer}
+						{t('riderSeats')}: {data.availableRiderSeats} <br />
+						{t('viewerSeats')}: {data.availableViewerSeats}
 					</p>
 				</HoverCardContent>
 			</HoverCard>
