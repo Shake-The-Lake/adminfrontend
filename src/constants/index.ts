@@ -24,7 +24,8 @@ export const eventDetailRoutes = {
 	bookingId: ':bookingId',
 };
 
-export const bookingsRoute = (eventId: number) => `/event/${eventId}/bookings`;
+export const bookingsRoute = (eventId: number) => `/event/${eventId}/${eventDetailRoutes.bookings}`;
+export const scheduleRoute = (eventId: number) => `/event/${eventId}/${eventDetailRoutes.schedule}`;
 
 export const iconPaths = {
 	tiAndM: '/ti-and-m-logo.svg',

@@ -1,5 +1,5 @@
 import { type QueryClient } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	type LoaderFunctionArgs,
 	useLoaderData,
@@ -30,8 +30,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import PageTransitionFadeIn from '../../../components/animations/page-transition-fade-in';
 import AuditTrailInfo from '../../../components/common/audit-trail-info';
-import { bookingsRoute, eventDetailRoutes } from '../../../constants';
+import { bookingsRoute, eventDetailRoutes, scheduleRoute } from '../../../constants';
 import { Button } from '../../../components/ui/button';
+import { TimeSlotType } from '../../../models/api/time-slot.model';
 
 export const loader =
 	(queryClient: QueryClient) =>
@@ -55,6 +56,12 @@ const ScheduleItemPage: React.FC = () => {
 	const navigate = useNavigate();
 
 	const { data: timeSlot } = useTimeSlotDetail(eventId, timeSlotId);
+
+	useEffect(() => {
+		if (timeSlot?.status === TimeSlotType.ON_BREAK) {
+			navigate(scheduleRoute(eventId));
+		}
+	}, [timeSlot?.status]);
 
 	const signedUpRiders =
 		(timeSlot?.seatsRider ?? 0) - (timeSlot?.availableRiderSeats ?? 0);
@@ -82,7 +89,7 @@ const ScheduleItemPage: React.FC = () => {
 						{getDisplayTimeFromBackend(timeSlot?.fromTime)} -{' '}
 						{getDisplayTimeFromBackend(timeSlot?.untilTime)}
 					</h2>
-					<Button
+					{timeSlot?.bookings === undefined || timeSlot?.bookings?.length === 0 && (<Button
 						variant="ghost"
 						size="icon"
 						className="items-center"
@@ -90,7 +97,7 @@ const ScheduleItemPage: React.FC = () => {
 						title={t('delete')}
 						aria-label={t('delete')}>
 						<Trash className="cursor-pointer hover:text-red-600" />
-					</Button>
+					</Button>)}
 				</div>
 				<div className="flex flex-wrap gap-5">
 					<span className="flex gap-2">
