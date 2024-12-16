@@ -17,7 +17,7 @@ describe('EditBookingTableCell', () => {
       phoneNumber: '1234567890',
     },
     isRider: true,
-    pagerNumber: '123',
+    pagerNumber: 123,
   };
 
   const mockDeleteMutation = {
@@ -44,13 +44,13 @@ describe('EditBookingTableCell', () => {
 
   it('renders the EditBookingTableCell component', () => {
     renderComponent();
-    expect(screen.getByRole('button', { name: /delete booking/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
   });
 
   it('calls deleteMutation when delete button is clicked', async () => {
     renderComponent();
 
-    const deleteButton = screen.getByRole('button', { name: /delete booking/i });
+    const deleteButton = screen.getByRole('button', { name: /delete/i });
     fireEvent.click(deleteButton);
 
     expect(mockDeleteMutation.mutateAsync).toHaveBeenCalledWith(booking.id);

@@ -58,18 +58,18 @@ describe('StlFilter', () => {
 
   it('renders activity type select when ActivityType option is provided', () => {
     renderWithQueryClient(<StlFilter options={StlFilterOptions.ActivityType} params={mockParams} />);
-    expect(screen.getByText('Activity Type')).toBeInTheDocument();
+    expect(screen.getByText('activityType.title')).toBeInTheDocument();
   });
 
   it('renders boat select when Boat option is provided', () => {
     renderWithQueryClient(<StlFilter options={StlFilterOptions.Boat} params={mockParams} />);
-    expect(screen.getByText('Boat')).toBeInTheDocument();
+    expect(screen.getByText('boat.title')).toBeInTheDocument();
   });
 
   it('renders time range inputs when TimeRange option is provided', () => {
     renderWithQueryClient(<StlFilter options={StlFilterOptions.TimeRange} params={mockParams} />);
     expect(screen.getByLabelText('from')).toBeInTheDocument();
-    expect(screen.getByLabelText('To')).toBeInTheDocument();
+    expect(screen.getByLabelText('to')).toBeInTheDocument();
   });
 
   it('calls onSearchTermChange when search term is changed', () => {
