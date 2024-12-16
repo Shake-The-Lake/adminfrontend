@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type QueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import {
@@ -18,7 +19,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '../../../components/ui/table';
-import { EyeIcon, SailboatIcon, TagIcon, Trash, UsersIcon } from 'lucide-react';
+import { EyeIcon, SailboatIcon, TagIcon, TimerResetIcon, Trash, UsersIcon } from 'lucide-react';
 import { getDisplayTimeFromBackend } from '../../../lib/date-time.utils';
 import { useDeleteBooking } from '../../../queries/booking';
 import EditBookingTableCell from '../../../components/table/edit-booking-table-cell';
@@ -100,21 +101,32 @@ const ScheduleItemPage: React.FC = () => {
 					</Button>)}
 				</div>
 				<div className="flex flex-wrap gap-5">
-					<span className="flex gap-2">
-						<SailboatIcon /> {timeSlot?.boat?.operator}
-					</span>
-					<span className="flex gap-2">
-						<EyeIcon />
-						{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
-					</span>
-					<span className="flex gap-2">
-						<UsersIcon />
-						{signedUpRiders} / {timeSlot?.seatsRider ?? 0}
-					</span>
-					<span className="flex gap-2">
-						<TagIcon />
-						{getTranslation(i18n.language, timeSlot?.activityType?.name)}
-					</span>
+					<div className="flex w-full justify-between">
+						<div className="flex flex-wrap gap-5">
+							<span className="flex gap-2">
+								<SailboatIcon /> {timeSlot?.boat?.operator}
+							</span>
+							<span className="flex gap-2">
+								<EyeIcon />
+								{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
+							</span>
+							<span className="flex gap-2">
+								<UsersIcon />
+								{signedUpRiders} / {timeSlot?.seatsRider ?? 0}
+							</span>
+							<span className="flex gap-2">
+								<TagIcon />
+								{getTranslation(i18n.language, timeSlot?.activityType?.name)}
+							</span>
+
+						</div>
+						<span className="flex gap-2 text-primary-dark-stroke">
+							<TimerResetIcon />
+							{t('timeSlot.originalTime')}:{' '}
+							{getDisplayTimeFromBackend(timeSlot?.originalFromTime ?? timeSlot?.fromTime)} -{' '}
+							{getDisplayTimeFromBackend(timeSlot?.originalUntilTime ?? timeSlot?.untilTime)}
+						</span>
+					</div>
 					<AuditTrailInfo {...timeSlot} />
 				</div>
 				<div className="flex justify-between items-end">
