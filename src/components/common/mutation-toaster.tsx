@@ -1,9 +1,9 @@
 import React from 'react';
-import {useEffect} from 'react';
-import {toast} from 'sonner';
-import {tryGetErrorMessage} from '../../lib/utils';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useTranslation} from 'react-i18next';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
+import { tryGetErrorMessage } from '../../lib/utils';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 type MutationToasterProps = {
 	type: 'create' | 'update' | 'delete';
@@ -17,8 +17,8 @@ const MutationToaster: React.FC<MutationToasterProps> = (props) => {
 };
 
 
-function useMutationToaster({type, mutation}: MutationToasterProps) {
-	const {t} = useTranslation();
+function useMutationToaster({ type, mutation }: MutationToasterProps) {
+	const { t } = useTranslation();
 
 	// Handle mutation status updates
 	useEffect(() => {
@@ -31,7 +31,7 @@ function useMutationToaster({type, mutation}: MutationToasterProps) {
 			toast.error(
 				t(messageKey),
 				mutation?.error && {
-					description: message,
+					description: t(message),
 				},
 			);
 		}
@@ -43,7 +43,7 @@ function useMutationToaster({type, mutation}: MutationToasterProps) {
 	return null; // This hook does not render UI
 }
 
-export {MutationToaster, useMutationToaster};
+export { MutationToaster, useMutationToaster };
 
 function getSuccessMessageKeyDependingOnType(
 	type: 'create' | 'update' | 'delete',

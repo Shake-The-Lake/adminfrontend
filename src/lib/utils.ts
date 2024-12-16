@@ -1,15 +1,15 @@
-import {type ClassValue, clsx} from 'clsx';
-import {twMerge} from 'tailwind-merge';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import {
 	type LocalizedStringDto,
 	type LocalizedStringKey,
 } from '../models/api/localized-string';
-import {type FieldErrors, type SubmitErrorHandler} from 'react-hook-form';
-import {toast} from 'sonner';
-import {type UseMutationResult} from '@tanstack/react-query';
-import {useEffect} from 'react';
-import {type Params} from 'react-router-dom';
-import {t} from 'i18next';
+import { type FieldErrors, type SubmitErrorHandler } from 'react-hook-form';
+import { toast } from 'sonner';
+import { type UseMutationResult } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { type Params } from 'react-router-dom';
+import { t } from 'i18next';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -49,7 +49,7 @@ export function tryGetErrorMessage(error: unknown) {
 
 	if (error && typeof error === 'object' && 'response' in error) {
 		const axiosError = error as {
-			response: {data?: string | {message?: string}; status: number};
+			response: { data?: string | { message?: string }; status: number };
 		};
 		const axiosMessage =
 			typeof axiosError.response.data === 'string'
@@ -69,12 +69,17 @@ export function tryGetErrorMessage(error: unknown) {
 	return errorMessage;
 }
 
-// Todo! maybe put into better place?
 export const onInvalidFormHandler: SubmitErrorHandler<any> = (
 	errors: FieldErrors<any>,
 ) => {
+	// Extract all error messages
+	const errorMessages = Object.entries(errors).map(([field, error]) => `${field}: ${error?.message?.toString() ?? 'unknown error'}`);
+
+	// Join messages into a single string or handle them individually
+	const allMessages = errorMessages.join(', ');
+
 	toast.error(t('messages.validationErrorTitle'), {
-		description: t('messages.validationErrorDescription'),
+		description: t('messages.validationErrorDescription') + ' ' + allMessages,
 	});
 };
 

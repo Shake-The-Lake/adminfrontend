@@ -1,4 +1,4 @@
-import { type TimeSlotDto } from '../models/api/time-slot.model';
+import { type MoveTimeSlotDto, type TimeSlotDto } from '../models/api/time-slot.model';
 import {
 	type QueryClient,
 	queryOptions,
@@ -14,6 +14,7 @@ import {
 	updateTimeSlot,
 	getAllTimeSlotsFromEvent,
 	getAllTimeSlotsFromBoat,
+	moveTimeSlot,
 } from '../services/time-slot-service';
 import { boatQueryKeys } from './boat';
 import {
@@ -34,7 +35,7 @@ export const timeSlotQueryKeys = {
 		[...baseQueryKey(eventId), 'detail', id] as QueryKey,
 };
 
-export const timeSlotMutationKeys = mutationKeyGenerator(identifier);
+export const timeSlotMutationKeys = { ...mutationKeyGenerator(identifier), move: [identifier, 'move'] };
 
 export const timeslotsForEventOptions = (eventId: number) =>
 	queryOptions({
@@ -87,7 +88,6 @@ export function useCreateTimeSlot(eventId: number, boatId: number) {
 				eventId,
 				boatId,
 				data?.id ?? 0,
-				data,
 			);
 		},
 	});
@@ -104,7 +104,6 @@ export function useUpdateTimeSlot(eventId: number, id: number) {
 				eventId,
 				data?.boatId,
 				id,
-				data,
 			);
 		},
 	});
@@ -121,12 +120,27 @@ export function useDeleteTimeSlot(eventId: number, boatId: number) {
 	});
 }
 
+export function useMoveTimeSlot(eventId: number, boatId: number, id: number) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationKey: timeSlotMutationKeys.move,
+		mutationFn: async (timeslot: MoveTimeSlotDto) => moveTimeSlot(id, timeslot),
+		async onSuccess() {
+			await queriesToInvalidateOnCrud(
+				queryClient,
+				eventId,
+				boatId,
+				id,
+			);
+		},
+	});
+}
+
 async function queriesToInvalidateOnCrud(
 	queryClient: QueryClient,
 	eventId: number,
 	boatId?: number,
 	timeSlotId?: number,
-	data?: TimeSlotDto,
 ) {
 	await invalidateFromBookingMetaDataRelevantQuery(queryClient, eventId); // Own invalidation is contained
 
