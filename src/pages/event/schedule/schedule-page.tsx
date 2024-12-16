@@ -86,8 +86,8 @@ const SchedulePage: React.FC = () => {
 			channelId: timeSlot.boatId,
 			channelUuid: timeSlot.boatId?.toString() ?? '',
 			description: timeSlot.boat!.name,
-			seatsViewer: timeSlot.boat!.seatsViewer,
-			seatsRider: timeSlot.boat!.seatsRider,
+			seatsViewer: timeSlot.availableRiderSeats - timeSlot.seatsViewer,
+			seatsRider: timeSlot.availableRiderSeats - timeSlot.seatsRider,
 			since: fromTimeToDateTime(
 				event?.date ?? new Date(),
 				timeSlot.fromTime ?? '',
@@ -104,7 +104,7 @@ const SchedulePage: React.FC = () => {
 
 	const channels: Channel[] = boats.map((boat) => ({
 		id: boat.id,
-		name: boat.name,
+		name: `${boat.name} R: ${boat.seatsRider} V:${boat.seatsViewer}`,
 		logo: 'https://via.placeholder.com/150',
 		uuid: boat?.id?.toString() ?? '',
 		position: { top: 0, height: 0 },
