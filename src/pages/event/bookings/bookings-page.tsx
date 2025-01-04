@@ -97,7 +97,7 @@ const BookingsPage: React.FC = () => {
 								params={searchParams}></StlFilter>
 							<DataTable
 								columns={bookingColumns}
-								data={bookings ?? []}
+								data={bookings}
 								onRowClick={handleRowClick}
 							/>
 						</>
