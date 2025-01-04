@@ -36,7 +36,7 @@ const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({
 					onValueChange={(value?: string) => {
 						field.onChange(value === '' ? '' : Number(value));
 					}}
-					list={searchParams?.activityTypes ?? []}
+					list={searchParams?.activityTypes}
 					getKey={getKey}
 					getLabel={getLabel}
 				/>

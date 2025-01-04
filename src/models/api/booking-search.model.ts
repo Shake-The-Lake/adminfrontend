@@ -51,7 +51,7 @@ export const bookingColumns: Array<ColumnDef<BookingSearchDto>> = [
 		cell: ({ row }) => getDisplayTimeFromBackend(row.original.timeSlot.untilTime),
 	},
 	{
-		accessorKey: 'activityType.name.en',
+		accessorKey: 'activityType.name.de',
 		header: t('activity'),
 	},
 	{
