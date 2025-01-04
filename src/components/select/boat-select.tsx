@@ -35,7 +35,7 @@ const BoatSelect: React.FC<BoatSelectProps> = ({ field, className }) => {
 						// React-hook-form does not support undefined as a value, therefore need to "hack" this
 						field.onChange(value === '' ? '' : Number(value));
 					}}
-					list={searchParams?.boats ?? []}
+					list={searchParams?.boats}
 					getKey={getKey}
 					getLabel={getLabel}></StlSelect>
 			</FormControl>

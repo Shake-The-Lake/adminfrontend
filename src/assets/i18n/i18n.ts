@@ -1,6 +1,6 @@
-import i18n, {type Resource} from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {en, languages} from '../../constants';
+import i18n, { type Resource } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { en, languages } from '../../constants';
 
 const resources: Resource = {
 	en: {
@@ -159,10 +159,10 @@ const resources: Resource = {
 			messages: {
 				pageErrorOops: 'Oops! Something went wrong.',
 				pageErrorNotFound: 'This page could not be found.',
-				pageErrorNotAuthorized: "You aren't authorized to see this.",
+				pageErrorNotAuthorized: 'You aren\'t authorized to see this.',
 				pageErrorApiDown: 'Looks like our API is down.',
 				pageErrorTeapot: 'Surfing makes thirsty 🍵.',
-				page404NavigateHome: "Let's get you back",
+				page404NavigateHome: 'Let\'s get you back',
 				successCreate: 'Item was created successfully!',
 				successUpdate: 'Item was saved successfully!',
 				successDelete: 'Item was deleted successfully!',
@@ -191,6 +191,9 @@ const resources: Resource = {
 			activity: 'Activity',
 			viewerSeats: 'Viewer Seats',
 			riderSeats: 'Rider Seats',
+			viewerSeatsShort: 'V',
+			riderSeatsShort: 'R',
+			booked: 'booked',
 			name: 'Name',
 			email: 'Email',
 			infoTextActivityTraceInfo:
@@ -404,7 +407,10 @@ const resources: Resource = {
 			lastName: 'Nachname',
 			activity: 'Aktivität',
 			viewerSeats: 'Zuschauer Plätze',
-			riderSeats: 'Rider Plätze',
+			riderSeats: 'Fahrer Plätze',
+			viewerSeatsShort: 'Z',
+			riderSeatsShort: 'F',
+			booked: 'gebucht',
 			name: 'Name',
 			email: 'E-Mail',
 			infoTextActivityTraceInfo:
@@ -484,7 +490,7 @@ const resources: Resource = {
 				seatsRider: 'Sitzplätz (Fahrer)',
 				seatsViewer: 'Sitzplätz (Zueschouer)',
 				maxSeats: 'Maximal verfiegbari Sitzplätz für Fahrer',
-				maxSeatsViewers: 'Maximal verfiegbari Sitzplätz für Zuächer',
+				maxSeatsViewers: 'Maximal verfiegbari Sitzplätz für Zuäschouer',
 				availableFrom: 'Boot verfüegbar ab',
 				availableUntil: 'Boot verfüegbar bis',
 				typeDescription: 'Technischä Type (zum Bispiu: NXT22)',
@@ -616,6 +622,9 @@ const resources: Resource = {
 			activity: 'Aktivität',
 			viewerSeats: 'Zueschouer Plätz',
 			riderSeats: 'Fahrer Plätz',
+			viewerSeatsShort: 'Z',
+			riderSeatsShort: 'F',
+			booked: 'buechet',
 			name: 'Name',
 			email: 'E-Mail',
 			createdBy: 'Ersteut vo',

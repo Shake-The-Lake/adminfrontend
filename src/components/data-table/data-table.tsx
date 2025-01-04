@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 type DataTableProps<TyData, TyValue> = {
 	columns: Array<ColumnDef<TyData, TyValue>>;
-	data: TyData[];
+	data: TyData[] | undefined;
 	onRowClick?: (row: TyData) => void;
 	rowTestIdPrefix?: string;
 	cellTestIdPrefix?: string;
@@ -39,7 +39,7 @@ export function DataTable<TyData, TyValue>({
 	const { t } = useTranslation();
 
 	const table = useReactTable({
-		data,
+		data: data ?? [],
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		onColumnFiltersChange: setColumnFilters,

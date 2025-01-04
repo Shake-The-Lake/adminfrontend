@@ -101,31 +101,32 @@ const ScheduleItemPage: React.FC = () => {
 					</Button>)}
 				</div>
 				<div className="flex flex-wrap gap-5">
-					<div className="flex w-full justify-between">
+					<div className="flex w-full flex-wrap md:flex-nowrap md:justify-between">
 						<div className="flex flex-wrap gap-5">
 							<span className="flex gap-2">
 								<SailboatIcon /> {timeSlot?.boat?.operator}
-							</span>
-							<span className="flex gap-2">
-								<EyeIcon />
-								{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
 							</span>
 							<span className="flex gap-2">
 								<UsersIcon />
 								{signedUpRiders} / {timeSlot?.seatsRider ?? 0}
 							</span>
 							<span className="flex gap-2">
+								<EyeIcon />
+								{signedUpViewers} / {timeSlot?.seatsViewer ?? 0}
+							</span>
+							<span className="flex gap-2">
 								<TagIcon />
 								{getTranslation(i18n.language, timeSlot?.activityType?.name)}
 							</span>
-
 						</div>
-						<span className="flex gap-2 text-primary-dark-stroke">
-							<TimerResetIcon />
-							{t('timeSlot.originalTime')}:{' '}
-							{getDisplayTimeFromBackend(timeSlot?.originalFromTime ?? timeSlot?.fromTime)} -{' '}
-							{getDisplayTimeFromBackend(timeSlot?.originalUntilTime ?? timeSlot?.untilTime)}
-						</span>
+						<div className="flex w-full md:w-auto justify-between mt-5 md:mt-0">
+							<span className="flex gap-2 text-primary-dark-stroke">
+								<TimerResetIcon />
+								{t('timeSlot.originalTime')}:{' '}
+								{getDisplayTimeFromBackend(timeSlot?.originalFromTime ?? timeSlot?.fromTime)} -{' '}
+								{getDisplayTimeFromBackend(timeSlot?.originalUntilTime ?? timeSlot?.untilTime)}
+							</span>
+						</div>
 					</div>
 					<AuditTrailInfo {...timeSlot} />
 				</div>
