@@ -172,8 +172,8 @@ const stlPlanByTheme: Theme = {
 	},
 	text: {
 		grey: {
-			300: '#ffffff',
-			500: '#CBD5E1',
+			300: '#768BA5', // Is used for time display
+			500: '#CBD5E1', // Is used for description of program items
 		},
 	},
 	timeline: {
@@ -182,7 +182,7 @@ const stlPlanByTheme: Theme = {
 		},
 	},
 	grey: {
-		300: '#e2e8f0',
+		300: '#f1f5f9', // Is used for title of program items
 	},
 	loader: {
 		teal: '#0EC8C8',
