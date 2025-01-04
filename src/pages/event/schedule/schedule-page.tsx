@@ -82,12 +82,15 @@ const SchedulePage: React.FC = () => {
 			id: timeSlot.id.toString(),
 			color: isBreak ? breakScheduleColor : mapColor(timeSlot?.activityTypeId ?? 0),
 			disable: isBreak,
+			isBreak,
 			title: slotName,
 			channelId: timeSlot.boatId,
 			channelUuid: timeSlot.boatId?.toString() ?? '',
 			description: timeSlot.boat!.name,
-			seatsViewer: timeSlot.availableRiderSeats - timeSlot.seatsViewer,
-			seatsRider: timeSlot.availableRiderSeats - timeSlot.seatsRider,
+			seatsViewer: timeSlot.seatsViewer,
+			seatsRider: timeSlot.seatsRider,
+			availableViewerSeats: timeSlot.availableViewerSeats,
+			availableRiderSeats: timeSlot.availableRiderSeats,
 			since: fromTimeToDateTime(
 				event?.date ?? new Date(),
 				timeSlot.fromTime ?? '',
@@ -169,8 +172,8 @@ const stlPlanByTheme: Theme = {
 	},
 	text: {
 		grey: {
-			300: '#CBD5E1',
-			500: '#768BA5',
+			300: '#ffffff',
+			500: '#CBD5E1',
 		},
 	},
 	timeline: {
