@@ -2,6 +2,7 @@ stages:
   - lint
   - test
   - build
+  - e2e
 test-job:
   stage: test
   image: node:lts
