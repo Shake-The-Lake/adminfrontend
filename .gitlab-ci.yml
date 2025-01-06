@@ -6,11 +6,21 @@ test-job:
   stage: test
   image: node:lts
   script:
-      - npm install
-      - npm run test
+    - npm install
+    - npm run test
 check-job:
   stage: lint
   image: node:lts
   script:
     - npm install
     - npm run lint
+e2e:
+  stage: e2e
+  trigger:
+    project: ip34-24bb/ip34-24bb_shakethelake/shakethelakee2e
+    branch: main
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always # Trigger when the pipeline is for a merge request
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: always # Trigger on pushes (optional)
