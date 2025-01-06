@@ -6,11 +6,12 @@ test-job:
   stage: test
   image: node:lts
   script:
-      - npm install
-      - npm run test
+    - npm install
+    - npm run test
 check-job:
   stage: lint
   image: node:lts
   script:
     - npm install
     - npm run lint
+
