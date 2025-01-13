@@ -38,15 +38,16 @@ export function DataTable<TyData, TyValue>({
 
 	const { t } = useTranslation();
 
+	const memoizedColumns = React.useMemo(() => columns, [columns]);
+	const memoizedData = React.useMemo(() => data ?? [], [data]);
+
 	const table = useReactTable({
-		data: data ?? [],
-		columns,
+		data: memoizedData,
+		columns: memoizedColumns,
 		getCoreRowModel: getCoreRowModel(),
-		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
-		state: {
-			columnFilters,
-		},
+		onColumnFiltersChange: setColumnFilters,
+		state: { columnFilters },
 	});
 
 	return (
@@ -80,7 +81,7 @@ export function DataTable<TyData, TyValue>({
 									className={onRowClick ? ('cursor-pointer hover:underline underline-offset-4') : ''}>
 									{row.getVisibleCells().map((cell, cellIndex) => (
 										<TableCell
-											key={cell.id}
+											key={`${rowIndex}-${cellIndex}`}
 											data-testid={`${cellTestIdPrefix}-${rowIndex}-${cellIndex}`}>
 											{flexRender(
 												cell.column.columnDef.cell,
